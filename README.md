@@ -1,5 +1,6 @@
 # StarFinder
 Setup:\
+NOTE: DO NOT COMMIT ANY API KEY INFORMATION!!!\
 in Visual Studio Code, run the following commands\
 npm install -g nodemon\
 npm install express\
