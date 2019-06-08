@@ -10,6 +10,6 @@ npm install body-parser\
 
 Install XAMPP, run MYSQL and APACHE\
 go to: localhost/phpmyadmin\
-create database (ask Dustin or Vlad for set-up information)\
+create database (info via MESSENGER)\
 
-We will be having the server hosted remotely for better usage, localhost phpmyadmin sucks\
+We will be having the server hosted remotely for better usage, localhost phpmyadmin sucks
