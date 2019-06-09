@@ -17,4 +17,5 @@ see (https://www.youtube.com/watch?v=w0HAZKxyrf8&list=PL0dzCUj1L5JE4w_OctDGyZOhM
 
 HELPFUL LINKS\
 https://www.physics.mcmaster.ca/sidewalkastronomy \
-https://www.youtube.com/playlist?list=PL0dzCUj1L5JE4w_OctDGyZOhML6OtJSqR
+https://www.youtube.com/playlist?list=PL0dzCUj1L5JE4w_OctDGyZOhML6OtJSqR \
+https://www.handprint.com/ASTRO/bortle.html
