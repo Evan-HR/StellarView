@@ -8,6 +8,8 @@ const bodyParser = require('body-parser');
 
 //set up simple express server
 const app = express();
+//for dynamic html generation
+app.set('view enginer','ejs');
 
 //arbitrary port 3000
 app.listen('3000', ()=>{
@@ -32,12 +34,49 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(morgan('short'));
 
 
+//note: get - get info from server, post - post info to server
 
 //serve public form to browser
 //application server (express) is serving all the files in the directory
 app.use(express.static('./public'))
 
-app.post('/find_nearby_parks',(req,res)=>{
+//dynamically populate homepage
+app.get(['/','/form.html'], function(req,res){
+    res.render('form.ejs',{name:"dustin"});
+})
+
+//full park info link pages
+app.get('/park/:id', function(req,res){
+    var id = req.params.id;
+//get info for id
+const queryString = "SELECT name, light_pol from ontario_parks WHERE id=?";
+getConnection().query(queryString, id, (err, parkInfo)=>{
+    if(err){
+        console.log("failed"+err)
+        res.sendStatus(500)
+        return
+    }
+
+    var tempdata = [];
+
+    function getInfo(temp){
+        tempdata.push(temp.name);
+        tempdata.push(temp.light_pol);
+        return tempdata;
+    }
+    parkInfo.map(getInfo).join('');
+    console.log(tempdata[0]);
+    console.log(tempdata[1]);
+
+    res.render('park.ejs',{parkname:tempdata[0], parkid:id, parklightpol:tempdata[1]});
+    res.end();
+
+})
+})
+
+
+//note, res.send sends the HTTP response, res.end ends the response process
+app.post('/results.html',(req,res)=>{
     console.log("Latitude entered: "+req.body.lat)
     console.log("Longitude entered: "+req.body.lng)
     console.log("Maximum Distance: "+ req.body.dist)
@@ -55,12 +94,26 @@ app.post('/find_nearby_parks',(req,res)=>{
             res.sendStatus(500)
             return
         }
-        console.log(results);
-        res.send(results);
+        //console.log(results);
+
+
+        //join with empty string removes the awkward comma separator of the JSON object arrays
+        //map returns a new array, param inside map runs once for each obj in array
+        //whatever it returns gets added to brand new array  
+        //parameter in function will pass on current item (json data) to an arbitrary param name (parks)
+        //then, use 'parks' to get the data
+        res.send(`${results.map(function(parks){
+            return `
+            <div class="results">
+                <a href="park/${parks.id}">${parks.name}<\a>
+                <br>
+                ${parks.distance}
+            </div>
+            `
+        }).join('')}`);
         res.end()
     })
 
 })
-
 
 
