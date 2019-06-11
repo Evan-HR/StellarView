@@ -8,10 +8,13 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const path = require('path');
 
-const mapAPIKey = 'NOKEY';
+//env variables
+require('dotenv').config();
+const mapsKey1 = process.env.DUSTINMAPKEY;
 
 //set up simple express server
 const app = express();
+
 
 
 //for dynamic html generation
@@ -108,6 +111,7 @@ app.post('/results.html', (req, res) => {
     console.log("Latitude entered: " + req.body.lat)
     console.log("Longitude entered: " + req.body.lng)
     console.log("Maximum Distance: " + req.body.dist)
+    //console.log(mapsKey1);
     //get fields from forms
     const lat = req.body.lat;
     const lng = req.body.lng;
@@ -124,7 +128,7 @@ app.post('/results.html', (req, res) => {
         }
         //console.log(results);
         //res.send(results)
-        res.render('results.ejs', { location: [lat, lng], parks: results, mapAPIKey });
+        res.render('results.ejs', { location: [lat, lng], parks: results, mapAPIKey: mapsKey1 });
         res.end()
     })
 
