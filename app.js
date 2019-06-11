@@ -10,6 +10,8 @@ const path = require('path');
 
 //set up simple express server
 const app = express();
+
+
 //for dynamic html generation
 app.set('view enginer','ejs');
 
@@ -28,10 +30,17 @@ function getConnection(){
     });
 }
 
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
+
 
 //middleware, this code is looking at the request for you, 
 //useful for getting data passed into the form 
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json());
 
 app.use(morgan('short'));
 
@@ -42,6 +51,27 @@ app.use(morgan('short'));
 //application server (express) is serving all the files in the directory
 app.use(express.static('./public'))
 
+
+//login 
+app.post('/auth', function(request, response) {
+	var username = request.body.username;
+	var password = request.body.password;
+	if (username && password) {
+		getConnection().query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
+			if (results.length > 0) {
+				request.session.loggedin = true;
+				request.session.username = username;
+				response.redirect('form.html');
+			} else {
+				response.send('Incorrect Username and/or Password!');
+			}			
+			response.end();
+		});
+	} else {
+		response.send('Please enter Username and Password!');
+		response.end();
+	}
+});
 
 //dynamically populate homepage
 app.get(['/','/form.html'], function(req,res){
@@ -76,6 +106,7 @@ getConnection().query(queryString, id, (err, parkInfo)=>{
 
 })
 })
+
 
 
 //note, res.send sends the HTTP response, res.end ends the response process
