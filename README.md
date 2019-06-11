@@ -7,6 +7,7 @@ npm install express\
 npm install morgan\
 npm install sql\
 npm install body-parser\
+npm install express-session\ 
 
 Install XAMPP, run MYSQL and APACHE\
 go to: localhost/phpmyadmin\
