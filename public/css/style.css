@@ -42,6 +42,7 @@
 
 #results-table {
   width: 100%;
+  height: calc(100vh - 400px - 15px);
   font-family: Arial, Helvetica, sans-serif;
   overflow: auto;
 }
@@ -49,6 +50,8 @@
 #results-table table, #results-table th, #results-table td {
   text-align: left;
   border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
 }
 
 #results-table th {
