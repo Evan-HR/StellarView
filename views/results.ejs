@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="/css/style.css" rel="stylesheet" type="text/css">
+    <title>Results</title>
+</head>
+<body>
+    <div id="map" style="width: 100%;height: 400px;background-color: grey;">
+    <% var lat = location[0]; %>
+    <% var lng = location[1]; %>
+    <script>
+        // Initialize and add the map
+        function initMap() {
+            var infowindow = null;
+
+            // Current location
+            var location = {lat: <%= lat %>, lng: <%= lng %>};
+            var map = new google.maps.Map(
+                document.getElementById('map'), {zoom: 8, center: location});
+            
+            <% for (var i = 0; i < parks.length ; i++) { %>
+
+                var contentString<%=i%> = `
+                <%= parks[i].name %><br>
+                <%= parks[i].light_pol %><br>
+                <a href="park/<%= parks[i].id %>">More info</a>
+                `;
+                
+
+                var marker<%=i%> = new google.maps.Marker({
+                    position: { lat: <%= parks[i].lat %>, lng: <%= parks[i].lng %> },
+                    map: map,
+                    title: "<%= parks[i].name %>"
+                });
+                marker<%=i%>.addListener('click', function() {
+                    if (infowindow) {
+                        infowindow.close();
+                    }
+                    infowindow = new google.maps.InfoWindow({
+                        content: contentString<%=i%>
+                    });
+                    infowindow.open(map, marker<%=i%>);
+                });
+
+            <% } %>  
+        }
+    </script> 
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=<%=mapAPIKey%>%>&callback=initMap">
+    </script>
+    </div>
+    <div id="results-table" style="width: 100%" >
+        <table>
+            <tr>
+                <th>Park Name</th>
+                <th>Light Pollution</th>
+                <th>Distance</th>
+            </tr>
+            <% for(var i=0; i < parks.length; i++) { %>
+                <tr>
+                    <td><a href="park/<%= parks[i].id %>"><%= parks[i].name %></a></td>
+                    <td><%= parks[i].light_pol %></td>
+                    <td><%= parks[i].distance %></td>
+                </tr>
+            <% } %>
+        </table>
+    </div>
+</body>
+</html>
