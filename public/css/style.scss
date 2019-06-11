@@ -27,11 +27,22 @@
   font-weight: bold;
   color: #ffffff;
 }
+
+#parkResults{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  color: darkblue;
+}
+
+#results-table {
+  color: darkblue;
+  width: 100%;
+}
+
 .map {
   width: 100%;
   height: 400px;
   background-color: grey;
 }
-.results-table {
-  width: 100%;
-}
+
