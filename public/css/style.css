@@ -43,6 +43,7 @@
 #results-table {
   width: 100%;
   font-family: Arial, Helvetica, sans-serif;
+  overflow: auto;
 }
 
 #results-table table, #results-table th, #results-table td {
