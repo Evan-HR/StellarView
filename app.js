@@ -40,6 +40,7 @@ app.use(morgan('short'));
 //application server (express) is serving all the files in the directory
 app.use(express.static('./public'))
 
+
 //dynamically populate homepage
 app.get(['/','/form.html'], function(req,res){
     res.render('form.ejs',{name:"dustin"});
@@ -94,7 +95,7 @@ app.post('/results.html',(req,res)=>{
             res.sendStatus(500)
             return
         }
-        //console.log(results);
+        console.log(results);
 
 
         //join with empty string removes the awkward comma separator of the JSON object arrays
