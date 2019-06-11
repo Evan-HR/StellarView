@@ -41,11 +41,29 @@
 }
 
 #results-table {
-  color: darkblue;
   width: 100%;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.map {
+#results-table table, #results-table th, #results-table td {
+  text-align: left;
+  border-collapse: collapse;
+}
+
+#results-table th {
+  color: #efff60;
+  background-color: #0d0053;
+}
+
+#results-table tr:nth-child(odd) {
+  background-color: #9c9c9c;
+}
+
+#results-table tr:nth-child(even) {
+  background-color: lightgray;
+}
+
+#map {
   width: 100%;
   height: 400px;
   background-color: grey;
