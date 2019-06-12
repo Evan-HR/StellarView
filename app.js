@@ -63,92 +63,16 @@ app.use(morgan('short'));
 app.use(express.static('./public'))
 
 
-//----------------------BEGIN CRYPTO--------------------------------------//
-'use strict';
-var crypto = require('crypto');
-
-/**
- * generates random string of characters i.e salt
- * @function
- * @param {number} length - Length of the random string.
- */
-var genRandomString = function(length){
-    return crypto.randomBytes(Math.ceil(length/2))
-            .toString('hex') /** convert to hexadecimal format */
-            .slice(0,length);   /** return required number of characters */
-};
-
-/**
- * hash password with sha512.
- * @function
- * @param {string} password - List of required fields.
- * @param {string} salt - Data to be validated.
- */
-var sha512 = function(password, salt){
-    var hash = crypto.createHmac('sha512', salt); /** Hashing algorithm sha512 */
-    hash.update(password);
-    var value = hash.digest('hex');
-    return {
-        salt:salt,
-        passwordHash:value
-    };
-};
-
-//Store the result as the password and also store the salt along side.
-function saltHashPassword(userpassword) {
-    var salt = genRandomString(16); /** Gives us salt of length 16 */
-    var passwordData = sha512(userpassword, salt);
-    console.log('UserPassword = '+userpassword);
-    console.log('Passwordhash = '+passwordData.passwordHash);
-    console.log('nSalt = '+passwordData.salt);
-}
 
 
 
-//----------------------END CRYPTO--------------------------------------//
-
-//login 
+//----------------------BEGIN LOGIN--------------------------------------//
 app.post('/auth', function(request, response) {
 	var username = request.body.username;
     var password = request.body.password;
-    var salt;
 
-    const saltQuery = 'SELECT salt FROM users WHERE username = ?';
-    getConnection().query(saltQuery, username, (err, userSalt) => {
-            if (err) {
-                console.log("failed" + err)
-                res.sendStatus(500)
-                return
-            }
-            salt = userSalt[0].salt;
-    console.log("salt from username:"+salt);
-    //let so it can be accessed outside of this function (getConnection)
-    let tempHashedPass = sha512(password, salt);
-    tempHashedPass = tempHashedPass.passwordHash;
-    console.log("hashed pass with salt is : " + tempHashedPass);
 });
-
-
-    const queryString = 'SELECT username,passwordhash FROM users WHERE username = ? AND passwordhash = ?';
-    
-	if (username && password) {
-
-		getConnection().query(queryString, [username, tempHashedPass], function(error, results, fields) {
- 
-            if (results.length > 0) {
-				request.session.loggedin = true;
-                request.session.username = username;
-				response.redirect('form.html');
-			} else {
-				response.send('Incorrect Username and/or Password!');
-			}			
-			response.end();
-		});
-	} else {
-		response.send('Please enter Username and Password!');
-		response.end();
-	}
-});
+//----------------------END LOGIN--------------------------------------//
 
 
 
