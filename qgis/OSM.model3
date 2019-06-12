@@ -1,0 +1,218 @@
+<!DOCTYPE model>
+<Option type="Map">
+  <Option name="children" type="Map">
+    <Option name="native:explodehstorefield_1" type="Map">
+      <Option value="true" name="active" type="bool"/>
+      <Option name="alg_config"/>
+      <Option value="native:explodehstorefield" name="alg_id" type="QString"/>
+      <Option value="Explode HStore Field" name="component_description" type="QString"/>
+      <Option value="528.4661791590495" name="component_pos_x" type="double"/>
+      <Option value="597.9177330895794" name="component_pos_y" type="double"/>
+      <Option name="dependencies"/>
+      <Option value="native:explodehstorefield_1" name="id" type="QString"/>
+      <Option name="outputs"/>
+      <Option value="true" name="outputs_collapsed" type="bool"/>
+      <Option value="true" name="parameters_collapsed" type="bool"/>
+      <Option name="params" type="Map">
+        <Option name="EXPECTED_FIELDS" type="List">
+          <Option type="Map">
+            <Option value="2" name="source" type="int"/>
+            <Option value="" name="static_value" type="QString"/>
+          </Option>
+        </Option>
+        <Option name="FIELD" type="List">
+          <Option type="Map">
+            <Option value="2" name="source" type="int"/>
+            <Option value="other_tags" name="static_value" type="QString"/>
+          </Option>
+        </Option>
+        <Option name="INPUT" type="List">
+          <Option type="Map">
+            <Option value="native:stringconcatenation_1" name="child_id" type="QString"/>
+            <Option value="CONCATENATION" name="output_name" type="QString"/>
+            <Option value="1" name="source" type="int"/>
+          </Option>
+        </Option>
+      </Option>
+    </Option>
+    <Option name="native:explodehstorefield_2" type="Map">
+      <Option value="true" name="active" type="bool"/>
+      <Option name="alg_config"/>
+      <Option value="native:explodehstorefield" name="alg_id" type="QString"/>
+      <Option value="Explode HStore Field" name="component_description" type="QString"/>
+      <Option value="539.6288848263255" name="component_pos_x" type="double"/>
+      <Option value="179.78976234003653" name="component_pos_y" type="double"/>
+      <Option name="dependencies"/>
+      <Option value="native:explodehstorefield_2" name="id" type="QString"/>
+      <Option name="outputs"/>
+      <Option value="true" name="outputs_collapsed" type="bool"/>
+      <Option value="true" name="parameters_collapsed" type="bool"/>
+      <Option name="params" type="Map">
+        <Option name="EXPECTED_FIELDS" type="List">
+          <Option type="Map">
+            <Option value="2" name="source" type="int"/>
+            <Option value="" name="static_value" type="QString"/>
+          </Option>
+        </Option>
+        <Option name="FIELD" type="List">
+          <Option type="Map">
+            <Option value="2" name="source" type="int"/>
+            <Option value="other_tags" name="static_value" type="QString"/>
+          </Option>
+        </Option>
+        <Option name="INPUT" type="List">
+          <Option type="Map">
+            <Option value="native:stringconcatenation_2" name="child_id" type="QString"/>
+            <Option value="CONCATENATION" name="output_name" type="QString"/>
+            <Option value="1" name="source" type="int"/>
+          </Option>
+        </Option>
+      </Option>
+    </Option>
+    <Option name="native:filedownloader_1" type="Map">
+      <Option value="true" name="active" type="bool"/>
+      <Option name="alg_config"/>
+      <Option value="native:filedownloader" name="alg_id" type="QString"/>
+      <Option value="Download file" name="component_description" type="QString"/>
+      <Option value="129" name="component_pos_x" type="double"/>
+      <Option value="249" name="component_pos_y" type="double"/>
+      <Option name="dependencies"/>
+      <Option value="native:filedownloader_1" name="id" type="QString"/>
+      <Option name="outputs"/>
+      <Option value="false" name="outputs_collapsed" type="bool"/>
+      <Option value="true" name="parameters_collapsed" type="bool"/>
+      <Option name="params" type="Map">
+        <Option name="URL" type="List">
+          <Option type="Map">
+            <Option value="quickosm:buildqueryinsidearea_1" name="child_id" type="QString"/>
+            <Option value="OUTPUT_URL" name="output_name" type="QString"/>
+            <Option value="1" name="source" type="int"/>
+          </Option>
+        </Option>
+      </Option>
+    </Option>
+    <Option name="native:stringconcatenation_1" type="Map">
+      <Option value="true" name="active" type="bool"/>
+      <Option name="alg_config"/>
+      <Option value="native:stringconcatenation" name="alg_id" type="QString"/>
+      <Option value="String concatenation - Multipolygon" name="component_description" type="QString"/>
+      <Option value="385.7166361974407" name="component_pos_x" type="double"/>
+      <Option value="524.7806215722121" name="component_pos_y" type="double"/>
+      <Option name="dependencies"/>
+      <Option value="native:stringconcatenation_1" name="id" type="QString"/>
+      <Option name="outputs"/>
+      <Option value="true" name="outputs_collapsed" type="bool"/>
+      <Option value="true" name="parameters_collapsed" type="bool"/>
+      <Option name="params" type="Map">
+        <Option name="INPUT_1" type="List">
+          <Option type="Map">
+            <Option value="native:filedownloader_1" name="child_id" type="QString"/>
+            <Option value="OUTPUT" name="output_name" type="QString"/>
+            <Option value="1" name="source" type="int"/>
+          </Option>
+        </Option>
+        <Option name="INPUT_2" type="List">
+          <Option type="Map">
+            <Option value="2" name="source" type="int"/>
+            <Option value="|layername=multipolygons" name="static_value" type="QString"/>
+          </Option>
+        </Option>
+      </Option>
+    </Option>
+    <Option name="native:stringconcatenation_2" type="Map">
+      <Option value="true" name="active" type="bool"/>
+      <Option name="alg_config"/>
+      <Option value="native:stringconcatenation" name="alg_id" type="QString"/>
+      <Option value="String concatenation - Points" name="component_description" type="QString"/>
+      <Option value="399.8153564899452" name="component_pos_x" type="double"/>
+      <Option value="104.46252285191952" name="component_pos_y" type="double"/>
+      <Option name="dependencies"/>
+      <Option value="native:stringconcatenation_2" name="id" type="QString"/>
+      <Option name="outputs"/>
+      <Option value="true" name="outputs_collapsed" type="bool"/>
+      <Option value="true" name="parameters_collapsed" type="bool"/>
+      <Option name="params" type="Map">
+        <Option name="INPUT_1" type="List">
+          <Option type="Map">
+            <Option value="native:filedownloader_1" name="child_id" type="QString"/>
+            <Option value="OUTPUT" name="output_name" type="QString"/>
+            <Option value="1" name="source" type="int"/>
+          </Option>
+        </Option>
+        <Option name="INPUT_2" type="List">
+          <Option type="Map">
+            <Option value="2" name="source" type="int"/>
+            <Option value="|layername=points" name="static_value" type="QString"/>
+          </Option>
+        </Option>
+      </Option>
+    </Option>
+    <Option name="quickosm:buildqueryinsidearea_1" type="Map">
+      <Option value="true" name="active" type="bool"/>
+      <Option name="alg_config"/>
+      <Option value="quickosm:buildqueryinsidearea" name="alg_id" type="QString"/>
+      <Option value="Build query inside an area" name="component_description" type="QString"/>
+      <Option value="120" name="component_pos_x" type="double"/>
+      <Option value="160" name="component_pos_y" type="double"/>
+      <Option name="dependencies"/>
+      <Option value="quickosm:buildqueryinsidearea_1" name="id" type="QString"/>
+      <Option name="outputs"/>
+      <Option value="true" name="outputs_collapsed" type="bool"/>
+      <Option value="true" name="parameters_collapsed" type="bool"/>
+      <Option name="params" type="Map">
+        <Option name="AREA" type="List">
+          <Option type="Map">
+            <Option value="inputarea" name="parameter_name" type="QString"/>
+            <Option value="0" name="source" type="int"/>
+          </Option>
+        </Option>
+        <Option name="KEY" type="List">
+          <Option type="Map">
+            <Option value="2" name="source" type="int"/>
+            <Option value="leisure" name="static_value" type="QString"/>
+          </Option>
+        </Option>
+        <Option name="SERVER" type="List">
+          <Option type="Map">
+            <Option value="2" name="source" type="int"/>
+            <Option value="http://www.overpass-api.de/api/interpreter" name="static_value" type="QString"/>
+          </Option>
+        </Option>
+        <Option name="TIMEOUT" type="List">
+          <Option type="Map">
+            <Option value="2" name="source" type="int"/>
+            <Option value="25" name="static_value" type="int"/>
+          </Option>
+        </Option>
+        <Option name="VALUE" type="List">
+          <Option type="Map">
+            <Option value="2" name="source" type="int"/>
+            <Option value="park" name="static_value" type="QString"/>
+          </Option>
+        </Option>
+      </Option>
+    </Option>
+  </Option>
+  <Option name="help"/>
+  <Option value="" name="model_group" type="QString"/>
+  <Option value="OSM" name="model_name" type="QString"/>
+  <Option name="parameterDefinitions" type="Map">
+    <Option name="inputarea" type="Map">
+      <Option value="ontario" name="default" type="QString"/>
+      <Option value="Input Area" name="description" type="QString"/>
+      <Option value="0" name="flags" type="int"/>
+      <Option name="metadata"/>
+      <Option value="false" name="multiline" type="bool"/>
+      <Option value="inputarea" name="name" type="QString"/>
+      <Option value="string" name="parameter_type" type="QString"/>
+    </Option>
+  </Option>
+  <Option name="parameters" type="Map">
+    <Option name="inputarea" type="Map">
+      <Option value="inputarea" name="component_description" type="QString"/>
+      <Option value="120" name="component_pos_x" type="double"/>
+      <Option value="60" name="component_pos_y" type="double"/>
+      <Option value="inputarea" name="name" type="QString"/>
+    </Option>
+  </Option>
+</Option>

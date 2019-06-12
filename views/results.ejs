@@ -47,6 +47,7 @@
             });
 
             bounds  = new google.maps.LatLngBounds();
+            bounds.extend(location);
             
             //loc = new google.maps.LatLng(marker<%=i%>.position.lat(), marker<%=i%>.position.lng());
             //bounds.extend(location);
@@ -67,8 +68,8 @@
                 });
 
                 //Update map bounds
-                loc = new google.maps.LatLng(marker<%=i%>.position.lat(), marker<%=i%>.position.lng());
-                bounds.extend(loc);
+                //var loc = new google.maps.LatLng(marker<%=i%>.position.lat(), marker<%=i%>.position.lng());
+                bounds.extend(marker<%=i%>.position);
 
                 //Initialize infowindow at markervar
                 contentString<%=i%> = `
@@ -84,6 +85,7 @@
                         content: contentString<%=i%>
                     });
                     infowindow.open(map, marker<%=i%>);
+                    map.setCenter(marker<%=i%>.position);
                 });
 
             <% } %>  
