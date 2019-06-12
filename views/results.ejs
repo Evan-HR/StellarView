@@ -14,27 +14,68 @@
     <script>
         // Initialize and add the map
         function initMap() {
+            //Initialize map info
             var infowindow = null;
+            var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+            var icons = {
+                currentLocation: {
+                    icon: 'http://maps.google.com/mapfiles/kml/shapes/placemark_circle.png',
+                    center: new google.maps.Point(15,17)
+                },
+                park: {
+                    icon: 'http://maps.google.com/mapfiles/kml/pal2/icon4.png',
+                    center: new google.maps.Point(16,16)
+                },
+                parkUnknown: {
+                    icon: 'http://maps.google.com/mapfiles/kml/pal2/icon12.png',
+                    center: new google.maps.Point(16,16)
+                }
+            };
 
             // Current location
             var location = {lat: <%= lat %>, lng: <%= lng %>};
             var map = new google.maps.Map(
-                document.getElementById('map'), {zoom: 8, center: location});
+                document.getElementById('map'), {zoom: 10, center: location});
             
+            var markerCurrentLocation = new google.maps.Marker({
+                position: location,
+                icon: {
+                    url: icons.currentLocation.icon,
+                    anchor: new google.maps.Point(15,17)
+                },
+                map: map
+            });
+
+            bounds  = new google.maps.LatLngBounds();
+            
+            //loc = new google.maps.LatLng(marker<%=i%>.position.lat(), marker<%=i%>.position.lng());
+            //bounds.extend(location);
+            
+            //Parks loop
             <% for (var i = 0; i < parks.length ; i++) { %>
 
-                var contentString<%=i%> = `
-                <%= parks[i].name %><br>
+                //Initialize marker
+                marker<%=i%> = new google.maps.Marker({
+                    position: { lat: <%= parks[i].lat %>, lng: <%= parks[i].lng %> },
+                    map: map,
+                    title: "<%= parks[i].name %>",
+                    icon: {
+                        url: ("<%= parks[i].name %>" == "Unknown" ? icons.parkUnknown.icon : icons.park.icon),
+                        anchor: icons.park.center,
+                        scaledSize: new google.maps.Size(21, 21),
+                    }
+                });
+
+                //Update map bounds
+                loc = new google.maps.LatLng(marker<%=i%>.position.lat(), marker<%=i%>.position.lng());
+                bounds.extend(loc);
+
+                //Initialize infowindow at markervar
+                contentString<%=i%> = `
+                <b><%= parks[i].name %></b><br>
                 <%= parks[i].light_pol %><br>
                 <a href="park/<%= parks[i].id %>">More info</a>
                 `;
-                
-
-                var marker<%=i%> = new google.maps.Marker({
-                    position: { lat: <%= parks[i].lat %>, lng: <%= parks[i].lng %> },
-                    map: map,
-                    title: "<%= parks[i].name %>"
-                });
                 marker<%=i%>.addListener('click', function() {
                     if (infowindow) {
                         infowindow.close();
@@ -46,6 +87,12 @@
                 });
 
             <% } %>  
+
+            if (<%=parks.length%> > 0) {
+                //Center the map
+                map.fitBounds(bounds); 
+                map.panToBounds(bounds);
+            }
         }
     </script> 
     <script async defer
@@ -61,7 +108,8 @@
             </tr>
             <% for(var i=0; i < parks.length; i++) { %>
                 <tr>
-                    <td><a href="park/<%= parks[i].id %>"><%= parks[i].name %></a></td>
+                    <!--<td><a href="park/<%= parks[i].id %>" ><%= parks[i].name %></a></td>-->
+                    <td><a href="javascript:void(0);" style="text-decoration: none; color:black;" onclick="google.maps.event.trigger(marker<%=i%>, 'click')" ><%= parks[i].name %></a></td>
                     <td><%= parks[i].light_pol %></td>
                     <td><%= parks[i].distance %></td>
                 </tr>
