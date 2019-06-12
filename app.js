@@ -1,5 +1,6 @@
 //this is the entry point (app.js)
 
+
 //bring in both express and mysql
 const express = require('express');
 const mysql = require("mysql");
@@ -7,6 +8,8 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const path = require('path');
+
+
 
 //env variables
 require('dotenv').config();
@@ -60,15 +63,81 @@ app.use(morgan('short'));
 app.use(express.static('./public'))
 
 
+//----------------------BEGIN CRYPTO--------------------------------------//
+'use strict';
+var crypto = require('crypto');
+
+/**
+ * generates random string of characters i.e salt
+ * @function
+ * @param {number} length - Length of the random string.
+ */
+var genRandomString = function(length){
+    return crypto.randomBytes(Math.ceil(length/2))
+            .toString('hex') /** convert to hexadecimal format */
+            .slice(0,length);   /** return required number of characters */
+};
+
+/**
+ * hash password with sha512.
+ * @function
+ * @param {string} password - List of required fields.
+ * @param {string} salt - Data to be validated.
+ */
+var sha512 = function(password, salt){
+    var hash = crypto.createHmac('sha512', salt); /** Hashing algorithm sha512 */
+    hash.update(password);
+    var value = hash.digest('hex');
+    return {
+        salt:salt,
+        passwordHash:value
+    };
+};
+
+//Store the result as the password and also store the salt along side.
+function saltHashPassword(userpassword) {
+    var salt = genRandomString(16); /** Gives us salt of length 16 */
+    var passwordData = sha512(userpassword, salt);
+    console.log('UserPassword = '+userpassword);
+    console.log('Passwordhash = '+passwordData.passwordHash);
+    console.log('nSalt = '+passwordData.salt);
+}
+
+
+
+//----------------------END CRYPTO--------------------------------------//
+
 //login 
 app.post('/auth', function(request, response) {
 	var username = request.body.username;
-	var password = request.body.password;
+    var password = request.body.password;
+    var salt;
+
+    const saltQuery = 'SELECT salt FROM users WHERE username = ?';
+    getConnection().query(saltQuery, username, (err, userSalt) => {
+            if (err) {
+                console.log("failed" + err)
+                res.sendStatus(500)
+                return
+            }
+            salt = userSalt[0].salt;
+    console.log("salt from username:"+salt);
+    //let so it can be accessed outside of this function (getConnection)
+    let tempHashedPass = sha512(password, salt);
+    tempHashedPass = tempHashedPass.passwordHash;
+    console.log("hashed pass with salt is : " + tempHashedPass);
+});
+
+
+    const queryString = 'SELECT username,passwordhash FROM users WHERE username = ? AND passwordhash = ?';
+    
 	if (username && password) {
-		getConnection().query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
-			if (results.length > 0) {
+
+		getConnection().query(queryString, [username, tempHashedPass], function(error, results, fields) {
+ 
+            if (results.length > 0) {
 				request.session.loggedin = true;
-				request.session.username = username;
+                request.session.username = username;
 				response.redirect('form.html');
 			} else {
 				response.send('Incorrect Username and/or Password!');
@@ -80,6 +149,8 @@ app.post('/auth', function(request, response) {
 		response.end();
 	}
 });
+
+
 
 //dynamically populate homepage
 app.get(['/', '/form.html'], function (req, res) {
