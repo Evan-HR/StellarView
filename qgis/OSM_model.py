@@ -1,8 +1,8 @@
 from qgis.core import QgsProcessing
 from qgis.core import QgsProcessingAlgorithm
 from qgis.core import QgsProcessingMultiStepFeedback
-from qgis.core import QgsProcessingParameterRasterLayer
 from qgis.core import QgsProcessingParameterString
+from qgis.core import QgsProcessingParameterRasterLayer
 from qgis.core import QgsProcessingParameterFeatureSink
 import processing
 
@@ -10,10 +10,11 @@ import processing
 class Osm(QgsProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
-        self.addParameter(QgsProcessingParameterRasterLayer('lightmap', 'Light Map', defaultValue=None))
         self.addParameter(QgsProcessingParameterString('inputarea', 'Input Area', multiLine=False, defaultValue='hamilton'))
-        self.addParameter(QgsProcessingParameterString('inputvalue', 'Input Value', multiLine=False, defaultValue='park'))
-        self.addParameter(QgsProcessingParameterFeatureSink('Outputfinal', 'OutputFinal', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterRasterLayer('lightmap', 'LightMap', defaultValue=None))
+        self.addParameter(QgsProcessingParameterString('inputvaluetype', 'Input Value Type', multiLine=False, defaultValue='park'))
+        self.addParameter(QgsProcessingParameterString('inputkeytype', 'Input Key Type', multiLine=False, defaultValue='leisure'))
+        self.addParameter(QgsProcessingParameterFeatureSink('OutputFinal', 'Output final', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
 
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
@@ -25,10 +26,10 @@ class Osm(QgsProcessingAlgorithm):
         # Build query inside an area
         alg_params = {
             'AREA': parameters['inputarea'],
-            'KEY': 'leisure',
+            'KEY': parameters['inputkeytype'],
             'SERVER': 'http://www.overpass-api.de/api/interpreter',
             'TIMEOUT': 999,
-            'VALUE': parameters['inputvalue']
+            'VALUE': parameters['inputvaluetype']
         }
         outputs['BuildQueryInsideAnArea'] = processing.run('quickosm:buildqueryinsidearea', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
@@ -69,52 +70,63 @@ class Osm(QgsProcessingAlgorithm):
         if feedback.isCanceled():
             return {}
 
-        # Explode HStore Field
+        # Fix geometries
         alg_params = {
-            'EXPECTED_FIELDS': '',
-            'FIELD': 'other_tags',
             'INPUT': outputs['StringConcatenationPoints']['CONCATENATION'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['ExplodeHstoreField'] = processing.run('native:explodehstorefield', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FixGeometries'] = processing.run('native:fixgeometries', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(5)
         if feedback.isCanceled():
             return {}
 
-        # Explode HStore Field
+        # Fix geometries
         alg_params = {
-            'EXPECTED_FIELDS': 'name,leisure',
-            'FIELD': 'other_tags',
             'INPUT': outputs['StringConcatenationMultipolygon']['CONCATENATION'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['ExplodeHstoreField'] = processing.run('native:explodehstorefield', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FixGeometries'] = processing.run('native:fixgeometries', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(6)
         if feedback.isCanceled():
             return {}
 
-        # Refactor fields
+        # Explode HStore Field
         alg_params = {
-            'FIELDS_MAPPING': [{'expression': '"osm_way_id"', 'length': 0, 'name': 'osm_id', 'precision': 0, 'type': 10}, {'expression': '"name"', 'length': 0, 'name': 'name', 'precision': 0, 'type': 10}, {'expression': '"leisure"', 'length': 0, 'name': 'leisure', 'precision': 0, 'type': 10}],
-            'INPUT': outputs['ExplodeHstoreField']['OUTPUT'],
+            'EXPECTED_FIELDS': '',
+            'FIELD': 'other_tags',
+            'INPUT': outputs['FixGeometries']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['RefactorFields'] = processing.run('qgis:refactorfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['ExplodeHstoreField'] = processing.run('native:explodehstorefield', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(7)
         if feedback.isCanceled():
             return {}
 
-        # Fix geometries
+        # Refactor fields
         alg_params = {
-            'INPUT': outputs['RefactorFields']['OUTPUT'],
+            'FIELDS_MAPPING': [{'expression': 'if("osm_way_id" is NULL, -1, "osm_way_id")', 'length': 0, 'name': 'osm_id', 'precision': 0, 'type': 10}, {'expression': ' if( "name" is NULL, \'Unknown\', "name")', 'length': 0, 'name': 'name', 'precision': 0, 'type': 10}, {'expression': "concat(@inputkeytype,'-', @inputvaluetype )", 'length': 0, 'name': 'type', 'precision': 0, 'type': 10}],
+            'INPUT': outputs['ExplodeHstoreField']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FixGeometries'] = processing.run('native:fixgeometries', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['RefactorFields'] = processing.run('qgis:refactorfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(8)
+        if feedback.isCanceled():
+            return {}
+
+        # Explode HStore Field
+        alg_params = {
+            'EXPECTED_FIELDS': '',
+            'FIELD': 'other_tags',
+            'INPUT': outputs['FixGeometries']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExplodeHstoreField'] = processing.run('native:explodehstorefield', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(9)
         if feedback.isCanceled():
             return {}
 
@@ -122,47 +134,35 @@ class Osm(QgsProcessingAlgorithm):
         alg_params = {
             'COLUMN_PREFIX': 'light_pol',
             'INPUT_RASTER': parameters['lightmap'],
-            'INPUT_VECTOR': outputs['FixGeometries']['OUTPUT'],
+            'INPUT_VECTOR': outputs['RefactorFields']['OUTPUT'],
             'RASTER_BAND': 1,
             'STATS': 2
         }
         outputs['ZonalStatistics'] = processing.run('qgis:zonalstatistics', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(9)
-        if feedback.isCanceled():
-            return {}
-
-        # Refactor fields
-        alg_params = {
-            'FIELDS_MAPPING': [{'expression': '"osm_id"', 'length': 0, 'name': 'osm_id', 'precision': 0, 'type': 10}, {'expression': 'if( "name" IS NULL, \'Unknown\', "name")\r\n', 'length': 0, 'name': 'name', 'precision': 0, 'type': 10}, {'expression': 'if("leisure" is NULL,  @inputvalue , "leisure")', 'length': 0, 'name': 'leisure', 'precision': 0, 'type': 10}],
-            'INPUT': outputs['ExplodeHstoreField']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['RefactorFields'] = processing.run('qgis:refactorfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
         feedback.setCurrentStep(10)
         if feedback.isCanceled():
             return {}
 
-        # Fix geometries
+        # Centroids
         alg_params = {
-            'INPUT': outputs['RefactorFields']['OUTPUT'],
+            'ALL_PARTS': False,
+            'INPUT': outputs['ZonalStatistics']['INPUT_VECTOR'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FixGeometries'] = processing.run('native:fixgeometries', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['Centroids'] = processing.run('native:centroids', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(11)
         if feedback.isCanceled():
             return {}
 
-        # Sample raster values
+        # Refactor fields
         alg_params = {
-            'COLUMN_PREFIX': 'rvalue',
-            'INPUT': outputs['FixGeometries']['OUTPUT'],
-            'RASTERCOPY': parameters['lightmap'],
+            'FIELDS_MAPPING': [{'expression': '"osm_id"', 'length': 0, 'name': 'osm_id', 'precision': 0, 'type': 2}, {'expression': '"name"', 'length': 0, 'name': 'name', 'precision': 0, 'type': 10}, {'expression': '"type"', 'length': 0, 'name': 'type', 'precision': 0, 'type': 10}, {'expression': '"light_polmean"', 'length': 0, 'name': 'light_pol', 'precision': 0, 'type': 6}],
+            'INPUT': outputs['Centroids']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['SampleRasterValues'] = processing.run('qgis:rastersampling', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['RefactorFields'] = processing.run('qgis:refactorfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(12)
         if feedback.isCanceled():
@@ -170,8 +170,8 @@ class Osm(QgsProcessingAlgorithm):
 
         # Refactor fields
         alg_params = {
-            'FIELDS_MAPPING': [{'expression': '"osm_id"', 'length': 0, 'name': 'osm_id', 'precision': 0, 'type': 10}, {'expression': 'if( "name" IS NULL, \'Unknown\', "name")\r\n', 'length': 0, 'name': 'name', 'precision': 0, 'type': 10}, {'expression': '"leisure"', 'length': 0, 'name': 'leisure', 'precision': 0, 'type': 10}, {'expression': '"light_polmean"', 'length': 0, 'name': 'light_pol', 'precision': 0, 'type': 6}],
-            'INPUT': outputs['ZonalStatistics']['INPUT_VECTOR'],
+            'FIELDS_MAPPING': [{'expression': 'if("osm_id" is NULL, -1, "osm_id")', 'length': 0, 'name': 'osm_id', 'precision': 0, 'type': 2}, {'expression': ' if( "name" is NULL, \'Unknown\', "name")', 'length': 0, 'name': 'name', 'precision': 0, 'type': 10}, {'expression': "concat(@inputkeytype,'-', @inputvaluetype )", 'length': 0, 'name': 'type', 'precision': 0, 'type': 10}],
+            'INPUT': outputs['ExplodeHstoreField']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['RefactorFields'] = processing.run('qgis:refactorfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
@@ -180,25 +180,26 @@ class Osm(QgsProcessingAlgorithm):
         if feedback.isCanceled():
             return {}
 
-        # Refactor fields
+        # Sample raster values
         alg_params = {
-            'FIELDS_MAPPING': [{'expression': '"osm_id"', 'length': 0, 'name': 'osm_id', 'precision': 0, 'type': 10}, {'expression': '"name"', 'length': 0, 'name': 'name', 'precision': 0, 'type': 10}, {'expression': '"leisure"', 'length': 0, 'name': 'leisure', 'precision': 0, 'type': 10}, {'expression': '"rvalue_1"', 'length': 0, 'name': 'light_pol', 'precision': 0, 'type': 6}],
-            'INPUT': outputs['SampleRasterValues']['OUTPUT'],
+            'COLUMN_PREFIX': 'rvalue',
+            'INPUT': outputs['RefactorFields']['OUTPUT'],
+            'RASTERCOPY': parameters['lightmap'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['RefactorFields'] = processing.run('qgis:refactorfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['SampleRasterValues'] = processing.run('qgis:rastersampling', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(14)
         if feedback.isCanceled():
             return {}
 
-        # Centroids
+        # Refactor fields
         alg_params = {
-            'ALL_PARTS': False,
-            'INPUT': outputs['RefactorFields']['OUTPUT'],
+            'FIELDS_MAPPING': [{'expression': '"osm_id"', 'length': 0, 'name': 'osm_id', 'precision': 0, 'type': 2}, {'expression': '"name"', 'length': 0, 'name': 'name', 'precision': 0, 'type': 10}, {'expression': '"type"', 'length': 0, 'name': 'type', 'precision': 0, 'type': 10}, {'expression': '"rvalue_1"', 'length': 0, 'name': 'light_pol', 'precision': 0, 'type': 6}],
+            'INPUT': outputs['SampleRasterValues']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['Centroids'] = processing.run('native:centroids', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['RefactorFields'] = processing.run('qgis:refactorfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(15)
         if feedback.isCanceled():
@@ -207,7 +208,7 @@ class Osm(QgsProcessingAlgorithm):
         # Merge vector layers
         alg_params = {
             'CRS': None,
-            'LAYERS': [outputs['Centroids']['OUTPUT'],outputs['RefactorFields']['OUTPUT']],
+            'LAYERS': [outputs['RefactorFields']['OUTPUT'],outputs['RefactorFields']['OUTPUT']],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['MergeVectorLayers'] = processing.run('native:mergevectorlayers', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
@@ -229,12 +230,12 @@ class Osm(QgsProcessingAlgorithm):
 
         # Refactor fields
         alg_params = {
-            'FIELDS_MAPPING': [{'expression': '"osm_id"', 'length': 10, 'name': 'osm_id', 'precision': 0, 'type': 10}, {'expression': '"name"', 'length': 33, 'name': 'name', 'precision': 0, 'type': 10}, {'expression': '"leisure"', 'length': 6, 'name': 'leisure', 'precision': 0, 'type': 10}, {'expression': '"light_pol"', 'length': 18, 'name': 'light_pol', 'precision': 10, 'type': 6}, {'expression': '"Y"', 'length': 18, 'name': 'lat', 'precision': 6, 'type': 6}, {'expression': '"X"', 'length': 18, 'name': 'lng', 'precision': 6, 'type': 6}],
+            'FIELDS_MAPPING': [{'expression': '"osm_id"', 'length': 16, 'name': 'osm_id', 'precision': 0, 'type': 4}, {'expression': '"name"', 'length': 33, 'name': 'name', 'precision': 0, 'type': 10}, {'expression': '"type"', 'length': 6, 'name': 'type', 'precision': 0, 'type': 10}, {'expression': '"light_pol"', 'length': 18, 'name': 'light_pol', 'precision': 10, 'type': 6}, {'expression': '"Y"', 'length': 18, 'name': 'lat', 'precision': 6, 'type': 6}, {'expression': '"X"', 'length': 18, 'name': 'lng', 'precision': 6, 'type': 6}],
             'INPUT': outputs['AddCoordinatesToPoints']['OUTPUT'],
-            'OUTPUT': parameters['Outputfinal']
+            'OUTPUT': parameters['OutputFinal']
         }
         outputs['RefactorFields'] = processing.run('qgis:refactorfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Outputfinal'] = outputs['RefactorFields']['OUTPUT']
+        results['OutputFinal'] = outputs['RefactorFields']['OUTPUT']
         return results
 
     def name(self):
