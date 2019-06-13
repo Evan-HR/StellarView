@@ -71,6 +71,7 @@
                 //var loc = new google.maps.LatLng(marker<%=i%>.position.lat(), marker<%=i%>.position.lng());
                 bounds.extend(marker<%=i%>.position);
 
+                
                 //Initialize infowindow at markervar
                 contentString<%=i%> = `
                 <b><%= parks[i].name %></b><br>

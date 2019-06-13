@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <link href="../css/style.css" rel="stylesheet" type="text/css">
+		<title>Register</title>
+	</head>
+	<body>
+		<div class="login-form">
+            <h1><%= test %></h1>
+            <!--post because the form data will be sent to our node server using this method-->
+			<form action="/register" method="POST">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password1" placeholder="Password" required>
+                <input type="password" name="password2" placeholder="Confirm Password" required>
+				<input type="submit">
+			</form>
+		</div>
+	</body>
+</html>

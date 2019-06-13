@@ -8,6 +8,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const path = require('path');
+const expressValidator = require('express-validator');
 
 
 
@@ -21,7 +22,7 @@ const app = express();
 
 
 //for dynamic html generation
-app.set('view enginer', 'ejs');
+app.set('view engine', 'ejs');
 //Serving css
 app.use('/public', express.static('public'));
 //app.use(express.static(__dirname + '/public'));
@@ -41,17 +42,12 @@ function getConnection() {
     });
 }
 
-app.use(session({
-	secret: 'secret',
-	resave: true,
-	saveUninitialized: true
-}));
-
 
 //middleware, this code is looking at the request for you, 
 //useful for getting data passed into the form 
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
+app.use(expressValidator());
 
 app.use(morgan('short'));
 
@@ -65,10 +61,33 @@ app.use(express.static('./public'))
 
 
 
+app.get('/register', function (req, res) {
+    res.render('register.ejs', { test: "Registration" });
+});
+
+app.post('/register', function (req, res) {
+    res.render('register.ejs', { test: "Registration Complete" });
+    var username = req.body.username;
+    var email = req.body.email;
+    //check if same
+    var password = req.body.password1;
+
+    //query info
+    const insertQuery = "INSERT into users (username, email, password) VALUES (?,?,?)";
+    getConnection().query(insertQuery, [username, email, password], (err, results,fields) => {
+        if (err) {
+            console.log("failed" + err)
+            res.sendStatus(500)
+            return
+        }
+
+
+    })
+});
 
 //----------------------BEGIN LOGIN--------------------------------------//
-app.post('/auth', function(request, response) {
-	var username = request.body.username;
+app.post('/auth', function (request, response) {
+    var username = request.body.username;
     var password = request.body.password;
 
 });
@@ -121,7 +140,8 @@ app.post('/results.html', (req, res) => {
             res.sendStatus(500)
             return
         }
-        //console.log(results);
+
+
         //res.send(results)
         res.render('results.ejs', { location: [lat, lng], parks: results, mapAPIKey: mapsKey1 });
         res.end()
