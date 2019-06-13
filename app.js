@@ -1,16 +1,19 @@
-//this is the entry point (app.js)
-
 
 //bring in both express and mysql
 const express = require('express');
 const mysql = require("mysql");
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const session = require('express-session');
 const path = require('path');
 const expressValidator = require('express-validator');
+
+//authentication variables
+var session = require('express-session');
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
+var cookieParser = require('cookie-parser');
+
+
 
 
 //env variables
@@ -58,7 +61,16 @@ app.use(morgan('short'));
 
 //serve public form to browser
 //application server (express) is serving all the files in the directory
+app.use(cookieParser());
 app.use(express.static('./public'));
+
+//session stuff
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  //cookie: { secure: true }
+}))
 
 
 
