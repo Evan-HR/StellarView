@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const path = require('path');
 const expressValidator = require('express-validator');
+const http = require('http');
 
 
 
@@ -141,7 +142,46 @@ app.post('/auth', function (request, response) {
 });
 //----------------------END LOGIN--------------------------------------//
 
+//- - - - - - - - - - - - - - - BEGIN WEATHER - - - - - - - - - - - - - - - - - - - -//
 
+
+
+
+
+function EvansEvanEvan(lat, lon) {
+    // call the api url with form input
+    var apiurl = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lon}&cnt=50&appid=${weatherKey1}`;
+
+    // code from https://www.twilio.com/blog/2017/08/http-requests-in-node-js.html
+    http.get(apiurl, (resp) => {
+        let data = '';
+      
+        // A chunk of data has been recieved.
+        resp.on('data', (chunk) => {
+          data += chunk;
+        });
+      
+        // The whole response has been received. Print out the result.
+        resp.on('end', () => {
+          weatherData = (JSON.parse(data));
+          return weatherData;
+        });
+      
+      }).on("error", (err) => {
+        console.log("Error: " + err.message);
+      });
+
+    // use result lat/lon coords and find closest city coords from weather
+    
+
+    // associate humidity and cloud cover info from closest city for each result location
+
+
+}
+var dataWeather = EvansEvanEvan(43,-79);
+
+
+// - - - - - - - - - - - - - - - END WEATHER - - - - - - - - - - - - - - - - - - - //
 
 //dynamically populate homepage
 app.get(['/', '/form.html'], function (req, res) {
