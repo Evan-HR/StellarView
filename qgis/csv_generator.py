@@ -1,34 +1,22 @@
-import sys
-
-from qgis.core import (
-     QgsApplication, 
-     QgsProcessingFeedback, 
-     QgsVectorLayer
-)
-
-# See https://gis.stackexchange.com/a/155852/4972 for details about the prefix 
-QgsApplication.setPrefixPath('/usr', True)
-qgs = QgsApplication([], False)
-qgs.initQgis()
-
-# Append the path where processing plugin can be found
-sys.path.append('/docs/dev/qgis/build/output/python/plugins')
-
+#Run this code via the built-in qgis python shell
+from qgis.core import *
 import processing
-from processing.core.Processing import Processing
-Processing.initialize()
 
-layer1 = QgsVectorLayer('/path/to/geodata/lines_1.shp', 'layer 1', 'ogr')
-layer2 = QgsVectorLayer('/path/to/geodata/lines_2.shp', 'layer 2', 'ogr')
+inputTypes = [("leisure", "park"), ("leisure", "nature_reserve")]
+provinces = ["Alberta", "British Columbia", "Manitoba", "New Brunswick",
+    "Newfoundland and Labrador", "Northwest Territories", "Nova Scotia", 
+    "Nunavut", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Yukon"]
 
-# You can see what parameters are needed by the algorithm  
-# using: processing.algorithmHelp("qgis:union")
-params = { 
-    'INPUT' : layer1,
-    'OVERLAY' : layer2, 
-    'OUTPUT' : '/path/to/output_layer.gpkg|layername=output'
-}
-feedback = QgsProcessingFeedback()
+for type in inputTypes:
+    for province in provinces:
+        print(f"Processing...\n {type[0]}-{type[1]}->{province}\n")
+        processing.run("model:OSM", 
+            {
+                'inputarea':f'{province}',
+                'inputkeytype':f'{type[0]}',
+                'inputvaluetype':f'{type[1]}',
+                'lightmap':'D:/StarGzr/SVDNB_npp_20190401-20190430_75N180W_vcmcfg_v10_c201905191000.avg_rade9h.tif', ###Your pollution source HERE###
+                'qgis:refactorfields_5:Output final':f'D:/StarGzr/SampleOut/{type[0]}-{type[1]}-{province}.csv' ###Your destination HERE###
+            })
 
-res = processing.run('qgis:union', params, feedback=feedback)
-res['OUTPUT'] # Access your output layer
+print("Success!")
