@@ -1,15 +1,19 @@
-//this is the entry point (app.js)
-
 
 //bring in both express and mysql
 const express = require('express');
 const mysql = require("mysql");
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const session = require('express-session');
 const path = require('path');
 const expressValidator = require('express-validator');
 const http = require('http');
+
+//authentication variables
+var session = require('express-session');
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
+var cookieParser = require('cookie-parser');
+
 
 
 
@@ -58,7 +62,16 @@ app.use(morgan('short'));
 
 //serve public form to browser
 //application server (express) is serving all the files in the directory
+app.use(cookieParser());
 app.use(express.static('./public'));
+
+//session stuff
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  //cookie: { secure: true }
+}))
 
 
 
@@ -89,46 +102,87 @@ app.post('/register', function (req, res) {
         //check if same
         var password = req.body.password1;
 
-        const emailQuery = "SELECT * from users WHERE email=?";
-        getConnection().query(emailQuery, [email], (err, results, fields) => {
+
+        const usernameQuery = "SELECT * from users WHERE username=?";
+        getConnection().query(usernameQuery, [username], (err, results, fields) => {
             if (err) {
                 console.log("failed" + err);
                 res.sendStatus(500);
                 return;
-            } else {
+            }
+
+            else {
                 if (results.length > 0) {
                     //display error message
-                    console.log("GOT HERE???");
-                    var jsonString = '[{"msg" : "Email already registered.  Please try again."}]';
-                    var emailErrorJSON = JSON.parse(jsonString);
+                    console.log("USERNAME ERROR!");
+                    var jsonString = '[{"msg" : "Username already registered.  Please try again."}]';
+                    var userErrorJSON = JSON.parse(jsonString);
                     console.log("errors is: ");
-                    console.log(emailErrorJSON.msg);
+                    console.log(userErrorJSON.msg);
                     res.render('register', {
                         registerResponse: 'Registration Failed',
-                        errors: emailErrorJSON
+                        errors: userErrorJSON
                     });
-                }
-                else {
-                    //proceed with INSERT query
-                    console.log("no duplicate emails");
-                    //query info
-                    const insertQuery = "INSERT into users (username, email, password) VALUES (?,?,?)";
-                    getConnection().query(insertQuery, [username, email, password], (err, results, fields) => {
+                } else {
+                    const emailQuery = "SELECT * from users WHERE email=?";
+                    getConnection().query(emailQuery, [email], (err, results, fields) => {
                         if (err) {
                             console.log("failed" + err);
                             res.sendStatus(500);
                             return;
                         } else {
-                            res.render('register.ejs', { registerResponse: "Registration Complete", errors: "" });
+                            if (results.length > 0) {
+                                //display error message
+                                console.log("GOT HERE???");
+                                var jsonString = '[{"msg" : "Email already registered.  Please try again."}]';
+                                var emailErrorJSON = JSON.parse(jsonString);
+                                console.log("errors is: ");
+                                console.log(emailErrorJSON.msg);
+                                res.render('register', {
+                                    registerResponse: 'Registration Failed',
+                                    errors: emailErrorJSON
+                                });
+                            }
+                            else {
+                                //proceed with INSERT query
+                                console.log("no duplicate emails");
+                                //query info
+                                const insertQuery = "INSERT into users (username, email, password) VALUES (?,?,?)";
+
+                                //wrap insert query with bcrypt
+                                bcrypt.hash(password, saltRounds, function (err, hash) {
+                                    getConnection().query(insertQuery, [username, email, hash], (err, results, fields) => {
+                                        if (err) {
+                                            console.log("failed" + err);
+                                            res.sendStatus(500);
+                                            return;
+                                        } else {
+                                            res.render('register.ejs', { registerResponse: "Registration Complete", errors: "" });
+                                        }
+                                    });
+                                    if (err) {
+                                        throw err;
+                                    }
+
+
+
+                                });
+                            }
+
                         }
-
-
                     });
+
+
+
+
+
                 }
-
             }
-        });
 
+
+
+
+        })
     }
 
 
