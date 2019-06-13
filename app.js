@@ -16,6 +16,7 @@ const saltRounds = 10;
 //env variables
 require('dotenv').config();
 const mapsKey1 = process.env.DUSTINMAPKEY;
+const weatherKey1 = process.env.EVANWEATHERKEY;
 
 //set up simple express server
 const app = express();
