@@ -17,20 +17,6 @@ create database (info via MESSENGER)\
 We will be having the server hosted remotely for better usage, localhost phpmyadmin sucks\
 see (https://www.youtube.com/watch?v=w0HAZKxyrf8&list=PL0dzCUj1L5JE4w_OctDGyZOhML6OtJSqR&index=5)\
 
-how to setup user login from console\
-create table users
-(
-  id           smallint(9) auto_increment
-    primary key,
-  name         varchar(50)                                                                       not null,
-  email        varchar(70)                                                                       not null,
-  dateofbirth  date                                                                              not null,
-  username     varchar(25)                                                                      null,
-  salt         varchar(16)                                                                       null,
-  passwordhash varchar(300)                                                                      null,
-  constraint users_username_uindex
-    unique (username)
-)
 
 HELPFUL LINKS\
 https://www.physics.mcmaster.ca/sidewalkastronomy \
