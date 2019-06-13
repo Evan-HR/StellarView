@@ -76,7 +76,7 @@
                 contentString<%=i%> = `
                 <b><%= parks[i].name %></b><br>
                 <%= parks[i].light_pol %><br>
-                <a href="park/<%= parks[i].id %>">More info</a>
+                <a href="park/<%= parks[i].id %>?ulat=<%= lat %>&ulng=<%= lng %>">More info</a>
                 `;
                 marker<%=i%>.addListener('click', function() {
                     if (infowindow) {
@@ -87,6 +87,7 @@
                     });
                     infowindow.open(map, marker<%=i%>);
                     map.setCenter(marker<%=i%>.position);
+                    map.setZoom(12);
                 });
 
             <% } %>  
