@@ -7,7 +7,16 @@
 	</head>
 	<body>
 		<div class="login-form">
-            <h1><%= test %></h1>
+
+			<h1><%= registerResponse %></h1>
+
+			<div id="errors"><% for(var i=0;i<errors.length;i++) { %>
+				<p>
+						<%=errors[i].msg %>
+			
+				</p>
+				<% } %> 
+				</div>
             <!--post because the form data will be sent to our node server using this method-->
 			<form action="/register" method="POST">
                 <input type="text" name="username" placeholder="Username" required>

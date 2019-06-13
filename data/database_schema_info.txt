@@ -5,8 +5,9 @@ CREATE TABLE `users` (
  `username` varchar(25) NOT NULL,
  `password` varchar(300) NOT NULL,
  PRIMARY KEY (`id`),
- UNIQUE KEY `users_username_uindex` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
+ UNIQUE KEY `users_username_uindex` (`username`),
+ UNIQUE KEY `email` (`email`,`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
 parks:
 CREATE TABLE `ontario_parks` (

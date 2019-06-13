@@ -62,27 +62,74 @@ app.use(express.static('./public'))
 
 
 app.get('/register', function (req, res) {
-    res.render('register.ejs', { test: "Registration" });
+    res.render('register.ejs', { registerResponse: "Registration", errors: "" });
 });
 
 app.post('/register', function (req, res) {
-    res.render('register.ejs', { test: "Registration Complete" });
-    var username = req.body.username;
-    var email = req.body.email;
-    //check if same
-    var password = req.body.password1;
 
-    //query info
-    const insertQuery = "INSERT into users (username, email, password) VALUES (?,?,?)";
-    getConnection().query(insertQuery, [username, email, password], (err, results,fields) => {
-        if (err) {
-            console.log("failed" + err)
-            res.sendStatus(500)
-            return
-        }
+    //client-side validation
+    req.checkBody('username', 'Username cannot be empty.').notEmpty();
+    req.checkBody('username', 'Username must be between 3-15 characters long.').len(3, 15);
+    req.checkBody('email', "The email you entered is invalid. Please try again.").isEmail();
+    req.checkBody('email', "Email address must be between 8-100 characters long.").len(8, 100);
+    req.checkBody('password2', 'Passwords do not match. Please try again.').equals(req.body.password1);
+    const errors = req.validationErrors();
+
+    if (errors) {
+        console.log(`errors: ${JSON.stringify(errors)}`);
+        res.render('register', {
+            registerResponse: 'Registration Failed',
+            errors: errors
+        });
+    } else {
+        var username = req.body.username;
+        var email = req.body.email;
+        //check if same
+        var password = req.body.password1;
+
+        const emailQuery = "SELECT * from users WHERE email=?";
+        getConnection().query(emailQuery, [email], (err, results, fields) => {
+            if (err) {
+                console.log("failed" + err)
+                res.sendStatus(500)
+                return
+            } else {
+                if (results.length > 0) {
+                    //display error message
+                    console.log("GOT HERE???");
+                    var jsonString = '[{"msg" : "Email already registered.  Please try again."}]';
+                    var emailErrorJSON = JSON.parse(jsonString);
+                    console.log("errors is: ");
+                    console.log(emailErrorJSON.msg);
+                    res.render('register', {
+                        registerResponse: 'Registration Failed',
+                        errors: emailErrorJSON
+                    });
+                }
+                else {
+                    //proceed with INSERT query
+                    console.log("no duplicate emails");
+                    //query info
+                    const insertQuery = "INSERT into users (username, email, password) VALUES (?,?,?)";
+                    getConnection().query(insertQuery, [username, email, password], (err, results, fields) => {
+                        if (err) {
+                            console.log("failed" + err)
+                            res.sendStatus(500)
+                            return
+                        } else {
+                            res.render('register.ejs', { registerResponse: "Registration Complete", errors: "" });
+                        }
 
 
-    })
+                    })
+                }
+
+            }
+        })
+
+    }
+
+
 });
 
 //----------------------BEGIN LOGIN--------------------------------------//
