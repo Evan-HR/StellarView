@@ -10,6 +10,8 @@ const expressValidator = require('express-validator');
 //authentication variables
 var session = require('express-session');
 var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var MySQLStore = require('express-mysql-session')(session);
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 var cookieParser = require('cookie-parser');
@@ -52,6 +54,15 @@ function getConnection() {
     );
 }
 
+//for sessions
+var options = {
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'parks'
+};
+
+var sessionStore = new MySQLStore(options);
 
 //middleware, this code is looking at the request for you, 
 //useful for getting data passed into the form 
@@ -75,6 +86,7 @@ app.use(session({
     //secret is like the salt, "signed"
     secret: 'J94js0f2s4J4jsjf',
     resave: false,
+    store: sessionStore,
     //only logged/registered users have cookies 
     saveUninitialized: false,
     //cookie: { secure: true }
@@ -84,6 +96,26 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
+passport.use(new LocalStrategy(
+    function(username, password, done) {
+console.log(username);
+console.log(password);
+        return done(null, false);
+    }
+  ));
+
+
+app.get('/login', function (req, res) {
+    res.render('login.ejs');
+});
+
+//local strategy cuz database is localhost
+//----------------------BEGIN LOGIN--------------------------------------//
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/profile',
+    failureRedirect: '/login'
+}));
+//----------------------END LOGIN--------------------------------------//
 
 
 app.get('/register', function (req, res) {
@@ -168,7 +200,7 @@ app.post('/register', function (req, res) {
 });
 
 
-//use this any time you want to WRITE info to a session
+//----------------------BEGIN AUTHENTICATION-----------------
 passport.serializeUser(function (user_id, done) {
     done(null, user_id);
 });
@@ -180,22 +212,31 @@ passport.deserializeUser(function (user_id, done) {
 
 });
 
+function authenticationMiddleware() {
+    return (req, res, next) => {
+        console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
 
-//----------------------BEGIN LOGIN--------------------------------------//
-app.post('/auth', function (request, response) {
-    var username = request.body.username;
-    var password = request.body.password;
+        if (req.isAuthenticated()) return next();
+        res.redirect('/login.html')
+    }
+}
+//----------------------END AUTHENTICATION-----------------
 
-});
-//----------------------END LOGIN--------------------------------------//
+
 
 
 
 //dynamically populate homepage
 app.get(['/', '/form.html'], function (req, res) {
     console.log(req.user);
-    console.log("are we authenticated??? "+req.isAuthenticated());
-    res.render('form.ejs', { name: "dustin" });
+    console.log("are we authenticated??? " + req.isAuthenticated());
+    res.render('form.ejs');
+});
+
+
+//authenticationMiddleware makes sure its visible only if youre registered+logged in
+app.get('/profile', authenticationMiddleware(), function (req, res) {
+    res.render('profile.ejs', { profile: "Profile ye" });
 });
 
 //full park info link pages
