@@ -91,51 +91,77 @@ app.use(session({
     saveUninitialized: false,
     //cookie: { secure: true }
 }));
-//creates passport sessions, grabs cookies
+
+
+
+/**
+ * creates passport sessions, grabs cookies
+ * PLEASE MAKE SURE THIS IS ABOVE ANY OTHER PASSPORT FUNCTION
+ */
 app.use(passport.initialize());
 app.use(passport.session());
+
+//global for dynamic session stuff
+//the bool gets passed through to EVERY VIEW!
+//you dont need to pass it through every route 
+app.use(function (req, res, next) {
+    res.locals.isAuthenticated = req.isAuthenticated();
+    next();
+});
 
 
 //using passport to authenticate login
 //adjust usernameField to email because this middleware
 //mandates key word "username" 
 passport.use(new LocalStrategy({
-usernameField: 'email'
+    usernameField: 'email'
 },
     function (username, password, done) {
-        console.log("email is: "+username);
-        console.log("password is: "+password);
+        console.log("email is: " + username);
+        console.log("password is: " + password);
         const passQuery = "SELECT id,password from users WHERE email=?";
         getConnection().query(passQuery, [username], (err, results, fields) => {
             //passport handles this error
             if (err) { done(err) };
             //doesn't exist 
             if (results.length === 0) {
-                 done(null, false);
-            }else{
-            //success query
-            console.log("success login");
-            console.log(results[0].password.toString());
-            const hash = results[0].password.toString();
-            
-            bcrypt.compare(password,hash,function(err,response){
-                if(response ===true){
-                    return done(null, {user_id:results[0].id});
-                }else{
-                    return done(null,false);
-                }
-            });
+                done(null, false);
+            } else {
+                //success query
+                console.log("success login");
+                console.log(results[0].password.toString());
+                const hash = results[0].password.toString();
+
+                bcrypt.compare(password, hash, function (err, response) {
+                    if (response === true) {
+                        return done(null, { user_id: results[0].id });
+                    } else {
+                        return done(null, false);
+                    }
+                });
             }
 
-            
+
 
         })
     }
 ));
 
+/**
+ * When you call req.logout(), req.session.destroy(), 
+ * and req.redirect('/') synchronously (one after the other)
+ *  like he does in the video, you may get an error in the console 
+ * about an unhandled promise. This is because req.session.destroy()
+ *  is asynchronous, so you may be redirected before your session has been destroyed. 
+ */
 app.get('/logout', function (req, res) {
-    res.logout();
-    res.redirect('/');
+    req.logout();
+    //destroys session from database
+    req.session.destroy(() => {
+        res.clearCookie('connect.sid')
+        res.redirect('/');
+    })
+
 });
 
 app.get('/login', function (req, res) {
@@ -220,7 +246,7 @@ app.post('/register', function (req, res) {
                                 req.login(user_id, function (err) {
                                     //will return successfully registered user to homepage
                                     res.redirect('/');
-                
+
                                 });
 
 
