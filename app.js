@@ -96,14 +96,47 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-passport.use(new LocalStrategy(
-    function(username, password, done) {
-console.log(username);
-console.log(password);
-        return done(null, false);
-    }
-  ));
+//using passport to authenticate login
+//adjust usernameField to email because this middleware
+//mandates key word "username" 
+passport.use(new LocalStrategy({
+usernameField: 'email'
+},
+    function (username, password, done) {
+        console.log("email is: "+username);
+        console.log("password is: "+password);
+        const passQuery = "SELECT id,password from users WHERE email=?";
+        getConnection().query(passQuery, [username], (err, results, fields) => {
+            //passport handles this error
+            if (err) { done(err) };
+            //doesn't exist 
+            if (results.length === 0) {
+                 done(null, false);
+            }else{
+            //success query
+            console.log("success login");
+            console.log(results[0].password.toString());
+            const hash = results[0].password.toString();
+            
+            bcrypt.compare(password,hash,function(err,response){
+                if(response ===true){
+                    return done(null, {user_id:results[0].id});
+                }else{
+                    return done(null,false);
+                }
+            });
+            }
 
+            
+
+        })
+    }
+));
+
+app.get('/logout', function (req, res) {
+    res.logout();
+    res.redirect('/');
+});
 
 app.get('/login', function (req, res) {
     res.render('login.ejs');
@@ -187,6 +220,7 @@ app.post('/register', function (req, res) {
                                 req.login(user_id, function (err) {
                                     //will return successfully registered user to homepage
                                     res.redirect('/');
+                
                                 });
 
 
@@ -217,7 +251,7 @@ function authenticationMiddleware() {
         console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
 
         if (req.isAuthenticated()) return next();
-        res.redirect('/login.html')
+        res.redirect('/login')
     }
 }
 //----------------------END AUTHENTICATION-----------------
