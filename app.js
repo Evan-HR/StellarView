@@ -10,6 +10,9 @@ const http = require('http');
 
 //authentication variables
 var session = require('express-session');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var MySQLStore = require('express-mysql-session')(session);
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 var cookieParser = require('cookie-parser');
@@ -21,6 +24,7 @@ var cookieParser = require('cookie-parser');
 require('dotenv').config();
 const mapsKey1 = process.env.DUSTINMAPKEY;
 const weatherKey1 = process.env.EVANWEATHERKEY;
+const cookieKey = process.env.SECRET;
 
 //set up simple express server
 const app = express();
@@ -40,14 +44,27 @@ app.listen('3000', () => {
 
 //tidy connection code
 function getConnection() {
-    return mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'parks'
-    });
+    return mysql.createConnection(
+        {
+            host: 'localhost',
+            user: 'root',
+            password: '',
+            database: 'parks',
+            multipleStatements: true
+
+        }
+    );
 }
 
+//for sessions
+var options = {
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'parks'
+};
+
+var sessionStore = new MySQLStore(options);
 
 //middleware, this code is looking at the request for you, 
 //useful for getting data passed into the form 
@@ -65,15 +82,102 @@ app.use(morgan('short'));
 app.use(cookieParser());
 app.use(express.static('./public'));
 
-//session stuff
+//session stuff, creates the cookie
+//to view cookie, check browser console and go to APPLICATION --> cookies for chrome
+//cookie: secure true is recommended by requires https connection
 app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
-  //cookie: { secure: true }
-}))
+    //secret is like the salt, "signed"
+    secret: cookieKey,
+    resave: false,
+    store: sessionStore,
+    //only logged/registered users have cookies 
+    saveUninitialized: false,
+    //cookie: { secure: true }
+}));
 
 
+
+/**
+ * creates passport sessions, grabs cookies
+ * PLEASE MAKE SURE THIS IS ABOVE ANY OTHER PASSPORT FUNCTION
+ */
+app.use(passport.initialize());
+app.use(passport.session());
+
+//global for dynamic session stuff
+//the bool gets passed through to EVERY VIEW!
+//you dont need to pass it through every route 
+app.use(function (req, res, next) {
+    res.locals.isAuthenticated = req.isAuthenticated();
+    next();
+});
+
+
+//using passport to authenticate login
+//adjust usernameField to email because this middleware
+//mandates key word "username" 
+passport.use(new LocalStrategy({
+    usernameField: 'email'
+},
+    function (username, password, done) {
+        console.log("email is: " + username);
+        console.log("password is: " + password);
+        const passQuery = "SELECT id,password from users WHERE email=?";
+        getConnection().query(passQuery, [username], (err, results, fields) => {
+            //passport handles this error
+            if (err) { done(err) };
+            //doesn't exist 
+            if (results.length === 0) {
+                done(null, false);
+            } else {
+                //success query
+                console.log("success login");
+                console.log(results[0].password.toString());
+                const hash = results[0].password.toString();
+
+                bcrypt.compare(password, hash, function (err, response) {
+                    if (response === true) {
+                        return done(null, { user_id: results[0].id});
+                    } else {
+                        return done(null, false);
+                    }
+                });
+            }
+
+
+
+        })
+    }
+));
+
+/**
+ * When you call req.logout(), req.session.destroy(), 
+ * and req.redirect('/') synchronously (one after the other)
+ *  like he does in the video, you may get an error in the console 
+ * about an unhandled promise. This is because req.session.destroy()
+ *  is asynchronous, so you may be redirected before your session has been destroyed. 
+ */
+app.get('/logout', function (req, res) {
+    req.logout();
+    //destroys session from database
+    req.session.destroy(() => {
+        res.clearCookie('connect.sid')
+        res.redirect('/');
+    })
+
+});
+
+app.get('/login', function (req, res) {
+    res.render('login.ejs');
+});
+
+//local strategy cuz database is localhost
+//----------------------BEGIN LOGIN--------------------------------------//
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/profile',
+    failureRedirect: '/login'
+}));
+//----------------------END LOGIN--------------------------------------//
 
 
 app.get('/register', function (req, res) {
@@ -83,8 +187,8 @@ app.get('/register', function (req, res) {
 app.post('/register', function (req, res) {
 
     //client-side validation
-    req.checkBody('username', 'Username cannot be empty.').notEmpty();
-    req.checkBody('username', 'Username must be between 3-15 characters long.').len(3, 15);
+    req.checkBody('name', 'Preferred name cannot be empty.').notEmpty();
+    req.checkBody('name', 'Preferred name must be between 2-25 characters long.').len(2, 25);
     req.checkBody('email', "The email you entered is invalid. Please try again.").isEmail();
     req.checkBody('email', "Email address must be between 8-100 characters long.").len(8, 100);
     req.checkBody('password2', 'Passwords do not match. Please try again.').equals(req.body.password1);
@@ -97,104 +201,93 @@ app.post('/register', function (req, res) {
             errors: errors
         });
     } else {
-        var username = req.body.username;
+        var name = req.body.name;
         var email = req.body.email;
         //check if same
         var password = req.body.password1;
 
-
-        const usernameQuery = "SELECT * from users WHERE username=?";
-        getConnection().query(usernameQuery, [username], (err, results, fields) => {
+        const emailQuery = "SELECT * from users WHERE email=?";
+        getConnection().query(emailQuery, [email], (err, results, fields) => {
             if (err) {
                 console.log("failed" + err);
                 res.sendStatus(500);
                 return;
-            }
-
-            else {
+            } else {
                 if (results.length > 0) {
                     //display error message
-                    console.log("USERNAME ERROR!");
-                    var jsonString = '[{"msg" : "Username already registered.  Please try again."}]';
-                    var userErrorJSON = JSON.parse(jsonString);
+                    console.log("GOT HERE???");
+                    var jsonString = '[{"msg" : "Email already registered.  Please try again."}]';
+                    var emailErrorJSON = JSON.parse(jsonString);
                     console.log("errors is: ");
-                    console.log(userErrorJSON.msg);
+                    console.log(emailErrorJSON.msg);
                     res.render('register', {
                         registerResponse: 'Registration Failed',
-                        errors: userErrorJSON
+                        errors: emailErrorJSON
                     });
-                } else {
-                    const emailQuery = "SELECT * from users WHERE email=?";
-                    getConnection().query(emailQuery, [email], (err, results, fields) => {
-                        if (err) {
-                            console.log("failed" + err);
-                            res.sendStatus(500);
-                            return;
-                        } else {
-                            if (results.length > 0) {
-                                //display error message
-                                console.log("GOT HERE???");
-                                var jsonString = '[{"msg" : "Email already registered.  Please try again."}]';
-                                var emailErrorJSON = JSON.parse(jsonString);
-                                console.log("errors is: ");
-                                console.log(emailErrorJSON.msg);
-                                res.render('register', {
-                                    registerResponse: 'Registration Failed',
-                                    errors: emailErrorJSON
-                                });
-                            }
-                            else {
-                                //proceed with INSERT query
-                                console.log("no duplicate emails");
-                                //query info
-                                const insertQuery = "INSERT into users (username, email, password) VALUES (?,?,?)";
+                }
+                else {
+                    //proceed with INSERT query
+                    console.log("no duplicate emails");
+                    //query info
+                    const insertQuery = "INSERT into users (name, email, password) VALUES (?,?,?); SELECT LAST_INSERT_ID() as user_id;";
 
-                                //wrap insert query with bcrypt
-                                bcrypt.hash(password, saltRounds, function (err, hash) {
-                                    getConnection().query(insertQuery, [username, email, hash], (err, results, fields) => {
-                                        if (err) {
-                                            console.log("failed" + err);
-                                            res.sendStatus(500);
-                                            return;
-                                        } else {
-                                            res.render('register.ejs', { registerResponse: "Registration Complete", errors: "" });
-                                        }
-                                    });
-                                    if (err) {
-                                        throw err;
-                                    }
+                    //wrap insert query with bcrypt
+                    bcrypt.hash(password, saltRounds, function (err, hash) {
+                        getConnection().query(insertQuery, [name, email, hash], (err, results, fields) => {
+                            if (err) {
+                                console.log("failed" + err);
+                                res.sendStatus(500);
+                                return;
+                            } else {
 
+                                console.log("THIS RAN!!!!!!!!!!!!!!");
 
+                                console.log("user ID is: " + results[1][0].user_id);
+                                const user_id = results[1][0].user_id;
+                                //should be user_id that was just created
+                                //login function returns data to serializeUser function below
+                                req.login(user_id, function (err) {
+                                    //will return successfully registered user to homepage
+                                    res.redirect('/');
 
                                 });
+
+
                             }
-
-                        }
+                        });
                     });
-
-
-
-
-
                 }
             }
-
-
-
-
-        })
+        });
     }
+});
 
+
+//----------------------BEGIN AUTHENTICATION-----------------
+passport.serializeUser(function (user_id, done) {
+    done(null, user_id);
+});
+//use this any time you want to GET info to a session
+passport.deserializeUser(function (user_id, done) {
+    //User.findById(id, function (err, user) {
+    //^ this line automatic in mongo, hopefully no issues with mySQL
+    done(null, user_id);
 
 });
 
-//----------------------BEGIN LOGIN--------------------------------------//
-app.post('/auth', function (request, response) {
-    var username = request.body.username;
-    var password = request.body.password;
 
-});
-//----------------------END LOGIN--------------------------------------//
+
+function authenticationMiddleware() {
+    return (req, res, next) => {
+        console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
+
+        if (req.isAuthenticated()) return next();
+        res.redirect('/login')
+    }
+}
+//----------------------END AUTHENTICATION-----------------
+
+
 
 //- - - - - - - - - - - - - - - BEGIN WEATHER - - - - - - - - - - - - - - - - - - - -//
 
@@ -239,8 +332,28 @@ var dataWeather = EvansEvanEvan(43,-79);
 
 //dynamically populate homepage
 app.get(['/', '/form.html'], function (req, res) {
-    res.render('form.ejs', { name: "dustin" });
+    console.log(req.user);
+    console.log("are we authenticated??? " + req.isAuthenticated());
+    res.render('form.ejs');
 });
+
+
+//authenticationMiddleware makes sure its visible only if youre registered+logged in
+app.get('/profile', authenticationMiddleware(), function (req, res) {
+    
+    const nameQuery = "SELECT name from users WHERE id=?";
+    getConnection().query(nameQuery, [req.user.user_id], (err, profileInfo) => {
+        if (err) {
+            console.log("failed" + err);
+            res.sendStatus(500);
+            return;
+        }
+        else{
+            res.render('profile.ejs', { profileName: profileInfo[0].name });
+        }
+  
+    
+})});
 
 //full park info link pages
 app.get('/park/:id', function (req, res) {
