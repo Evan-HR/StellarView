@@ -6,7 +6,8 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
 const expressValidator = require('express-validator');
-const http = require('http');
+//const http = require('http');
+const request = require('request');
 
 //authentication variables
 var session = require('express-session');
@@ -295,38 +296,41 @@ function authenticationMiddleware() {
 
 
 
-function EvansEvanEvan(lat, lon) {
-    // call the api url with form input
-    var apiurl = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lon}&cnt=50&appid=${weatherKey1}`;
-    var weatherData;
-    // code from https://www.twilio.com/blog/2017/08/http-requests-in-node-js.html
-    http.get(apiurl, (resp) => {
-        let data = '';
+function GetWeather(lat, lon) {
+    // // call the api url with form input
+    // var apiurl = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lon}&cnt=50&appid=${weatherKey1}`;
+    // var weatherData;
+    // // code from https://www.twilio.com/blog/2017/08/http-requests-in-node-js.html
+    // http.get(apiurl, (resp) => {
+    //     let data = '';
       
-        // A chunk of data has been recieved.
-        resp.on('data', (chunk) => {
-          data += chunk;
-        });
+    //     // A chunk of data has been recieved.
+    //     resp.on('data', (chunk) => {
+    //       data += chunk;
+    //     });
       
-        // The whole response has been received. Print out the result.
-        resp.on('end', () => {
-          weatherData = (JSON.parse(data));
-          //console.log(weatherData);
-        });
+    //     // The whole response has been received. Print out the result.
+    //     resp.on('end', () => {
+    //       weatherData = (JSON.parse(data));
+    //     });
       
-      }).on("error", (err) => {
-        console.log("Error: " + err.message);
-      });
+    //   }).on("error", (err) => {
+    //     console.log("Error: " + err.message);
+    //   });
+
+
+    console.log("aaaaaaaaaaaaaaa");
+    request(`http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lon}&cnt=50&appid=${weatherKey1}`, (err, res, body) => {
+        if (err) { return console.error(err); }
+        dataWeather = body;
+        console.log(body);
+    });
 
     // use result lat/lon coords and find closest city coords from weather
     
 
     // associate humidity and cloud cover info from closest city for each result location
-    return weatherData;
-
 }
-var dataWeather = EvansEvanEvan(43,-79); // this holds weather json
-console.log(dataWeather);
 
 
 //-----------------END WEATHER-----------------
@@ -334,10 +338,21 @@ console.log(dataWeather);
 //dynamically populate homepage
 app.get(['/', '/form.html'], function (req, res) {
     console.log(req.user);
-    // weather teasting
-    var dataWeather = EvansEvanEvan(43,-79); // this holds weather json
-    //console.log("data");
-    console.log("data:" + dataWeather);
+
+
+    // weather testing
+
+    var weatherJSON;
+    weatherUrl = `http://api.openweathermap.org/data/2.5/find?lat=${43.254591}&lon=${-79.8632725}&cnt=50&appid=${weatherKey1}`;
+    request(weatherUrl, (err, res, body) => {
+        if (err) { console.log(err); }
+        else {
+            weatherJSON = JSON.parse(body); 
+            console.log(weatherJSON.list);
+            var weatherArr = [];
+
+        }
+    });
     // end weather testing
 
     console.log("are we authenticated??? " + req.isAuthenticated());
