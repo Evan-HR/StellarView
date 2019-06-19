@@ -23,6 +23,7 @@ var cookieParser = require('cookie-parser');
 require('dotenv').config();
 const mapsKey1 = process.env.DUSTINMAPKEY;
 const weatherKey1 = process.env.EVANWEATHERKEY;
+const cookieKey = process.env.SECRET;
 
 //set up simple express server
 const app = express();
@@ -82,9 +83,10 @@ app.use(express.static('./public'));
 
 //session stuff, creates the cookie
 //to view cookie, check browser console and go to APPLICATION --> cookies for chrome
+//cookie: secure true is recommended by requires https connection
 app.use(session({
     //secret is like the salt, "signed"
-    secret: 'J94js0f2s4J4jsjf',
+    secret: cookieKey,
     resave: false,
     store: sessionStore,
     //only logged/registered users have cookies 
@@ -134,7 +136,7 @@ passport.use(new LocalStrategy({
 
                 bcrypt.compare(password, hash, function (err, response) {
                     if (response === true) {
-                        return done(null, { user_id: results[0].id });
+                        return done(null, { user_id: results[0].id});
                     } else {
                         return done(null, false);
                     }
@@ -272,6 +274,8 @@ passport.deserializeUser(function (user_id, done) {
 
 });
 
+
+
 function authenticationMiddleware() {
     return (req, res, next) => {
         console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
@@ -296,8 +300,20 @@ app.get(['/', '/form.html'], function (req, res) {
 
 //authenticationMiddleware makes sure its visible only if youre registered+logged in
 app.get('/profile', authenticationMiddleware(), function (req, res) {
-    res.render('profile.ejs', { profile: "Profile ye" });
-});
+    
+    const nameQuery = "SELECT name from users WHERE id=?";
+    getConnection().query(nameQuery, [req.user.user_id], (err, profileInfo) => {
+        if (err) {
+            console.log("failed" + err);
+            res.sendStatus(500);
+            return;
+        }
+        else{
+            res.render('profile.ejs', { profileName: profileInfo[0].name });
+        }
+  
+    
+})});
 
 //full park info link pages
 app.get('/park/:id', function (req, res) {
