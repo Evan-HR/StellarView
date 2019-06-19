@@ -289,7 +289,7 @@ function authenticationMiddleware() {
 
 
 
-//- - - - - - - - - - - - - - - BEGIN WEATHER - - - - - - - - - - - - - - - - - - - -//
+//----------------------BEGIN WEATHER-----------------
 
 
 
@@ -298,7 +298,7 @@ function authenticationMiddleware() {
 function EvansEvanEvan(lat, lon) {
     // call the api url with form input
     var apiurl = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lon}&cnt=50&appid=${weatherKey1}`;
-
+    var weatherData;
     // code from https://www.twilio.com/blog/2017/08/http-requests-in-node-js.html
     http.get(apiurl, (resp) => {
         let data = '';
@@ -311,7 +311,7 @@ function EvansEvanEvan(lat, lon) {
         // The whole response has been received. Print out the result.
         resp.on('end', () => {
           weatherData = (JSON.parse(data));
-          return weatherData;
+          //console.log(weatherData);
         });
       
       }).on("error", (err) => {
@@ -322,17 +322,24 @@ function EvansEvanEvan(lat, lon) {
     
 
     // associate humidity and cloud cover info from closest city for each result location
-
+    return weatherData;
 
 }
-var dataWeather = EvansEvanEvan(43,-79);
+var dataWeather = EvansEvanEvan(43,-79); // this holds weather json
+console.log(dataWeather);
 
 
-// - - - - - - - - - - - - - - - END WEATHER - - - - - - - - - - - - - - - - - - - //
+//-----------------END WEATHER-----------------
 
 //dynamically populate homepage
 app.get(['/', '/form.html'], function (req, res) {
     console.log(req.user);
+    // weather teasting
+    var dataWeather = EvansEvanEvan(43,-79); // this holds weather json
+    //console.log("data");
+    console.log("data:" + dataWeather);
+    // end weather testing
+
     console.log("are we authenticated??? " + req.isAuthenticated());
     res.render('form.ejs');
 });
