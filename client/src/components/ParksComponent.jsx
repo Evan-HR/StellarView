@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 class ParksComponent extends Component {
 	state = {
-		parks: []
+        parks: []
 	};
 
 	getParks = reqData => {
@@ -23,13 +23,29 @@ class ParksComponent extends Component {
 			.catch(err => console.error(err));
 	};
 
+	clearParks = () => {
+		this.setState({ parks: [] });
+	};
+
 	renderPark = park => (
 		<tr>
 			<td>{park.name}</td>
 			<td>{park.light_pol}</td>
 			<td>{park.distance}</td>
 		</tr>
-	);
+    );
+
+	clearButtonClass() {
+		let classes = "btn btn-danger btn-sm m-2";
+		if (this.state.parks.length > 0) {
+			console.log("Clear button enabled");
+			classes += " active";
+		} else {
+			console.log("Clear button disabled");
+			classes += " disabled";
+		}
+		return classes;
+	}
 
 	render() {
 		console.log("ParksComponent - rendered");
@@ -40,6 +56,8 @@ class ParksComponent extends Component {
 			dist: 50,
 			lightpol: 2
 		};
+		//let clearButtonClass = this.clearButtonClass();
+
 		return (
 			<div className="ParksDiv">
 				<button
@@ -47,7 +65,15 @@ class ParksComponent extends Component {
 					className="btn btn-primary btn-sm m-2"
 					type="button"
 				>
-					Get parks at
+					<strong>Get parks</strong>
+				</button>
+				<button
+					onClick={this.clearParks}
+                    className={this.clearButtonClass()}
+                    disabled={(this.state.parks.length === 0)}
+					type="button"
+				>
+					<strong>Clear</strong>
 				</button>
 				<br />
 				lat: {reqData.lat}, lng: {reqData.lng}
