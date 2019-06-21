@@ -1,30 +1,34 @@
 {
-  "name": "stargazer",
-  "version": "1.0.0",
-  "description": "sample app for using mysql with node",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "bcrypt": "^3.0.6",
+	"name": "stargazer",
+	"version": "1.0.0",
+	"description": "sample app for using mysql with node",
+	"main": "app.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"client": "cd client && npm start",
+		"server": "nodemon app.js",
+		"dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
-    "cookie-parser": "^1.4.4",
-    "dotenv": "^8.0.0",
-    "ejs": "^2.6.1",
-    "express": "^4.17.1",
-    "express-mysql-session": "^2.1.0",
-    "express-session": "^1.16.2",
-    "express-validator": "^5.3.1",
-    "morgan": "^1.9.1",
-    "mysql": "^2.17.1",
-    "nodemon": "^1.19.1",
-    "passport": "^0.4.0",
-    "passport-local": "^1.0.0",
-    "path": "^0.12.7",
-    "request": "^2.88.0"
-  },
-  "devDependencies": {}
+    "concurrently": "^4.1.0",
+		"cookie-parser": "^1.4.4",
+		"dotenv": "^8.0.0",
+		"ejs": "^2.6.1",
+		"express": "^4.17.1",
+		"express-mysql-session": "^2.1.0",
+		"express-session": "^1.16.2",
+		"express-validator": "^5.3.1",
+		"morgan": "^1.9.1",
+		"mysql": "^2.17.1",
+		"nodemon": "^1.19.1",
+		"passport": "^0.4.0",
+		"passport-local": "^1.0.0",
+		"path": "^0.12.7",
+		"request": "^2.88.0"
+	},
+	"devDependencies": {}
 }

@@ -29,7 +29,7 @@ const cookieKey = process.env.SECRET;
 
 //set up simple express server
 const app = express();
-
+const port = process.env.PORT || 5000;
 
 
 //for dynamic html generation
@@ -38,9 +38,9 @@ app.set('view engine', 'ejs');
 app.use('/public', express.static('public'));
 //app.use(express.static(__dirname + '/public'));
 
-//arbitrary port 3000
-app.listen('3000', () => {
-    console.log('Server started on port 3000');
+//arbitrary port 5000
+app.listen(port, () => {
+    console.log(`Server started on port ${port}`);
 });
 
 //tidy connection code
@@ -434,5 +434,21 @@ app.post('/results.html', (req, res) => {
     });
 
 });
+
+/*** HELLO REACT ***/
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.get('/api/hello', (req, res) => {
+  res.send({ express: 'Hello From Express' });
+});
+
+app.post('/api/world', (req, res) => {
+  console.log(req.body);
+  res.send(
+    `I received your POST request. This is what you sent me: ${req.body.post}`,
+  );
+});
+/*** HELLO REACT ***/
 
 
