@@ -449,6 +449,27 @@ app.post('/api/world', (req, res) => {
     `I received your POST request. This is what you sent me: ${req.body.post}`,
   );
 });
+
+app.post('/api/getParks', (req, res) => {
+    console.log(req.body);
+    //var requestData = JSON.parse(req.body);
+    
+    const lat = req.body.lat;
+    const lng = req.body.lng;
+    const dist = req.body.dist;
+    const lightpol = req.body.lightpol;
+    //6371 is km, 3959 is miles 
+    const queryString = "SELECT *, ( 6371 * acos( cos( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin( radians( ? ) ) * sin( radians( lat ) ) ) ) AS distance FROM ontario_parks HAVING distance <= ? AND light_pol <= ? ORDER BY distance ASC";
+    getConnection().query(queryString, [lat, lng, lat, dist, lightpol], (err, results) => {
+        if (err) {
+            console.log("failed" + err);
+            res.sendStatus(500);
+            return;
+        }
+        res.send(results)
+        //res.send({ location: [lat, lng], parks: results, mapAPIKey: mapsKey1 });
+    });
+})
 /*** HELLO REACT ***/
 
 
