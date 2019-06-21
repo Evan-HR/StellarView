@@ -48,6 +48,7 @@ class App extends Component {
 			<div className="App">
 				<button
 					onClick={this.getParks.bind(this, reqData)}
+					className="btn btn-primary btn-sm m-2"
 					type="button"
 				>
 					Get parks at
@@ -55,13 +56,13 @@ class App extends Component {
 				<br />
 				lat: {reqData.lat}, lng: {reqData.lng}
 				<br />
-				<table>
+				<table className="table table-hover">
 					<tr>
 						<th>Name</th>
 						<th>Light</th>
 						<th>Distance</th>
 					</tr>
-					{parks.map(this.renderPark)}
+					<tbody>{parks.map(this.renderPark)}</tbody>
 				</table>
 			</div>
 		);
