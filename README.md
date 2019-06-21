@@ -14,6 +14,9 @@ Install XAMPP, run MYSQL and APACHE\
 go to: localhost/phpmyadmin\
 create database (info via MESSENGER)\
 
+To run client+server at the same time:
+npm run dev
+
 We will be having the server hosted remotely for better usage, localhost phpmyadmin sucks\
 see (https://www.youtube.com/watch?v=w0HAZKxyrf8&list=PL0dzCUj1L5JE4w_OctDGyZOhML6OtJSqR&index=5)\
 
