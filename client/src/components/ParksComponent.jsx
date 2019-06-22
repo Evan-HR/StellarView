@@ -2,10 +2,17 @@ import React, { Component } from "react";
 
 class ParksComponent extends Component {
 	state = {
-        parks: []
+		parks: []
 	};
 
 	//Request parks from server
+	//getParks is a function, weird react notation perhaps?
+	//note, reqData could be X, just a variable name! int x=
+
+	//YOU NEED THE / in the ADDRESS!!
+	//don't put "getParks", must be "/name"
+	//getParks gets called, and does a fetch to
+	//app.post("/api/getParks")
 	getParks = reqData => {
 		console.log(JSON.stringify(reqData));
 		fetch("/api/getParks", {
@@ -16,6 +23,14 @@ class ParksComponent extends Component {
 			},
 			body: JSON.stringify(reqData)
 		})
+			//RESPONSE IS "x", any OUTPUT from previous
+			//function CALL (FETCH POST REQ to server.js getParks)
+			//.then WAITS for the response from fetch/server.js
+			//data is "response" lol! can call either x/y
+			//update STATE as a JSON array
+			//react says "oh shit something changed"
+			// note, everytime setState is called, it
+			//automatically goes to RENDER() function!
 			.then(response => response.json())
 			.then(data => {
 				console.log(data);
@@ -30,13 +45,15 @@ class ParksComponent extends Component {
 	};
 
 	//Draw table entries per park
-	renderPark = park => (
+	//at this point, fields "name, light_pol, distance" aren't defined
+	//which is why you don't see it populated on the table before "get parks" button
+	renderPark = x => (
 		<tr>
-			<td>{park.name}</td>
-			<td>{park.light_pol}</td>
-			<td>{park.distance}</td>
+			<td>{x.name}</td>
+			<td>{x.light_pol}</td>
+			<td>{x.distance}</td>
 		</tr>
-    );
+	);
 
 	//Clear button style
 	clearButtonClass() {
@@ -51,8 +68,11 @@ class ParksComponent extends Component {
 		return classes;
 	}
 
+	//recursively calls render on it's children
 	render() {
 		console.log("ParksComponent - rendered");
+
+		//"copies" into temp array parks
 		const parks = this.state.parks;
 		//Placeholder request
 		var reqData = {
@@ -62,6 +82,8 @@ class ParksComponent extends Component {
 			lightpol: 2
 		};
 		//let clearButtonClass = this.clearButtonClass();
+		//bind(this,reqData) passes reqData to getParks
+		//bind seems to be needed for onClick buttons /w args
 
 		return (
 			<div className="ParksDiv">
@@ -74,8 +96,8 @@ class ParksComponent extends Component {
 				</button>
 				<button
 					onClick={this.clearParks}
-                    className={this.clearButtonClass()}
-                    disabled={(this.state.parks.length === 0)}
+					className={this.clearButtonClass()}
+					disabled={this.state.parks.length === 0}
 					type="button"
 				>
 					<strong>Clear</strong>

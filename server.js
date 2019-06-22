@@ -443,10 +443,6 @@ app.post("/results.html", (req, res) => {
 	);
 });
 
-/*** HELLO REACT ***/
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
 // Tutorial API
 // app.get("/api/hello", (req, res) => {
 // 	res.send({ express: "Hello From Express" });
@@ -461,7 +457,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // 	);
 // });
 
+//YOU NEED THE / in the ADDRESS!!
+//don't put "getParks", must be "/name"
 app.post("/api/getParks", (req, res) => {
+	//from bodyParser, parses the HTTP request
+	//from ParksComponent / React (getParks =>)
 	console.log(req.body);
 	//var requestData = JSON.parse(req.body);
 
