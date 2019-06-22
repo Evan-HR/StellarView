@@ -1,6 +1,10 @@
 # StarFinder
 **⚠️⚠️⚠️!!!NOTE: DO NOT COMMIT ANY API KEY INFORMATION!!!⚠️⚠️⚠️**
 
+## On Ports
+Backend node server can be connected to via `http://localhost:5000/`\
+Frontend react server can be connected to via `http://localhost:3000/`
+
 ## Traditional Setup
 in Visual Studio Code, run the following commands
 ```

@@ -5,6 +5,7 @@ class ParksComponent extends Component {
         parks: []
 	};
 
+	//Request parks from server
 	getParks = reqData => {
 		console.log(JSON.stringify(reqData));
 		fetch("/api/getParks", {
@@ -23,10 +24,12 @@ class ParksComponent extends Component {
 			.catch(err => console.error(err));
 	};
 
+	//Clear button handler
 	clearParks = () => {
 		this.setState({ parks: [] });
 	};
 
+	//Draw table entries per park
 	renderPark = park => (
 		<tr>
 			<td>{park.name}</td>
@@ -35,6 +38,7 @@ class ParksComponent extends Component {
 		</tr>
     );
 
+	//Clear button style
 	clearButtonClass() {
 		let classes = "btn btn-danger btn-sm m-2";
 		if (this.state.parks.length > 0) {
@@ -50,6 +54,7 @@ class ParksComponent extends Component {
 	render() {
 		console.log("ParksComponent - rendered");
 		const parks = this.state.parks;
+		//Placeholder request
 		var reqData = {
 			lat: 43.25542,
 			lng: -79.881315,

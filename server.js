@@ -447,18 +447,19 @@ app.post("/results.html", (req, res) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/api/hello", (req, res) => {
-	res.send({ express: "Hello From Express" });
-});
+// Tutorial API
+// app.get("/api/hello", (req, res) => {
+// 	res.send({ express: "Hello From Express" });
+// });
 
-app.post("/api/world", (req, res) => {
-	console.log(req.body);
-	res.send(
-		`I received your POST request. This is what you sent me: ${
-			req.body.post
-		}`
-	);
-});
+// app.post("/api/world", (req, res) => {
+// 	console.log(req.body);
+// 	res.send(
+// 		`I received your POST request. This is what you sent me: ${
+// 			req.body.post
+// 		}`
+// 	);
+// });
 
 app.post("/api/getParks", (req, res) => {
 	console.log(req.body);
