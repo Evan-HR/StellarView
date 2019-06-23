@@ -8,6 +8,17 @@ class ParksComponent extends Component {
 	state = {
 		parks: []
 	};
+	/* Note - park object is:
+        {
+            distance: number,
+            id: number,
+            lat: number,
+            lng: number,
+            light_pol: number,
+            name: string,
+            osmid: number,
+        }
+    */
 
 	//Request parks from server
 	//getParks is a function, weird react notation perhaps?
@@ -47,6 +58,18 @@ class ParksComponent extends Component {
 	clearParks = () => {
 		this.setState({ parks: [] });
 	};
+	//Clear button style
+	clearButtonClass() {
+		let classes = "btn btn-danger btn-sm m-2";
+		if (this.state.parks.length > 0) {
+			console.log("Clear button enabled");
+			classes += " active";
+		} else {
+			console.log("Clear button disabled");
+			classes += " disabled";
+		}
+		return classes;
+	}
 
 	//Draw table entries per park
 	//at this point, fields "name, light_pol, distance" aren't defined
@@ -78,20 +101,28 @@ class ParksComponent extends Component {
 
 		return (
 			<div className="ParksDiv">
-				<ParkForm />
-				<br />
-				<ParkTable />
+				{/* <ParkForm /> */}
+				{/* ParkForm replaced with temp buttons */}
+				<button
+					onClick={this.getParks.bind(this, reqData)}
+					className="btn btn-primary btn-sm m-2"
+					type="button"
+				>
+					<strong>Get parks</strong>
+				</button>
+				<button
+					onClick={this.clearParks}
+					className={this.clearButtonClass()}
+					disabled={this.state.parks.length === 0}
+					type="button"
+				>
+					<strong>Clear</strong>
+				</button>
 				<br />
 				<ParkMap />
-				<br /> <br />
-				<table className="table table-hover">
-					<tr>
-						<th>Name</th>
-						<th>Light</th>
-						<th>Distance</th>
-					</tr>
-					<tbody>{parks.map(this.renderPark)}</tbody>
-				</table>
+				<br />
+				<ParkTable parkList={this.state.parks}/>
+				<br /> <br />{" "}
 			</div>
 		);
 	}
