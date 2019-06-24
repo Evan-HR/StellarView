@@ -18,7 +18,8 @@ class ParksComponent extends Component {
 	//getParks gets called, and does a fetch to
 	//app.post("/api/getParks")
 	getParks = reqData => {
-		console.log(JSON.stringify(reqData));
+		console.log("GOT HERE!!!!!!!!!!!!!!!!!!!!!");
+		console.log(reqData);
 		fetch("/api/getParks", {
 			method: "POST", //Important
 			headers: {
@@ -48,50 +49,25 @@ class ParksComponent extends Component {
 		this.setState({ parks: [] });
 	};
 
-	//Draw table entries per park
-	//at this point, fields "name, light_pol, distance" aren't defined
-	//which is why you don't see it populated on the table before "get parks" button
-	renderPark = x => (
-		<tr>
-			<td>{x.name}</td>
-			<td>{x.light_pol}</td>
-			<td>{x.distance}</td>
-		</tr>
-	);
-
 	//recursively calls render on it's children
 	render() {
 		console.log("ParksComponent - rendered");
 
 		//"copies" into temp array parks
 		const parks = this.state.parks;
-		//Placeholder request
-		var reqData = {
-			lat: 43.25542,
-			lng: -79.881315,
-			dist: 50,
-			lightpol: 2
-		};
+
 		//let clearButtonClass = this.clearButtonClass();
 		//bind(this,reqData) passes reqData to getParks
 		//bind seems to be needed for onClick buttons /w args
 
 		return (
 			<div className="ParksDiv">
-				<ParkForm />
+				<ParkForm fetchParks={this.getParks} />
 				<br />
-				<ParkTable />
+				<ParkTable parkList={this.state.parks} />
 				<br />
 				<ParkMap />
 				<br /> <br />
-				<table className="table table-hover">
-					<tr>
-						<th>Name</th>
-						<th>Light</th>
-						<th>Distance</th>
-					</tr>
-					<tbody>{parks.map(this.renderPark)}</tbody>
-				</table>
 			</div>
 		);
 	}

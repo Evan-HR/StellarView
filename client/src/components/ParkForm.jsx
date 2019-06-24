@@ -32,10 +32,6 @@ class ParkForm extends Component {
 		);
 	};
 
-	handleSubmit(event) {
-		alert("submitted info " + this.input.curren);
-	}
-
 	handleDistanceChange = changeEvent => {
 		this.setState({
 			dist: changeEvent.target.value
@@ -60,21 +56,20 @@ class ParkForm extends Component {
 		});
 	};
 
-	onSubmit = (e) => {
+	//props to send one-way information to parksComponent
+	//this.state is the "X" in getParks()
+	//fetchP(x) --> getparks(x)
+	onSubmit = e => {
 		e.preventDefault();
 		console.log(this.state);
-	}
+
+		//getparks(reqdata) of parent
+		this.props.fetchParks(this.state);
+	};
 
 	render() {
 		return (
 			<div className="border border-primary">
-				<button
-					// onClick={this.getParks.bind(this, this.state.formInput)}
-					className="btn btn-primary btn-sm m-2"
-					type="button"
-				>
-					<strong>Get parks</strong>
-				</button>
 				<button
 					// onClick={this.getParks.bind(this, this.state.formInput)}
 					className="btn btn-primary btn-sm m-2"
@@ -97,7 +92,7 @@ class ParkForm extends Component {
 				dist: {this.state.dist}, lightpol: {this.state.lightpol}
 				<br />
 				<h3>Input Form</h3>
-				<form onSubmit={this.handleSubmit} />
+				<form />
 				<input
 					placeholder="Latitude"
 					type="number"
@@ -195,7 +190,7 @@ class ParkForm extends Component {
 					required
 					onChange={this.handleLightPolChange}
 				/>
-				<button onClick={(e) => this.onSubmit(e)}>Submit</button>
+				<button onClick={e => this.onSubmit(e)}>Submit</button>
 				<form />
 				<br />
 				<br />
