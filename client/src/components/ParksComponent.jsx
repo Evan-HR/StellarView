@@ -8,6 +8,17 @@ class ParksComponent extends Component {
 	state = {
 		parks: []
 	};
+	/* Note - park object is:
+        {
+            distance: number,
+            id: number,
+            lat: number,
+            lng: number,
+            light_pol: number,
+            name: string,
+            osmid: number,
+        }
+    */
 
 	//Request parks from server
 	//getParks is a function, weird react notation perhaps?
@@ -48,6 +59,18 @@ class ParksComponent extends Component {
 	clearParks = () => {
 		this.setState({ parks: [] });
 	};
+	//Clear button style
+	clearButtonClass() {
+		let classes = "btn btn-danger btn-sm m-2";
+		if (this.state.parks.length > 0) {
+			console.log("Clear button enabled");
+			classes += " active";
+		} else {
+			console.log("Clear button disabled");
+			classes += " disabled";
+		}
+		return classes;
+	}
 
 	//recursively calls render on it's children
 	render() {
