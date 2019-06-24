@@ -457,6 +457,7 @@ app.post("/results.html", (req, res) => {
 // 	);
 // });
 
+
 //YOU NEED THE / in the ADDRESS!!
 //don't put "getParks", must be "/name"
 app.post("/api/getParks", (req, res) => {
