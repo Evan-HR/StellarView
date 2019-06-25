@@ -79,7 +79,7 @@ class ParkForm extends Component {
 					<strong>Get location</strong>
 				</button>
 				<button
-					// onClick={this.clearParks}
+					onClick={this.props.clearParks}
 					// className={this.clearButtonClass()}
 					// disabled={this.state.parks.length === 0}
 					type="button"
