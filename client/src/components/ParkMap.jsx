@@ -1,5 +1,6 @@
 //Displays parks google map
 import React, { Component, createRef } from "react";
+import PropTypes from "prop-types";
 
 /* Notes:
 Couldn't figure out how to make google.etc work, 
@@ -87,9 +88,11 @@ class ParkMap extends Component {
 			if (this.googleMapInfowindow) {
 				this.googleMapInfowindow.close();
 			}
-			this.googleMapInfowindow = new window.google.maps.InfoWindow({content: contentString});
-            this.googleMapInfowindow.open(this.googleMap, marker);
-            this.googleMap.setCenter(marker.position);
+			this.googleMapInfowindow = new window.google.maps.InfoWindow({
+				content: contentString
+			});
+			this.googleMapInfowindow.open(this.googleMap, marker);
+			// this.googleMap.setCenter(marker.position);
 		});
 		this.markers.push(marker); //Maybe this can be moved out of the function
 		this.googleMapBounds.extend(location);
