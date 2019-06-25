@@ -85,12 +85,20 @@ class ParksComponent extends Component {
 
 		return (
 			<div className="ParksDiv">
-				<ParkForm fetchParks={this.getParks} />
-				<br />
-				<ParkTable parkList={this.state.parks} />
-				<br />
-				<ParkMap />
-				<br /> <br />
+				{/* <div className="container"> */}
+				<div className="row">
+					<div className="col">
+						<ParkMap />
+					</div>
+					<div className="col">
+						<ParkForm fetchParks={this.getParks} />
+						<br />
+						<div style={{"max-height": "300px", "overflow-y": "scroll"}}>
+							<ParkTable parkList={this.state.parks} />
+						</div>
+					</div>
+				</div>
+				{/* </div> */}
 			</div>
 		);
 	}
