@@ -4,6 +4,7 @@ import React, { Component } from "react";
 
 import "./App.css";
 import ParksComponent from "./components/ParksComponent";
+import NavBar from "./components/NavBar";
 
 class App extends Component {
 	//RENDER --> ReactDOM.render(<App />, document.getElementById("root"));
@@ -13,6 +14,7 @@ class App extends Component {
 		//render methods NEED A RETURN!
 		return (
 			<div className="App">
+				<NavBar />
 				<ParksComponent />
 			</div>
 		);
