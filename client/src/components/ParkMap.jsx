@@ -25,6 +25,7 @@ class ParkMap extends Component {
 			this.googleMap = this.createGoogleMap();
 			this.googleMapBounds = new window.google.maps.LatLngBounds();
 			this.markers = [];
+			this.currentLocation = null;
 			let loadedState = this.state;
 			loadedState.mapLoaded = true;
 			this.setState(loadedState);
@@ -47,7 +48,7 @@ class ParkMap extends Component {
 			lat: this.props.location.lat,
 			lng: this.props.location.lng
 		};
-		new window.google.maps.Marker({
+		this.currentLocation = new window.google.maps.Marker({
 			position: location,
 			icon: {
 				url:
@@ -79,11 +80,13 @@ class ParkMap extends Component {
 	};
 
 	centerMap = () => {
-		var latLng = new window.google.maps.LatLng(
-			this.props.location.lat,
-			this.props.location.lng
-		); //Makes a latlng
-		this.googleMap.panTo(latLng); //Make map global
+		if (this.props.location.length !== 0) {
+			var latLng = new window.google.maps.LatLng(
+				this.props.location.lat,
+				this.props.location.lng
+			); //Makes a latlng
+			this.googleMap.panTo(latLng); //Make map global
+		}
 	};
 
 	render() {
@@ -95,10 +98,12 @@ class ParkMap extends Component {
 		if (this.state.mapLoaded) {
 			//Clear existing markers
 			console.log("#Markers:", this.markers.length);
-			if (this.markers.length > 0 && this.props.location.length === 0) {
+			if (this.markers.length > 0) {
 				console.log("Removing markers..");
 				this.markers.map(marker => marker.setMap(null));
-				this.markers = [];
+                this.markers = [];
+                this.currentLocation.setMap(null);
+				this.currentLocation = null;
 			}
 
 			//Add new markers if possible
@@ -117,7 +122,7 @@ class ParkMap extends Component {
 				<div
 					ref={this.googleMapRef}
 					className="border border-primary"
-					style={{ width: "600px", height: "400px" }}
+					style={{ width: "100%", height: "400px" }}
 				/>
 				<div>
 					<button onClick={this.centerMap}>Re-center</button>
