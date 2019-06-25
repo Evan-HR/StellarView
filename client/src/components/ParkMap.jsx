@@ -25,7 +25,7 @@ class ParkMap extends Component {
 			this.googleMap = this.createGoogleMap();
 			this.googleMapBounds = new window.google.maps.LatLngBounds();
 			this.markers = [];
-			this.currentLocation = null;
+			this.currentLocationMarker = null;
 			let loadedState = this.state;
 			loadedState.mapLoaded = true;
 			this.setState(loadedState);
@@ -48,7 +48,7 @@ class ParkMap extends Component {
 			lat: this.props.location.lat,
 			lng: this.props.location.lng
 		};
-		this.currentLocation = new window.google.maps.Marker({
+		this.currentLocationMarker = new window.google.maps.Marker({
 			position: location,
 			icon: {
 				url:
@@ -61,6 +61,7 @@ class ParkMap extends Component {
 	};
 
 	addParkMarker = park => {
+		//TODO: See if possible to modularize this function
 		let location = { lat: park.lat, lng: park.lng };
 		this.googleMapBounds.extend(location);
 		var marker = new window.google.maps.Marker({
@@ -76,7 +77,7 @@ class ParkMap extends Component {
 				scaledSize: new window.google.maps.Size(21, 21)
 			}
 		});
-		this.markers.push(marker);
+		this.markers.push(marker); //Maybe this can be moved out of the function
 	};
 
 	centerMap = () => {
@@ -97,24 +98,32 @@ class ParkMap extends Component {
 		};
 		if (this.state.mapLoaded) {
 			//Clear existing markers
+			//TODO: Definitely possible to optimize
+			// -Not deleting markers when there's no change? But then have to check for changes
 			console.log("#Markers:", this.markers.length);
 			if (this.markers.length > 0) {
+				this.googleMapBounds = new window.google.maps.LatLngBounds();
 				console.log("Removing markers..");
 				this.markers.map(marker => marker.setMap(null));
-                this.markers = [];
-                this.currentLocation.setMap(null);
-				this.currentLocation = null;
+				this.markers = [];
+				this.currentLocationMarker.setMap(null);
+				this.currentLocationMarker = null;
 			}
 
 			//Add new markers if possible
 			if (this.props.location.length !== 0) {
 				console.log("Adding markers..");
-				// console.log("Testing", this.props.location);
 				this.addCurrentLocationMarker();
 				this.props.parkList.map(this.addParkMarker);
-				console.log(this.markers);
-				this.googleMap.fitBounds(this.googleMapBounds);
-				this.googleMap.panToBounds(this.googleMapBounds);
+				if (this.markers.length > 0) {
+					this.googleMap.panToBounds(this.googleMapBounds);
+					this.googleMap.fitBounds(this.googleMapBounds);
+				} else {
+					this.googleMap.setCenter(
+						this.currentLocationMarker.position
+					);
+					this.googleMap.setZoom(10);
+				}
 			}
 		}
 		return (
