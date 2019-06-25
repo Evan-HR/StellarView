@@ -24,6 +24,7 @@ class ParkMap extends Component {
 		googleMapScript.addEventListener("load", () => {
 			this.googleMap = this.createGoogleMap();
 			this.googleMapBounds = new window.google.maps.LatLngBounds();
+			this.googleMapInfowindow = null;
 			this.markers = [];
 			this.currentLocationMarker = null;
 			let loadedState = this.state;
@@ -63,7 +64,6 @@ class ParkMap extends Component {
 	addParkMarker = park => {
 		//TODO: See if possible to modularize this function
 		let location = { lat: park.lat, lng: park.lng };
-		this.googleMapBounds.extend(location);
 		var marker = new window.google.maps.Marker({
 			position: location,
 			map: this.googleMap,
@@ -77,7 +77,22 @@ class ParkMap extends Component {
 				scaledSize: new window.google.maps.Size(21, 21)
 			}
 		});
+		marker.addListener("click", () => {
+			console.log("Clicked marker at", marker.title);
+			let contentString = `
+            <b>${park.name}</b><br>
+            ${park.light_pol}<br>
+            <button class="btn btn-info btn-sm m-1">More info</button>
+            `;
+			if (this.googleMapInfowindow) {
+				this.googleMapInfowindow.close();
+			}
+			this.googleMapInfowindow = new window.google.maps.InfoWindow({content: contentString});
+            this.googleMapInfowindow.open(this.googleMap, marker);
+            this.googleMap.setCenter(marker.position);
+		});
 		this.markers.push(marker); //Maybe this can be moved out of the function
+		this.googleMapBounds.extend(location);
 	};
 
 	centerMap = () => {
@@ -96,6 +111,7 @@ class ParkMap extends Component {
 			width: "100%",
 			height: "100%"
 		};
+		//IMPORTANT: Have to wait until the map finished loading before accessing it
 		if (this.state.mapLoaded) {
 			//Clear existing markers
 			//TODO: Definitely possible to optimize
