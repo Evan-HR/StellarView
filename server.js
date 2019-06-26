@@ -84,8 +84,9 @@ app.use(
 		resave: false,
 		store: sessionStore,
 		//only logged/registered users have cookies
-		saveUninitialized: false
+		saveUninitialized: false,
 		//cookie: { secure: true }
+		cookie: { httpOnly: false }
 	})
 );
 
