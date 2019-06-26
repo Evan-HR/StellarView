@@ -7,6 +7,7 @@ const path = require("path");
 const expressValidator = require("express-validator");
 //const http = require('http');
 const request = require("request");
+const axios = require('axios');
 
 //authentication variables
 var session = require("express-session");
@@ -101,7 +102,11 @@ app.use(passport.session());
 //the bool gets passed through to EVERY VIEW!
 //you dont need to pass it through every route
 app.use(function(req, res, next) {
+	console.log("USER REQ IS :"+req.user);
+	res.locals.user = req.user;
+	console.log("res locals is: "+res.locals.user)
 	res.locals.isAuthenticated = req.isAuthenticated();
+	console.log("USER IS AUTHENTICATED?? :"+res.locals.isAuthenticated);
 	next();
 });
 
@@ -346,7 +351,7 @@ function GetWeather(lat, lon) {
 
 //dynamically populate homepage
 app.get(["/", "/form.html"], function(req, res) {
-	console.log(req.user);
+	//console.log(req.user);
 
 	// weather testing
 
@@ -379,6 +384,35 @@ app.get("/profile", authenticationMiddleware(), function(req, res) {
 			res.render("profile.ejs", { profileName: profileInfo[0].name });
 		}
 	});
+});
+
+app.get("/api/getUserInfo", (req,res) => {
+	var tempName;
+	
+	const nameQuery = "SELECT name from users WHERE id=?";
+	console.log("USER ID FOR QUERY IS:"+req.user);
+	getConnection().query(nameQuery, [req.user], (err, profileInfo) => {
+		if (err) {
+			console.log("failed" + err);
+			res.sendStatus(500);
+			return;
+		} else {
+			console.log("GET HERE?");
+			console.log("NAME IN QUERY: "+profileInfo[0].name);
+			tempName = profileInfo[0].name;
+			
+			
+		}
+	});
+
+	console.log("tempName is:"+tempName);
+	//const tempJSON = `"{ "firstName": ${tempName}, "isAuth": true, "userID": 35 }"`
+
+	console.log("USER ISSSSSSS: "+req.user);
+	var userID = req.user;
+	console.log("USER ID VAR IS "+userID);
+	//res.send(req.isAuthenticated());
+	res.send(JSON.parse(tempJSON));
 });
 
 //full park info link pages

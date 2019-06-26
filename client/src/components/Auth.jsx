@@ -2,6 +2,7 @@ import React from "react";
 
 import { AuthProvider, AuthConsumer } from "./AuthContext";
 import App from "../App";
+import axios from 'axios';
 //import { Cookies } from "react-cookie";
 
 // {"cookie":{"originalMaxAge":null,"expires":null,
@@ -9,9 +10,33 @@ import App from "../App";
 export class Auth extends React.Component {
 	state = {
 		//userID: cookies.get().passport.user.user_id,
-		firstName: "Sanchez",
-		isAuth: false
+		firstName: "",
+		userID:"",
+		isAuth: "",
+		apiResponse: []
 	};
+
+	
+
+	callAPI() {
+		  
+		axios.get("/api/getUserInfo")
+
+		.then(({ data })=> {
+			this.setState({ 
+			firstName: "",
+			isAuth: data.isAuth, 
+			userID: data.userID
+		  });
+		})
+	   .catch((error)=>{
+		  console.log(error);
+	   });
+	}
+
+	componentWillMount() {
+		this.callAPI();
+	}
 
 	render() {
 		//console.log(cookies.get().passport.user.user_id);

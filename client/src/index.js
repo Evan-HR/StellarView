@@ -5,7 +5,7 @@ import "./index.css";
 import Auth from "./components/Auth";
 import * as serviceWorker from "./serviceWorker";
 import "bootstrap/dist/css/bootstrap.css";
-import { CookiesProvider } from "react-cookie";
+//import { CookiesProvider } from "react-cookie";
 
 ReactDOM.render(
 	//<CookiesProvider>
