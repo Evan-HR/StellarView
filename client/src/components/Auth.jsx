@@ -13,7 +13,7 @@ export class Auth extends React.Component {
 		firstName: "",
 		userID:"",
 		isAuth: "",
-		apiResponse: []
+		//apiResponse: []
 	};
 
 	
@@ -24,8 +24,8 @@ export class Auth extends React.Component {
 
 		.then(({ data })=> {
 			this.setState({ 
-			firstName: "",
-			isAuth: data.isAuth, 
+			firstName: data.firstName,
+			isAuth: data.isAuth,
 			userID: data.userID
 		  });
 		})

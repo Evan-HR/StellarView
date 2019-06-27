@@ -102,9 +102,9 @@ app.use(passport.session());
 //the bool gets passed through to EVERY VIEW!
 //you dont need to pass it through every route
 app.use(function(req, res, next) {
-	console.log("USER REQ IS :" + req.user);
-	res.locals.user = req.user;
-	console.log("res locals is: " + res.locals.user);
+	//console.log("USER REQ IS :" + req.user);
+	//res.locals.user = req.user;
+	//console.log("res locals is: " + res.locals.user);
 	res.locals.isAuthenticated = req.isAuthenticated();
 	console.log("USER IS AUTHENTICATED?? :" + res.locals.isAuthenticated);
 	next();
@@ -387,10 +387,20 @@ app.get("/profile", authenticationMiddleware(), function(req, res) {
 });
 
 app.get("/api/getUserInfo", (req, res) => {
-	var tempName;
-
+	//var tempName = `"John"`
+	//var tempString = `"{ "firstName": "dustin", "isAuth": true, "userID": 35 }"`;
+	// var jsonblah = `{"firstName":${tempName},"isAuth":true,"userID": 35}`
+	// console.log("#1. jsonblah is"+jsonblah);
+	// var stringTemp = JSON.stringify(jsonblah);
+	// console.log("#2. stringTemp is"+stringTemp);
+	// var tempParse = JSON.parse(stringTemp);
+	// console.log("#3. tempParse is"+tempParse);
+	// res.send(tempParse);
+	
+	//onlaptop it was req.user.user_id for some reason, on BROWSER its req.user
+console.log("user ID IS!!!: "+req.user);
 	const nameQuery = "SELECT name from users WHERE id=?";
-	console.log("USER ID FOR QUERY IS:" + req.user);
+	//console.log("USER ID FOR QUERY IS:" + req.user);
 	getConnection().query(nameQuery, [req.user], (err, profileInfo) => {
 		if (err) {
 			console.log("failed" + err);
@@ -400,17 +410,12 @@ app.get("/api/getUserInfo", (req, res) => {
 			console.log("GET HERE?");
 			console.log("NAME IN QUERY: " + profileInfo[0].name);
 			tempName = profileInfo[0].name;
+			const tempJSON = `{ "firstName": "${profileInfo[0].name}", "isAuth": ${req.isAuthenticated()}, "userID": ${req.user} }`;
+			console.log("finalJSON is: "+tempJSON);
+			res.send(JSON.parse(tempJSON));
 		}
 	});
 
-	console.log("tempName is:" + tempName);
-	//const tempJSON = `"{ "firstName": ${tempName}, "isAuth": true, "userID": 35 }"`
-
-	console.log("USER ISSSSSSS: " + req.user);
-	var userID = req.user;
-	console.log("USER ID VAR IS " + userID);
-	//res.send(req.isAuthenticated());
-	res.send(JSON.parse(tempJSON));
 });
 
 //full park info link pages

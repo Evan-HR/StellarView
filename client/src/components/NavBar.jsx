@@ -11,16 +11,50 @@ class NavBar extends Component {
 						Home
 					</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/login.html">
-						Login
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/profile">
-						Profile
-					</a>
-				</li>
+				<AuthConsumer>
+					{x => {
+						if (x.isAuth === true) {
+							return (
+								<li class="nav-item">
+									<a class="nav-link" href="/logout.html">
+										Logout
+									</a>
+								</li>
+							);
+						} else {
+							return (
+								<li class="nav-item">
+									<a class="nav-link" href="/login.html">
+										Login
+									</a>
+								</li>
+							);
+						}
+					}}
+				</AuthConsumer>
+
+				<AuthConsumer>
+					{x => {
+						if (x.isAuth === true) {
+							return (
+								<li class="nav-item">
+									<a class="nav-link" href="/profile.html">
+										Profile
+									</a>
+								</li>
+							);
+						} else {
+							return (
+								<li class="nav-item">
+									<a class="nav-link" href="/login.html">
+										Profile
+									</a>
+								</li>
+							);
+						}
+					}}
+				</AuthConsumer>
+
 				<li class="nav-item">
 					<a class="nav-link" href="/faq">
 						FAQ
@@ -28,8 +62,8 @@ class NavBar extends Component {
 				</li>
 				<AuthConsumer>
 					{x => {
-						if (x.isAuth === false) {
-							return x.userID;
+						if (x.isAuth === true) {
+							return "hello, " + x.firstName;
 						}
 					}}
 				</AuthConsumer>
