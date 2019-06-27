@@ -129,7 +129,7 @@ const styleSelector = {
 		}
 	]
 };
-
+//TODO: Move the whole MODAL to its own component
 const modalStyle = {
 	overlay: {
 		position: "fixed",
@@ -243,7 +243,7 @@ class ParkMap extends Component {
             <b>${park.name}</b><br>
 			${park.light_pol}<br>
 			<div id=${infoWindowID} />
-            `;
+            `; //Infobox div!
 			if (this.googleMapInfowindow) {
 				this.googleMapInfowindow.close();
 			}
@@ -253,8 +253,31 @@ class ParkMap extends Component {
 			});
 			this.googleMapInfowindow.open(this.googleMap, marker);
 			// this.googleMap.setCenter(marker.position);
-			let button = <button onClick={() => this.openModal()}>Pardon</button>
-			window.google.maps.event.addListener(this.googleMapInfowindow, 'domready', function(e) { ReactDOM.render(button ,document.getElementById(infoWindowID)) })
+
+			/**
+			 * Okay I need to explain this before I forget:
+			 * GoogleMaps built in infoboxes only take in HTML content, so you can't
+			 * call react functions from the onClick events or whatever. SO the easy solution
+			 * is to pass in a div with an id, and then have react RENDER that div and replace
+			 * it with react content, ie this button. Ofcourse there's a race condition since
+			 * the infobox takes time to be ready, so we have to attach a listener to the
+			 * infobox, which wait until the dom is loaded before calling react render on it.
+			 *
+			 */
+
+			let button = (
+				<button onClick={() => this.openModal()}>Pardon</button>
+			);
+			window.google.maps.event.addListener(
+				this.googleMapInfowindow,
+				"domready",
+				function(e) {
+					ReactDOM.render(
+						button,
+						document.getElementById(infoWindowID)
+					);
+				}
+			);
 		});
 		this.markers.push(marker); //Maybe this can be moved out of the function
 		this.googleMapBounds.extend(location);
@@ -333,7 +356,7 @@ class ParkMap extends Component {
 							Hello
 						</h2>
 						<button onClick={this.closeModal}>close</button>
-						<div>DIE DUSTIN</div>
+						<div>Content goes here blah blah blah</div>
 					</Modal>
 				</div>{" "}
 			</React.Fragment>
