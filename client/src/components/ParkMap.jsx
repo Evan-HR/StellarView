@@ -282,7 +282,7 @@ class ParkMap extends Component {
 				<div
 					ref={this.googleMapRef}
 					className="border border-primary"
-					style={{ width: "100%", height: "400px" }}
+					style={{ width: "100%", height: "600px" }}
 				/>
 				<div>
 					<button onClick={this.centerMap}>Re-center</button>
