@@ -9,6 +9,125 @@ instead you have to use window.google.etc
 
 // const google = window.google;
 
+//TODO: Move the style to a different place
+const styleSelector = {
+	retro: [
+		{ elementType: "geometry", stylers: [{ color: "#ebe3cd" }] },
+		{ elementType: "labels.text.fill", stylers: [{ color: "#523735" }] },
+		{ elementType: "labels.text.stroke", stylers: [{ color: "#f5f1e6" }] },
+		{
+			featureType: "administrative",
+			elementType: "geometry.stroke",
+			stylers: [{ color: "#c9b2a6" }]
+		},
+		{
+			featureType: "administrative.land_parcel",
+			elementType: "geometry.stroke",
+			stylers: [{ color: "#dcd2be" }]
+		},
+		{
+			featureType: "administrative.land_parcel",
+			elementType: "labels.text.fill",
+			stylers: [{ color: "#ae9e90" }]
+		},
+		{
+			featureType: "landscape.natural",
+			elementType: "geometry",
+			stylers: [{ color: "#dfd2ae" }]
+		},
+		{
+			featureType: "poi",
+			elementType: "geometry",
+			stylers: [{ color: "#dfd2ae" }]
+		},
+		{
+			featureType: "poi",
+			elementType: "labels.text.fill",
+			stylers: [{ color: "#93817c" }]
+		},
+		{
+			featureType: "poi.business",
+			stylers: [{ visibility: "off" }]
+		},
+
+		{
+			featureType: "poi.park",
+			elementType: "geometry.fill",
+			stylers: [{ color: "#a5b076" }]
+		},
+		{
+			featureType: "poi.park",
+			elementType: "labels.text.fill",
+			stylers: [{ color: "#447530" }]
+		},
+		{
+			featureType: "road",
+			elementType: "geometry",
+			stylers: [{ color: "#f5f1e6" }]
+		},
+		{
+			featureType: "road.arterial",
+			elementType: "geometry",
+			stylers: [{ color: "#fdfcf8" }]
+		},
+		{
+			featureType: "road.highway",
+			elementType: "geometry",
+			stylers: [{ color: "#f8c967" }]
+		},
+		{
+			featureType: "road.highway",
+			elementType: "geometry.stroke",
+			stylers: [{ color: "#e9bc62" }]
+		},
+		{
+			featureType: "road.highway.controlled_access",
+			elementType: "geometry",
+			stylers: [{ color: "#e98d58" }]
+		},
+		{
+			featureType: "road.highway.controlled_access",
+			elementType: "geometry.stroke",
+			stylers: [{ color: "#db8555" }]
+		},
+		{
+			featureType: "road.local",
+			elementType: "labels.text.fill",
+			stylers: [{ color: "#806b63" }]
+		},
+		{
+			featureType: "transit.line",
+			elementType: "geometry",
+			stylers: [{ color: "#dfd2ae" }]
+		},
+		{
+			featureType: "transit.line",
+			elementType: "labels.text.fill",
+			stylers: [{ color: "#8f7d77" }]
+		},
+		{
+			featureType: "transit.line",
+			elementType: "labels.text.stroke",
+			stylers: [{ color: "#ebe3cd" }]
+		},
+		{
+			featureType: "transit.station",
+			elementType: "geometry",
+			stylers: [{ color: "#dfd2ae" }]
+		},
+		{
+			featureType: "water",
+			elementType: "geometry.fill",
+			stylers: [{ color: "#b9d3c2" }]
+		},
+		{
+			featureType: "water",
+			elementType: "labels.text.fill",
+			stylers: [{ color: "#92998d" }]
+		}
+	]
+};
+
 class ParkMap extends Component {
 	state = {
 		mapLoaded: false
@@ -45,6 +164,9 @@ class ParkMap extends Component {
 		});
 	};
 
+	/**
+	 * Add marker to initial location, passed in through prop
+	 */
 	addCurrentLocationMarker = () => {
 		let location = {
 			lat: this.props.location.lat,
@@ -62,6 +184,11 @@ class ParkMap extends Component {
 		this.googleMapBounds.extend(location);
 	};
 
+	/**
+	 * Create a marker for the park on this.googleMap object.
+	 * Additionally, creates infobox listener, adds park coordinate to map bounds,
+	 * and pushes the marker object into this.parks array
+	 */
 	addParkMarker = park => {
 		//TODO: See if possible to modularize this function
 		let location = { lat: park.lat, lng: park.lng };
@@ -98,6 +225,9 @@ class ParkMap extends Component {
 		this.googleMapBounds.extend(location);
 	};
 
+	/**
+	 * Center map on initial location passed in through prop
+	 */
 	centerMap = () => {
 		if (this.props.location.length !== 0) {
 			var latLng = new window.google.maps.LatLng(
@@ -110,6 +240,7 @@ class ParkMap extends Component {
 
 	render() {
 		console.log("ParkMap - rendered");
+		//NOTE: mapStyles is NEEDED for map to display
 		const mapStyles = {
 			width: "100%",
 			height: "100%"
@@ -119,6 +250,7 @@ class ParkMap extends Component {
 			//Clear existing markers
 			//TODO: Definitely possible to optimize
 			// -Not deleting markers when there's no change? But then have to check for changes
+			this.googleMap.setOptions({ styles: styleSelector.retro });
 			console.log("#Markers:", this.markers.length);
 			if (this.markers.length > 0) {
 				this.googleMapBounds = new window.google.maps.LatLngBounds();
@@ -150,7 +282,7 @@ class ParkMap extends Component {
 				<div
 					ref={this.googleMapRef}
 					className="border border-primary"
-					style={{ width: "100%", height: "400px" }}
+					style={{ width: "100%", height: "600px" }}
 				/>
 				<div>
 					<button onClick={this.centerMap}>Re-center</button>
