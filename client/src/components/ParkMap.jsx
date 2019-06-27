@@ -2,6 +2,7 @@
 import React, { Component, createRef } from "react";
 import PropTypes from "prop-types";
 import Modal from "react-modal";
+import ReactDOM from "react-dom";
 
 /* Notes:
 Couldn't figure out how to make google.etc work, 
@@ -136,13 +137,14 @@ const modalStyle = {
 		left: 0,
 		right: 0,
 		bottom: 0,
-		backgroundColor: "rgba(0, 0, 255, 0.75)"
+		background: "linear-gradient(rgba(0,0,255,0.25), rgba(255,0,0,0.75))"
 	},
 	content: {
 		top: "50%",
 		left: "50%",
 		right: "auto",
 		bottom: "auto",
+		borderRadius: "25px",
 		marginRight: "-50%",
 		transform: "translate(-50%, -50%)"
 	}
@@ -236,19 +238,23 @@ class ParkMap extends Component {
 		});
 		marker.addListener("click", () => {
 			console.log("Clicked marker at", marker.title);
+			let infoWindowID = "infowindow" + park.id;
 			let contentString = `
             <b>${park.name}</b><br>
-            ${park.light_pol}<br>
-            <button class="btn btn-info btn-sm m-1">More info</button>
+			${park.light_pol}<br>
+			<div id=${infoWindowID} />
             `;
 			if (this.googleMapInfowindow) {
 				this.googleMapInfowindow.close();
 			}
 			this.googleMapInfowindow = new window.google.maps.InfoWindow({
-				content: contentString
+				content: contentString,
+				enableEventPropagation: true
 			});
 			this.googleMapInfowindow.open(this.googleMap, marker);
 			// this.googleMap.setCenter(marker.position);
+			let button = <button onClick={() => this.openModal()}>Pardon</button>
+			window.google.maps.event.addListener(this.googleMapInfowindow, 'domready', function(e) { ReactDOM.render(button ,document.getElementById(infoWindowID)) })
 		});
 		this.markers.push(marker); //Maybe this can be moved out of the function
 		this.googleMapBounds.extend(location);
