@@ -1,6 +1,7 @@
 //Displays parks google map
 import React, { Component, createRef } from "react";
 import PropTypes from "prop-types";
+import Modal from "react-modal";
 
 /* Notes:
 Couldn't figure out how to make google.etc work, 
@@ -128,9 +129,29 @@ const styleSelector = {
 	]
 };
 
+const modalStyle = {
+	overlay: {
+		position: "fixed",
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: "rgba(0, 0, 255, 0.75)"
+	},
+	content: {
+		top: "50%",
+		left: "50%",
+		right: "auto",
+		bottom: "auto",
+		marginRight: "-50%",
+		transform: "translate(-50%, -50%)"
+	}
+};
+
 class ParkMap extends Component {
 	state = {
-		mapLoaded: false
+		mapLoaded: false,
+		modalIsOpen: false
 	};
 	googleMapRef = createRef();
 
@@ -182,6 +203,14 @@ class ParkMap extends Component {
 			map: this.googleMap
 		});
 		this.googleMapBounds.extend(location);
+	};
+
+	openModal = () => {
+		this.setState({ ...this.state, modalIsOpen: true });
+	};
+
+	closeModal = () => {
+		this.setState({ ...this.state, modalIsOpen: false });
 	};
 
 	/**
@@ -286,7 +315,21 @@ class ParkMap extends Component {
 				/>
 				<div>
 					<button onClick={this.centerMap}>Re-center</button>
-				</div>
+					<button onClick={this.openModal}>Modal</button>
+					<Modal
+						isOpen={this.state.modalIsOpen}
+						// onAfterOpen={this.afterOpenModal}
+						onRequestClose={this.closeModal}
+						style={modalStyle}
+						contentLabel="Example Modal"
+					>
+						<h2 ref={subtitle => (this.subtitle = subtitle)}>
+							Hello
+						</h2>
+						<button onClick={this.closeModal}>close</button>
+						<div>DIE DUSTIN</div>
+					</Modal>
+				</div>{" "}
 			</React.Fragment>
 		);
 	}
