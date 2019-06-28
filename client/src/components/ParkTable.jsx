@@ -3,19 +3,44 @@ import React, { Component } from "react";
 
 class ParkTable extends Component {
 	state = {};
+	/* Note - park object is:
+        {
+            distance: number,
+            id: number,
+            lat: number,
+            lng: number,
+            light_pol: number,
+            name: string,
+            osmid: number,
+        }
+    */
 
-	//Draw table entries per park
-	//at this point, fields "name, light_pol, distance" aren't defined
-	//which is why you don't see it populated on the table before "get parks" button
-	renderPark = x => (
+	renderParkTable = () => {
+		if (this.props.parkList.length > 0) {
+			return this.props.parkList.map(this.renderPark);
+		} else {
+			return (
+				<tr>
+					<td colSpan={3}>
+						<strong style={{ color: "red" }}>
+							No parks available.
+						</strong>
+					</td>
+				</tr>
+			);
+		}
+	};
+
+	renderPark = park => (
 		<tr>
-			<td>{x.name}</td>
-			<td>{x.light_pol}</td>
-			<td>{x.distance}</td>
+			<td>{park.name}</td>
+			<td>{park.light_pol}</td>
+			<td>{park.distance}</td>
 		</tr>
 	);
 
 	render() {
+		console.log("ParkTable - rendered")
 		return (
 			<div className="border border-primary">
 				<table className="table table-hover">
@@ -24,7 +49,7 @@ class ParkTable extends Component {
 						<th>Light</th>
 						<th>Distance</th>
 					</tr>
-					<tbody>{this.props.parkList.map(this.renderPark)}</tbody>
+					<tbody>{this.renderParkTable()}</tbody>
 				</table>
 			</div>
 		);

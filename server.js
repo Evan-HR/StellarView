@@ -309,44 +309,6 @@ function authenticationMiddleware() {
 
 //----------------------BEGIN WEATHER-----------------
 
-function GetWeather(lat, lon) {
-	// // call the api url with form input
-	// var apiurl = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lon}&cnt=50&appid=${weatherKey1}`;
-	// var weatherData;
-	// // code from https://www.twilio.com/blog/2017/08/http-requests-in-node-js.html
-	// http.get(apiurl, (resp) => {
-	//     let data = '';
-
-	//     // A chunk of data has been recieved.
-	//     resp.on('data', (chunk) => {
-	//       data += chunk;
-	//     });
-
-	//     // The whole response has been received. Print out the result.
-	//     resp.on('end', () => {
-	//       weatherData = (JSON.parse(data));
-	//     });
-
-	//   }).on("error", (err) => {
-	//     console.log("Error: " + err.message);
-	//   });
-
-	console.log("aaaaaaaaaaaaaaa");
-	request(
-		`http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lon}&cnt=50&appid=${weatherKey1}`,
-		(err, res, body) => {
-			if (err) {
-				return console.error(err);
-			}
-			dataWeather = body;
-			console.log(body);
-		}
-	);
-
-	// use result lat/lon coords and find closest city coords from weather
-
-	// associate humidity and cloud cover info from closest city for each result location
-}
 
 //-----------------END WEATHER-----------------
 
@@ -363,8 +325,21 @@ app.get(["/", "/form.html"], function(req, res) {
 			console.log(err);
 		} else {
 			weatherJSON = JSON.parse(body);
-			console.log(weatherJSON.list);
 			var weatherArr = [];
+			for(var i = 0; i < weatherJSON.list.length; i++) {
+				var elem = weatherJSON.list[i];
+				console.log("city name: " + elem.name);
+				console.log("clouds: " + elem.clouds.all);
+				console.log("humidity: " + elem.main.humidity);
+				console.log(elem.coord);
+				// make NEW JSON from this
+				// compare each park location to each weather result
+				// assign park location the weather info of the CLOSEST weather result.
+				//weather info is cloud, humidity.	
+
+			}
+			//weatherJSON.map(whatamIdoingwithmylife)
+
 		}
 	});
 	// end weather testing
