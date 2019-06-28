@@ -1,6 +1,9 @@
 //Displays parks google map
 import React, { Component, createRef } from "react";
 import PropTypes from "prop-types";
+import Modal from "react-modal";
+import ReactDOM from "react-dom";
+import ParkMapModal from "./ParkMapModal";
 
 /* Notes:
 Couldn't figure out how to make google.etc work, 
@@ -133,6 +136,11 @@ class ParkMap extends Component {
 		mapLoaded: false
 	};
 	googleMapRef = createRef();
+	constructor(props) {
+		super(props);
+		this.parkModalChild = React.createRef();
+		this.modalContent = "No content";
+	}
 
 	componentDidMount() {
 		const googleMapScript = document.createElement("script");
@@ -184,6 +192,14 @@ class ParkMap extends Component {
 		this.googleMapBounds.extend(location);
 	};
 
+	openModal = content => {
+		this.parkModalChild.current.openModal(content);
+	};
+
+	closeModal = () => {
+		this.parkModalChild.current.closeModal();
+	};
+
 	/**
 	 * Create a marker for the park on this.googleMap object.
 	 * Additionally, creates infobox listener, adds park coordinate to map bounds,
@@ -207,19 +223,74 @@ class ParkMap extends Component {
 		});
 		marker.addListener("click", () => {
 			console.log("Clicked marker at", marker.title);
+			let infoWindowID = "infowindow" + park.id;
 			let contentString = `
             <b>${park.name}</b><br>
-            ${park.light_pol}<br>
-            <button class="btn btn-info btn-sm m-1">More info</button>
-            `;
+			${park.light_pol}<br>
+			<div id=${infoWindowID} />
+            `; //Infobox div!
 			if (this.googleMapInfowindow) {
 				this.googleMapInfowindow.close();
 			}
 			this.googleMapInfowindow = new window.google.maps.InfoWindow({
-				content: contentString
+				content: contentString,
+				enableEventPropagation: true
 			});
 			this.googleMapInfowindow.open(this.googleMap, marker);
 			// this.googleMap.setCenter(marker.position);
+
+			
+			let lighPolStatus = () => {
+				if (park.light_pol > 2) {
+					return <b className="bg-danger text-white">bad</b>;
+				} else if (park.light_pol > 1) {
+					return <b className="bg-warning text-dark">okay</b>;
+				} else {
+					return <b className="bg-success text-white">perfect</b>;
+				}
+			};
+			let newModalContent = (
+				<React.Fragment>
+					<h1>{park.name}</h1>
+					<img src={"https://placeimg.com/400/400/nature?" +  Math.random()} className="img-responsive"/>
+					<p> This park is located at {location.lat},{" "}
+					{location.lng}. The light pollution level here is{" "}
+					{park.light_pol}, which is {lighPolStatus()}. </p>
+				</React.Fragment>
+			);
+			let button = (
+				<button
+					className="btn btn-link btn-sm"
+					onClick={() => {
+						this.modalContent = newModalContent;
+						console.log(newModalContent);
+						this.openModal(newModalContent);
+					}}
+				>
+					More Info
+				</button>
+			);
+			
+			/**
+			* Okay I need to explain this before I forget:
+			* GoogleMaps built in infoboxes only take in HTML content, so you can't
+			* call react functions from the onClick events or whatever. SO the easy solution
+			* is to pass in a div with an id, and then have react RENDER that div and replace
+			* it with react content, ie this button. Ofcourse there's a race condition since
+			* the infobox takes time to be ready, so we have to attach a listener to the
+			* infobox, which wait until the dom is loaded before calling react render on it.
+			*
+			*/
+			window.google.maps.event.addListener(
+				this.googleMapInfowindow,
+				"domready",
+				function(e) {
+					ReactDOM.render(
+						button,
+						document.getElementById(infoWindowID)
+					);
+				}
+			);
 		});
 		this.markers.push(marker); //Maybe this can be moved out of the function
 		this.googleMapBounds.extend(location);
@@ -286,7 +357,8 @@ class ParkMap extends Component {
 				/>
 				<div>
 					<button onClick={this.centerMap}>Re-center</button>
-				</div>
+				</div>{" "}
+				<ParkMapModal ref={this.parkModalChild} />
 			</React.Fragment>
 		);
 	}

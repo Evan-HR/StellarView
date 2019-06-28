@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { AuthProvider, AuthConsumer } from "./AuthContext";
 import axios from "axios";
+import NavBarFAQ from "./NavBarFAQ";
+
 class NavBar extends Component {
 	state = {};
 	//each href will be a get request from the server.js
@@ -8,7 +10,6 @@ class NavBar extends Component {
 	handleLogout() {
 		axios.get("/logout");
 		this.props.handleLogoutState();
-
 	}
 
 	render() {
@@ -24,7 +25,7 @@ class NavBar extends Component {
 						if (x.isAuth === true) {
 							return (
 								<li class="nav-item">
-									<button onClick={()=>this.handleLogout()}>
+									<button onClick={() => this.handleLogout()}>
 										Logout
 									</button>
 								</li>
@@ -63,11 +64,13 @@ class NavBar extends Component {
 					}}
 				</AuthConsumer>
 
-				<li class="nav-item">
+				<NavBarFAQ />
+
+				{/* <li class="nav-item">
 					<a class="nav-link" href="/faq">
 						FAQ
 					</a>
-				</li>
+				</li> */}
 				<AuthConsumer>
 					{x => {
 						if (x.isAuth === true) {
