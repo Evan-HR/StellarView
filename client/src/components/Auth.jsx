@@ -8,21 +8,23 @@ import axios from "axios";
 // {"cookie":{"originalMaxAge":null,"expires":null,
 // "httpOnly":true,"path":"/"},"passport":{"user":{"user_id":81}}}
 export class Auth extends React.Component {
-	state = {
-		//userID: cookies.get().passport.user.user_id,
-		firstName: "",
-		userID: "",
-		isAuth: ""
-		//apiResponse: []
-	};
+	constructor(props) {
+		super(props);
+		this.state = {
+			firstName: null,
+			userID: null,
+			isAuth: null
+		};
+		this.handleLogoutState = this.handleLogoutState.bind(this);
+	}
 
-	handleLogoutState = () => {
+	handleLogoutState() {
 		this.setState({
-			firstName: "",
-			userID: "",
+			firstName: null,
+			userID: null,
 			isAuth: false
 		});
-	};
+	}
 
 	callAPI() {
 		axios
@@ -42,29 +44,16 @@ export class Auth extends React.Component {
 
 	componentWillMount() {
 		this.callAPI();
+
 	}
 
 	render() {
-		//console.log(cookies.get().passport.user.user_id);
-
 		return (
-			// We wrap all of the components that need access
-			// to the lastName property in FamilyProvider.
 			<AuthProvider value={this.state}>
-				<App />
+				<App handleLogoutState={this.handleLogoutState} />
 			</AuthProvider>
 		);
 	}
 }
 
 export default Auth;
-
-// const Mother = () => {
-// 	return <Child />;
-// };
-
-// const Child = () => {
-// 	// We wrap the component that actaully needs access to
-// 	// the lastName property in FamilyConsumer
-// 	return <FamilyConsumer>{context => <p>{context}</p>}</FamilyConsumer>;
-// };

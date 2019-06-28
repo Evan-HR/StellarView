@@ -6,9 +6,9 @@ class NavBar extends Component {
 	//each href will be a get request from the server.js
 
 	handleLogout() {
-		//console.log("BUTTON PRESSED!!! JUST ONCE? JUST TWICE..MAYBE? WHAT ABOUT THRICE?")
 		axios.get("/logout");
-		//this.props.handleLogoutState();
+		this.props.handleLogoutState();
+
 	}
 
 	render() {
@@ -24,7 +24,7 @@ class NavBar extends Component {
 						if (x.isAuth === true) {
 							return (
 								<li class="nav-item">
-									<button onClick={this.handleLogout()}>
+									<button onClick={()=>this.handleLogout()}>
 										Logout
 									</button>
 								</li>

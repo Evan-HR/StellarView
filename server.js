@@ -388,10 +388,10 @@ app.get("/profile", authenticationMiddleware(), function(req, res) {
 });
 
 app.get("/api/getUserInfo", (req, res) => {
-	console.log(
-		"USER ID IS HOPEFULLY!!! : : : : ",
-		req.session.passport.user.user_id
-	);
+	// console.log(
+	// 	"USER ID IS HOPEFULLY!!! : : : : ",
+	// 	req.session.passport.user.user_id
+	// );
 	//var tempName = `"John"`
 	//var tempString = `"{ "firstName": "dustin", "isAuth": true, "userID": 35 }"`;
 	// var jsonblah = `{"firstName":${tempName},"isAuth":true,"userID": 35}`
@@ -406,28 +406,32 @@ app.get("/api/getUserInfo", (req, res) => {
 	//console.log("user ID IS!!!: " + req.user);
 	const nameQuery = "SELECT name from users WHERE id=?";
 	//console.log("USER ID FOR QUERY IS:" + req.user);
-	getConnection().query(
-		nameQuery,
-		[req.session.passport.user.user_id],
-		(err, profileInfo) => {
-			if (err) {
-				console.log("failed" + err);
-				res.sendStatus(500);
-				return;
-			} else {
-				console.log("GET HERE?");
-				console.log("NAME IN QUERY: " + profileInfo[0].name);
-				tempName = profileInfo[0].name;
-				const tempJSON = `{ "firstName": "${
-					profileInfo[0].name
-				}", "isAuth": ${req.isAuthenticated()}, "userID": ${
-					req.session.passport.user.user_id
-				} }`;
-				console.log("finalJSON is: " + tempJSON);
-				res.send(JSON.parse(tempJSON));
+	//if logged in...
+	if(req.session.passport){
+		getConnection().query(
+			nameQuery,
+			[req.session.passport.user.user_id],
+			(err, profileInfo) => {
+				if (err) {
+					console.log("failed" + err);
+					res.sendStatus(500);
+					return;
+				} else {
+					console.log("GET HERE?");
+					console.log("NAME IN QUERY: " + profileInfo[0].name);
+					tempName = profileInfo[0].name;
+					const tempJSON = `{ "firstName": "${
+						profileInfo[0].name
+					}", "isAuth": ${req.isAuthenticated()}, "userID": ${
+						req.session.passport.user.user_id
+					} }`;
+					console.log("finalJSON is: " + tempJSON);
+					res.send(JSON.parse(tempJSON));
+				}
 			}
-		}
-	);
+		);
+	}
+
 });
 
 //full park info link pages
