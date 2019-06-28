@@ -7,6 +7,7 @@ const path = require("path");
 const expressValidator = require("express-validator");
 //const http = require('http');
 const request = require("request");
+const axios = require("axios");
 
 //authentication variables
 var session = require("express-session");
@@ -84,8 +85,9 @@ app.use(
 		resave: false,
 		store: sessionStore,
 		//only logged/registered users have cookies
-		saveUninitialized: false
+		saveUninitialized: false,
 		//cookie: { secure: true }
+		cookie: { httpOnly: false }
 	})
 );
 
@@ -100,7 +102,11 @@ app.use(passport.session());
 //the bool gets passed through to EVERY VIEW!
 //you dont need to pass it through every route
 app.use(function(req, res, next) {
+	//console.log("USER REQ IS :" + req.user);
+	//res.locals.user = req.user;
+	//console.log("res locals is: " + res.locals.user);
 	res.locals.isAuthenticated = req.isAuthenticated();
+	console.log("USER IS AUTHENTICATED?? :" + res.locals.isAuthenticated);
 	next();
 });
 
@@ -155,6 +161,7 @@ passport.use(
  *  is asynchronous, so you may be redirected before your session has been destroyed.
  */
 app.get("/logout", function(req, res) {
+	console.log("LOG OUT GOT HERE!???!?");
 	req.logout();
 	//destroys session from database
 	req.session.destroy(() => {
@@ -172,7 +179,7 @@ app.get("/login", function(req, res) {
 app.post(
 	"/login",
 	passport.authenticate("local", {
-		successRedirect: "/profile",
+		successRedirect: "/",
 		failureRedirect: "/login"
 	})
 );
@@ -307,7 +314,7 @@ function authenticationMiddleware() {
 
 //dynamically populate homepage
 app.get(["/", "/form.html"], function(req, res) {
-	console.log(req.user);
+	//console.log(req.user);
 
 	// weather testing
 
@@ -353,6 +360,53 @@ app.get("/profile", authenticationMiddleware(), function(req, res) {
 			res.render("profile.ejs", { profileName: profileInfo[0].name });
 		}
 	});
+});
+
+app.get("/api/getUserInfo", (req, res) => {
+	// console.log(
+	// 	"USER ID IS HOPEFULLY!!! : : : : ",
+	// 	req.session.passport.user.user_id
+	// );
+	//var tempName = `"John"`
+	//var tempString = `"{ "firstName": "dustin", "isAuth": true, "userID": 35 }"`;
+	// var jsonblah = `{"firstName":${tempName},"isAuth":true,"userID": 35}`
+	// console.log("#1. jsonblah is"+jsonblah);
+	// var stringTemp = JSON.stringify(jsonblah);
+	// console.log("#2. stringTemp is"+stringTemp);
+	// var tempParse = JSON.parse(stringTemp);
+	// console.log("#3. tempParse is"+tempParse);
+	// res.send(tempParse);
+
+	//onlaptop it was req.user.user_id for some reason, on BROWSER its req.user
+	//console.log("user ID IS!!!: " + req.user);
+	const nameQuery = "SELECT name from users WHERE id=?";
+	//console.log("USER ID FOR QUERY IS:" + req.user);
+	//if logged in...
+	if(req.session.passport){
+		getConnection().query(
+			nameQuery,
+			[req.session.passport.user.user_id],
+			(err, profileInfo) => {
+				if (err) {
+					console.log("failed" + err);
+					res.sendStatus(500);
+					return;
+				} else {
+					console.log("GET HERE?");
+					console.log("NAME IN QUERY: " + profileInfo[0].name);
+					tempName = profileInfo[0].name;
+					const tempJSON = `{ "firstName": "${
+						profileInfo[0].name
+					}", "isAuth": ${req.isAuthenticated()}, "userID": ${
+						req.session.passport.user.user_id
+					} }`;
+					console.log("finalJSON is: " + tempJSON);
+					res.send(JSON.parse(tempJSON));
+				}
+			}
+		);
+	}
+
 });
 
 //full park info link pages
