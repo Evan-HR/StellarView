@@ -3,6 +3,7 @@ import React, { Component, createRef } from "react";
 import PropTypes from "prop-types";
 import Modal from "react-modal";
 import ReactDOM from "react-dom";
+import ParkMapModal from "./ParkMapModal";
 
 /* Notes:
 Couldn't figure out how to make google.etc work, 
@@ -129,33 +130,17 @@ const styleSelector = {
 		}
 	]
 };
-//TODO: Move the whole MODAL to its own component
-const modalStyle = {
-	overlay: {
-		position: "fixed",
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		background: "linear-gradient(rgba(0,0,255,0.25), rgba(255,0,0,0.75))"
-	},
-	content: {
-		top: "50%",
-		left: "50%",
-		right: "auto",
-		bottom: "auto",
-		borderRadius: "25px",
-		marginRight: "-50%",
-		transform: "translate(-50%, -50%)"
-	}
-};
 
 class ParkMap extends Component {
 	state = {
-		mapLoaded: false,
-		modalIsOpen: false
+		mapLoaded: false
 	};
 	googleMapRef = createRef();
+	constructor(props) {
+		super(props);
+		this.parkModalChild = React.createRef();
+		this.modalContent = "No content";
+	}
 
 	componentDidMount() {
 		const googleMapScript = document.createElement("script");
@@ -207,12 +192,12 @@ class ParkMap extends Component {
 		this.googleMapBounds.extend(location);
 	};
 
-	openModal = () => {
-		this.setState({ ...this.state, modalIsOpen: true });
+	openModal = content => {
+		this.parkModalChild.current.openModal(content);
 	};
 
 	closeModal = () => {
-		this.setState({ ...this.state, modalIsOpen: false });
+		this.parkModalChild.current.closeModal();
 	};
 
 	/**
@@ -254,20 +239,48 @@ class ParkMap extends Component {
 			this.googleMapInfowindow.open(this.googleMap, marker);
 			// this.googleMap.setCenter(marker.position);
 
-			/**
-			 * Okay I need to explain this before I forget:
-			 * GoogleMaps built in infoboxes only take in HTML content, so you can't
-			 * call react functions from the onClick events or whatever. SO the easy solution
-			 * is to pass in a div with an id, and then have react RENDER that div and replace
-			 * it with react content, ie this button. Ofcourse there's a race condition since
-			 * the infobox takes time to be ready, so we have to attach a listener to the
-			 * infobox, which wait until the dom is loaded before calling react render on it.
-			 *
-			 */
-
-			let button = (
-				<button onClick={() => this.openModal()}>Pardon</button>
+			
+			let lighPolStatus = () => {
+				if (park.light_pol > 2) {
+					return <b className="bg-danger text-white">bad</b>;
+				} else if (park.light_pol > 1) {
+					return <b className="bg-warning text-dark">okay</b>;
+				} else {
+					return <b className="bg-success text-white">perfect</b>;
+				}
+			};
+			let newModalContent = (
+				<React.Fragment>
+					<h1>{park.name}</h1>
+					<img src={"https://placeimg.com/400/400/nature?" +  Math.random()} className="rounded"/>
+					<p> This park is located at {location.lat},{" "}
+					{location.lng}. The light pollution level here is{" "}
+					{park.light_pol}, which is {lighPolStatus()}. </p>
+				</React.Fragment>
 			);
+			let button = (
+				<button
+					className="btn btn-link btn-sm"
+					onClick={() => {
+						this.modalContent = newModalContent;
+						console.log(newModalContent);
+						this.openModal(newModalContent);
+					}}
+				>
+					More Info
+				</button>
+			);
+			
+			/**
+			* Okay I need to explain this before I forget:
+			* GoogleMaps built in infoboxes only take in HTML content, so you can't
+			* call react functions from the onClick events or whatever. SO the easy solution
+			* is to pass in a div with an id, and then have react RENDER that div and replace
+			* it with react content, ie this button. Ofcourse there's a race condition since
+			* the infobox takes time to be ready, so we have to attach a listener to the
+			* infobox, which wait until the dom is loaded before calling react render on it.
+			*
+			*/
 			window.google.maps.event.addListener(
 				this.googleMapInfowindow,
 				"domready",
@@ -345,20 +358,8 @@ class ParkMap extends Component {
 				<div>
 					<button onClick={this.centerMap}>Re-center</button>
 					<button onClick={this.openModal}>Modal</button>
-					<Modal
-						isOpen={this.state.modalIsOpen}
-						// onAfterOpen={this.afterOpenModal}
-						onRequestClose={this.closeModal}
-						style={modalStyle}
-						contentLabel="Example Modal"
-					>
-						<h2 ref={subtitle => (this.subtitle = subtitle)}>
-							Hello
-						</h2>
-						<button onClick={this.closeModal}>close</button>
-						<div>Content goes here blah blah blah</div>
-					</Modal>
 				</div>{" "}
+				<ParkMapModal ref={this.parkModalChild} />
 			</React.Fragment>
 		);
 	}
