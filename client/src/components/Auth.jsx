@@ -2,7 +2,7 @@ import React from "react";
 
 import { AuthProvider, AuthConsumer } from "./AuthContext";
 import App from "../App";
-import axios from 'axios';
+import axios from "axios";
 //import { Cookies } from "react-cookie";
 
 // {"cookie":{"originalMaxAge":null,"expires":null,
@@ -11,27 +11,33 @@ export class Auth extends React.Component {
 	state = {
 		//userID: cookies.get().passport.user.user_id,
 		firstName: "",
-		userID:"",
-		isAuth: "",
+		userID: "",
+		isAuth: ""
 		//apiResponse: []
 	};
 
-	
+	handleLogoutState = () => {
+		this.setState({
+			firstName: "",
+			userID: "",
+			isAuth: false
+		});
+	};
 
 	callAPI() {
-		  
-		axios.get("/api/getUserInfo")
+		axios
+			.get("/api/getUserInfo")
 
-		.then(({ data })=> {
-			this.setState({ 
-			firstName: data.firstName,
-			isAuth: data.isAuth,
-			userID: data.userID
-		  });
-		})
-	   .catch((error)=>{
-		  console.log(error);
-	   });
+			.then(({ data }) => {
+				this.setState({
+					firstName: data.firstName,
+					isAuth: data.isAuth,
+					userID: data.userID
+				});
+			})
+			.catch(error => {
+				console.log(error);
+			});
 	}
 
 	componentWillMount() {

@@ -1,8 +1,16 @@
 import React, { Component } from "react";
 import { AuthProvider, AuthConsumer } from "./AuthContext";
+import axios from "axios";
 class NavBar extends Component {
 	state = {};
 	//each href will be a get request from the server.js
+
+	handleLogout() {
+		//console.log("BUTTON PRESSED!!! JUST ONCE? JUST TWICE..MAYBE? WHAT ABOUT THRICE?")
+		axios.get("/logout");
+		//this.props.handleLogoutState();
+	}
+
 	render() {
 		return (
 			<ul class="nav justify-content-center">
@@ -16,9 +24,9 @@ class NavBar extends Component {
 						if (x.isAuth === true) {
 							return (
 								<li class="nav-item">
-									<a class="nav-link" href="/logout.html">
+									<button onClick={this.handleLogout()}>
 										Logout
-									</a>
+									</button>
 								</li>
 							);
 						} else {
