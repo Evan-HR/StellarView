@@ -18,8 +18,8 @@ const modalStyle = {
 		borderRadius: "25px",
 		marginRight: "-50%",
 		transform: "translate(-50%, -50%)",
-        width: "95%",
-        maxWidth: "600px",
+		width: "95%",
+		maxWidth: "600px",
 		height: "95%",
 		overflowY: "auto"
 	}
@@ -61,8 +61,8 @@ class NavBarFAQ extends Component {
 					<img
 						src="https://apod.nasa.gov/apod/image/1705/Arp273Main_HubblePestana_3079.jpg"
 						alt="galaxy"
-                        width="40%"
-                        maxWidth="500px"
+						width="40%"
+						maxWidth="500px"
 						//height="20%"
 					/>
 					<p>
@@ -123,6 +123,12 @@ class NavBarFAQ extends Component {
 						nisi lectus, commodo ac, facilisis ac, ultricies eu,
 						pede.{" "}
 					</p>
+					<button
+						className="btn btn-primary float-right"
+						onClick={this.closeModal}
+					>
+						Okay
+					</button>
 				</Modal>
 			</React.Fragment>
 		);
