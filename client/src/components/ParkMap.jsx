@@ -252,7 +252,7 @@ class ParkMap extends Component {
 			let newModalContent = (
 				<React.Fragment>
 					<h1>{park.name}</h1>
-					<img src={"https://placeimg.com/400/400/nature?" +  Math.random()} className="rounded"/>
+					<img src={"https://placeimg.com/400/400/nature?" +  Math.random()} className="img-responsive"/>
 					<p> This park is located at {location.lat},{" "}
 					{location.lng}. The light pollution level here is{" "}
 					{park.light_pol}, which is {lighPolStatus()}. </p>
@@ -357,7 +357,6 @@ class ParkMap extends Component {
 				/>
 				<div>
 					<button onClick={this.centerMap}>Re-center</button>
-					<button onClick={this.openModal}>Modal</button>
 				</div>{" "}
 				<ParkMapModal ref={this.parkModalChild} />
 			</React.Fragment>

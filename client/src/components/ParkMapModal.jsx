@@ -18,7 +18,9 @@ const modalStyle = {
 		bottom: "auto",
 		borderRadius: "25px",
 		marginRight: "-50%",
-		transform: "translate(-50%, -50%)"
+		transform: "translate(-50%, -50%)",
+		maxWidth: "95%",
+		maxHeight: "95%"
 	}
 };
 
@@ -28,8 +30,15 @@ class ParkMapModal extends Component {
 	};
 
 	openModal = content => {
+		if (content === "") {
+			content = "No content."
+		}
 		this.modalContent = content;
 		this.setState({ ...this.state, modalIsOpen: true });
+	};
+
+	afterOpenModal = () => {
+		document.body.style.overflow = "hidden"; //Prevents background scrolling
 	};
 
 	closeModal = () => {
@@ -40,7 +49,7 @@ class ParkMapModal extends Component {
 		return (
 			<Modal
 				isOpen={this.state.modalIsOpen}
-				// onAfterOpen={this.afterOpenModal}
+				onAfterOpen={this.afterOpenModal}
 				onRequestClose={this.closeModal}
 				style={modalStyle}
 				contentLabel="Example Modal"
