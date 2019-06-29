@@ -121,8 +121,8 @@ class ParksComponent extends Component {
 						<br />
 						<div
 							style={{
-								"max-height": "300px",
-								"overflow-y": "scroll"
+								"maxHeight": "300px",
+								"overflowY": "scroll"
 							}}
 						>
 							<ParkTable parkList={this.state.parks} />

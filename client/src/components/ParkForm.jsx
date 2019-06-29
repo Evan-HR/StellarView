@@ -34,11 +34,15 @@ class ParkForm extends Component {
 		});
 	};
 
+	/**
+	 * For more info visit https://nominatim.org/release-docs/develop/api/Search/
+	 */
 	getPlaceCoordinates = () => {
 		this.setState({ ...this.state, isGeocodingLocation: true });
 		axios
 			.get(
-				`http://nominatim.openstreetmap.org/search?format=json&q=${
+				//Internet Explorer didn't want to connect to OSM server, so the request has to be proxied through heroku
+				`${"https://cors-anywhere.herokuapp.com/"}http://nominatim.openstreetmap.org/search?format=json&q=${
 					this.state.reqData.placeName
 				}`
 			)
@@ -86,6 +90,14 @@ class ParkForm extends Component {
 					},
 					isLoadingLocation: false
 				});
+				if (window.google) {
+					this.props.googleMap.panTo(
+						new window.google.maps.LatLng(
+							position.coords.latitude,
+							position.coords.longitude
+						)
+					);
+				}
 			},
 			error => {
 				this.setState({
