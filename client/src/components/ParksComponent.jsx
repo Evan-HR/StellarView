@@ -7,7 +7,8 @@ import ParkMap from "./ParkMap";
 class ParksComponent extends Component {
 	state = {
 		parks: [],
-		fetchReq: []
+		fetchReq: [],
+		isMapLoaded: false
 	};
 	/* Note - park object is:
         {
@@ -20,6 +21,15 @@ class ParksComponent extends Component {
             osmid: number,
         }
     */
+	constructor(props) {
+		super(props);
+		this.googleMap = false;
+	}
+
+	handleMapLoaded = googleMapActual => {
+		this.googleMap = googleMapActual;
+		this.setState({ ...this.state, isMapLoaded: true });
+	};
 
 	//Request parks from server
 	//getParks is a function, weird react notation perhaps?
@@ -95,10 +105,19 @@ class ParksComponent extends Component {
 				{/* <div className="container"> */}
 				<div className="row">
 					<div className="col">
-						<ParkMap parkList={this.state.parks} location={this.state.fetchReq} />
+						<ParkMap
+							parkList={this.state.parks}
+							location={this.state.fetchReq}
+							onMapLoaded={this.handleMapLoaded}
+						/>
 					</div>
 					<div className="col">
-						<ParkForm fetchParks={this.getParks} clearParks={this.clearParks} />
+						<ParkForm
+							fetchParks={this.getParks}
+							clearParks={this.clearParks}
+							// isMapLoaded={this.state.isMapLoaded}
+							googleMap={this.googleMap}
+						/>
 						<br />
 						<div
 							style={{

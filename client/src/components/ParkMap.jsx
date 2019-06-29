@@ -158,6 +158,7 @@ class ParkMap extends Component {
 			let loadedState = this.state;
 			loadedState.mapLoaded = true;
 			this.setState(loadedState);
+			this.props.onMapLoaded(this.googleMap);
 		});
 	}
 
