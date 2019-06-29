@@ -31,7 +31,7 @@ class ParkMapModal extends Component {
 
 	openModal = content => {
 		if (content === "") {
-			content = "No content."
+			content = "No content.";
 		}
 		this.modalContent = content;
 		this.setState({ ...this.state, modalIsOpen: true });
@@ -42,6 +42,7 @@ class ParkMapModal extends Component {
 	};
 
 	closeModal = () => {
+		document.body.style.overflow = "visible";
 		this.setState({ ...this.state, modalIsOpen: false });
 	};
 
