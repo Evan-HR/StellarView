@@ -8,7 +8,8 @@ class ParksComponent extends Component {
 	state = {
 		parks: [],
 		fetchReq: [],
-		isMapLoaded: false
+		isMapLoaded: false,
+		isFetchingParks: false
 	};
 	/* Note - park object is:
         {
@@ -41,6 +42,7 @@ class ParksComponent extends Component {
 	//app.post("/api/getParks")
 	getParks = reqData => {
 		console.log(reqData);
+		this.setState({ isFetchingParks: true });
 		// let fetchingState = this.state;
 		// fetchingState.isFetching = true;
 		// this.setState(fetchingState);
@@ -65,10 +67,11 @@ class ParksComponent extends Component {
 				console.log(data);
 				this.setState({
 					parks: data,
-					fetchReq: reqData
+					fetchReq: reqData,
+					isFetchingParks: false
 				});
 			})
-			.catch(err => console.error(err));
+			.catch(err => {console.error(err); this.setState({isFetchingParks: false})});
 	};
 
 	//Clear button handler
@@ -115,14 +118,14 @@ class ParksComponent extends Component {
 						<ParkForm
 							fetchParks={this.getParks}
 							clearParks={this.clearParks}
-							// isMapLoaded={this.state.isMapLoaded}
+							isFetchingParks={this.state.isFetchingParks}
 							googleMap={this.googleMap}
 						/>
 						<br />
 						<div
 							style={{
-								"maxHeight": "300px",
-								"overflowY": "scroll"
+								maxHeight: "300px",
+								overflowY: "scroll"
 							}}
 						>
 							<ParkTable parkList={this.state.parks} />
