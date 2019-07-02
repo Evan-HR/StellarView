@@ -5,22 +5,11 @@ class Reviews extends Component {
 		name: "",
 		score: "",
 		review: "",
+		hasReviewed: false,
 		dbReviewList: []
 	};
 
-	// getReviewsAxios(){
-	// 	return axios
-	// 		.get("/api/getReviews")
-
-	// 		.then(response => {
-	// 			// returning the data here allows the caller to get it through another .then(...)
-	// 			return response.data;
-	// 		});
-	// };
-
-
-
-	componentDidMount(){
+	componentDidMount() {
 		axios
 			.get("/api/getReviews")
 			.then(response => {
@@ -31,21 +20,28 @@ class Reviews extends Component {
 				//append to STATE!
 				console.log(response.data[0].name);
 
-				if (response.data.length > 110) {
+				if (response.data.length > 0) {
+					var tempReviewsArr;
+
 					console.log("BLAH!?");
-					response.data.map(x =>
-						this.state.dbReviewList.push([
-							x.name,
-							x.score,
-							x.review
-						])
-					);
-				} else {
-					console.log("BLU?!!!");
-					this.state.dbReviewList.push(
-					"pardon?"
-					);
+					tempReviewsArr = response.data.map(x => {
+						return {
+							name: x.name,
+							score: x.score,
+							review: x.review
+						};
+					});
+					this.setState({
+						dbReviewList: tempReviewsArr
+					});
 				}
+				// else {
+				// 	console.log("BLU?!!!");
+				// 	this.state.dbReviewList.push("pardon?");
+				// 	this.setState({
+				// 		dbReviewList: [this.state.dbReviewList]
+				// 	});
+				// }
 			})
 			.catch(error => {
 				console.log(error);
@@ -54,13 +50,6 @@ class Reviews extends Component {
 
 	onSubmit = e => {
 		e.preventDefault();
-		//console.log(this.state.reqData);i
-		//const errors = this.validate(this.state.reqData);
-		//if (errors.length === 0) {
-		//this.setState({ ...this.state, formErrors: [] });
-		this.setState(prevState => ({
-			dbReviewList: [...prevState.dbReviewList, this.state]
-		}));
 
 		const newReview = {
 			name: this.state.name,
@@ -72,53 +61,35 @@ class Reviews extends Component {
 			.post("/api/storeReview", newReview)
 			.then(res => console.log(res.data))
 			.catch(err => console.log(err.response.data));
+		this.setState({
+			dbReviewList: [newReview, ...this.state.dbReviewList]
+		});
 	};
 
-	// populateReviewTable = review => (
-	// 	<tr>
-	// 		<td>{review.name}</td>
-	// 		<td>{review.score}</td>
-	// 		<td>{review.review}</td>
-	// 	</tr>
-	// );
+	formatReviews = review => (
+		<tr>
+			<td>{review.name}</td>
+			<td>{review.score}</td>
+			<td>{review.review}</td>
+		</tr>
+	);
 
-	renderReviews = () => {
-
+	renderReviewTable = () => {
+		if (this.state.dbReviewList.length > 0) {
+			return this.state.dbReviewList.map(this.formatReviews);
+		} else {
 			return (
 				<tr>
 					<td colSpan={3}>
 						<strong style={{ color: "red" }}>
-							{this.state.dbReviewList[0]}
+							No reviews available. Be the first!
 						</strong>
 					</td>
 				</tr>
-			)
-
+			);
+		}
 	};
 
-
-//format for state results
-	renderPark = park => (
-		<tr>
-			<td>{park.name}</td>
-			<td>{park.light_pol}</td>
-			<td>{park.distance}</td>
-		</tr>
-	);
-
-	//handle any form input change at once
-	//onChange={this.handleChange.bind(this)} for each input
-	// handleChange = e => {
-	// 	// If you are using babel, you can use ES 6 dictionary syntax
-	// 	// let change = { [e.target.name] = e.target.value }
-	// 	let change = {};
-	// 	change[e.target.name] = e.target.value;
-	// 	this.setState(change);
-	// };
-
-	// this.setState({
-	// 	date: new Date()
-	//   });
 	handleNameChange = e => {
 		this.setState({ name: e.target.value });
 	};
@@ -133,52 +104,55 @@ class Reviews extends Component {
 	render() {
 		return (
 			<div>
-				<form id="reviewForm">
-					<label>
-						Name: <br />
-						<input
-							type="text"
-							placeholder="Name"
-							name="name"
-							onChange={this.handleNameChange}
-							value={this.state.name}
-						/>
-					</label>
-					<br />
-					<label>
-						Score (1-5):
+				{this.state.hasReviewed === false ? (
+					<form id="reviewForm">
+						<label>
+							Name: <br />
+							<input
+								type="text"
+								placeholder="Name"
+								name="name"
+								onChange={this.handleNameChange}
+								value={this.state.name}
+							/>
+						</label>
 						<br />
-						<input
-							type="number"
-							min="1"
-							max="5"
-							name="score"
-							onChange={this.handleScoreChange}
-							value={this.state.score}
-						/>
-					</label>
-					<br />
-					Review
-					<br />
-					<label>
-						<textarea
-							rows="4"
-							cols="30"
-							name="review"
-							placeholder="Enter text here..."
-							onChange={this.handleReviewChange}
-							value={this.state.review}
-						/>
-					</label>
-					<br />
-					<button
-						className="btn btn-primary m-2"
-						onClick={e => this.onSubmit(e)}
-					>
-						Submit
-					</button>
-				</form>
-
+						<label>
+							Score (1-5):
+							<br />
+							<input
+								type="number"
+								min="1"
+								max="5"
+								name="score"
+								onChange={this.handleScoreChange}
+								value={this.state.score}
+							/>
+						</label>
+						<br />
+						Review
+						<br />
+						<label>
+							<textarea
+								rows="4"
+								cols="30"
+								name="review"
+								placeholder="Enter text here..."
+								onChange={this.handleReviewChange}
+								value={this.state.review}
+							/>
+						</label>
+						<br />
+						<button
+							className="btn btn-primary m-2"
+							onClick={e => this.onSubmit(e)}
+						>
+							Submit
+						</button>
+					</form>
+				) : (
+					"Review Submitted.  Thank you!"
+				)}
 				<div className="border border-primary">
 					<table className="table table-hover">
 						<tbody>
@@ -188,9 +162,7 @@ class Reviews extends Component {
 								<th>Review</th>
 							</tr>
 						</tbody>
-						<tbody>{
-							this.renderReviews()
-							}</tbody>
+						<tbody>{this.renderReviewTable()}</tbody>
 					</table>
 				</div>
 			</div>
