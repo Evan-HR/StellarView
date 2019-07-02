@@ -37,6 +37,7 @@ We will be having the server hosted remotely for better usage, localhost phpmyad
 see (https://www.youtube.com/watch?v=w0HAZKxyrf8&list=PL0dzCUj1L5JE4w_OctDGyZOhML6OtJSqR&index=5)\
 
 
+
 ## HELPFUL LINKS
 https://www.physics.mcmaster.ca/sidewalkastronomy \
 https://www.youtube.com/playlist?list=PL0dzCUj1L5JE4w_OctDGyZOhML6OtJSqR \
@@ -53,3 +54,15 @@ app.post('/login', passport.authenticate('local', {
 ```
 install `npm install passport-local` because i used a local\
 strategy database, this might need to be diff on server-side\
+
+reviews query: CREATE TABLE `reviews` (
+ `id` int(25) unsigned NOT NULL AUTO_INCREMENT,
+ `p_id` int(25) NOT NULL,
+ `score` smallint(5) unsigned NOT NULL,
+ `name` varchar(20) DEFAULT NULL,
+ `user_id` int(25) unsigned NOT NULL,
+ `review` varchar(2000) DEFAULT NULL,
+ PRIMARY KEY (`id`),
+ KEY `fk_reviews` (`p_id`),
+ CONSTRAINT `fk_reviews` FOREIGN KEY (`p_id`) REFERENCES `ontario_parks` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8
