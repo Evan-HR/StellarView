@@ -49,7 +49,8 @@ class ParkMapModal extends Component {
 	render() {
 		return (
 			<Modal
-				className=" modal-dialog"
+				className="Modal__Bootstrap modal-dialog"
+				closeTimeoutMS={150}
 				isOpen={this.state.modalIsOpen}
 				onAfterOpen={this.afterOpenModal}
 				onRequestClose={this.closeModal}
