@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Modal from "react-modal";
+import "./modal.css";
 
 //TODO: Move the whole MODAL to its own component
 const modalStyle = {
@@ -31,7 +32,7 @@ class ParkMapModal extends Component {
 
 	openModal = content => {
 		if (content === "") {
-			content = "No content."
+			content = "No content.";
 		}
 		this.modalContent = content;
 		this.setState({ ...this.state, modalIsOpen: true });
@@ -48,13 +49,15 @@ class ParkMapModal extends Component {
 	render() {
 		return (
 			<Modal
+				className="Modal__Bootstrap modal-dialog"
+				closeTimeoutMS={150}
 				isOpen={this.state.modalIsOpen}
 				onAfterOpen={this.afterOpenModal}
 				onRequestClose={this.closeModal}
-				style={modalStyle}
+				// style={modalStyle}
 				contentLabel="Example Modal"
 			>
-				{this.modalContent}
+				<div className="modal-content">{this.modalContent}</div>
 			</Modal>
 		);
 	}

@@ -225,20 +225,20 @@ class ParkMap extends Component {
 		});
 		marker.addListener("click", () => {
 			console.log("Clicked marker at", marker.title);
-			let infoWindowID = "infowindow" + park.id;
-			let contentString = `
-		    <b>${park.name}</b><br>
-			${park.light_pol}<br>
-			<div id=${infoWindowID} />
-		    `; //Infobox div!
-			if (this.googleMapInfowindow) {
-				this.googleMapInfowindow.close();
-			}
-			this.googleMapInfowindow = new window.google.maps.InfoWindow({
-				content: contentString,
-				enableEventPropagation: true
-			});
-			this.googleMapInfowindow.open(this.googleMap, marker);
+			// let infoWindowID = "infowindow" + park.id;
+			// let contentString = `
+			// <b>${park.name}</b><br>
+			// ${park.light_pol}<br>
+			// <div id=${infoWindowID} />
+			// `; //Infobox div!
+			// if (this.googleMapInfowindow) {
+			// 	this.googleMapInfowindow.close();
+			// }
+			// this.googleMapInfowindow = new window.google.maps.InfoWindow({
+			// 	content: contentString,
+			// 	enableEventPropagation: true
+			// });
+			// this.googleMapInfowindow.open(this.googleMap, marker);
 			// this.googleMap.setCenter(marker.position);
 
 			let lighPolStatus = () => {
@@ -252,55 +252,60 @@ class ParkMap extends Component {
 			};
 			let newModalContent = (
 				<React.Fragment>
-					<h1>{park.name}</h1>
-					<img
-						src={
-							"https://placeimg.com/400/400/nature?" +
-							Math.random()
-						}
-						className="img-responsive"
-					/>
-					<p>
-						{" "}
-						This park is located at {location.lat}, {location.lng}.
-						The light pollution level here is {park.light_pol},
-						which is {lighPolStatus()}.{" "}
-					</p>
+					<div className="modal-header">
+						<h1>{park.name}</h1>
+					</div>
+					<div className="modal-body">
+						<img
+							src={
+								"https://placeimg.com/400/400/nature?" +
+								Math.random()
+							}
+							className="img-responsive"
+						/>
+						<p>
+							{" "}
+							This park is located at {location.lat},{" "}
+							{location.lng}. The light pollution level here is{" "}
+							{park.light_pol}, which is {lighPolStatus()}.{" "}
+						</p>
+					</div>
 				</React.Fragment>
 			);
-			let button = (
-				<button
-					className="btn btn-link btn-sm"
-					onClick={() => {
-						this.modalContent = newModalContent;
-						console.log(newModalContent);
-						this.openModal(newModalContent);
-					}}
-				>
-					More Info
-				</button>
-			);
+			this.openModal(newModalContent);
+			// let button = (
+			// 	<button
+			// 		className="btn btn-link btn-sm"
+			// 		onClick={() => {
+			// 			this.modalContent = newModalContent;
+			// 			console.log(newModalContent);
+			// 			this.openModal(newModalContent);
+			// 		}}
+			// 	>
+			// 		More Info
+			// 	</button>
+			// );
 
-			/**
-			 * Okay I need to explain this before I forget:
-			 * GoogleMaps built in infoboxes only take in HTML content, so you can't
-			 * call react functions from the onClick events or whatever. SO the easy solution
-			 * is to pass in a div with an id, and then have react RENDER that div and replace
-			 * it with react content, ie this button. Ofcourse there's a race condition since
-			 * the infobox takes time to be ready, so we have to attach a listener to the
-			 * infobox, which wait until the dom is loaded before calling react render on it.
-			 *
-			 */
-			window.google.maps.event.addListener(
-				this.googleMapInfowindow,
-				"domready",
-				function(e) {
-					ReactDOM.render(
-						button,
-						document.getElementById(infoWindowID)
-					);
-				}
-			);
+			// /**
+			//  * Okay I need to explain this before I forget:
+			//  * GoogleMaps built in infoboxes only take in HTML content, so you can't
+			//  * call react functions from the onClick events or whatever. SO the easy solution
+			//  * is to pass in a div with an id, and then have react RENDER that div and replace
+			//  * it with react content, ie this button. Ofcourse there's a race condition since
+			//  * the infobox takes time to be ready, so we have to attach a listener to the
+			//  * infobox, which wait until the dom is loaded before calling react render on it.
+			//  *
+			//  */
+			// window.google.maps.event.addListener(
+			// 	this.googleMapInfowindow,
+			// 	"domready",
+			// 	function(e) {
+			// 		ReactDOM.render(
+			// 			button,
+			// 			document.getElementById(infoWindowID)
+			// 		);
+			// 	}
+			// );
 		});
 		this.markers.push(marker); //Maybe this can be moved out of the function
 		this.googleMapBounds.extend(location);

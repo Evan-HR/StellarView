@@ -355,7 +355,7 @@ class ParkForm extends Component {
 						className="btn btn-danger m-2"
 						onClick={this.props.clearParks}
 						// className={this.clearButtonClass()}
-						// disabled={this.state.parks.length === 0}
+						disabled={this.props.isFetchingParks}
 						type="button"
 					>
 						<strong>Clear</strong>
