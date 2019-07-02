@@ -55,7 +55,9 @@ app.post('/login', passport.authenticate('local', {
 install `npm install passport-local` because i used a local\
 strategy database, this might need to be diff on server-side\
 
-reviews query: CREATE TABLE `reviews` (
+reviews query: 
+```
+CREATE TABLE `reviews` (
  `id` int(25) unsigned NOT NULL AUTO_INCREMENT,
  `p_id` int(25) NOT NULL,
  `score` smallint(5) unsigned NOT NULL,
@@ -66,3 +68,4 @@ reviews query: CREATE TABLE `reviews` (
  KEY `fk_reviews` (`p_id`),
  CONSTRAINT `fk_reviews` FOREIGN KEY (`p_id`) REFERENCES `ontario_parks` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8
+```
