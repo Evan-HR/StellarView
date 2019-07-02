@@ -43,6 +43,7 @@ class ParkMapModal extends Component {
 	};
 
 	closeModal = () => {
+		document.body.style.overflow = "visible";
 		this.setState({ ...this.state, modalIsOpen: false });
 	};
 

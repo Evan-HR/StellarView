@@ -40,7 +40,7 @@ class ParkTable extends Component {
 	);
 
 	render() {
-		console.log("ParkTable - rendered")
+		console.log("ParkTable - rendered");
 		return (
 			<div className="border border-primary">
 				<table className="table table-hover">
