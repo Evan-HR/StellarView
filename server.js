@@ -192,6 +192,43 @@ app.get("/register", function(req, res) {
 	});
 });
 
+//get reviews from db
+app.get("/api/getReviews", function(req, res){
+	//order in query :p_id, score, name, user_id, review
+	//id is autoincrement so dont worry about that
+	//"SELECT name, light_pol, lat, lng from ontario_parks WHERE id=?";
+	const getReviewQuery = "SELECT name, score, review from reviews";
+
+	getConnection().query(getReviewQuery,(err, reviews) => {
+		if (err) {
+			console.log("failed" + err);
+			res.sendStatus(500);
+			return;
+		} 
+		else{
+			res.send(reviews);
+		}
+	});
+});
+
+//put review to database
+app.post("/api/storeReview", function(req, res){
+	console.log("review on submission from client: ",req.body);
+	console.log(req.body.name);
+
+	//order in query :p_id, score, name, user_id, review
+	//id is autoincrement so dont worry about that
+	const insertReviewQuery = "INSERT INTO reviews (p_id, score, name, user_id, review) VALUES (323, ?, ?, 2, ?)";
+
+	getConnection().query(insertReviewQuery, [req.body.score, req.body.name,req.body.review], (err, profileInfo) => {
+		if (err) {
+			console.log("failed" + err);
+			res.sendStatus(500);
+			return;
+		} 
+	});
+});
+
 app.post("/register", function(req, res) {
 	//client-side validation
 	req.checkBody("name", "Preferred name cannot be empty.").notEmpty();
@@ -408,6 +445,7 @@ app.get("/api/getUserInfo", (req, res) => {
 	}
 
 });
+
 
 //full park info link pages
 app.get("/park/:id", function(req, res) {

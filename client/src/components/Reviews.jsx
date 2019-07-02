@@ -1,31 +1,56 @@
 import React, { Component } from "react";
+import axios from "axios";
 class Reviews extends Component {
 	state = {
 		name: "",
 		score: "",
 		review: "",
-		reviewList: [
-			{ name: "dustin", score: 5, review: "dece" },
-			{ name: "vlad", score: 3, review: "ye" }
-		]
+		dbReviewList: []
 	};
 
-	renderReviewsTable = () => {
-		if (this.state.reviewList.length > 0) {
-			return this.state.reviewList.map(this.populateReviewTable);
-		} else {
-			return (
-				<tr>
-					<td colSpan={3}>
-						<strong style={{ color: "red" }}>
-							There are no reviews for this location yet - be the
-							first!
-						</strong>
-					</td>
-				</tr>
-			);
-		}
-	};
+	// getReviewsAxios(){
+	// 	return axios
+	// 		.get("/api/getReviews")
+
+	// 		.then(response => {
+	// 			// returning the data here allows the caller to get it through another .then(...)
+	// 			return response.data;
+	// 		});
+	// };
+
+
+
+	componentDidMount(){
+		axios
+			.get("/api/getReviews")
+			.then(response => {
+				console.log({ message: "Request received!", response });
+
+				//prints dustin
+				//START HERE!!!!!!!!!!!!!!!!!!!!!!!!
+				//append to STATE!
+				console.log(response.data[0].name);
+
+				if (response.data.length > 110) {
+					console.log("BLAH!?");
+					response.data.map(x =>
+						this.state.dbReviewList.push([
+							x.name,
+							x.score,
+							x.review
+						])
+					);
+				} else {
+					console.log("BLU?!!!");
+					this.state.dbReviewList.push(
+					"pardon?"
+					);
+				}
+			})
+			.catch(error => {
+				console.log(error);
+			});
+	}
 
 	onSubmit = e => {
 		e.preventDefault();
@@ -34,20 +59,50 @@ class Reviews extends Component {
 		//if (errors.length === 0) {
 		//this.setState({ ...this.state, formErrors: [] });
 		this.setState(prevState => ({
-			reviewList: [...prevState.reviewList, this.state]
+			dbReviewList: [...prevState.dbReviewList, this.state]
 		}));
-		//this.props.fetchParks(this.state.reqData);
-		// } else {
-		// 	this.setState({ ...this.state, formErrors: errors });
-		// }
-		//getparks(reqdata) of parent
+
+		const newReview = {
+			name: this.state.name,
+			score: this.state.score,
+			review: this.state.review
+		};
+
+		axios
+			.post("/api/storeReview", newReview)
+			.then(res => console.log(res.data))
+			.catch(err => console.log(err.response.data));
 	};
 
-	populateReviewTable = review => (
+	// populateReviewTable = review => (
+	// 	<tr>
+	// 		<td>{review.name}</td>
+	// 		<td>{review.score}</td>
+	// 		<td>{review.review}</td>
+	// 	</tr>
+	// );
+
+	renderReviews = () => {
+
+			return (
+				<tr>
+					<td colSpan={3}>
+						<strong style={{ color: "red" }}>
+							{this.state.dbReviewList[0]}
+						</strong>
+					</td>
+				</tr>
+			)
+
+	};
+
+
+//format for state results
+	renderPark = park => (
 		<tr>
-			<td>{review.name}</td>
-			<td>{review.score}</td>
-			<td>{review.review}</td>
+			<td>{park.name}</td>
+			<td>{park.light_pol}</td>
+			<td>{park.distance}</td>
 		</tr>
 	);
 
@@ -61,14 +116,18 @@ class Reviews extends Component {
 	// 	this.setState(change);
 	// };
 
+	// this.setState({
+	// 	date: new Date()
+	//   });
 	handleNameChange = e => {
-		this.setState(e.target.value);
+		this.setState({ name: e.target.value });
 	};
 	handleScoreChange = e => {
-		this.setState(e.target.value);
+		this.setState({ score: e.target.value });
 	};
+
 	handleReviewChange = e => {
-		this.setState(e.target.value);
+		this.setState({ review: e.target.value });
 	};
 
 	render() {
@@ -122,12 +181,16 @@ class Reviews extends Component {
 
 				<div className="border border-primary">
 					<table className="table table-hover">
-						<tr>
-							<th>Name</th>
-							<th>Score</th>
-							<th>Review</th>
-						</tr>
-						<tbody>{this.renderReviewsTable()}</tbody>
+						<tbody>
+							<tr>
+								<th>Name</th>
+								<th>Score</th>
+								<th>Review</th>
+							</tr>
+						</tbody>
+						<tbody>{
+							this.renderReviews()
+							}</tbody>
 					</table>
 				</div>
 			</div>
