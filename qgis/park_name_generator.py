@@ -1,3 +1,5 @@
+### REMINDER: CHECK INPUTS BEFORE RUNNING ON FULL NA DATASET ###
+
 import json
 import csv
 import requests
