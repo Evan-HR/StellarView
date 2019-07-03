@@ -33,7 +33,7 @@ class ParkTable extends Component {
 
 	renderPark = park => (
 		<tr>
-			<td>{park.name}</td>
+			<td>{park.name_alt}</td>
 			<td>{park.light_pol}</td>
 			<td>{park.distance}</td>
 		</tr>
