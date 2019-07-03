@@ -2,6 +2,9 @@ import json
 import csv
 import requests
 import time
+import colorama
+
+colorama.init()
 
 startTime = time.time()
 startLine = int(input("Start line?"))
@@ -17,28 +20,27 @@ with open('../data/ontario_parks.csv', newline='') as csv_file:
     for row in csv_reader:
         if(int(row[0]) < startLine):
             continue
-        elapsedTime = time.time() - startTime
-        if(elapsedTime < 1.0):
-            time.sleep( 1.0 - elapsedTime)
 
         print(f'Id: {row[0]}, Name: {row[2]}')
         alt_name = row[2]
         if row[2] == "Unknown":
+            elapsedTime = time.time() - startTime
+            print(f'API timer: {elapsedTime}s')
+            if(elapsedTime < 1.0):
+                time.sleep(1.0 - elapsedTime)
+            startTime = time.time()
             line_count += 1
             response = requests.get(
                 f'https://nominatim.openstreetmap.org/reverse?format=json&lat={row[5]}&lon={row[4]}')
             data = response.json()
             if 'name' in data.keys():
-                print(data['name'])
+                alt_name = data['name']
             else:
                 if 'house_number' in data['address'].keys() and data['address']['house_number'] == data['display_name'].split(', ')[0]:
                     alt_name = f"{data['display_name'].split(', ')[0]} {data['display_name'].split(', ')[1]}"
-                    print(
-                        f"{data['display_name'].split(', ')[0]} {data['display_name'].split(', ')[1]}")
                 else:
                     alt_name = f"{data['display_name'].split(', ')[0]}"
-                    print(
-                        f"{data['display_name'].split(', ')[0]}")
+            print(colorama.Fore.RED + alt_name + colorama.Style.RESET_ALL)
         csv_writer.writerow(
             [row[0], row[1], row[2], alt_name, row[3], row[5], row[4]])
     print(f'Processed {line_count} unknowns.')
