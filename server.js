@@ -197,9 +197,9 @@ app.get("/api/getReviews", function(req, res){
 	//order in query :p_id, score, name, user_id, review
 	//id is autoincrement so dont worry about that
 	//"SELECT name, light_pol, lat, lng from ontario_parks WHERE id=?";
-	const getReviewQuery = "SELECT name, score, review from reviews";
+	const getReviewQuery = "SELECT name, score, review from reviews where p_id = ?";
 
-	getConnection().query(getReviewQuery,(err, reviews) => {
+	getConnection().query(getReviewQuery,[req.query.parkID],(err, reviews) => {
 		if (err) {
 			console.log("failed" + err);
 			res.sendStatus(500);
@@ -215,12 +215,14 @@ app.get("/api/getReviews", function(req, res){
 app.post("/api/storeReview", function(req, res){
 	console.log("review on submission from client: ",req.body);
 	console.log(req.body.name);
+	console.log(req.body.user_id)
+	console.log('park id is : '+req.body.parkID);
 
 	//order in query :p_id, score, name, user_id, review
 	//id is autoincrement so dont worry about that
-	const insertReviewQuery = "INSERT INTO reviews (p_id, score, name, user_id, review) VALUES (323, ?, ?, 2, ?)";
+	const insertReviewQuery = "INSERT INTO reviews (p_id, score, name, user_id, review) VALUES (?, ?, ?, ?, ?)";
 
-	getConnection().query(insertReviewQuery, [req.body.score, req.body.name,req.body.review], (err, profileInfo) => {
+	getConnection().query(insertReviewQuery, [req.body.parkID,req.body.score, req.body.name,req.user.user_id,req.body.review], (err, profileInfo) => {
 		if (err) {
 			console.log("failed" + err);
 			res.sendStatus(500);

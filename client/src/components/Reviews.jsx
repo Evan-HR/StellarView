@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { AuthProvider, AuthConsumer } from "./AuthContext";
 class Reviews extends Component {
 	state = {
 		name: "",
@@ -11,7 +12,11 @@ class Reviews extends Component {
 
 	componentDidMount() {
 		axios
-			.get("/api/getReviews")
+			.get("/api/getReviews", {
+				params: {
+					parkID: this.props.parkID
+				}
+			})
 			.then(response => {
 				console.log({ message: "Request received!", response });
 
@@ -54,7 +59,8 @@ class Reviews extends Component {
 		const newReview = {
 			name: this.state.name,
 			score: this.state.score,
-			review: this.state.review
+			review: this.state.review,
+			parkID: this.props.parkID
 		};
 
 		axios
@@ -73,6 +79,73 @@ class Reviews extends Component {
 			<td>{review.review}</td>
 		</tr>
 	);
+
+	renderUserNoReview(){
+		return(
+			<form id="reviewForm">
+			<label>
+				Name: <br />
+				<input
+					type="text"
+					placeholder={this.name}
+					name="name"
+					onChange={this.handleNameChange}
+					value={this.state.name}
+				/>
+			</label>
+			<br />
+			<label>
+				Score (1-5):
+				<br />
+				<input
+					type="number"
+					min="1"
+					max="5"
+					name="score"
+					onChange={this.handleScoreChange}
+					value={this.state.score}
+				/>
+			</label>
+			<br />
+			Review
+			<br />
+			<label>
+				<textarea
+					rows="4"
+					cols="30"
+					name="review"
+					placeholder="Enter text here..."
+					onChange={this.handleReviewChange}
+					value={this.state.review}
+				/>
+			</label>
+			<br />
+			<button
+				className="btn btn-primary m-2"
+				onClick={e => this.onSubmit(e)}
+			>
+				Submit
+			</button>
+		</form>
+		)
+	}
+
+	renderReviewsDiv() {
+		return (
+			<div className="border border-primary">
+				<table className="table table-hover">
+					<tbody>
+						<tr>
+							<th>Name</th>
+							<th>Score</th>
+							<th>Review</th>
+						</tr>
+					</tbody>
+					<tbody>{this.renderReviewTable()}</tbody>
+				</table>
+			</div>
+		);
+	}
 
 	renderReviewTable = () => {
 		if (this.state.dbReviewList.length > 0) {
@@ -105,66 +178,14 @@ class Reviews extends Component {
 		return (
 			<div>
 				{this.state.hasReviewed === false ? (
-					<form id="reviewForm">
-						<label>
-							Name: <br />
-							<input
-								type="text"
-								placeholder="Name"
-								name="name"
-								onChange={this.handleNameChange}
-								value={this.state.name}
-							/>
-						</label>
-						<br />
-						<label>
-							Score (1-5):
-							<br />
-							<input
-								type="number"
-								min="1"
-								max="5"
-								name="score"
-								onChange={this.handleScoreChange}
-								value={this.state.score}
-							/>
-						</label>
-						<br />
-						Review
-						<br />
-						<label>
-							<textarea
-								rows="4"
-								cols="30"
-								name="review"
-								placeholder="Enter text here..."
-								onChange={this.handleReviewChange}
-								value={this.state.review}
-							/>
-						</label>
-						<br />
-						<button
-							className="btn btn-primary m-2"
-							onClick={e => this.onSubmit(e)}
-						>
-							Submit
-						</button>
-					</form>
+					this.renderUserNoReview()
 				) : (
 					"Review Submitted.  Thank you!"
 				)}
-				<div className="border border-primary">
-					<table className="table table-hover">
-						<tbody>
-							<tr>
-								<th>Name</th>
-								<th>Score</th>
-								<th>Review</th>
-							</tr>
-						</tbody>
-						<tbody>{this.renderReviewTable()}</tbody>
-					</table>
-				</div>
+
+				
+
+				{this.renderReviewsDiv()}
 			</div>
 		);
 	}
