@@ -254,7 +254,11 @@ class ParkMap extends Component {
 			let newModalContent = (
 				<React.Fragment>
 					<div className="modal-header">
-						<h1>{park.name}</h1>
+						<h1>
+							{park.name === "Unknown" && park.name_alt
+								? park.name_alt
+								: park.name}
+						</h1>
 					</div>
 					<div className="modal-body">
 						<img
