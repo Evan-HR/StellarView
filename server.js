@@ -309,7 +309,6 @@ function authenticationMiddleware() {
 
 //----------------------BEGIN WEATHER-----------------
 
-
 //-----------------END WEATHER-----------------
 
 //dynamically populate homepage
@@ -326,7 +325,7 @@ app.get(["/", "/form.html"], function(req, res) {
 		} else {
 			weatherJSON = JSON.parse(body);
 			var weatherArr = [];
-			for(var i = 0; i < weatherJSON.list.length; i++) {
+			for (var i = 0; i < weatherJSON.list.length; i++) {
 				var elem = weatherJSON.list[i];
 				console.log("city name: " + elem.name);
 				console.log("clouds: " + elem.clouds.all);
@@ -335,11 +334,9 @@ app.get(["/", "/form.html"], function(req, res) {
 				// make NEW JSON from this
 				// compare each park location to each weather result
 				// assign park location the weather info of the CLOSEST weather result.
-				//weather info is cloud, humidity.	
-
+				//weather info is cloud, humidity.
 			}
 			//weatherJSON.map(whatamIdoingwithmylife)
-
 		}
 	});
 	// end weather testing
@@ -382,7 +379,7 @@ app.get("/api/getUserInfo", (req, res) => {
 	const nameQuery = "SELECT name from users WHERE id=?";
 	//console.log("USER ID FOR QUERY IS:" + req.user);
 	//if logged in...
-	if(req.session.passport){
+	if (req.session.passport) {
 		getConnection().query(
 			nameQuery,
 			[req.session.passport.user.user_id],
@@ -406,7 +403,6 @@ app.get("/api/getUserInfo", (req, res) => {
 			}
 		);
 	}
-
 });
 
 //full park info link pages
