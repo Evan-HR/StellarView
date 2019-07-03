@@ -6,20 +6,23 @@ Backend node server can be connected to via `http://localhost:5000/`\
 Frontend react server can be connected to via `http://localhost:3000/`
 
 ## Traditional Setup
-in Visual Studio Code, run the following commands
-```
-npm install -g nodemon
-npm install express
-npm install morgan
-npm install sql
-npm install body-parser
-npm install express-session 
-npm install dotenv --save
-```
 
 Install XAMPP, run MYSQL and APACHE\
 go to: localhost/phpmyadmin\
-create database (info via MESSENGER)\
+create database:
+```
+CREATE TABLE `ontario_parks` (
+ `id` int(25) NOT NULL AUTO_INCREMENT,
+ `osm_id` int(25) NOT NULL,
+ `name` varchar(25) NOT NULL,
+ `name_alt` text NOT NULL,
+ `light_pol` decimal(10,8) NOT NULL,
+ `lat` decimal(11,8) NOT NULL,
+ `lng` decimal(11,8) NOT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12488 DEFAULT CHARSET=utf8
+```
+(additional info via MESSENGER)
 
 ## reactPlayground Development Mode
 
