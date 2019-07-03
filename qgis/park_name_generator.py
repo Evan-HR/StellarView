@@ -1,18 +1,26 @@
 import json
 import csv
 import requests
+import time
 
-
+startTime = time.time()
+startLine = int(input("Start line?"))
 # Input row order: id, osmid, name, light_pol, lat, lng
 # Output row order: id, osmid, name, alt_name, light_pol, lat, lng
 with open('../data/ontario_parks.csv', newline='') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     csv_writer = csv.writer(
-        open('../data/ontario_parks_out.csv', 'w', newline='', encoding='utf-8'))
+        open('../data/ontario_parks_out.csv', 'a', newline='', encoding='utf-8'))
     line_count = 0
-    csv_writer.writerow(
-        ["id", "osmid", "name", "alt_name", "light_pol", "lat", "lng"])
+    # csv_writer.writerow(
+    #     ["id", "osmid", "name", "alt_name", "light_pol", "lat", "lng"])
     for row in csv_reader:
+        if(int(row[0]) < startLine):
+            continue
+        elapsedTime = time.time() - startTime
+        if(elapsedTime < 1.0):
+            time.sleep( 1.0 - elapsedTime)
+
         print(f'Id: {row[0]}, Name: {row[2]}')
         alt_name = row[2]
         if row[2] == "Unknown":
