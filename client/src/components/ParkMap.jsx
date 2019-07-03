@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import Modal from "react-modal";
 import ReactDOM from "react-dom";
 import ParkMapModal from "./ParkMapModal";
+import Reviews from "./Reviews";
 
 /* Notes:
 Couldn't figure out how to make google.etc work, 
@@ -269,6 +270,7 @@ class ParkMap extends Component {
 							{location.lng}. The light pollution level here is{" "}
 							{park.light_pol}, which is {lighPolStatus()}.{" "}
 						</p>
+						<Reviews parkID={park.id}/>
 					</div>
 				</React.Fragment>
 			);
