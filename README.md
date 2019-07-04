@@ -48,6 +48,71 @@ https://www.handprint.com/ASTRO/bortle.html
 
 Light pollution data via: https://ngdc.noaa.gov/eog/viirs/download_dnb_composites.html\
 
+## HOW TO AVOID PROP DRILLING
+use Contexts!\
+const UserContext = React.createContext()\
+this returns both a provider and a consumer, properties of UserContext\
+to set up provider:
+```
+render(){
+return(
+<UserContext.Provider value = {this.state.user}>
+<Main />
+</UserContext.Provider>
+```
+Now suppose a NavBar() function/component is in main
+```
+function NavBar(){
+return(
+ <UserContext.Consumer>
+ ##HTML GOES HERE##
+  </UserContext.Consumer>
+)
+}
+```
+You'll get a "render not a function" ,so that's why you use arrow function!
+
+```
+function NavBar(){
+return(
+	<UserContext.Consumer>
+	{value => <nav>
+	<span> Hello, {value}!</span>
+		</nav>
+	}
+  </UserContext.Consumer>
+);
+}
+```
+But, this is kinda #gross no?\
+solution: useContext hooks!\
+what is a hook? - let you use state without writing a class
+
+```
+import React, {useContext} from 'react':
+```
+
+Then, you can keep your provider wrapper, but you don't need the consumer wrapper
+```
+function Navbar() {
+  const { firstName, lastName } = useContext(UserContext);
+
+  return (
+    <nav>
+      <span className="title">Cool App</span>
+
+      <span>
+        Hello, {firstName} {lastName}!
+      </span>
+    </nav>
+  );
+}
+```
+
+full code:\
+https://codesandbox.io/s/5zv4xm1pyk
+
+
 ## SESSION INFO
 ```
 app.post('/login', passport.authenticate('local', {
