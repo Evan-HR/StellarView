@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { AuthProvider, AuthConsumer } from "./AuthContext";
-class Reviews extends Component {
+class BaseReviews extends Component {
 	state = {
 		name: "",
 		score: "",
@@ -12,6 +12,21 @@ class Reviews extends Component {
 	};
 
 	componentDidMount() {
+		if (
+			this.props.context.isAuth == true &&
+			this.state.hasReviewed == true
+		) {
+			this.setState((this.state.switchCase = "loggedInHasReviewed"));
+		} else if (
+			this.props.context.isAuth == true &&
+			this.state.hasReviewed == false
+		) {
+			console.log("DID IT GET HERE?????????????????? 1010");
+			this.setState({ switchCase: "loggedInNotReviewed" });
+		} else if (this.props.context.isAuth == false) {
+			this.setState((this.state.switchCase = "notLoggedIn"));
+		}
+
 		axios
 			.get("/api/getReviews", {
 				params: {
@@ -163,42 +178,21 @@ class Reviews extends Component {
 		this.setState({ review: e.target.value });
 	};
 
-	getSwitchCase() {
-		return (
-			<AuthConsumer>
-				{x => {
-					console.log("get here? auth is: " + x.isAuth);
-					if (x.isAuth == true && this.state.hasReviewed == true) {
-						this.setState(
-							(this.state.switchCase = "loggedInHasReviewed")
-						);
-					} else if (
-						x.isAuth == true &&
-						this.state.hasReview == false
-					) {
-						this.setState(
-							(this.state.switchCase = "loggedInNotReviewed")
-						);
-					} else if (x.isAuth == false) {
-						this.setState((this.state.switchCase = "notLoggedIn"));
-					}
-				}}
-			</AuthConsumer>
-		);
-	}
-
 	render() {
-		//this.getSwitchCase();
 		return (
 			<div>
+				{console.log(this.props.context)}
 				{this.state.hasReviewed === false
 					? this.renderUserNoReview()
 					: "Review Submitted.  Thank you!"}
-
 				{this.renderReviewsDiv()}
 			</div>
 		);
 	}
 }
+
+const Reviews = () => (
+	<AuthConsumer>{x => <BaseReviews context={x} />}</AuthConsumer>
+);
 
 export default Reviews;

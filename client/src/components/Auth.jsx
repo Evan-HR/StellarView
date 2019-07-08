@@ -15,6 +15,7 @@ export class Auth extends React.Component {
 			userID: null,
 			isAuth: null
 		};
+		this.callAPI();
 		this.handleLogoutState = this.handleLogoutState.bind(this);
 	}
 
@@ -40,11 +41,6 @@ export class Auth extends React.Component {
 			.catch(error => {
 				console.log(error);
 			});
-	}
-
-	componentWillMount() {
-		this.callAPI();
-
 	}
 
 	render() {
