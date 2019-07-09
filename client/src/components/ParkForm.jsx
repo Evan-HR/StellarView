@@ -20,7 +20,7 @@ class ParkForm extends Component {
 
 	//componentDidMount runs RIGHT after post-render
 	componentDidMount() {
-		// this.getMyLocation();
+		//this.getMyLocation();
 	}
 
 	handlePlaceChange = changeEvent => {
@@ -42,6 +42,7 @@ class ParkForm extends Component {
 		axios
 			.get(
 				//Internet Explorer didn't want to connect to OSM server, so the request has to be proxied through heroku
+				//This can be avoided by redirecting the call through NODE
 				`${"https://cors-anywhere.herokuapp.com/"}http://nominatim.openstreetmap.org/search?format=json&q=${
 					this.state.reqData.placeName
 				}`
@@ -52,7 +53,7 @@ class ParkForm extends Component {
 					...this.state,
 					isGeocodingLocation: false,
 					reqData: {
-						...this.reqData,
+						...this.state.reqData,
 						lat: parseFloat(data[0].lat),
 						lng: parseFloat(data[0].lon)
 					}
