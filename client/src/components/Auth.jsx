@@ -29,7 +29,6 @@ export class Auth extends React.Component {
 		});
 	}
 
-
 	getUserInfo() {
 		axios
 			.get("/api/getUserInfo")
@@ -50,9 +49,9 @@ export class Auth extends React.Component {
 		axios
 			.get("/api/getUserReviews")
 
-			.then((reviews) => {
+			.then(reviews => {
 				this.setState({
-					userReviews : reviews
+					userReviews: reviews.data
 				});
 			})
 			.catch(error => {

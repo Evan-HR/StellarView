@@ -11,20 +11,35 @@ class BaseReviews extends Component {
 		dbReviewList: []
 	};
 
+	getHasReviewed() {
+		if (this.props.context.userReviews.includes(this.props.parkID)) {
+			this.setState({ hasReviewed: true });
+		}
+	}
+
 	componentDidMount() {
-		//console.log("parkID is: "+this.props.parkID);
+		console.log("parkID is: " + this.props.parkID);
+
+		//get review status from user and db
+
 		if (
 			this.props.context.isAuth == true &&
-			this.state.hasReviewed == true
+			this.props.context.userReviews.includes(this.props.parkID)
 		) {
-			this.setState({switchCase: "loggedInHasReviewed"});
+			console.log("siwtch case 1");
+			this.setState({
+				switchCase: "loggedInHasReviewed",
+				hasReviewed: true
+			});
 		} else if (
 			this.props.context.isAuth == true &&
 			this.state.hasReviewed == false
 		) {
+			console.log("siwtch case 2");
 			this.setState({ switchCase: "loggedInNotReviewed" });
 		} else if (this.props.context.isAuth == false) {
-			this.setState({switchCase:"notLoggedIn"});
+			console.log("siwtch case 3");
+			this.setState({ switchCase: "notLoggedIn" });
 		}
 
 		axios
@@ -36,11 +51,11 @@ class BaseReviews extends Component {
 			.then(response => {
 				console.log({ message: "Reviews Gathered!", response });
 
-				if (response.length > 0) {
+				if (response.data.length > 0) {
 					var tempReviewsArr;
 
 					console.log("BLAH!?");
-					tempReviewsArr = response.map(x => {
+					tempReviewsArr = response.data.map(x => {
 						return {
 							name: x.name,
 							score: x.score,
@@ -72,8 +87,14 @@ class BaseReviews extends Component {
 			.then(res => console.log(res.data))
 			.catch(err => console.log(err.response.data));
 		this.setState({
-			dbReviewList: [newReview, ...this.state.dbReviewList]
+			dbReviewList: [newReview, ...this.state.dbReviewList],
+			hasReviewed: true,
+			switchCase: "loggedInHasReviewed"
 		});
+
+		//push parkID to userReviews in Auth context provider
+		//this.props.context.userReviews
+		this.props.context.userReviews.push(this.props.parkID);
 	};
 
 	formatReviews = review => (
@@ -154,10 +175,13 @@ class BaseReviews extends Component {
 	renderReviewsSwitch(param) {
 		switch (param) {
 			case "loggedInHasReviewed":
+				console.log("loggedinhasreviewed got here");
 				return "Thank you for your review!";
 			case "loggedInNotReviewed":
+				console.log("loggedinNotreviewed got here");
 				return this.renderUserNoReview();
 			case "notLoggedIn":
+				console.log("notLoggedI  got here");
 				return "You must be logged-in to submit a review";
 			default:
 				return null;
@@ -194,6 +218,7 @@ class BaseReviews extends Component {
 	render() {
 		return (
 			<div>
+				pizza
 				{this.renderReviewsSwitch(this.state.switchCase)}
 				{this.renderReviewsDiv()}
 			</div>
@@ -201,8 +226,10 @@ class BaseReviews extends Component {
 	}
 }
 
-const Reviews = (props) => (
-	<AuthConsumer>{x => <BaseReviews context={x} parkID={props.parkID} />}</AuthConsumer>
+const Reviews = props => (
+	<AuthConsumer>
+		{x => <BaseReviews context={x} parkID={props.parkID} />}
+	</AuthConsumer>
 );
 
 export default Reviews;
