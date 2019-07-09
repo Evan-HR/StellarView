@@ -45,6 +45,7 @@ class ParksComponent extends Component {
 	//app.post("/api/getParks")
 	getParks = reqData => {
 		console.log(reqData);
+		this.updateHistoryQuery(reqData);
 		this.setState({ isFetchingParks: true });
 		// let fetchingState = this.state;
 		// fetchingState.isFetching = true;
@@ -68,7 +69,6 @@ class ParksComponent extends Component {
 			.then(response => response.json())
 			.then(data => {
 				console.log(data);
-				this.updateHistoryQuery(reqData);
 				this.setState({
 					parks: data,
 					fetchReq: reqData,

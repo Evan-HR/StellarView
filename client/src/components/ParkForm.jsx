@@ -1,8 +1,12 @@
 //Input form
 import React, { Component } from "react";
 import axios from "axios";
+import { createBrowserHistory } from "history";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
-class ParkForm extends Component {
+const history = createBrowserHistory();
+
+class BaseParkForm extends Component {
 	state = {
 		reqData: {
 			lat: "",
@@ -23,11 +27,13 @@ class ParkForm extends Component {
 		//this.getMyLocation();
 	}
 
-	// componentDidUpdate(){
-	// 	window.onpop = (e) => {
-	// 		console.log("History back to: ")
-	// 	}
-	// }
+	componentDidUpdate(prevProps) {
+		if (prevProps !== this.props) {
+			console.log("Prev location:", prevProps.history.location.search);
+			console.log("Curr location:", this.props.history.location.search);
+			
+		}
+	}
 
 	handlePlaceChange = changeEvent => {
 		this.setState({
@@ -227,7 +233,6 @@ class ParkForm extends Component {
 	};
 
 	render() {
-		
 		return (
 			<div className="border border-primary">
 				{/* <br />
@@ -396,5 +401,17 @@ class ParkForm extends Component {
 		);
 	}
 }
+
+const ParkForm = parkProps => (
+	<Router>
+		<Route
+			path="/"
+			render={routerProps => (
+				//Combine props passed to parkForm with router props
+				<BaseParkForm {...{ ...parkProps, ...routerProps }} />
+			)}
+		/>
+	</Router>
+);
 
 export default ParkForm;
