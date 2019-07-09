@@ -31,7 +31,6 @@ class BaseParkForm extends Component {
 		if (prevProps !== this.props) {
 			console.log("Prev location:", prevProps.history.location.search);
 			console.log("Curr location:", this.props.history.location.search);
-			
 		}
 	}
 
@@ -159,11 +158,22 @@ class BaseParkForm extends Component {
 		const errors = this.validate(this.state.reqData);
 		if (errors.length === 0) {
 			this.setState({ ...this.state, formErrors: [] });
+			this.updateHistoryQuery(this.state.reqData);
 			this.props.fetchParks(this.state.reqData);
 		} else {
 			this.setState({ ...this.state, formErrors: errors });
 		}
 		//getparks(reqdata) of parent
+	};
+
+	updateHistoryQuery = reqData => {
+		console.log("Adding test query");
+		//this.props.history.push({ query: "test" });
+		this.props.history.push({
+			search: `?lat=${reqData.lat}&lng=${reqData.lng}&dist=${
+				reqData.dist
+			}&lightpol=${reqData.lightpol}`
+		});
 	};
 
 	validate = reqData => {
