@@ -1,9 +1,6 @@
 //Input form
 import React, { Component } from "react";
 import axios from "axios";
-import { createBrowserHistory } from "history";
-
-const history = createBrowserHistory();
 
 class ParkForm extends Component {
 	state = {
@@ -155,7 +152,6 @@ class ParkForm extends Component {
 		//console.log(this.state.reqData);
 		const errors = this.validate(this.state.reqData);
 		if (errors.length === 0) {
-			this.updateQuery(this.state.reqData);
 			this.setState({ ...this.state, formErrors: [] });
 			this.props.fetchParks(this.state.reqData);
 		} else {
@@ -194,15 +190,15 @@ class ParkForm extends Component {
 		return errors;
 	};
 
-	updateQuery = reqData => {
-		console.log("Adding test query");
-		//this.props.history.push({ query: "test" });
-		history.push({
-			search: `?lat=${reqData.lat}&lng=${reqData.lng}&dist=${
-				reqData.dist
-			}&lightpol=${reqData.lightpol}`
-		});
-	};
+	// updateQuery = reqData => {
+	// 	console.log("Adding test query");
+	// 	//this.props.history.push({ query: "test" });
+	// 	history.push({
+	// 		search: `?lat=${reqData.lat}&lng=${reqData.lng}&dist=${
+	// 			reqData.dist
+	// 		}&lightpol=${reqData.lightpol}`
+	// 	});
+	// };
 
 	renderLocationSpinner = () => {
 		if (this.state.isLoadingLocation) {

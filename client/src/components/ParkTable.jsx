@@ -34,8 +34,8 @@ class ParkTable extends Component {
 	renderPark = park => (
 		<tr>
 			<td>{park.name_alt}</td>
-			<td>{park.light_pol}</td>
-			<td>{park.distance}</td>
+			<td>{parseFloat(park.light_pol).toFixed(3)}</td>
+			<td>{parseFloat(park.distance).toFixed(3)}</td>
 		</tr>
 	);
 

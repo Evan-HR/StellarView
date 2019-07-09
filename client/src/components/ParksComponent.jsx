@@ -3,6 +3,9 @@ import React, { Component } from "react";
 import ParkForm from "./ParkForm";
 import ParkTable from "./ParkTable";
 import ParkMap from "./ParkMap";
+import { createBrowserHistory } from "history";
+
+const history = createBrowserHistory();
 
 class ParksComponent extends Component {
 	state = {
@@ -65,13 +68,27 @@ class ParksComponent extends Component {
 			.then(response => response.json())
 			.then(data => {
 				console.log(data);
+				this.updateHistoryQuery(reqData);
 				this.setState({
 					parks: data,
 					fetchReq: reqData,
 					isFetchingParks: false
 				});
 			})
-			.catch(err => {console.error(err); this.setState({isFetchingParks: false})});
+			.catch(err => {
+				console.error(err);
+				this.setState({ isFetchingParks: false });
+			});
+	};
+
+	updateHistoryQuery = reqData => {
+		console.log("Adding test query");
+		//this.props.history.push({ query: "test" });
+		history.push({
+			search: `?lat=${reqData.lat}&lng=${reqData.lng}&dist=${
+				reqData.dist
+			}&lightpol=${reqData.lightpol}`
+		});
 	};
 
 	//Clear button handler
