@@ -437,7 +437,37 @@ app.get("/api/getUserInfo", (req, res) => {
 						req.session.passport.user.user_id
 					} }`;
 					console.log("finalJSON is: " + tempJSON);
-					res.send(JSON.parse(tempJSON));
+					res.send(tempJSON);
+				}
+			}
+		);
+	}
+});
+
+app.get("/api/getUserReviews", (req, res) => {
+
+	const getUserReviewQuery = "SELECT p_id from reviews WHERE user_id=?";
+	//console.log("USER ID FOR QUERY IS:" + req.user);
+	//if logged in...
+	if (req.session.passport) {
+		getConnection().query(
+			getUserReviewQuery,
+			[req.session.passport.user.user_id],
+			(err, reviewResults) => {
+				if (err) {
+					console.log("failed" + err);
+					res.sendStatus(500);
+					return;
+				} else {
+
+					tempReviews = []
+					for (var i =0; i< reviewResults.length ;i++) {
+						tempReviews.push(reviewResults[i].p_id);
+					 }
+
+
+					console.log(tempReviews);
+					res.send(tempReviews)
 				}
 			}
 		);

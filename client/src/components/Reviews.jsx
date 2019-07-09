@@ -12,19 +12,19 @@ class BaseReviews extends Component {
 	};
 
 	componentDidMount() {
+		//console.log("parkID is: "+this.props.parkID);
 		if (
 			this.props.context.isAuth == true &&
 			this.state.hasReviewed == true
 		) {
-			this.setState((this.state.switchCase = "loggedInHasReviewed"));
+			this.setState({switchCase: "loggedInHasReviewed"});
 		} else if (
 			this.props.context.isAuth == true &&
 			this.state.hasReviewed == false
 		) {
-			console.log("DID IT GET HERE?????????????????? 1010");
 			this.setState({ switchCase: "loggedInNotReviewed" });
 		} else if (this.props.context.isAuth == false) {
-			this.setState((this.state.switchCase = "notLoggedIn"));
+			this.setState({switchCase:"notLoggedIn"});
 		}
 
 		axios
@@ -34,13 +34,13 @@ class BaseReviews extends Component {
 				}
 			})
 			.then(response => {
-				console.log({ message: "Request received!", response });
+				console.log({ message: "Reviews Gathered!", response });
 
-				if (response.data.length > 0) {
+				if (response.length > 0) {
 					var tempReviewsArr;
 
 					console.log("BLAH!?");
-					tempReviewsArr = response.data.map(x => {
+					tempReviewsArr = response.map(x => {
 						return {
 							name: x.name,
 							score: x.score,
@@ -61,7 +61,7 @@ class BaseReviews extends Component {
 		e.preventDefault();
 
 		const newReview = {
-			name: this.state.name,
+			name: this.props.context.firstName,
 			score: this.state.score,
 			review: this.state.review,
 			parkID: this.props.parkID
@@ -151,6 +151,19 @@ class BaseReviews extends Component {
 		);
 	}
 
+	renderReviewsSwitch(param) {
+		switch (param) {
+			case "loggedInHasReviewed":
+				return "Thank you for your review!";
+			case "loggedInNotReviewed":
+				return this.renderUserNoReview();
+			case "notLoggedIn":
+				return "You must be logged-in to submit a review";
+			default:
+				return null;
+		}
+	}
+
 	renderReviewTable = () => {
 		if (this.state.dbReviewList.length > 0) {
 			return this.state.dbReviewList.map(this.formatReviews);
@@ -181,18 +194,15 @@ class BaseReviews extends Component {
 	render() {
 		return (
 			<div>
-				{console.log(this.props.context)}
-				{this.state.hasReviewed === false
-					? this.renderUserNoReview()
-					: "Review Submitted.  Thank you!"}
+				{this.renderReviewsSwitch(this.state.switchCase)}
 				{this.renderReviewsDiv()}
 			</div>
 		);
 	}
 }
 
-const Reviews = () => (
-	<AuthConsumer>{x => <BaseReviews context={x} />}</AuthConsumer>
+const Reviews = (props) => (
+	<AuthConsumer>{x => <BaseReviews context={x} parkID={props.parkID} />}</AuthConsumer>
 );
 
 export default Reviews;
