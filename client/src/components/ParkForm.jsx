@@ -177,9 +177,14 @@ class ParkForm extends Component {
 
 	renderLocationSpinner = () => {
 		if (this.state.isLoadingLocation) {
-			return <span class="spinner-border spinner-border-sm" />;
+			return (
+				<React.Fragment>
+					<span class="spinner-border spinner-border-sm" />
+					Searching
+				</React.Fragment>
+			);
 		} else {
-			return "📍";
+			return "My Location";
 		}
 	};
 
@@ -232,7 +237,7 @@ class ParkForm extends Component {
 							this.getPlaceCoordinates(e);
 						}}
 					>
-						Locate
+						🔎
 					</button>
 					<button
 						// onClick={this.getParks.bind(this, this.state.formInput)}
