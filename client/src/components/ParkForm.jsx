@@ -1,6 +1,9 @@
 //Input form
 import React, { Component } from "react";
 import axios from "axios";
+import { createBrowserHistory } from "history";
+
+const history = createBrowserHistory();
 
 class ParkForm extends Component {
 	state = {
@@ -22,6 +25,12 @@ class ParkForm extends Component {
 	componentDidMount() {
 		// this.getMyLocation();
 	}
+
+	// componentDidUpdate(){
+	// 	window.onpop = (e) => {
+	// 		console.log("History back to: ")
+	// 	}
+	// }
 
 	handlePlaceChange = changeEvent => {
 		this.setState({
@@ -52,7 +61,7 @@ class ParkForm extends Component {
 					...this.state,
 					isGeocodingLocation: false,
 					reqData: {
-						...this.reqData,
+						...this.state.reqData,
 						lat: parseFloat(data[0].lat),
 						lng: parseFloat(data[0].lon)
 					}
@@ -145,6 +154,7 @@ class ParkForm extends Component {
 		//console.log(this.state.reqData);
 		const errors = this.validate(this.state.reqData);
 		if (errors.length === 0) {
+			this.updateQuery(this.state.reqData);
 			this.setState({ ...this.state, formErrors: [] });
 			this.props.fetchParks(this.state.reqData);
 		} else {
@@ -156,23 +166,41 @@ class ParkForm extends Component {
 	validate = reqData => {
 		const errors = [];
 		if (
+			!reqData.lat ||
 			reqData.lat === "" ||
 			reqData.lat < -90 ||
 			reqData.lat > 90 ||
+			!reqData.lng ||
 			reqData.lng === "" ||
 			reqData.lng < -180 ||
 			reqData.lng > 180
 		)
 			errors.push("Invalid location");
-		if (reqData.dist === "" || reqData.dist < 0 || reqData.dist > 300)
+		if (
+			!reqData.dist ||
+			reqData.dist === "" ||
+			reqData.dist < 0 ||
+			reqData.dist > 300
+		)
 			errors.push("Invalid distance");
 		if (
+			!reqData.lightpol ||
 			reqData.lightpol === "" ||
 			reqData.lightpol < 0 ||
 			reqData.lightpol > 40
 		)
 			errors.push("Invalid light pollution");
 		return errors;
+	};
+
+	updateQuery = reqData => {
+		console.log("Adding test query");
+		//this.props.history.push({ query: "test" });
+		history.push({
+			search: `?lat=${reqData.lat}&lng=${reqData.lng}&dist=${
+				reqData.dist
+			}&lightpol=${reqData.lightpol}`
+		});
 	};
 
 	renderLocationSpinner = () => {
@@ -197,6 +225,7 @@ class ParkForm extends Component {
 	};
 
 	render() {
+		
 		return (
 			<div className="border border-primary">
 				{/* <br />
@@ -337,7 +366,7 @@ class ParkForm extends Component {
 						min="0"
 						max="40"
 						step="any"
-						id="lightpoll"
+						id="lightpol"
 						name="lightpol"
 						value={this.state.reqData.lightpol}
 						required

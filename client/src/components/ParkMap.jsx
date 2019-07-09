@@ -137,6 +137,7 @@ class ParkMap extends Component {
 		mapLoaded: false
 	};
 	googleMapRef = createRef();
+	
 	constructor(props) {
 		super(props);
 		this.parkModalChild = React.createRef();
