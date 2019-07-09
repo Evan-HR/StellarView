@@ -23,7 +23,7 @@ class ParkForm extends Component {
 
 	//componentDidMount runs RIGHT after post-render
 	componentDidMount() {
-		// this.getMyLocation();
+		//this.getMyLocation();
 	}
 
 	// componentDidUpdate(){
@@ -51,6 +51,7 @@ class ParkForm extends Component {
 		axios
 			.get(
 				//Internet Explorer didn't want to connect to OSM server, so the request has to be proxied through heroku
+				//This can be avoided by redirecting the call through NODE
 				`${"https://cors-anywhere.herokuapp.com/"}http://nominatim.openstreetmap.org/search?format=json&q=${
 					this.state.reqData.placeName
 				}`
@@ -205,9 +206,14 @@ class ParkForm extends Component {
 
 	renderLocationSpinner = () => {
 		if (this.state.isLoadingLocation) {
-			return <span class="spinner-border spinner-border-sm" />;
+			return (
+				<React.Fragment>
+					<span class="spinner-border spinner-border-sm" />
+					Searching
+				</React.Fragment>
+			);
 		} else {
-			return "📍";
+			return "My Location";
 		}
 	};
 
@@ -261,7 +267,7 @@ class ParkForm extends Component {
 							this.getPlaceCoordinates(e);
 						}}
 					>
-						Locate
+						🔎
 					</button>
 					<button
 						// onClick={this.getParks.bind(this, this.state.formInput)}

@@ -7,6 +7,7 @@ class Reviews extends Component {
 		score: "",
 		review: "",
 		hasReviewed: false,
+		switchCase: "",
 		dbReviewList: []
 	};
 
@@ -19,11 +20,6 @@ class Reviews extends Component {
 			})
 			.then(response => {
 				console.log({ message: "Request received!", response });
-
-				//prints dustin
-				//START HERE!!!!!!!!!!!!!!!!!!!!!!!!
-				//append to STATE!
-				console.log(response.data[0].name);
 
 				if (response.data.length > 0) {
 					var tempReviewsArr;
@@ -40,13 +36,6 @@ class Reviews extends Component {
 						dbReviewList: tempReviewsArr
 					});
 				}
-				// else {
-				// 	console.log("BLU?!!!");
-				// 	this.state.dbReviewList.push("pardon?");
-				// 	this.setState({
-				// 		dbReviewList: [this.state.dbReviewList]
-				// 	});
-				// }
 			})
 			.catch(error => {
 				console.log(error);
@@ -80,54 +69,54 @@ class Reviews extends Component {
 		</tr>
 	);
 
-	renderUserNoReview(){
-		return(
+	renderUserNoReview() {
+		return (
 			<form id="reviewForm">
-			<label>
-				Name: <br />
-				<input
-					type="text"
-					placeholder={this.name}
-					name="name"
-					onChange={this.handleNameChange}
-					value={this.state.name}
-				/>
-			</label>
-			<br />
-			<label>
-				Score (1-5):
+				<label>
+					Name: <br />
+					<input
+						type="text"
+						placeholder={this.name}
+						name="name"
+						onChange={this.handleNameChange}
+						value={this.state.name}
+					/>
+				</label>
 				<br />
-				<input
-					type="number"
-					min="1"
-					max="5"
-					name="score"
-					onChange={this.handleScoreChange}
-					value={this.state.score}
-				/>
-			</label>
-			<br />
-			Review
-			<br />
-			<label>
-				<textarea
-					rows="4"
-					cols="30"
-					name="review"
-					placeholder="Enter text here..."
-					onChange={this.handleReviewChange}
-					value={this.state.review}
-				/>
-			</label>
-			<br />
-			<button
-				className="btn btn-primary m-2"
-				onClick={e => this.onSubmit(e)}
-			>
-				Submit
-			</button>
-		</form>
-		)
+				<label>
+					Score (1-5):
+					<br />
+					<input
+						type="number"
+						min="1"
+						max="5"
+						name="score"
+						onChange={this.handleScoreChange}
+						value={this.state.score}
+					/>
+				</label>
+				<br />
+				Review
+				<br />
+				<label>
+					<textarea
+						rows="4"
+						cols="30"
+						name="review"
+						placeholder="Enter text here..."
+						onChange={this.handleReviewChange}
+						value={this.state.review}
+					/>
+				</label>
+				<br />
+				<button
+					className="btn btn-primary m-2"
+					onClick={e => this.onSubmit(e)}
+				>
+					Submit
+				</button>
+			</form>
+		);
 	}
 
 	renderReviewsDiv() {
@@ -174,16 +163,37 @@ class Reviews extends Component {
 		this.setState({ review: e.target.value });
 	};
 
+	getSwitchCase() {
+		return (
+			<AuthConsumer>
+				{x => {
+					console.log("get here? auth is: " + x.isAuth);
+					if (x.isAuth == true && this.state.hasReviewed == true) {
+						this.setState(
+							(this.state.switchCase = "loggedInHasReviewed")
+						);
+					} else if (
+						x.isAuth == true &&
+						this.state.hasReview == false
+					) {
+						this.setState(
+							(this.state.switchCase = "loggedInNotReviewed")
+						);
+					} else if (x.isAuth == false) {
+						this.setState((this.state.switchCase = "notLoggedIn"));
+					}
+				}}
+			</AuthConsumer>
+		);
+	}
+
 	render() {
+		//this.getSwitchCase();
 		return (
 			<div>
-				{this.state.hasReviewed === false ? (
-					this.renderUserNoReview()
-				) : (
-					"Review Submitted.  Thank you!"
-				)}
-
-				
+				{this.state.hasReviewed === false
+					? this.renderUserNoReview()
+					: "Review Submitted.  Thank you!"}
 
 				{this.renderReviewsDiv()}
 			</div>
