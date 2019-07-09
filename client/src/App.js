@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-//import { AuthProvider, AuthConsumer } from "./AuthContext";
+import { AuthProvider, AuthConsumer } from "./components/AuthContext";
 //import logo from "./logo.svg";
 
 import "./App.css";
@@ -15,8 +15,10 @@ class App extends Component {
 		//render methods NEED A RETURN!
 		return (
 			<div className="App">
+				
 				<NavBar handleLogoutState={this.props.handleLogoutState} />
 				<ParksComponent />
+				
 				
 			</div>
 		);
