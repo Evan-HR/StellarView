@@ -49,13 +49,15 @@ class BaseParkForm extends Component {
 			this.setState({
 				reqData: {
 					...this.state.reqData,
-					lat: query.lat,
-					lng: query.lng,
+					lat: parseFloat(query.lat),
+					lng: parseFloat(query.lng),
 					dist: query.dist,
-					lightpol: query.lightpol,
+					lightpol: parseFloat(query.lightpol),
 					error: ""
 				}
 			});
+			//THe quick and dirty way to load map results would be.......
+			
 		}
 	};
 
