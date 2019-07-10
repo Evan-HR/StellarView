@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { createBrowserHistory } from "history";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import qs from "qs";
 
 const history = createBrowserHistory();
 
@@ -22,17 +23,50 @@ class BaseParkForm extends Component {
 		formErrors: {}
 	};
 
-	//componentDidMount runs RIGHT after post-render
+	// componentDidMount runs RIGHT after post-render
 	componentDidMount() {
-		//this.getMyLocation();
+		// this.getMyLocation();
+
+		//If results exist
+		this.loadQuery();
 	}
 
-	componentDidUpdate(prevProps) {
-		if (prevProps !== this.props) {
-			console.log("Prev location:", prevProps.history.location.search);
-			console.log("Curr location:", this.props.history.location.search);
-		}
+	componentDidUpdate() {
+		//On back button load previous results
+		window.onpopstate = e => {
+			console.log("Back button pressed");
+			this.loadQuery();
+		};
 	}
+
+	//Load query into state
+	loadQuery = () => {
+		let query = qs.parse(this.props.history.location.search, {
+			ignoreQueryPrefix: true
+		});
+		console.log(query);
+		if (Object.keys(query).length !== 0) {
+			this.setState({
+				reqData: {
+					...this.state.reqData,
+					lat: query.lat,
+					lng: query.lng,
+					dist: query.dist,
+					lightpol: query.lightpol,
+					error: ""
+				}
+			});
+		}
+	};
+
+	// Can't get update to happen on address change
+	// don't know if that's what we would want either actually
+	// componentDidUpdate(prevProps) {
+	// 	if (prevProps !== this.props) {
+	// 		console.log("Prev location:", prevProps.history.location.search);
+	// 		console.log("Curr location:", this.props.history.location.search);
+	// 	}
+	// }
 
 	handlePlaceChange = changeEvent => {
 		this.setState({
@@ -298,7 +332,7 @@ class BaseParkForm extends Component {
 						min="-90"
 						max="90"
 						step="any"
-						value={this.state.reqData.lat}
+						value={this.state.reqData.lat || ""}
 						id="Lat"
 						name="lat"
 						required
@@ -311,7 +345,7 @@ class BaseParkForm extends Component {
 						min="-180"
 						max="180"
 						step="any"
-						value={this.state.reqData.lng}
+						value={this.state.reqData.lng || ""}
 						id="Long"
 						name="lng"
 						required
@@ -385,7 +419,7 @@ class BaseParkForm extends Component {
 						step="any"
 						id="lightpol"
 						name="lightpol"
-						value={this.state.reqData.lightpol}
+						value={this.state.reqData.lightpol || ""}
 						required
 						onChange={this.handleLightPolChange}
 					/>
