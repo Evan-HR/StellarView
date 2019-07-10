@@ -53,11 +53,11 @@ class BaseParkForm extends Component {
 					lng: parseFloat(query.lng),
 					dist: query.dist,
 					lightpol: parseFloat(query.lightpol),
-					error: ""
+					error: "",
+					placeName: ""
 				}
 			});
 			//THe quick and dirty way to load map results would be.......
-			
 		}
 	};
 
@@ -203,7 +203,7 @@ class BaseParkForm extends Component {
 	};
 
 	updateHistoryQuery = reqData => {
-		console.log("Adding test query");
+		console.log("Updating history...");
 		//this.props.history.push({ query: "test" });
 		this.props.history.push({
 			search: `?lat=${reqData.lat}&lng=${reqData.lng}&dist=${
@@ -296,7 +296,7 @@ class BaseParkForm extends Component {
 					<input
 						type="text"
 						name="placeName"
-						value={this.state.reqData.placeName}
+						value={this.state.reqData.placeName || ""}
 						onChange={this.handlePlaceChange}
 					/>
 					<button
