@@ -23,11 +23,15 @@ class BaseParkForm extends Component {
 		formErrors: {}
 	};
 
+	//There are two cases when we would want to load results form url query:
+	// 1: We hit back/forward to go to previous searches
+	// 2: We load page from a link with query information
+
 	// componentDidMount runs RIGHT after post-render
 	componentDidMount() {
 		// this.getMyLocation();
 
-		//If results exist
+		//On page load, load results from query is possible
 		this.loadQuery();
 	}
 
@@ -49,12 +53,11 @@ class BaseParkForm extends Component {
 			this.setState({
 				reqData: {
 					...this.state.reqData,
-					lat: parseFloat(query.lat),
-					lng: parseFloat(query.lng),
+					lat: query.lat,
+					lng: query.lng,
 					dist: query.dist,
-					lightpol: parseFloat(query.lightpol),
-					error: "",
-					placeName: ""
+					lightpol: query.lightpol,
+					error: ""
 				}
 			});
 			//THe quick and dirty way to load map results would be.......
@@ -195,21 +198,42 @@ class BaseParkForm extends Component {
 		if (errors.length === 0) {
 			this.setState({ ...this.state, formErrors: [] });
 			this.updateHistoryQuery(this.state.reqData);
-			this.props.fetchParks(this.state.reqData);
+			this.props.fetchParks(this.convertReqToFloat(this.state.reqData));
 		} else {
 			this.setState({ ...this.state, formErrors: errors });
 		}
 		//getparks(reqdata) of parent
 	};
 
+	convertReqToFloat = reqData => {
+		return {
+			lat: parseFloat(reqData.lat),
+			lng: parseFloat(reqData.lng),
+			dist: parseFloat(reqData.dist),
+			lightpol: parseFloat(reqData.lightpol)
+		};
+	};
+
 	updateHistoryQuery = reqData => {
 		console.log("Updating history...");
 		//this.props.history.push({ query: "test" });
-		this.props.history.push({
-			search: `?lat=${reqData.lat}&lng=${reqData.lng}&dist=${
-				reqData.dist
-			}&lightpol=${reqData.lightpol}`
+		let query = qs.parse(this.props.history.location.search, {
+			ignoreQueryPrefix: true
 		});
+		if (
+			query.lat !== reqData.lat ||
+			query.lng !== reqData.lng ||
+			query.dist !== reqData.dist ||
+			query.lightpol !== reqData.lightpol
+		) {
+			this.props.history.push({
+				search: `?lat=${reqData.lat}&lng=${reqData.lng}&dist=${
+					reqData.dist
+				}&lightpol=${reqData.lightpol}`
+			});
+		} else {
+			console.log("Attempting to repeat current search.");
+		}
 	};
 
 	validate = reqData => {
