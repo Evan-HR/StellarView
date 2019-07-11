@@ -54,14 +54,6 @@ class ParksComponent extends Component {
 			},
 			body: JSON.stringify(reqData)
 		})
-			//RESPONSE IS "x", any OUTPUT from previous
-			//function CALL (FETCH POST REQ to server.js getParks)
-			//.then WAITS for the response from fetch/server.js
-			//data is "response" lol! can call either x/y
-			//update STATE as a JSON array
-			//react says "oh shit something changed"
-			// note, everytime setState is called, it
-			//automatically goes to RENDER() function!
 			.then(response => response.json())
 			.then(data => {
 				console.log(data);
@@ -71,7 +63,10 @@ class ParksComponent extends Component {
 					isFetchingParks: false
 				});
 			})
-			.catch(err => {console.error(err); this.setState({isFetchingParks: false})});
+			.catch(err => {
+				console.error(err);
+				this.setState({ isFetchingParks: false });
+			});
 	};
 
 	//Clear button handler

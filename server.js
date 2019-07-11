@@ -21,7 +21,7 @@ var cookieParser = require("cookie-parser");
 //env variables
 require("dotenv").config();
 const mapsKey1 = process.env.DUSTINMAPKEY;
-const weatherKey1 = process.env.EVANWEATHERKEY;
+const weatherKey1 = process.env.REACT_APP_EVANWEATHERKEY;
 const cookieKey = process.env.SECRET;
 
 //set up simple express server
@@ -193,42 +193,57 @@ app.get("/register", function(req, res) {
 });
 
 //get reviews from db
-app.get("/api/getReviews", function(req, res){
+app.get("/api/getReviews", function(req, res) {
 	//order in query :p_id, score, name, user_id, review
 	//id is autoincrement so dont worry about that
 	//"SELECT name, light_pol, lat, lng from ontario_parks WHERE id=?";
-	const getReviewQuery = "SELECT name, score, review from reviews where p_id = ?";
+	const getReviewQuery =
+		"SELECT name, score, review from reviews where p_id = ?";
 
-	getConnection().query(getReviewQuery,[req.query.parkID],(err, reviews) => {
-		if (err) {
-			console.log("failed" + err);
-			res.sendStatus(500);
-			return;
-		} 
-		else{
-			res.send(reviews);
+	getConnection().query(
+		getReviewQuery,
+		[req.query.parkID],
+		(err, reviews) => {
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
+			} else {
+				res.send(reviews);
+			}
 		}
-	});
+	);
 });
 
 //put review to database
-app.post("/api/storeReview", function(req, res){
-	console.log("review on submission from client: ",req.body);
+app.post("/api/storeReview", function(req, res) {
+	console.log("review on submission from client: ", req.body);
 	console.log(req.body.name);
-	console.log(req.body.user_id)
-	console.log('park id is : '+req.body.parkID);
+	console.log(req.body.user_id);
+	console.log("park id is : " + req.body.parkID);
 
 	//order in query :p_id, score, name, user_id, review
 	//id is autoincrement so dont worry about that
-	const insertReviewQuery = "INSERT INTO reviews (p_id, score, name, user_id, review) VALUES (?, ?, ?, ?, ?)";
+	const insertReviewQuery =
+		"INSERT INTO reviews (p_id, score, name, user_id, review) VALUES (?, ?, ?, ?, ?)";
 
-	getConnection().query(insertReviewQuery, [req.body.parkID,req.body.score, req.body.name,req.user.user_id,req.body.review], (err, profileInfo) => {
-		if (err) {
-			console.log("failed" + err);
-			res.sendStatus(500);
-			return;
-		} 
-	});
+	getConnection().query(
+		insertReviewQuery,
+		[
+			req.body.parkID,
+			req.body.score,
+			req.body.name,
+			req.user.user_id,
+			req.body.review
+		],
+		(err, profileInfo) => {
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
+			}
+		}
+	);
 });
 
 app.post("/register", function(req, res) {
@@ -346,44 +361,6 @@ function authenticationMiddleware() {
 }
 //----------------------END AUTHENTICATION-----------------
 
-//----------------------BEGIN WEATHER-----------------
-
-//-----------------END WEATHER-----------------
-
-//dynamically populate homepage
-app.get(["/", "/form.html"], function(req, res) {
-	//console.log(req.user);
-
-	// weather testing
-
-	var weatherJSON;
-	weatherUrl = `http://api.openweathermap.org/data/2.5/find?lat=${43.254591}&lon=${-79.8632725}&cnt=50&appid=${weatherKey1}`;
-	request(weatherUrl, (err, res, body) => {
-		if (err) {
-			console.log(err);
-		} else {
-			weatherJSON = JSON.parse(body);
-			var weatherArr = [];
-			for (var i = 0; i < weatherJSON.list.length; i++) {
-				var elem = weatherJSON.list[i];
-				console.log("city name: " + elem.name);
-				console.log("clouds: " + elem.clouds.all);
-				console.log("humidity: " + elem.main.humidity);
-				console.log(elem.coord);
-				// make NEW JSON from this
-				// compare each park location to each weather result
-				// assign park location the weather info of the CLOSEST weather result.
-				//weather info is cloud, humidity.
-			}
-			//weatherJSON.map(whatamIdoingwithmylife)
-		}
-	});
-	// end weather testing
-
-	console.log("are we authenticated??? " + req.isAuthenticated());
-	res.render("form.ejs");
-});
-
 //authenticationMiddleware makes sure its visible only if youre registered+logged in
 app.get("/profile", authenticationMiddleware(), function(req, res) {
 	const nameQuery = "SELECT name from users WHERE id=?";
@@ -445,7 +422,6 @@ app.get("/api/getUserInfo", (req, res) => {
 });
 
 app.get("/api/getUserReviews", (req, res) => {
-
 	const getUserReviewQuery = "SELECT p_id from reviews WHERE user_id=?";
 	//console.log("USER ID FOR QUERY IS:" + req.user);
 	//if logged in...
@@ -459,21 +435,18 @@ app.get("/api/getUserReviews", (req, res) => {
 					res.sendStatus(500);
 					return;
 				} else {
-
-					tempReviews = []
-					for (var i =0; i< reviewResults.length ;i++) {
+					tempReviews = [];
+					for (var i = 0; i < reviewResults.length; i++) {
 						tempReviews.push(reviewResults[i].p_id);
-					 }
-
+					}
 
 					console.log(tempReviews);
-					res.send(tempReviews)
+					res.send(tempReviews);
 				}
 			}
 		);
 	}
 });
-
 
 //full park info link pages
 app.get("/park/:id", function(req, res) {
@@ -557,7 +530,7 @@ app.post("/results.html", (req, res) => {
 app.post("/api/getParks", (req, res) => {
 	//from bodyParser, parses the HTTP request
 	//from ParksComponent / React (getParks =>)
-	console.log("BODY IS: " + req.body);
+	console.log("BODY IS: ", req.body);
 	//var requestData = JSON.parse(req.body);
 
 	const lat = req.body.lat;
@@ -576,7 +549,40 @@ app.post("/api/getParks", (req, res) => {
 				res.sendStatus(500);
 				return;
 			}
+			var nicerJSON = JSON.parse(JSON.stringify(results));
+			// begin weather
+			//console.log("RESULTS IS: ", nicerJSON);
+			//console.log("RESULTS IS: ", nicerJSON[0].lat);
+			// begin weather
+			var weatherArr = [];
+			weatherURL = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lng}&cnt=50&appid=${weatherKey1}`;
+			axios
+				.get(weatherURL)
+				.then(function(response) {
+					for (var i = 0; i < response.data.list.length; i++) {
+						var elem = response.data.list[i];
+						var city = {};
+						city.name = elem.name;
+						city.clouds = elem.clouds.all;
+						city.humidity = elem.main.humidity;
+						city.lat = elem.coord.lat;
+						city.lng = elem.coord.lon;
+
+						//console.log("city is:", city);
+
+						weatherArr.push(city);
+						//console.log("weather arr is : ", weatherArr);
+					}
+
+					console.log("SHOULD BE FIRST:", weatherArr);
+					console.log("SHOULD BE SECOND:", nicerJSON[0].lat);
+				})
+
+				.catch(function(response) {
+					console.log(response);
+				});
 			res.send(results);
+
 			//res.send({ location: [lat, lng], parks: results, mapAPIKey: mapsKey1 });
 		}
 	);
