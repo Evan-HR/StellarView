@@ -574,14 +574,71 @@ app.post("/api/getParks", (req, res) => {
 						//console.log("weather arr is : ", weatherArr);
 					}
 
-					console.log("SHOULD BE FIRST:", weatherArr);
-					console.log("SHOULD BE SECOND:", nicerJSON[0].lat);
+
+					//console.log("SHOULD BE FIRST:", weatherArr);
+					//console.log("SHOULD BE SECOND:", nicerJSON[0].lat);
+
+					////pass final results here
+					////append weather + moon data to this results JSON
+
+					//evan help! 
+					//use this #BuriedRelic of a function to Append a distance to each city!
+					            //lat/long to distance in km converter
+            //found online, fairly simplistic calculator
+            // function distance($lat1, $lon1, $lat2, $lon2)
+            // {
+            //     $theta = $lon1 - $lon2;
+            //     $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+            //     $dist = acos($dist);
+            //     $dist = rad2deg($dist);
+            //     $miles = $dist * 60 * 1.1515;
+            //     return ($miles * 1.609344);
+            // }
+
+					// weather assigning:
+					for (var i = 0; i < nicerJSON.length; i++){
+						var minDist = 300000; // higher than any coord distance
+						var closestCity = -1; //variable represents index of closest city; initialized as -ve, will throw err if no closer city
+						for (var j = 0; j < weatherArr.length; j++){
+							var cityLat = parseFloat(weatherArr[j].lat); 
+							var cityLng = parseFloat(weatherArr[j].lng);
+							var parkLat = parseFloat(nicerJSON[i].lat);
+							var parkLng = parseFloat(nicerJSON[i].lng);
+						
+							var theta = parkLng - cityLng;
+							var dist = Math.sin(parkLat * Math.PI/180) * Math.sin(cityLat * Math.PI/180) + Math.cos(parkLng * Math.PI/180) * Math.cos(cityLng * Math.PI/180) * Math.cos(theta * Math.PI/180);
+							dist = Math.acos(dist);
+							dist = dist * 20014.1238528/Math.PI;
+            				console.log(dist);
+
+							
+							var distance = Math.sqrt( Math.pow(cityLat - parkLat, 2) + Math.pow(cityLng - parkLng, 2) );
+							console.log("distance for the " + j + "th city is: " + dist + " in kilometers!!!" );
+							if (distance < minDist){
+								minDist = distance;
+								closestCity = j;
+							}
+						nicerJSON[i].clouds = weatherArr[closestCity].clouds; // PARKS JSON FOR i GETS NEW COMPONENT 'weather' WITH DATA FROM CLOSEST CITY
+						nicerJSON[i].humidity = weatherArr[closestCity].humidity;
+						nicerJSON[i].city = weatherArr[closestCity].name;
+						console.log("put on your seatbelts for this SYNCRONOUS BS: \n", nicerJSON);
+						}
+					
+				
+						// can u get the km distance between each park
+						 //like what does 'closest' mean do we know that yet?
+						 // lets look at some of the #s
+						
+					}
+						
+
+					res.send(results);
 				})
 
 				.catch(function(response) {
 					console.log(response);
 				});
-			res.send(results);
+			
 
 			//res.send({ location: [lat, lng], parks: results, mapAPIKey: mapsKey1 });
 		}
