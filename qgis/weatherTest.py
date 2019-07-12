@@ -38,7 +38,7 @@ simulatedParks = np.random.uniform(low=[minLng, minLat], high=[
 simParksResults = []
 for i in range(0, len(simulatedParks)):
     response = requests.get(
-        f'http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lng}&APPID=08c7fcf7e68ec973d48dda2ba76e8314')
+        f'http://api.openweathermap.org/data/2.5/weather?lat={simulatedParks[i][1]}&lon={simulatedParks[i][0]}&APPID=08c7fcf7e68ec973d48dda2ba76e8314')
     weather = response.json()
     simParksResults += [weather["main"]["humidity"]]
 simParksResults = np.array(simParksResults)
