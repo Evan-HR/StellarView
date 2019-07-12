@@ -8,6 +8,8 @@ const expressValidator = require("express-validator");
 //const http = require('http');
 const request = require("request");
 const axios = require("axios");
+//moon phases
+var lune = require("lune");
 
 //authentication variables
 var session = require("express-session");
@@ -682,11 +684,13 @@ app.post("/api/getParks", (req, res) => {
 					temparr.push(weatherJSON);
 
 					//console.log(temparr);
-					temparr.push(percentMoon);
+					temparr.push(parseInt(percentMoon));
 					temparr.push(moonType);
 					//console.log(weatherJSON);
 					console.log("temparr is: ", temparr);
-					res.send(weatherJSON);
+					console.log("moon illum", temparr[1]);
+					console.log("moon type", temparr[2]);
+					res.send(temparr);
 					//res.send(results);
 				})
 

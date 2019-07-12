@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import ParkForm from "./ParkForm";
 import ParkTable from "./ParkTable";
 import ParkMap from "./ParkMap";
+import axios from "axios";
 
 class ParksComponent extends Component {
 	state = {
@@ -47,19 +48,14 @@ class ParksComponent extends Component {
 		// let fetchingState = this.state;
 		// fetchingState.isFetching = true;
 		// this.setState(fetchingState);
-		fetch("/api/getParks", {
-			method: "POST", //Important
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify(reqData)
-		})
-			.then(response => response.json())
-			.then(data => {
-				console.log(data);
+		axios
+			.post("/api/getParks", reqData)
+			.then(response => {
+				console.log("data is!!!!!!!!!!!! ", response.data);
 				this.setState({
-					parks: data,
+					parks: response.data[0],
+					moon: response.data[1],
+					moonType: response.data[2],
 					fetchReq: reqData,
 					isFetchingParks: false
 				});
@@ -102,6 +98,7 @@ class ParksComponent extends Component {
 		return (
 			<div className="ParksDiv">
 				{/* <div className="container"> */}
+
 				<div className="row">
 					<div className="col">
 						<ParkMap
@@ -124,7 +121,11 @@ class ParksComponent extends Component {
 								overflowY: "scroll"
 							}}
 						>
-							<ParkTable parkList={this.state.parks} />
+							<ParkTable
+								parkList={this.state.parks}
+								moon={this.state.moon}
+								moonType={this.state.moonType}
+							/>
 						</div>
 					</div>
 				</div>
