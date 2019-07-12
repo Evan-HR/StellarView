@@ -16,6 +16,7 @@ export class Auth extends React.Component {
 			isAuth: null,
 			userReviews: []
 		};
+		this.getWeatherInfo();
 		this.getUserInfo();
 		this.getUserReviews();
 		this.handleLogoutState = this.handleLogoutState.bind(this);
@@ -27,6 +28,15 @@ export class Auth extends React.Component {
 			userID: null,
 			isAuth: false
 		});
+	}
+
+	getWeatherInfo() {
+		axios
+			.get("/api/getWeatherInfo")
+			//put .then here
+			.catch(error => {
+				console.log(error);
+			});
 	}
 
 	getUserInfo() {

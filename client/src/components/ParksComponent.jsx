@@ -48,13 +48,14 @@ class ParksComponent extends Component {
 		// let fetchingState = this.state;
 		// fetchingState.isFetching = true;
 		// this.setState(fetchingState);
-		axios.post("/api/getParks",reqData)
+		axios
+			.post("/api/getParks", reqData)
 			.then(response => {
-				console.log("data is!!!!!!!!!!!! ",response.data);
+				console.log("data is!!!!!!!!!!!! ", response.data);
 				this.setState({
 					parks: response.data[0],
 					moon: response.data[1],
-					moonType:response.data[2],
+					moonType: response.data[2],
 					fetchReq: reqData,
 					isFetchingParks: false
 				});
@@ -120,7 +121,11 @@ class ParksComponent extends Component {
 								overflowY: "scroll"
 							}}
 						>
-							<ParkTable parkList={this.state.parks} moon={this.state.moon} moonType={this.state.moonType}/>
+							<ParkTable
+								parkList={this.state.parks}
+								moon={this.state.moon}
+								moonType={this.state.moonType}
+							/>
 						</div>
 					</div>
 				</div>
