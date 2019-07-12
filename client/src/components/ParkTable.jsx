@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 
 class ParkTable extends Component {
-	state = {}
+	state = {};
 	/* Note - park object is:
         {
        { id: 6817,
@@ -35,20 +35,16 @@ class ParkTable extends Component {
 		}
 	};
 
-	renderMoonData(){
-		if(this.props.parkList.length > 0){
+	renderMoonData() {
+		if (this.props.parkList.length > 0) {
 			var moonDataString = "";
-			var moonIllum=this.props.moon
-			var moonType=this.props.moonType
-			moonDataString = `The moon is ${moonType}, meaning it is ${moonIllum}% illuminated.`
+			var moonIllum = this.props.moon;
+			var moonType = this.props.moonType;
+			moonDataString = `The moon is ${moonType}, meaning it is ${moonIllum}% illuminated.`;
 
-return moonDataString}
+			return moonDataString;
+		}
 	}
-		
-			
-		
-		
-	
 
 	renderPark = park => (
 		<tr>
@@ -58,7 +54,8 @@ return moonDataString}
 			<td>{park.clouds}</td>
 			<td>{park.cloudDesc}</td>
 			<td>{park.humidity}</td>
-			<td>{park.distance}</td>
+			<td>{this.props.moon}</td>
+			<td>{this.props.moonType}</td>
 		</tr>
 	);
 
@@ -66,8 +63,8 @@ return moonDataString}
 		console.log("ParkTable - rendered");
 		return (
 			<div className="border border-primary">
-			{this.renderMoonData()}
-			
+				{this.renderMoonData()}
+
 				<table className="table table-hover">
 					<tr>
 						<th>Name</th>
@@ -76,7 +73,8 @@ return moonDataString}
 						<th>Cloud Coverage</th>
 						<th>Cloud Type</th>
 						<th>Humidity</th>
-						<th>Moon</th>
+						<th>Moon %</th>
+						<th>Moon Phase</th>
 					</tr>
 					<tbody>{this.renderParkTable()}</tbody>
 				</table>
