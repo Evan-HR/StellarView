@@ -565,35 +565,21 @@ app.post("/results.html", (req, res) => {
 // 	);
 // });
 
-//format "2014-02-17T00:00-0500"
+//format "2014-02-17T00:00-0500", ISO 8601
 function getMoon() {
-	var dateObj = new Date();
+	var now = new Date();
+	var isoDate = now.toISOString();
+	isoDate = new Date(isoDate);
+		//console.log("date is:"+isoDate);
+	//use phase_hunt to get next dates, 
 
-	var year = dateObj.getUTCFullYear();
-	var month = dateObj.getUTCMonth();
-	var day = dateObj.getUTCDate();
-	var hour = dateObj.getUTCHours();
-	var minute = dateObj.getUTCMinutes();
-	var timezoneOffset = dateObj.getTimezoneOffset();
-	var dateString =
-		year +
-		"-" +
-		month +
-		"-" +
-		day +
-		"T" +
-		hour +
-		":" +
-		minute +
-		timezoneOffset;
-	console.log("date is: " + dateString);
+	//var phaseDates = lune.phase_hunt(isoDate);
+	var phaseInfo = lune.phase(isoDate);
+	return phaseInfo;
+}
 
-	var testDate = new Date("2019-06-17T08:31:18.607Z");
-
-	var some_date = new Date(dateString);
-
-	var some_date_phase = lune.phase(testDate);
-	console.log(some_date_phase);
+function inRange(x, min, max) {
+    return ((x-min)*(x-max) <= 0);
 }
 
 //YOU NEED THE / in the ADDRESS!!
@@ -601,7 +587,7 @@ function getMoon() {
 app.post("/api/getParks", (req, res) => {
 	//from bodyParser, parses the HTTP request
 	//from ParksComponent / React (getParks =>)
-	console.log("BODY IS: " + req.body);
+	console.log("BODY IS: " , req.body);
 	//var requestData = JSON.parse(req.body);
 
 	const lat = req.body.lat;
@@ -620,8 +606,37 @@ app.post("/api/getParks", (req, res) => {
 				res.sendStatus(500);
 				return;
 			}
-			getMoon();
-			res.send(results);
+			
+			var phaseInfo = getMoon();
+			var moonType = "";
+			var percentMoon = parseFloat(phaseInfo.illuminated)*100;
+	
+if(inRange(percentMoon,0,25)){
+moonType = "New Moon"
+}else if(inRange(percentMoon,25,50)){
+	moonType = "First Quarter"
+	}
+	else if(inRange(percentMoon,50,75)){
+		moonType = "Full Moon"
+		}
+		else if(inRange(percentMoon,75,100)){
+			moonType = "Last Quarter"
+			}
+
+		
+
+			var temparr=[];
+			var results = JSON.parse(JSON.stringify(results))
+			temparr.push(results);
+			
+			//console.log(temparr);
+			temparr.push(percentMoon)
+			temparr.push(moonType)
+			//results.moonPhase.push({"moonPhase":{phaseInfo}})
+			//results.moonPhase = phaseInfo.illuminated;
+			console.log(temparr);
+			
+			res.send(temparr)
 			//res.send({ location: [lat, lng], parks: results, mapAPIKey: mapsKey1 });
 		}
 	);
