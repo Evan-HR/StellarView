@@ -8,6 +8,8 @@ const expressValidator = require("express-validator");
 //const http = require('http');
 const request = require("request");
 const axios = require("axios");
+//moon phases
+var lune = require("lune");
 
 //authentication variables
 var session = require("express-session");
@@ -193,42 +195,57 @@ app.get("/register", function(req, res) {
 });
 
 //get reviews from db
-app.get("/api/getReviews", function(req, res){
+app.get("/api/getReviews", function(req, res) {
 	//order in query :p_id, score, name, user_id, review
 	//id is autoincrement so dont worry about that
 	//"SELECT name, light_pol, lat, lng from ontario_parks WHERE id=?";
-	const getReviewQuery = "SELECT name, score, review from reviews where p_id = ?";
+	const getReviewQuery =
+		"SELECT name, score, review from reviews where p_id = ?";
 
-	getConnection().query(getReviewQuery,[req.query.parkID],(err, reviews) => {
-		if (err) {
-			console.log("failed" + err);
-			res.sendStatus(500);
-			return;
-		} 
-		else{
-			res.send(reviews);
+	getConnection().query(
+		getReviewQuery,
+		[req.query.parkID],
+		(err, reviews) => {
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
+			} else {
+				res.send(reviews);
+			}
 		}
-	});
+	);
 });
 
 //put review to database
-app.post("/api/storeReview", function(req, res){
-	console.log("review on submission from client: ",req.body);
+app.post("/api/storeReview", function(req, res) {
+	console.log("review on submission from client: ", req.body);
 	console.log(req.body.name);
-	console.log(req.body.user_id)
-	console.log('park id is : '+req.body.parkID);
+	console.log(req.body.user_id);
+	console.log("park id is : " + req.body.parkID);
 
 	//order in query :p_id, score, name, user_id, review
 	//id is autoincrement so dont worry about that
-	const insertReviewQuery = "INSERT INTO reviews (p_id, score, name, user_id, review) VALUES (?, ?, ?, ?, ?)";
+	const insertReviewQuery =
+		"INSERT INTO reviews (p_id, score, name, user_id, review) VALUES (?, ?, ?, ?, ?)";
 
-	getConnection().query(insertReviewQuery, [req.body.parkID,req.body.score, req.body.name,req.user.user_id,req.body.review], (err, profileInfo) => {
-		if (err) {
-			console.log("failed" + err);
-			res.sendStatus(500);
-			return;
-		} 
-	});
+	getConnection().query(
+		insertReviewQuery,
+		[
+			req.body.parkID,
+			req.body.score,
+			req.body.name,
+			req.user.user_id,
+			req.body.review
+		],
+		(err, profileInfo) => {
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
+			}
+		}
+	);
 });
 
 app.post("/register", function(req, res) {
@@ -445,7 +462,6 @@ app.get("/api/getUserInfo", (req, res) => {
 });
 
 app.get("/api/getUserReviews", (req, res) => {
-
 	const getUserReviewQuery = "SELECT p_id from reviews WHERE user_id=?";
 	//console.log("USER ID FOR QUERY IS:" + req.user);
 	//if logged in...
@@ -459,21 +475,18 @@ app.get("/api/getUserReviews", (req, res) => {
 					res.sendStatus(500);
 					return;
 				} else {
-
-					tempReviews = []
-					for (var i =0; i< reviewResults.length ;i++) {
+					tempReviews = [];
+					for (var i = 0; i < reviewResults.length; i++) {
 						tempReviews.push(reviewResults[i].p_id);
-					 }
-
+					}
 
 					console.log(tempReviews);
-					res.send(tempReviews)
+					res.send(tempReviews);
 				}
 			}
 		);
 	}
 });
-
 
 //full park info link pages
 app.get("/park/:id", function(req, res) {
@@ -552,12 +565,29 @@ app.post("/results.html", (req, res) => {
 // 	);
 // });
 
+//format "2014-02-17T00:00-0500", ISO 8601
+function getMoon() {
+	var now = new Date();
+	var isoDate = now.toISOString();
+	isoDate = new Date(isoDate);
+		//console.log("date is:"+isoDate);
+	//use phase_hunt to get next dates, 
+
+	//var phaseDates = lune.phase_hunt(isoDate);
+	var phaseInfo = lune.phase(isoDate);
+	return phaseInfo;
+}
+
+function inRange(x, min, max) {
+    return ((x-min)*(x-max) <= 0);
+}
+
 //YOU NEED THE / in the ADDRESS!!
 //don't put "getParks", must be "/name"
 app.post("/api/getParks", (req, res) => {
 	//from bodyParser, parses the HTTP request
 	//from ParksComponent / React (getParks =>)
-	console.log("BODY IS: " + req.body);
+	console.log("BODY IS: " , req.body);
 	//var requestData = JSON.parse(req.body);
 
 	const lat = req.body.lat;
@@ -576,7 +606,37 @@ app.post("/api/getParks", (req, res) => {
 				res.sendStatus(500);
 				return;
 			}
-			res.send(results);
+			
+			var phaseInfo = getMoon();
+			var moonType = "";
+			var percentMoon = parseFloat(phaseInfo.illuminated)*100;
+	
+if(inRange(percentMoon,0,25)){
+moonType = "New Moon"
+}else if(inRange(percentMoon,25,50)){
+	moonType = "First Quarter"
+	}
+	else if(inRange(percentMoon,50,75)){
+		moonType = "Full Moon"
+		}
+		else if(inRange(percentMoon,75,100)){
+			moonType = "Last Quarter"
+			}
+
+		
+
+			var temparr=[];
+			var results = JSON.parse(JSON.stringify(results))
+			temparr.push(results);
+			
+			//console.log(temparr);
+			temparr.push(percentMoon)
+			temparr.push(moonType)
+			//results.moonPhase.push({"moonPhase":{phaseInfo}})
+			//results.moonPhase = phaseInfo.illuminated;
+			console.log(temparr);
+			
+			res.send(temparr)
 			//res.send({ location: [lat, lng], parks: results, mapAPIKey: mapsKey1 });
 		}
 	);

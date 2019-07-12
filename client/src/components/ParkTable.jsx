@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 
 class ParkTable extends Component {
-	state = {};
+	state = {}
 	/* Note - park object is:
         {
             distance: number,
@@ -31,6 +31,21 @@ class ParkTable extends Component {
 		}
 	};
 
+	renderMoonData(){
+		if(this.props.parkList.length > 0){
+			var moonDataString = "";
+			var moonIllum=this.props.moon
+			var moonType=this.props.moonType
+			moonDataString = `The moon is ${moonType}, meaning it is ${moonIllum}% illuminated.`
+
+return moonDataString}
+	}
+		
+			
+		
+		
+	
+
 	renderPark = park => (
 		<tr>
 			<td>{park.name_alt}</td>
@@ -43,6 +58,8 @@ class ParkTable extends Component {
 		console.log("ParkTable - rendered");
 		return (
 			<div className="border border-primary">
+			{this.renderMoonData()}
+			
 				<table className="table table-hover">
 					<tr>
 						<th>Name</th>
