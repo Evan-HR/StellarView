@@ -48,38 +48,55 @@ class BaseParksComponent extends Component {
 		console.log(reqData);
 		// this.updateHistoryQuery(reqData);
 		this.setState({ isFetchingParks: true });
-		// let fetchingState = this.state;
-		// fetchingState.isFetching = true;
-		// this.setState(fetchingState);
-		fetch("/api/getParks", {
-			method: "POST", //Important
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify(reqData)
-		})
-			//RESPONSE IS "x", any OUTPUT from previous
-			//function CALL (FETCH POST REQ to server.js getParks)
-			//.then WAITS for the response from fetch/server.js
-			//data is "response" lol! can call either x/y
-			//update STATE as a JSON array
-			//react says "oh shit something changed"
-			// note, everytime setState is called, it
-			//automatically goes to RENDER() function!
-			.then(response => response.json())
-			.then(data => {
-				console.log(data);
-				this.setState({
-					parks: data,
-					fetchReq: reqData,
-					isFetchingParks: false
-				});
-			})
-			.catch(err => {
-				console.error(err);
-				this.setState({ isFetchingParks: false });
+
+		let localData = localStorage.getItem(JSON.stringify(reqData));
+
+		if (localData) {
+			console.log("Loaded from storage:", JSON.parse(localData));
+			this.setState({
+				parks: JSON.parse(localData),
+				fetchReq: reqData,
+				isFetchingParks: false
 			});
+		} else {
+			// let fetchingState = this.state;
+			// fetchingState.isFetching = true;
+			// this.setState(fetchingState);
+			fetch("/api/getParks", {
+				method: "POST", //Important
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(reqData)
+			})
+				//RESPONSE IS "x", any OUTPUT from previous
+				//function CALL (FETCH POST REQ to server.js getParks)
+				//.then WAITS for the response from fetch/server.js
+				//data is "response" lol! can call either x/y
+				//update STATE as a JSON array
+				//react says "oh shit something changed"
+				// note, everytime setState is called, it
+				//automatically goes to RENDER() function!
+				.then(response => response.json())
+				.then(data => {
+					console.log(data);
+					this.setState({
+						parks: data,
+						fetchReq: reqData,
+						isFetchingParks: false
+					});
+					localStorage.setItem(
+						JSON.stringify(reqData),
+						JSON.stringify(data)
+					);
+					console.log("Saved to storage");
+				})
+				.catch(err => {
+					console.error(err);
+					this.setState({ isFetchingParks: false });
+				});
+		}
 	};
 
 	updateHistoryQuery = reqData => {
