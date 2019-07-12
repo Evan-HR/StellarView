@@ -8,11 +8,13 @@ import colorama
 from prettytable import PrettyTable
 from sklearn.metrics import mean_absolute_error, median_absolute_error, r2_score, explained_variance_score
 
-coord = (43.255205, -79.868202)
+coord = (48.406414, -89.259796)
 lat = coord[0]
 lng = coord[1]
+url = f'http://api.openweathermap.org/data/2.5/find?lat={lat}&lon={lng}&cnt=50&APPID=08c7fcf7e68ec973d48dda2ba76e8314'
+print(url)
 response = requests.get(
-    f'http://api.openweathermap.org/data/2.5/find?lat={lat}&lon={lng}&cnt=50&APPID=08c7fcf7e68ec973d48dda2ba76e8314')
+    url)
 # response = requests.get(f'http://api.openweathermap.org/data/2.5/box/city?bbox=-82.43659184,42.2636709,-80.2994317,44.4901755,35&APPID=08c7fcf7e68ec973d48dda2ba76e8314')
 weather = response.json()
 stations = [station for station in weather["list"]]
@@ -40,15 +42,16 @@ for i in range(0, len(simulatedParks)):
     response = requests.get(
         f'http://api.openweathermap.org/data/2.5/weather?lat={simulatedParks[i][1]}&lon={simulatedParks[i][0]}&APPID=08c7fcf7e68ec973d48dda2ba76e8314')
     weather = response.json()
-    simParksResults += [weather["main"]["humidity"]]
+    simParksResults += [weather["clouds"]["all"]]
 simParksResults = np.array(simParksResults)
 
 # points = np.random.rand(1000,2)
 # print(points)
+names = [station["name"] for station in stations]
 points = np.array([[station["coord"]["lon"], station["coord"]["lat"]]
                    for station in stations])
-values = np.array([station["main"]["humidity"] for station in stations])
-# values = np.array([station["clouds"]["all"] for station in stations])
+# values = np.array([station["main"]["humidity"] for station in stations])
+values = np.array([station["clouds"]["all"] for station in stations])
 grid_x, grid_y = np.mgrid[minLng:maxLng:500j, minLat:maxLat:500j]
 
 # Populate edge
@@ -80,7 +83,7 @@ grid_z2 = griddata(points, values, (grid_x, grid_y), method='cubic')
 grid_z1e = griddata(points_alt, values_alt, (grid_x, grid_y), method='linear')
 grid_z2e = griddata(points_alt, values_alt, (grid_x, grid_y), method='cubic')
 
-plt.suptitle('Humidity Estimation')
+plt.suptitle('Clouds Estimation')
 
 plt.subplot(231)
 plt.plot(points[:, 0], points[:, 1], marker='.', color='k', linestyle="none")
@@ -166,9 +169,9 @@ plt.title('Cubic Interpolation - exteded')
 # plt.colorbar(cax=cax)
 
 # print(tabulate([[simParksResults, parkDataNN, parkDataLIe, parkDataCIe], headers=['Actual', 'NN', 'LI-e', 'CI-e']]))
-t = PrettyTable(['Actual', 'NN', 'LI-e', 'CI-e'])
+t = PrettyTable(['Station', 'Actual', 'NN', 'LI-e', 'CI-e'])
 for i in range(0, len(simParksResults)):
-    t.add_row([simParksResults[i], parkDataNN[i], round(
+    t.add_row([names[i], simParksResults[i], parkDataNN[i], round(
         parkDataLIe[i], 1), round(parkDataCIe[i], 1)])
 print(t)
 print("Stats:")

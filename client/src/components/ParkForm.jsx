@@ -32,6 +32,7 @@ class ParkForm extends Component {
 		// this.getMyLocation();
 
 		//On page load, load results from query is possible
+		console.log("Form mounted, searching...");
 		this.loadQuery();
 	}
 
@@ -41,6 +42,10 @@ class ParkForm extends Component {
 			console.log("Back button pressed");
 			this.loadQuery();
 		};
+		if (this.state.submitOnNextUpdate) {
+			console.log("Submitting...", this.state.reqData);
+			this.onSubmit();
+		}
 	}
 
 	//Load query into state
@@ -49,17 +54,26 @@ class ParkForm extends Component {
 			ignoreQueryPrefix: true
 		});
 		console.log(query);
+		// console.log("First mount? ", this.state.firstLoad)
 		if (Object.keys(query).length !== 0) {
-			this.setState({
-				reqData: {
-					...this.state.reqData,
-					lat: query.lat,
-					lng: query.lng,
-					dist: query.dist,
-					lightpol: query.lightpol,
-					error: ""
-				}
-			});
+			if (
+				query.lat !== this.state.reqData.lat ||
+				query.lng !== this.state.reqData.lng ||
+				query.dist !== this.state.reqData.dist ||
+				query.lightpol !== this.state.reqData.lightpol
+			) {
+				// console.log("Loading from firstmount", this.state.firstLoad)
+				this.setState({
+					reqData: {
+						...this.state.reqData,
+						lat: query.lat,
+						lng: query.lng,
+						dist: query.dist,
+						lightpol: query.lightpol,
+						error: ""
+					}
+				});
+			}
 			//THe quick and dirty way to load map results would be.......
 		}
 	};
@@ -192,7 +206,7 @@ class ParkForm extends Component {
 	//this.state is the "X" in getParks()
 	//fetchP(x) --> getparks(x)
 	onSubmit = e => {
-		e.preventDefault();
+		if (e) e.preventDefault();
 		//console.log(this.state.reqData);
 		const errors = this.validate(this.state.reqData);
 		if (errors.length === 0) {
