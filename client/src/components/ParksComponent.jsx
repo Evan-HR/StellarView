@@ -71,7 +71,10 @@ class ParksComponent extends Component {
 					isFetchingParks: false
 				});
 			})
-			.catch(err => {console.error(err); this.setState({isFetchingParks: false})});
+			.catch(err => {
+				console.error(err);
+				this.setState({ isFetchingParks: false });
+			});
 	};
 
 	//Clear button handler
