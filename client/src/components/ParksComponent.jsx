@@ -4,10 +4,11 @@ import ParkForm from "./ParkForm";
 import ParkTable from "./ParkTable";
 import ParkMap from "./ParkMap";
 import { createBrowserHistory } from "history";
+import { BrowserRouter as Router, Route, withRouter } from "react-router-dom";
 
 const history = createBrowserHistory();
 
-class ParksComponent extends Component {
+class BaseParksComponent extends Component {
 	state = {
 		parks: [],
 		fetchReq: [],
@@ -154,5 +155,17 @@ class ParksComponent extends Component {
 		);
 	}
 }
+
+const ParksComponent = parkProps => (
+	<Router>
+		<Route
+			path="/"
+			render={routerProps => (
+				//Combine props passed to parkForm with router props
+				<BaseParksComponent {...{ ...parkProps, ...routerProps }} />
+			)}
+		/>
+	</Router>
+);
 
 export default ParksComponent;

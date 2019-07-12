@@ -2,12 +2,12 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { createBrowserHistory } from "history";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, withRouter } from "react-router-dom";
 import qs from "qs";
 
 const history = createBrowserHistory();
 
-class BaseParkForm extends Component {
+class ParkForm extends Component {
 	state = {
 		reqData: {
 			lat: "",
@@ -472,16 +472,4 @@ class BaseParkForm extends Component {
 	}
 }
 
-const ParkForm = parkProps => (
-	<Router>
-		<Route
-			path="/"
-			render={routerProps => (
-				//Combine props passed to parkForm with router props
-				<BaseParkForm {...{ ...parkProps, ...routerProps }} />
-			)}
-		/>
-	</Router>
-);
-
-export default ParkForm;
+export default withRouter(ParkForm);
