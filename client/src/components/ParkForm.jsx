@@ -42,10 +42,6 @@ class ParkForm extends Component {
 			console.log("Back button pressed");
 			this.loadQuery();
 		};
-		if (this.state.submitOnNextUpdate) {
-			console.log("Submitting...", this.state.reqData);
-			this.onSubmit();
-		}
 	}
 
 	//Load query into state
@@ -63,16 +59,23 @@ class ParkForm extends Component {
 				query.lightpol !== this.state.reqData.lightpol
 			) {
 				// console.log("Loading from firstmount", this.state.firstLoad)
-				this.setState({
-					reqData: {
-						...this.state.reqData,
-						lat: query.lat,
-						lng: query.lng,
-						dist: query.dist,
-						lightpol: query.lightpol,
-						error: ""
+				this.setState(
+					{
+						reqData: {
+							...this.state.reqData,
+							lat: query.lat,
+							lng: query.lng,
+							dist: query.dist,
+							lightpol: query.lightpol,
+							error: ""
+						}
+					},
+					//SetState callback
+					() => {
+						console.log("Submitting..", this.state.reqData);
+						this.onSubmit();
 					}
-				});
+				);
 			}
 			//THe quick and dirty way to load map results would be.......
 		}
