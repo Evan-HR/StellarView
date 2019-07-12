@@ -8,6 +8,7 @@ class ParksComponent extends Component {
 	state = {
 		parks: [],
 		fetchReq: [],
+		moon: "",
 		isMapLoaded: false,
 		isFetchingParks: false
 	};

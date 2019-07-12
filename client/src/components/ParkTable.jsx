@@ -5,13 +5,17 @@ class ParkTable extends Component {
 	state = {};
 	/* Note - park object is:
         {
-            distance: number,
-            id: number,
-            lat: number,
-            lng: number,
-            light_pol: number,
-            name: string,
-            osmid: number,
+       { id: 6817,
+[0]     osm_id: 217500775,
+[0]     name: 'Unknown',
+[0]     name_alt: 'Maple Avenue',
+[0]     light_pol: 1.84691197,
+[0]     lat: 43.19786151,
+[0]     lng: -80.10863081,
+[0]     distance: 20.26280157312762,
+[0]     clouds: 90,
+[0]     humidity: 72,
+[0]     city: 'St. George' } ]
         }
     */
 
@@ -36,6 +40,10 @@ class ParkTable extends Component {
 			<td>{park.name_alt}</td>
 			<td>{park.light_pol}</td>
 			<td>{park.distance}</td>
+			<td>{park.clouds}</td>
+			<td>{park.cloudDesc}</td>
+			<td>{park.humidity}</td>
+			<td>{park.distance}</td>
 		</tr>
 	);
 
@@ -48,6 +56,10 @@ class ParkTable extends Component {
 						<th>Name</th>
 						<th>Light</th>
 						<th>Distance</th>
+						<th>Cloud Coverage</th>
+						<th>Cloud Type</th>
+						<th>Humidity</th>
+						<th>Moon</th>
 					</tr>
 					<tbody>{this.renderParkTable()}</tbody>
 				</table>
