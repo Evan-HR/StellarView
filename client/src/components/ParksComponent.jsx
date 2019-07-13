@@ -3,9 +3,13 @@ import React, { Component } from "react";
 import ParkForm from "./ParkForm";
 import ParkTable from "./ParkTable";
 import ParkMap from "./ParkMap";
+import { createBrowserHistory } from "history";
+import { BrowserRouter as Router, Route, withRouter } from "react-router-dom";
 import axios from "axios";
 
-class ParksComponent extends Component {
+const history = createBrowserHistory();
+
+class BaseParksComponent extends Component {
 	state = {
 		parks: [],
 		fetchReq: [],
@@ -44,27 +48,47 @@ class ParksComponent extends Component {
 	//app.post("/api/getParks")
 	getParks = reqData => {
 		console.log(reqData);
+		// this.updateHistoryQuery(reqData);
 		this.setState({ isFetchingParks: true });
-		// let fetchingState = this.state;
-		// fetchingState.isFetching = true;
-		// this.setState(fetchingState);
-		axios
-			.post("/api/getParks", reqData)
-			.then(response => {
-				console.log("data is!!!!!!!!!!!! ", response.data);
-				this.setState({
-					parks: response.data[0],
-					moon: response.data[1],
-					moonType: response.data[2],
-					fetchReq: reqData,
-					isFetchingParks: false
-				});
-			})
-			.catch(err => {
-				console.error(err);
-				this.setState({ isFetchingParks: false });
+
+		let localData = localStorage.getItem(JSON.stringify(reqData));
+
+		if (localData) {
+			console.log("Loaded from storage:", JSON.parse(localData));
+			this.setState({
+				parks: JSON.parse(localData)[0],
+				moon: localData[1],
+				moonType: localData[2],
+				fetchReq: reqData,
+				isFetchingParks: false
 			});
+		} else {
+			// let fetchingState = this.state;
+			// fetchingState.isFetching = true;
+			// this.setState(fetchingState);
+			axios.post("/api/getParks", reqData)
+				.then(response => {
+					console.log(response.data);
+					this.setState({
+						parks: response.data[0],
+						moon: response.data[1],
+						moonType: response.data[2],
+						fetchReq: reqData,
+						isFetchingParks: false
+					});
+					localStorage.setItem(
+						JSON.stringify(reqData),
+						JSON.stringify(response.data)
+					);
+					console.log("Saved to storage");
+				})
+				.catch(err => {
+					console.error(err);
+					this.setState({ isFetchingParks: false });
+				});
+		}
 	};
+	
 
 	//Clear button handler
 	clearParks = () => {
@@ -134,5 +158,17 @@ class ParksComponent extends Component {
 		);
 	}
 }
+
+const ParksComponent = parkProps => (
+	<Router>
+		<Route
+			path="/"
+			render={routerProps => (
+				//Combine props passed to parkForm with router props
+				<BaseParksComponent {...{ ...parkProps, ...routerProps }} />
+			)}
+		/>
+	</Router>
+);
 
 export default ParksComponent;
