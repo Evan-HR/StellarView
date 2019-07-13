@@ -56,7 +56,9 @@ class BaseParksComponent extends Component {
 		if (localData) {
 			console.log("Loaded from storage:", JSON.parse(localData));
 			this.setState({
-				parks: JSON.parse(localData),
+				parks: JSON.parse(localData)[0],
+				moon: localData[1],
+				moonType: localData[2],
 				fetchReq: reqData,
 				isFetchingParks: false
 			});
@@ -65,16 +67,18 @@ class BaseParksComponent extends Component {
 			// fetchingState.isFetching = true;
 			// this.setState(fetchingState);
 			axios.post("/api/getParks", reqData)
-				.then(data => {
-					console.log(data);
+				.then(response => {
+					console.log(response.data);
 					this.setState({
-						parks: data,
+						parks: response.data[0],
+						moon: response.data[1],
+						moonType: response.data[2],
 						fetchReq: reqData,
 						isFetchingParks: false
 					});
 					localStorage.setItem(
 						JSON.stringify(reqData),
-						JSON.stringify(data)
+						JSON.stringify(response.data)
 					);
 					console.log("Saved to storage");
 				})

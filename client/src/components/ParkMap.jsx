@@ -137,7 +137,7 @@ class ParkMap extends Component {
 		mapLoaded: false
 	};
 	googleMapRef = createRef();
-	
+
 	constructor(props) {
 		super(props);
 		this.parkModalChild = React.createRef();
@@ -157,9 +157,7 @@ class ParkMap extends Component {
 			this.googleMapInfowindow = null;
 			this.markers = [];
 			this.currentLocationMarker = null;
-			let loadedState = this.state;
-			loadedState.mapLoaded = true;
-			this.setState(loadedState);
+			this.setState({ mapLoaded: true });
 			this.props.onMapLoaded(this.googleMap);
 		});
 	}
@@ -211,7 +209,7 @@ class ParkMap extends Component {
 	addParkMarker = park => {
 		//TODO: See if possible to modularize this function
 		//MAKE SURE ITS A FLOAT FROM DATABASE!
-		let location = { lat: park.lat, lng: park.lng };
+		let location = { lat: parseFloat(park.lat), lng: parseFloat(park.lng) };
 		var marker = new window.google.maps.Marker({
 			position: location,
 			map: this.googleMap,
@@ -275,7 +273,7 @@ class ParkMap extends Component {
 							{location.lng}. The light pollution level here is{" "}
 							{park.light_pol}, which is {lighPolStatus()}.{" "}
 						</p>
-						<Reviews parkID={park.id}/>
+						<Reviews parkID={park.id} />
 					</div>
 				</React.Fragment>
 			);
