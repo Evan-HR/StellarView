@@ -13,8 +13,12 @@ export class Auth extends React.Component {
 		this.state = {
 			firstName: null,
 			userID: null,
-			isAuth: null
+			isAuth: null,
+			userReviews: []
 		};
+		this.getWeatherInfo();
+		this.getUserInfo();
+		this.getUserReviews();
 		this.handleLogoutState = this.handleLogoutState.bind(this);
 	}
 
@@ -26,7 +30,16 @@ export class Auth extends React.Component {
 		});
 	}
 
-	callAPI() {
+	getWeatherInfo() {
+		axios
+			.get("/api/getWeatherInfo")
+			//put .then here
+			.catch(error => {
+				console.log(error);
+			});
+	}
+
+	getUserInfo() {
 		axios
 			.get("/api/getUserInfo")
 
@@ -42,9 +55,18 @@ export class Auth extends React.Component {
 			});
 	}
 
-	componentWillMount() {
-		this.callAPI();
+	getUserReviews() {
+		axios
+			.get("/api/getUserReviews")
 
+			.then(reviews => {
+				this.setState({
+					userReviews: reviews.data
+				});
+			})
+			.catch(error => {
+				console.log(error);
+			});
 	}
 
 	render() {

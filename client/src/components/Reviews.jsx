@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { AuthProvider, AuthConsumer } from "./AuthContext";
-class Reviews extends Component {
+class BaseReviews extends Component {
 	state = {
 		name: "",
 		score: "",
@@ -11,7 +11,37 @@ class Reviews extends Component {
 		dbReviewList: []
 	};
 
+	getHasReviewed() {
+		if (this.props.context.userReviews.includes(this.props.parkID)) {
+			this.setState({ hasReviewed: true });
+		}
+	}
+
 	componentDidMount() {
+		console.log("parkID is: " + this.props.parkID);
+
+		//get review status from user and db
+
+		if (
+			this.props.context.isAuth == true &&
+			this.props.context.userReviews.includes(this.props.parkID)
+		) {
+			console.log("siwtch case 1");
+			this.setState({
+				switchCase: "loggedInHasReviewed",
+				hasReviewed: true
+			});
+		} else if (
+			this.props.context.isAuth == true &&
+			this.state.hasReviewed == false
+		) {
+			console.log("siwtch case 2");
+			this.setState({ switchCase: "loggedInNotReviewed" });
+		} else if (this.props.context.isAuth == false) {
+			console.log("siwtch case 3");
+			this.setState({ switchCase: "notLoggedIn" });
+		}
+
 		axios
 			.get("/api/getReviews", {
 				params: {
@@ -19,7 +49,7 @@ class Reviews extends Component {
 				}
 			})
 			.then(response => {
-				console.log({ message: "Request received!", response });
+				console.log({ message: "Reviews Gathered!", response });
 
 				if (response.data.length > 0) {
 					var tempReviewsArr;
@@ -46,7 +76,7 @@ class Reviews extends Component {
 		e.preventDefault();
 
 		const newReview = {
-			name: this.state.name,
+			name: this.props.context.firstName,
 			score: this.state.score,
 			review: this.state.review,
 			parkID: this.props.parkID
@@ -57,8 +87,14 @@ class Reviews extends Component {
 			.then(res => console.log(res.data))
 			.catch(err => console.log(err.response.data));
 		this.setState({
-			dbReviewList: [newReview, ...this.state.dbReviewList]
+			dbReviewList: [newReview, ...this.state.dbReviewList],
+			hasReviewed: true,
+			switchCase: "loggedInHasReviewed"
 		});
+
+		//push parkID to userReviews in Auth context provider
+		//this.props.context.userReviews
+		this.props.context.userReviews.push(this.props.parkID);
 	};
 
 	formatReviews = review => (
@@ -136,6 +172,22 @@ class Reviews extends Component {
 		);
 	}
 
+	renderReviewsSwitch(param) {
+		switch (param) {
+			case "loggedInHasReviewed":
+				console.log("loggedinhasreviewed got here");
+				return "Thank you for your review!";
+			case "loggedInNotReviewed":
+				console.log("loggedinNotreviewed got here");
+				return this.renderUserNoReview();
+			case "notLoggedIn":
+				console.log("notLoggedI  got here");
+				return "You must be logged-in to submit a review";
+			default:
+				return null;
+		}
+	}
+
 	renderReviewTable = () => {
 		if (this.state.dbReviewList.length > 0) {
 			return this.state.dbReviewList.map(this.formatReviews);
@@ -163,42 +215,21 @@ class Reviews extends Component {
 		this.setState({ review: e.target.value });
 	};
 
-	getSwitchCase() {
-		return (
-			<AuthConsumer>
-				{x => {
-					console.log("get here? auth is: " + x.isAuth);
-					if (x.isAuth == true && this.state.hasReviewed == true) {
-						this.setState(
-							(this.state.switchCase = "loggedInHasReviewed")
-						);
-					} else if (
-						x.isAuth == true &&
-						this.state.hasReview == false
-					) {
-						this.setState(
-							(this.state.switchCase = "loggedInNotReviewed")
-						);
-					} else if (x.isAuth == false) {
-						this.setState((this.state.switchCase = "notLoggedIn"));
-					}
-				}}
-			</AuthConsumer>
-		);
-	}
-
 	render() {
-		//this.getSwitchCase();
 		return (
 			<div>
-				{this.state.hasReviewed === false
-					? this.renderUserNoReview()
-					: "Review Submitted.  Thank you!"}
-
+				pizza
+				{this.renderReviewsSwitch(this.state.switchCase)}
 				{this.renderReviewsDiv()}
 			</div>
 		);
 	}
 }
+
+const Reviews = props => (
+	<AuthConsumer>
+		{x => <BaseReviews context={x} parkID={props.parkID} />}
+	</AuthConsumer>
+);
 
 export default Reviews;
