@@ -172,17 +172,13 @@ app.get("/logout", function(req, res) {
 	});
 });
 
-app.get("/login", function(req, res) {
-	res.render("login.ejs");
-});
-
 //local strategy cuz database is localhost
 //----------------------BEGIN LOGIN--------------------------------------//
 app.post(
-	"/login",
+	"/api/login",
 	passport.authenticate("local", {
 		successRedirect: "/",
-		failureRedirect: "/login"
+		failureRedirect: "/api/login"
 	})
 );
 //----------------------END LOGIN--------------------------------------//
@@ -358,7 +354,7 @@ function authenticationMiddleware() {
 		);
 
 		if (req.isAuthenticated()) return next();
-		res.redirect("/login");
+		res.redirect("/api/login");
 	};
 }
 //----------------------END AUTHENTICATION-----------------

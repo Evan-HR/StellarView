@@ -5,6 +5,7 @@ import { AuthProvider, AuthConsumer } from "./components/AuthContext";
 import "./App.css";
 import ParksComponent from "./components/ParksComponent";
 import NavBar from "./components/NavBar";
+import Login from "./components/Login";
 //import Reviews from "./components/Reviews";
 
 class App extends Component {
@@ -15,11 +16,9 @@ class App extends Component {
 		//render methods NEED A RETURN!
 		return (
 			<div className="App">
-				
 				<NavBar handleLogoutState={this.props.handleLogoutState} />
+				<Login />
 				<ParksComponent />
-				
-				
 			</div>
 		);
 	}
