@@ -54,8 +54,8 @@ class BaseParksComponent extends Component {
 			console.log("Loaded from storage:", JSON.parse(localData));
 			this.setState({
 				parks: JSON.parse(localData)[0],
-				moon: localData[1],
-				moonType: localData[2],
+				moon: JSON.parse(localData)[1],
+				moonType: JSON.parse(localData)[2],
 				fetchReq: reqData,
 				isFetchingParks: false
 			});
@@ -77,7 +77,7 @@ class BaseParksComponent extends Component {
 						JSON.stringify(reqData),
 						JSON.stringify(response.data)
 					);
-					console.log("Saved to storage");
+					console.log("Saved to storage:", response.data);
 				})
 				.catch(err => {
 					console.error(err);
