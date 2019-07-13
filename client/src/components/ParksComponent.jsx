@@ -3,11 +3,8 @@ import React, { Component } from "react";
 import ParkForm from "./ParkForm";
 import ParkTable from "./ParkTable";
 import ParkMap from "./ParkMap";
-import { createBrowserHistory } from "history";
-import { BrowserRouter as Router, Route, withRouter } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import axios from "axios";
-
-const history = createBrowserHistory();
 
 class BaseParksComponent extends Component {
 	state = {
@@ -113,7 +110,7 @@ class BaseParksComponent extends Component {
 		console.log("ParksComponent - rendered");
 
 		//"copies" into temp array parks
-		const parks = this.state.parks;
+		// const parks = this.state.parks;
 
 		//let clearButtonClass = this.clearButtonClass();
 		//bind(this,reqData) passes reqData to getParks

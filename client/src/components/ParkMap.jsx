@@ -356,7 +356,8 @@ class ParkMap extends Component {
 			if (this.props.location.length !== 0) {
 				console.log("Adding markers..");
 				this.addCurrentLocationMarker();
-				this.props.parkList.map(this.addParkMarker);
+				//Sometimes crashes here, probably because parkList is JSON and not an array
+				this.props.parkList.map(this.addParkMarker); 
 				if (this.markers.length > 0) {
 					this.googleMap.panToBounds(this.googleMapBounds);
 					this.googleMap.fitBounds(this.googleMapBounds);

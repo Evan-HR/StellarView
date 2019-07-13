@@ -1,11 +1,8 @@
 //Input form
 import React, { Component } from "react";
 import axios from "axios";
-import { createBrowserHistory } from "history";
-import { BrowserRouter as Router, Route, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import qs from "qs";
-
-const history = createBrowserHistory();
 
 class ParkForm extends Component {
 	state = {
