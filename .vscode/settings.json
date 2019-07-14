@@ -1,5 +1,5 @@
 {
     "prettier.tabWidth": 4,
     "prettier.useTabs": true,
-    "python.pythonPath": "C:\\Users\\Vlad\\AppData\\Local\\Programs\\Python\\Python37\\python.exe"
+    "python.formatting.provider": "black",
 }

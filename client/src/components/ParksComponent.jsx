@@ -3,11 +3,8 @@ import React, { Component } from "react";
 import ParkForm from "./ParkForm";
 import ParkTable from "./ParkTable";
 import ParkMap from "./ParkMap";
-import { createBrowserHistory } from "history";
-import { BrowserRouter as Router, Route, withRouter } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import axios from "axios";
-
-const history = createBrowserHistory();
 
 class BaseParksComponent extends Component {
 	state = {
@@ -51,14 +48,14 @@ class BaseParksComponent extends Component {
 		// this.updateHistoryQuery(reqData);
 		this.setState({ isFetchingParks: true });
 
-		let localData = localStorage.getItem(JSON.stringify(reqData));
+		let localData = sessionStorage.getItem(JSON.stringify(reqData));
 
 		if (localData) {
 			console.log("Loaded from storage:", JSON.parse(localData));
 			this.setState({
 				parks: JSON.parse(localData)[0],
-				moon: localData[1],
-				moonType: localData[2],
+				moon: JSON.parse(localData)[1],
+				moonType: JSON.parse(localData)[2],
 				fetchReq: reqData,
 				isFetchingParks: false
 			});
@@ -66,7 +63,8 @@ class BaseParksComponent extends Component {
 			// let fetchingState = this.state;
 			// fetchingState.isFetching = true;
 			// this.setState(fetchingState);
-			axios.post("/api/getParks", reqData)
+			axios
+				.post("/api/getParks", reqData)
 				.then(response => {
 					console.log(response.data);
 					this.setState({
@@ -76,11 +74,11 @@ class BaseParksComponent extends Component {
 						fetchReq: reqData,
 						isFetchingParks: false
 					});
-					localStorage.setItem(
+					sessionStorage.setItem(
 						JSON.stringify(reqData),
 						JSON.stringify(response.data)
 					);
-					console.log("Saved to storage");
+					console.log("Saved to storage:", response.data);
 				})
 				.catch(err => {
 					console.error(err);
@@ -88,7 +86,6 @@ class BaseParksComponent extends Component {
 				});
 		}
 	};
-	
 
 	//Clear button handler
 	clearParks = () => {
@@ -113,7 +110,7 @@ class BaseParksComponent extends Component {
 		console.log("ParksComponent - rendered");
 
 		//"copies" into temp array parks
-		const parks = this.state.parks;
+		// const parks = this.state.parks;
 
 		//let clearButtonClass = this.clearButtonClass();
 		//bind(this,reqData) passes reqData to getParks

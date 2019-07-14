@@ -1,11 +1,8 @@
 //Input form
 import React, { Component } from "react";
 import axios from "axios";
-import { createBrowserHistory } from "history";
-import { BrowserRouter as Router, Route, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import qs from "qs";
-
-const history = createBrowserHistory();
 
 class ParkForm extends Component {
 	state = {
@@ -320,6 +317,7 @@ class ParkForm extends Component {
 	};
 
 	render() {
+		//console.log("Fetching parks?", this.props.isFetchingParks);
 		return (
 			<div className="border border-primary">
 				{/* <br />
@@ -471,6 +469,7 @@ class ParkForm extends Component {
 					<button
 						className="btn btn-primary m-2"
 						onClick={e => this.onSubmit(e)}
+						disabled={this.props.isFetchingParks}
 					>
 						Submit
 					</button>
@@ -478,7 +477,6 @@ class ParkForm extends Component {
 						className="btn btn-danger m-2"
 						onClick={this.props.clearParks}
 						// className={this.clearButtonClass()}
-						disabled={this.props.isFetchingParks}
 						type="button"
 					>
 						<strong>Clear</strong>
