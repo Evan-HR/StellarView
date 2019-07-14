@@ -48,7 +48,7 @@ class BaseParksComponent extends Component {
 		// this.updateHistoryQuery(reqData);
 		this.setState({ isFetchingParks: true });
 
-		let localData = localStorage.getItem(JSON.stringify(reqData));
+		let localData = sessionStorage.getItem(JSON.stringify(reqData));
 
 		if (localData) {
 			console.log("Loaded from storage:", JSON.parse(localData));
@@ -73,7 +73,7 @@ class BaseParksComponent extends Component {
 						fetchReq: reqData,
 						isFetchingParks: false
 					});
-					localStorage.setItem(
+					sessionStorage.setItem(
 						JSON.stringify(reqData),
 						JSON.stringify(response.data)
 					);
