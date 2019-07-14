@@ -14,8 +14,10 @@ export class Auth extends React.Component {
 			firstName: null,
 			userID: null,
 			isAuth: null,
+			isLoggingIn: false,
 			userReviews: []
 		};
+		//console.log("GET HERE AFTER SUBMIT?");
 		this.getWeatherInfo();
 		this.getUserInfo();
 		this.getUserReviews();
@@ -29,6 +31,13 @@ export class Auth extends React.Component {
 			isAuth: false
 		});
 	}
+
+	handleLogin = () => {
+		console.log("FORCE UPDATE RUN???????????????");
+
+		this.getUserInfo();
+		this.getUserReviews();
+	};
 
 	getWeatherInfo() {
 		axios
@@ -72,7 +81,10 @@ export class Auth extends React.Component {
 	render() {
 		return (
 			<AuthProvider value={this.state}>
-				<App handleLogoutState={this.handleLogoutState} />
+				<App
+					handleLogoutState={this.handleLogoutState}
+					handleLogin={this.handleLogin}
+				/>
 			</AuthProvider>
 		);
 	}

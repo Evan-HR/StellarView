@@ -16,8 +16,11 @@ class App extends Component {
 		//render methods NEED A RETURN!
 		return (
 			<div className="App">
-				<NavBar handleLogoutState={this.props.handleLogoutState} />
-				
+				<NavBar
+					handleLogoutState={this.props.handleLogoutState}
+					handleLogin={this.props.handleLogin}
+				/>
+
 				<ParksComponent />
 			</div>
 		);

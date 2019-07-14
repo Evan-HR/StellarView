@@ -71,21 +71,22 @@ class NavBar extends Component {
 						if (x.isAuth === true) {
 							return (
 								<li class="nav-item">
-									<button className="btn btn-link"
-									onClick={e => this.handleLogout(e)}>
+									<button
+										className="btn btn-link"
+										onClick={e => this.handleLogout(e)}
+									>
 										Logout
 									</button>
 								</li>
 							);
 						} else {
 							return (
-								<Login />
+								<Login handleLogin={this.props.handleLogin} />
 							);
 						}
 					}}
 				</AuthConsumer>
 
-					
 				<NavBarFAQ />
 
 				{/* <li class="nav-item">

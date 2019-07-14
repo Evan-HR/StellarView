@@ -30,7 +30,7 @@ class Login extends Component {
 	state = {
 		userEmail: "",
 		userPassword: "",
-		modalIsOpen: false 
+		modalIsOpen: false
 	};
 
 	openModal = () => {
@@ -59,13 +59,13 @@ class Login extends Component {
 
 	onSubmit = e => {
 		e.preventDefault();
-		axios.post("/api/login", {
-			email: this.state.userEmail,
-			password: this.state.userPassword
-		})
-		.then(this.closeModal)
-		
-		
+		axios
+			.post("/api/login", {
+				email: this.state.userEmail,
+				password: this.state.userPassword
+			})
+			.then(this.props.handleLogin)
+			.then(this.closeModal);
 	};
 
 	render() {
@@ -91,36 +91,31 @@ class Login extends Component {
 							<h1>Login</h1>
 						</div>
 						<div className="login-form">
-				
-
-				<form>
-					<input
-						type="email"
-						placeholder="email"
-						name="email"
-						onChange={this.handleEmailChange}
-						required
-					/>
-					<input
-						type="password"
-						placeholder="password"
-						name="password"
-						onChange={this.handlePasswordChange}
-						required
-					/>
-					<button
-						className="btn btn-primary m-2"
-						onClick={e => this.onSubmit(e)}
-					>
-						Submit
-					</button>
-				</form>
-			</div>
-
-	
-						<div className="modal-footer">
-					
+							<form>
+								<input
+									type="email"
+									placeholder="email"
+									name="email"
+									onChange={this.handleEmailChange}
+									required
+								/>
+								<input
+									type="password"
+									placeholder="password"
+									name="password"
+									onChange={this.handlePasswordChange}
+									required
+								/>
+								<button
+									className="btn btn-primary m-2"
+									onClick={e => this.onSubmit(e)}
+								>
+									Submit
+								</button>
+							</form>
 						</div>
+
+						<div className="modal-footer" />
 					</div>
 				</Modal>
 			</React.Fragment>
