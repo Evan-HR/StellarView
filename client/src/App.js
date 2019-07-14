@@ -17,7 +17,7 @@ class App extends Component {
 		return (
 			<div className="App">
 				<NavBar handleLogoutState={this.props.handleLogoutState} />
-				<Login />
+				
 				<ParksComponent />
 			</div>
 		);

@@ -1,9 +1,48 @@
 import React, { Component } from "react";
 import axios from "axios";
+import Modal from "react-modal";
+
+const modalStyle = {
+	overlay: {
+		position: "fixed",
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		background: "rgba(0,0,0,0.75)"
+	},
+	content: {
+		top: "50%",
+		left: "50%",
+		right: "auto",
+		bottom: "auto",
+		borderRadius: "25px",
+		marginRight: "-50%",
+		transform: "translate(-50%, -50%)",
+		width: "95%",
+		maxWidth: "600px",
+		height: "95%",
+		overflowY: "auto"
+	}
+};
+
 class Login extends Component {
 	state = {
 		userEmail: "",
-		userPassword: ""
+		userPassword: "",
+		modalIsOpen: false 
+	};
+
+	openModal = () => {
+		this.setState({ ...this.state, modalIsOpen: true });
+	};
+
+	afterOpenModal = () => {
+		document.body.style.overflow = "hidden"; //Prevents background scrolling
+	};
+
+	closeModal = () => {
+		this.setState({ ...this.state, modalIsOpen: false });
 	};
 
 	handleEmailChange = changeEvent => {
@@ -23,13 +62,36 @@ class Login extends Component {
 		axios.post("/api/login", {
 			email: this.state.userEmail,
 			password: this.state.userPassword
-		});
+		})
+		.then(this.closeModal)
+		
+		
 	};
 
 	render() {
 		return (
-			<div className="login-form">
-				<p>Login Form</p>
+			<React.Fragment>
+				<button
+					className="btn btn-link"
+					onClick={() => this.openModal()}
+				>
+					Login
+				</button>
+				<Modal
+					className="modal-dialog"
+					closeTimeoutMS={150}
+					isOpen={this.state.modalIsOpen}
+					onAfterOpen={this.afterOpenModal}
+					onRequestClose={this.closeModal}
+					// style={modalStyle}
+					contentLabel="FAQ Modal"
+				>
+					<div className="modal-content">
+						<div className="modal-header">
+							<h1>Login</h1>
+						</div>
+						<div className="login-form">
+				
 
 				<form>
 					<input
@@ -54,6 +116,14 @@ class Login extends Component {
 					</button>
 				</form>
 			</div>
+
+	
+						<div className="modal-footer">
+					
+						</div>
+					</div>
+				</Modal>
+			</React.Fragment>
 		);
 	}
 }
