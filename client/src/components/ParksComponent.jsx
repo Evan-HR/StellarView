@@ -63,7 +63,8 @@ class BaseParksComponent extends Component {
 			// let fetchingState = this.state;
 			// fetchingState.isFetching = true;
 			// this.setState(fetchingState);
-			axios.post("/api/getParks", reqData)
+			axios
+				.post("/api/getParks", reqData)
 				.then(response => {
 					console.log(response.data);
 					this.setState({
@@ -85,7 +86,6 @@ class BaseParksComponent extends Component {
 				});
 		}
 	};
-	
 
 	//Clear button handler
 	clearParks = () => {
