@@ -18,7 +18,7 @@ export class Auth extends React.Component {
 			userReviews: []
 		};
 		//console.log("GET HERE AFTER SUBMIT?");
-		this.getWeatherInfo();
+		//this.getWeatherInfo();
 		this.getUserInfo();
 		this.getUserReviews();
 		this.handleLogoutState = this.handleLogoutState.bind(this);

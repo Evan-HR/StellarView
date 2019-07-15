@@ -3,6 +3,7 @@ import { AuthProvider, AuthConsumer } from "./AuthContext";
 import axios from "axios";
 import NavBarFAQ from "./NavBarFAQ";
 import Login from "./Login";
+import Register from "./Register";
 
 class NavBar extends Component {
 	state = {};
@@ -86,6 +87,8 @@ class NavBar extends Component {
 						}
 					}}
 				</AuthConsumer>
+
+				<Register />
 
 				<NavBarFAQ />
 

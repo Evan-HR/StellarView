@@ -30,6 +30,7 @@ class Login extends Component {
 	state = {
 		userEmail: "",
 		userPassword: "",
+		errorDB: false,
 		modalIsOpen: false
 	};
 
@@ -57,6 +58,31 @@ class Login extends Component {
 		});
 	};
 
+	handleErrorAlert = () => {
+		this.setState({
+			errorDB: true
+		});
+	}
+
+	errorMsg(){
+		if(this.state.errorDB==true){
+			return (<div class="alert alert-danger" role="alert">
+			Invalid login credentials! Please try again
+		  </div>)
+		}
+	
+	}
+
+	loginSuccess=()=>{
+		console.log("get here for some reason?");
+		this.setState({
+			modalIsOpen:false
+		})
+		
+		this.props.handleLogin();
+	}
+
+
 	onSubmit = e => {
 		e.preventDefault();
 		axios
@@ -64,9 +90,21 @@ class Login extends Component {
 				email: this.state.userEmail,
 				password: this.state.userPassword
 			})
-			.then(this.props.handleLogin)
-			.then(this.closeModal);
-	};
+			//this.loginSuccess() will run function automatically
+			.then(
+				this.loginSuccess
+				
+				)
+			
+			.catch(err => {
+				console.error("ERROR OCCURRED!",err);
+				this.handleErrorAlert();
+				//.then(this.closemModal) is needed 
+				
+			});
+		}
+
+
 
 	render() {
 		return (
@@ -115,7 +153,10 @@ class Login extends Component {
 							</form>
 						</div>
 
-						<div className="modal-footer" />
+						{this.errorMsg()}
+						
+						
+
 					</div>
 				</Modal>
 			</React.Fragment>

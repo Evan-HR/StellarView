@@ -183,12 +183,7 @@ app.post(
 );
 //----------------------END LOGIN--------------------------------------//
 
-app.get("/register", function(req, res) {
-	res.render("register.ejs", {
-		registerResponse: "Registration",
-		errors: ""
-	});
-});
+
 
 //get reviews from db
 app.get("/api/getReviews", function(req, res) {
@@ -244,7 +239,10 @@ app.post("/api/storeReview", function(req, res) {
 	);
 });
 
-app.post("/register", function(req, res) {
+app.post("/api/register", function(req, res) {
+	console.log("name is: " , req.body.name)
+	console.log("name is: " , req.body.email)
+	console.log("name is: " , req.body.password1)
 	//client-side validation
 	req.checkBody("name", "Preferred name cannot be empty.").notEmpty();
 	req.checkBody(
@@ -374,22 +372,6 @@ app.get("/profile", authenticationMiddleware(), function(req, res) {
 });
 
 app.get("/api/getUserInfo", (req, res) => {
-	// console.log(
-	// 	"USER ID IS HOPEFULLY!!! : : : : ",
-	// 	req.session.passport.user.user_id
-	// );
-	//var tempName = `"John"`
-	//var tempString = `"{ "firstName": "dustin", "isAuth": true, "userID": 35 }"`;
-	// var jsonblah = `{"firstName":${tempName},"isAuth":true,"userID": 35}`
-	// console.log("#1. jsonblah is"+jsonblah);
-	// var stringTemp = JSON.stringify(jsonblah);
-	// console.log("#2. stringTemp is"+stringTemp);
-	// var tempParse = JSON.parse(stringTemp);
-	// console.log("#3. tempParse is"+tempParse);
-	// res.send(tempParse);
-
-	//onlaptop it was req.user.user_id for some reason, on BROWSER its req.user
-	//console.log("user ID IS!!!: " + req.user);
 	const nameQuery = "SELECT name from users WHERE id=?";
 	//console.log("USER ID FOR QUERY IS:" + req.user);
 	//if logged in...
@@ -404,6 +386,7 @@ app.get("/api/getUserInfo", (req, res) => {
 					return;
 				} else {
 					console.log("GET HERE?");
+					//START HERE ! PROFILEINFO[NAME] DOESN'T EXIST. FIGURE OUT THE PROPER CALL WITH PRINT STATEMTNS
 					console.log("NAME IN QUERY: " + profileInfo[0].name);
 					tempName = profileInfo[0].name;
 					const tempJSON = `{ "firstName": "${
@@ -591,25 +574,7 @@ app.post("/api/getParks", (req, res) => {
 						//console.log("weather arr is : ", weatherArr);
 					}
 
-					//console.log("SHOULD BE FIRST:", weatherArr);
-					//console.log("SHOULD BE SECOND:", weatherJSON[0].lat);
 
-					////pass final results here
-					////append weather + moon data to this results JSON
-
-					//evan help!
-					//use this #BuriedRelic of a function to Append a distance to each city!
-					//lat/long to distance in km converter
-					//found online, fairly simplistic calculator
-					// function distance($lat1, $lon1, $lat2, $lon2)
-					// {
-					//     $theta = $lon1 - $lon2;
-					//     $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
-					//     $dist = acos($dist);
-					//     $dist = rad2deg($dist);
-					//     $miles = $dist * 60 * 1.1515;
-					//     return ($miles * 1.609344);
-					// }
 
 					// weather assigning:
 					for (var i = 0; i < weatherJSON.length; i++) {
