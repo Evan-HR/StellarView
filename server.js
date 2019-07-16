@@ -169,6 +169,7 @@ app.get("/logout", function(req, res) {
 	req.session.destroy(() => {
 		res.clearCookie("connect.sid");
 		res.redirect("/");
+		
 	});
 });
 
@@ -372,6 +373,9 @@ app.get("/profile", authenticationMiddleware(), function(req, res) {
 });
 
 app.get("/api/getUserInfo", (req, res) => {
+	console.log("user id is: ",req.session.passport.user.user_id)
+	console.log("session info: ",req.session.passport)
+	console.log("user info: ",req.session.passport.user)
 	const nameQuery = "SELECT name from users WHERE id=?";
 	//console.log("USER ID FOR QUERY IS:" + req.user);
 	//if logged in...
@@ -386,8 +390,9 @@ app.get("/api/getUserInfo", (req, res) => {
 					return;
 				} else {
 					console.log("GET HERE?");
+					console.log("profile info: ",profileInfo[0]);
 					//START HERE ! PROFILEINFO[NAME] DOESN'T EXIST. FIGURE OUT THE PROPER CALL WITH PRINT STATEMTNS
-					console.log("NAME IN QUERY: " + profileInfo[0].name);
+					//console.log("NAME IN QUERY: " + profileInfo[0].name);
 					tempName = profileInfo[0].name;
 					const tempJSON = `{ "firstName": "${
 						profileInfo[0].name
@@ -400,6 +405,7 @@ app.get("/api/getUserInfo", (req, res) => {
 			}
 		);
 	}
+	
 });
 
 app.get("/api/getUserReviews", (req, res) => {
@@ -409,7 +415,7 @@ app.get("/api/getUserReviews", (req, res) => {
 	if (req.session.passport) {
 		getConnection().query(
 			getUserReviewQuery,
-			[req.session.passport.user.user_id],
+			[req.session.passport.user],
 			(err, reviewResults) => {
 				if (err) {
 					console.log("failed" + err);
