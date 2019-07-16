@@ -94,7 +94,7 @@ class Register extends Component {
 			modalIsOpen:false
 		})
 		
-		//this.props.handleLogin();
+		this.props.handleLogin();
 	}
 
 

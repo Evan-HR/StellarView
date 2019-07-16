@@ -372,6 +372,20 @@ app.get("/profile", authenticationMiddleware(), function(req, res) {
 	});
 });
 
+app.get("/api/getUserAuth", (req, res) => {
+
+	//console.log("USER ID FOR QUERY IS:" + req.user);
+	//if logged in...
+	if (req.session.passport) {
+		console.log("auth got here")
+		res.send(JSON.parse(true));
+		
+	}else{
+		res.send(JSON.parse(false));
+	}
+	
+});
+
 app.get("/api/getUserInfo", (req, res) => {
 	console.log("user id is: ",req.session.passport.user.user_id)
 	console.log("session info: ",req.session.passport)

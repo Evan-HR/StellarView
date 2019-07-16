@@ -19,8 +19,9 @@ export class Auth extends React.Component {
 		};
 		//console.log("GET HERE AFTER SUBMIT?");
 		//this.getWeatherInfo();
-		this.getUserInfo();
-		this.getUserReviews();
+		this.getUserAuth();
+		// this.getUserInfo();
+		// this.getUserReviews();
 		this.handleLogoutState = this.handleLogoutState.bind(this);
 	}
 
@@ -38,6 +39,25 @@ export class Auth extends React.Component {
 		this.getUserInfo();
 		this.getUserReviews();
 	};
+
+	getUserAuth(){
+		axios
+			.get("/api/getUserAuth")
+			.then(function (response) {
+				if(response.data==true){
+					this.getUserInfo();
+					this.getUserReviews();
+
+				}
+				
+			  })
+
+			.catch(error => {
+				console.log(error);
+			});
+		
+
+	}
 
 	getWeatherInfo() {
 		axios
