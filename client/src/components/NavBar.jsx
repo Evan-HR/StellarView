@@ -15,9 +15,9 @@ class NavBar extends Component {
 
 	render() {
 		return (
-			<ul class="nav justify-content-center">
-				<li class="nav-item">
-					<a class="nav-link" href="/">
+			<ul className="nav justify-content-center">
+				<li className="nav-item">
+					<a className="nav-link" href="/">
 						Home
 					</a>
 				</li>
@@ -25,7 +25,7 @@ class NavBar extends Component {
 					{x => {
 						if (x.isAuth === true) {
 							return (
-								<li class="nav-item">
+								<li className="nav-item">
 									<button onClick={e => this.handleLogout(e)}>
 										Logout
 									</button>
@@ -33,8 +33,8 @@ class NavBar extends Component {
 							);
 						} else {
 							return (
-								<li class="nav-item">
-									<a class="nav-link" href="/login.html">
+								<li className="nav-item">
+									<a className="nav-link" href="/login.html">
 										Login
 									</a>
 								</li>
@@ -47,16 +47,19 @@ class NavBar extends Component {
 					{x => {
 						if (x.isAuth === true) {
 							return (
-								<li class="nav-item">
-									<a class="nav-link" href="/profile.html">
+								<li className="nav-item">
+									<a
+										className="nav-link"
+										href="/profile.html"
+									>
 										Profile
 									</a>
 								</li>
 							);
 						} else {
 							return (
-								<li class="nav-item">
-									<a class="nav-link" href="/login.html">
+								<li className="nav-item">
+									<a className="nav-link" href="/login.html">
 										Profile
 									</a>
 								</li>
