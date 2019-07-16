@@ -15,8 +15,9 @@ class App extends Component {
 		console.log("App - rendered");
 		return (
 			<div className="App">
-				<NavBar handleLogoutState={this.props.handleLogoutState} />{" "}
-				{/* <AuthConsumer>
+				<Router>
+					<NavBar handleLogoutState={this.props.handleLogoutState} />{" "}
+					{/* <AuthConsumer>
 					{" "}
 					{({ isAuth }) => (
 						<Route
@@ -31,7 +32,6 @@ class App extends Component {
 						/>
 					)}{" "}
 				</AuthConsumer> */}
-				<Router>
 					<Route path="/" exact component={ParksComponent} />
 					<AuthConsumer>
 						{x => {
@@ -41,10 +41,18 @@ class App extends Component {
 									path="/profile"
 									render={() => {
 										console.log(x);
-										if(x.isAuth !== null) {
-											if(x.isAuth === true) return <Profile userName={x.firstName} />
-											else return <Redirect to="/login" />
-										} 
+										if (x.isAuth !== null) {
+											if (x.isAuth === true)
+												return (
+													<Profile
+														userName={x.firstName}
+													/>
+												);
+											else
+												return (
+													<Redirect to="/login.html" />
+												);
+										}
 									}}
 								/>
 							);

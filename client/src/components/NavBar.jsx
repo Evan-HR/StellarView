@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { AuthProvider, AuthConsumer } from "./AuthContext";
 import axios from "axios";
 import NavBarFAQ from "./NavBarFAQ";
+import { withRouter, Link } from "react-router-dom";
 
 class NavBar extends Component {
 	state = {};
@@ -50,9 +51,9 @@ class NavBar extends Component {
 								<li className="nav-item">
 									<a
 										className="nav-link"
-										href="/profile.html"
+										//href="/profile"
 									>
-										Profile
+										<Link to="/profile">Profile</Link>
 									</a>
 								</li>
 							);
@@ -87,4 +88,4 @@ class NavBar extends Component {
 	}
 }
 
-export default NavBar;
+export default withRouter(NavBar);
