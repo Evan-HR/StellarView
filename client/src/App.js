@@ -5,7 +5,8 @@ import React, { Component } from "react";
 import "./App.css";
 import ParksComponent from "./components/ParksComponent";
 import NavBar from "./components/NavBar";
-// import Reviews from "./components/Reviews";
+import Login from "./components/Login";
+//import Reviews from "./components/Reviews";
 
 class App extends Component {
 	//RENDER --> ReactDOM.render(<App />, document.getElementById("root"));
@@ -15,7 +16,11 @@ class App extends Component {
 		//render methods NEED A RETURN!
 		return (
 			<div className="App">
-				<NavBar handleLogoutState={this.props.handleLogoutState} />
+				<NavBar
+					handleLogoutState={this.props.handleLogoutState}
+					handleLogin={this.props.handleLogin}
+				/>
+
 				<ParksComponent />
 			</div>
 		);

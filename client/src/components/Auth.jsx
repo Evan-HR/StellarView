@@ -14,12 +14,19 @@ export class Auth extends React.Component {
 			firstName: null,
 			userID: null,
 			isAuth: null,
+			isLoggingIn: false,
 			userReviews: []
 		};
-		this.getWeatherInfo();
-		this.getUserInfo();
-		this.getUserReviews();
+		console.log("AFTER REG, PRE-GETUSERAUTH, should be SECOND");
+		//this.getWeatherInfo();
+		this.getUserAuth();
+		console.log(
+			"AFTER REG and getUserAuth() in constructor, should be THIRD"
+		);
+		// this.getUserInfo();
+		// this.getUserReviews();
 		this.handleLogoutState = this.handleLogoutState.bind(this);
+		//this.getUserInfo = this.getUserInfo.bind(this);
 	}
 
 	handleLogoutState() {
@@ -28,6 +35,33 @@ export class Auth extends React.Component {
 			userID: null,
 			isAuth: false
 		});
+	}
+
+	//for register function
+	handleLogin = () => {
+		console.log("REGISTER GOT HERE, should be FIRST");
+
+		this.getUserInfo();
+		//this.getUserReviews();
+	};
+
+	getUserAuth() {
+		console.log("FIRST: GETUSERAUTH()");
+		var self = this;
+		axios
+			.get("/api/getUserAuth")
+			.then(function(response) {
+				console.log("response is: ", response.data);
+				if (response.data == true) {
+					console.log("get here ya?");
+					self.getUserInfo();
+					self.getUserReviews();
+				}
+			})
+
+			.catch(error => {
+				console.log(error);
+			});
 	}
 
 	getWeatherInfo() {
@@ -40,6 +74,7 @@ export class Auth extends React.Component {
 	}
 
 	getUserInfo() {
+		console.log("SECOND: getUserInfo()");
 		axios
 			.get("/api/getUserInfo")
 
@@ -56,6 +91,7 @@ export class Auth extends React.Component {
 	}
 
 	getUserReviews() {
+		console.log("THIRD: getUserReviews()");
 		axios
 			.get("/api/getUserReviews")
 
@@ -72,7 +108,10 @@ export class Auth extends React.Component {
 	render() {
 		return (
 			<AuthProvider value={this.state}>
-				<App handleLogoutState={this.handleLogoutState} />
+				<App
+					handleLogoutState={this.handleLogoutState}
+					handleLogin={this.handleLogin}
+				/>
 			</AuthProvider>
 		);
 	}

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { AuthProvider, AuthConsumer } from "./AuthContext";
 import axios from "axios";
 import NavBarFAQ from "./NavBarFAQ";
+import Login from "./Login";
+import Register from "./Register";
 
 class NavBar extends Component {
 	state = {};
@@ -21,7 +23,7 @@ class NavBar extends Component {
 						Home
 					</a>
 				</li>
-				<AuthConsumer>
+				{/* <AuthConsumer>
 					{x => {
 						if (x.isAuth === true) {
 							return (
@@ -41,7 +43,7 @@ class NavBar extends Component {
 							);
 						}
 					}}
-				</AuthConsumer>
+				</AuthConsumer> */}
 
 				<AuthConsumer>
 					{x => {
@@ -67,6 +69,29 @@ class NavBar extends Component {
 						}
 					}}
 				</AuthConsumer>
+
+				<AuthConsumer>
+					{x => {
+						if (x.isAuth === true) {
+							return (
+								<li class="nav-item">
+									<button
+										className="btn btn-link"
+										onClick={e => this.handleLogout(e)}
+									>
+										Logout
+									</button>
+								</li>
+							);
+						} else {
+							return (
+								<Login handleLogin={this.props.handleLogin} />
+							);
+						}
+					}}
+				</AuthConsumer>
+
+				<Register handleLogin={this.props.handleLogin} />
 
 				<NavBarFAQ />
 
