@@ -1,6 +1,8 @@
 //Input form
 import React, { Component } from "react";
 import axios from "axios";
+import { withRouter } from "react-router-dom";
+import qs from "qs";
 
 class ParkForm extends Component {
 	state = {
@@ -18,10 +20,72 @@ class ParkForm extends Component {
 		formErrors: {}
 	};
 
-	//componentDidMount runs RIGHT after post-render
+	//There are two cases when we would want to load results form url query:
+	// 1: We hit back/forward to go to previous searches
+	// 2: We load page from a link with query information
+
+	// componentDidMount runs RIGHT after post-render
 	componentDidMount() {
-		//this.getMyLocation();
+		// this.getMyLocation();
+
+		//On page load, load results from query is possible
+		console.log("Form mounted, searching...");
+		this.loadQuery();
 	}
+
+	componentDidUpdate() {
+		//On back button load previous results
+		window.onpopstate = e => {
+			console.log("Back button pressed");
+			this.loadQuery();
+		};
+	}
+
+	//Load query into state
+	loadQuery = () => {
+		let query = qs.parse(this.props.history.location.search, {
+			ignoreQueryPrefix: true
+		});
+		console.log(query);
+		// console.log("First mount? ", this.state.firstLoad)
+		if (Object.keys(query).length !== 0) {
+			if (
+				query.lat !== this.state.reqData.lat ||
+				query.lng !== this.state.reqData.lng ||
+				query.dist !== this.state.reqData.dist ||
+				query.lightpol !== this.state.reqData.lightpol
+			) {
+				// console.log("Loading from firstmount", this.state.firstLoad)
+				this.setState(
+					{
+						reqData: {
+							...this.state.reqData,
+							lat: query.lat,
+							lng: query.lng,
+							dist: query.dist,
+							lightpol: query.lightpol,
+							error: ""
+						}
+					},
+					//SetState callback
+					() => {
+						console.log("Submitting..", this.state.reqData);
+						this.onSubmit();
+					}
+				);
+			}
+			//THe quick and dirty way to load map results would be.......
+		}
+	};
+
+	// Can't get update to happen on address change
+	// don't know if that's what we would want either actually
+	// componentDidUpdate(prevProps) {
+	// 	if (prevProps !== this.props) {
+	// 		console.log("Prev location:", prevProps.history.location.search);
+	// 		console.log("Curr location:", this.props.history.location.search);
+	// 	}
+	// }
 
 	handlePlaceChange = changeEvent => {
 		this.setState({
@@ -142,32 +206,72 @@ class ParkForm extends Component {
 	//this.state is the "X" in getParks()
 	//fetchP(x) --> getparks(x)
 	onSubmit = e => {
-		e.preventDefault();
+		if (e) e.preventDefault();
 		//console.log(this.state.reqData);
 		const errors = this.validate(this.state.reqData);
 		if (errors.length === 0) {
 			this.setState({ ...this.state, formErrors: [] });
-			this.props.fetchParks(this.state.reqData);
+			this.updateHistoryQuery(this.state.reqData);
+			this.props.fetchParks(this.convertReqToFloat(this.state.reqData));
 		} else {
 			this.setState({ ...this.state, formErrors: errors });
 		}
 		//getparks(reqdata) of parent
 	};
 
+	convertReqToFloat = reqData => {
+		return {
+			lat: parseFloat(reqData.lat),
+			lng: parseFloat(reqData.lng),
+			dist: parseFloat(reqData.dist),
+			lightpol: parseFloat(reqData.lightpol)
+		};
+	};
+
+	updateHistoryQuery = reqData => {
+		console.log("Updating history...");
+		//this.props.history.push({ query: "test" });
+		let query = qs.parse(this.props.history.location.search, {
+			ignoreQueryPrefix: true
+		});
+		if (
+			query.lat !== reqData.lat ||
+			query.lng !== reqData.lng ||
+			query.dist !== reqData.dist ||
+			query.lightpol !== reqData.lightpol
+		) {
+			this.props.history.push({
+				search: `?lat=${reqData.lat}&lng=${reqData.lng}&dist=${
+					reqData.dist
+				}&lightpol=${reqData.lightpol}`
+			});
+		} else {
+			console.log("Attempting to repeat current search.");
+		}
+	};
+
 	validate = reqData => {
 		const errors = [];
 		if (
+			!reqData.lat ||
 			reqData.lat === "" ||
 			reqData.lat < -90 ||
 			reqData.lat > 90 ||
+			!reqData.lng ||
 			reqData.lng === "" ||
 			reqData.lng < -180 ||
 			reqData.lng > 180
 		)
 			errors.push("Invalid location");
-		if (reqData.dist === "" || reqData.dist < 0 || reqData.dist > 300)
+		if (
+			!reqData.dist ||
+			reqData.dist === "" ||
+			reqData.dist < 0 ||
+			reqData.dist > 300
+		)
 			errors.push("Invalid distance");
 		if (
+			!reqData.lightpol ||
 			reqData.lightpol === "" ||
 			reqData.lightpol < 0 ||
 			reqData.lightpol > 40
@@ -175,6 +279,16 @@ class ParkForm extends Component {
 			errors.push("Invalid light pollution");
 		return errors;
 	};
+
+	// updateQuery = reqData => {
+	// 	console.log("Adding test query");
+	// 	//this.props.history.push({ query: "test" });
+	// 	history.push({
+	// 		search: `?lat=${reqData.lat}&lng=${reqData.lng}&dist=${
+	// 			reqData.dist
+	// 		}&lightpol=${reqData.lightpol}`
+	// 	});
+	// };
 
 	renderLocationSpinner = () => {
 		if (this.state.isLoadingLocation) {
@@ -203,6 +317,7 @@ class ParkForm extends Component {
 	};
 
 	render() {
+		//console.log("Fetching parks?", this.props.isFetchingParks);
 		return (
 			<div className="border border-primary">
 				{/* <br />
@@ -220,7 +335,7 @@ class ParkForm extends Component {
 					<input
 						type="text"
 						name="placeName"
-						value={this.state.reqData.placeName}
+						value={this.state.reqData.placeName || ""}
 						onChange={this.handlePlaceChange}
 					/>
 					<button
@@ -258,7 +373,7 @@ class ParkForm extends Component {
 						min="-90"
 						max="90"
 						step="any"
-						value={this.state.reqData.lat}
+						value={this.state.reqData.lat || ""}
 						id="Lat"
 						name="lat"
 						required
@@ -271,7 +386,7 @@ class ParkForm extends Component {
 						min="-180"
 						max="180"
 						step="any"
-						value={this.state.reqData.lng}
+						value={this.state.reqData.lng || ""}
 						id="Long"
 						name="lng"
 						required
@@ -343,9 +458,9 @@ class ParkForm extends Component {
 						min="0"
 						max="40"
 						step="any"
-						id="lightpoll"
+						id="lightpol"
 						name="lightpol"
-						value={this.state.reqData.lightpol}
+						value={this.state.reqData.lightpol || ""}
 						required
 						onChange={this.handleLightPolChange}
 					/>
@@ -354,6 +469,7 @@ class ParkForm extends Component {
 					<button
 						className="btn btn-primary m-2"
 						onClick={e => this.onSubmit(e)}
+						disabled={this.props.isFetchingParks}
 					>
 						Submit
 					</button>
@@ -361,7 +477,6 @@ class ParkForm extends Component {
 						className="btn btn-danger m-2"
 						onClick={this.props.clearParks}
 						// className={this.clearButtonClass()}
-						disabled={this.props.isFetchingParks}
 						type="button"
 					>
 						<strong>Clear</strong>
@@ -372,4 +487,4 @@ class ParkForm extends Component {
 	}
 }
 
-export default ParkForm;
+export default withRouter(ParkForm);

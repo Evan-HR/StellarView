@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { AuthProvider, AuthConsumer } from "./AuthContext";
+import { AuthConsumer } from "./AuthContext";
 class BaseReviews extends Component {
 	state = {
 		name: "",
@@ -23,7 +23,7 @@ class BaseReviews extends Component {
 		//get review status from user and db
 
 		if (
-			this.props.context.isAuth == true &&
+			this.props.context.isAuth === true &&
 			this.props.context.userReviews.includes(this.props.parkID)
 		) {
 			console.log("siwtch case 1");
@@ -32,12 +32,12 @@ class BaseReviews extends Component {
 				hasReviewed: true
 			});
 		} else if (
-			this.props.context.isAuth == true &&
-			this.state.hasReviewed == false
+			this.props.context.isAuth === true &&
+			this.state.hasReviewed === false
 		) {
 			console.log("siwtch case 2");
 			this.setState({ switchCase: "loggedInNotReviewed" });
-		} else if (this.props.context.isAuth == false) {
+		} else if (this.props.context.isAuth === false) {
 			console.log("siwtch case 3");
 			this.setState({ switchCase: "notLoggedIn" });
 		}
