@@ -66,16 +66,18 @@ class ParkTable extends Component {
 				{this.renderMoonData()}
 
 				<table className="table table-hover">
-					<tr>
-						<th>Name</th>
-						<th>Light</th>
-						<th>Distance</th>
-						<th>Cloud Coverage</th>
-						<th>Cloud Type</th>
-						<th>Humidity</th>
-						<th>Moon %</th>
-						<th>Moon Phase</th>
-					</tr>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Light</th>
+							<th>Distance</th>
+							<th>Cloud Coverage</th>
+							<th>Cloud Type</th>
+							<th>Humidity</th>
+							<th>Moon %</th>
+							<th>Moon Phase</th>
+						</tr>
+					</thead>
 					<tbody>{this.renderParkTable()}</tbody>
 				</table>
 			</div>

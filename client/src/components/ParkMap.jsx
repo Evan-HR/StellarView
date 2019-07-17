@@ -1,8 +1,8 @@
 //Displays parks google map
 import React, { Component, createRef } from "react";
-import PropTypes from "prop-types";
-import Modal from "react-modal";
-import ReactDOM from "react-dom";
+// import PropTypes from "prop-types";
+// import Modal from "react-modal";
+// import ReactDOM from "react-dom";
 import ParkMapModal from "./ParkMapModal";
 import Reviews from "./Reviews";
 
@@ -25,6 +25,8 @@ class ParkMap extends Component {
 		super(props);
 		this.parkModalChild = React.createRef();
 		this.modalContent = "No content";
+		this.markers = [];
+		this.currentLocationMarker = null;
 	}
 
 	componentDidMount() {
@@ -38,8 +40,6 @@ class ParkMap extends Component {
 			this.googleMap = this.createGoogleMap();
 			this.googleMapBounds = new window.google.maps.LatLngBounds();
 			// this.googleMapInfowindow = null;
-			this.markers = [];
-			this.currentLocationMarker = null;
 			this.googleMap.setOptions({ styles: styleSelector.retro });
 			this.setState({ mapLoaded: true });
 			this.props.onMapLoaded(this.googleMap);
@@ -77,6 +77,7 @@ class ParkMap extends Component {
 		this.googleMapBounds.extend(location);
 	};
 
+	//Unfortunately, due to the way markers are, opening modal needs to be done from here
 	openModal = content => {
 		this.parkModalChild.current.openModal(content);
 	};
