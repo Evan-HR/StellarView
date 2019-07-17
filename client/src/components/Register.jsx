@@ -32,6 +32,7 @@ class Register extends Component {
 		userEmail: "",
 		userPassword1: "",
 		userPassword2: "",
+		regErrors: [],
 		errorDB: false,
 		modalIsOpen: false
 	};
@@ -45,7 +46,7 @@ class Register extends Component {
 	};
 
 	closeModal = () => {
-		this.setState({ ...this.state, modalIsOpen: false });
+		this.setState({ ...this.state, modalIsOpen: false, errorDB: false });
 	};
 
 	handleNameChange = changeEvent => {
@@ -80,11 +81,13 @@ class Register extends Component {
 
 	errorMsg() {
 		if (this.state.errorDB == true) {
-			return (
-				<div class="alert alert-danger" role="alert">
-					Unable to register!
-				</div>
-			);
+			return this.state.regErrors.map(errors => {
+				return (
+					<div class="alert alert-danger" role="alert">
+						{errors.msg}
+					</div>
+				);
+			});
 		}
 	}
 
@@ -110,8 +113,13 @@ class Register extends Component {
 			.then(this.registerSuccess)
 
 			.catch(err => {
-				console.error("ERROR OCCURRED!", err);
-				this.handleErrorAlert();
+				console.error(err.response.data.errors);
+				//console.error("ERROR OCCURRED!", err);
+				this.setState({
+					errorDB: true,
+					regErrors: err.response.data.errors
+				});
+				//this.handleErrorAlert();
 				//.then(this.closemModal) is needed
 			});
 	};

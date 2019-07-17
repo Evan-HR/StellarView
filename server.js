@@ -100,13 +100,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-//global for dynamic session stuff
-//the bool gets passed through to EVERY VIEW!
-//you dont need to pass it through every route
 app.use(function(req, res, next) {
-	//console.log("USER REQ IS :" + req.user);
-	//res.locals.user = req.user;
-	//console.log("res locals is: " + res.locals.user);
 	res.locals.isAuthenticated = req.isAuthenticated();
 	console.log("USER IS AUTHENTICATED?? :" + res.locals.isAuthenticated);
 	next();
@@ -253,8 +247,8 @@ app.post("/api/register", function(req, res) {
 	).isEmail();
 	req.checkBody(
 		"email",
-		"Email address must be between 8-100 characters long."
-	).len(8, 100);
+		"Email address must be between 5-100 characters long."
+	).len(5, 100);
 	req.checkBody(
 		"password2",
 		"Passwords do not match. Please try again."
@@ -262,12 +256,11 @@ app.post("/api/register", function(req, res) {
 	const errors = req.validationErrors();
 
 	if (errors) {
+		console.log("ERRORS BRANCH!!");
 		console.log(`errors: ${JSON.stringify(errors)}`);
-		res.render("register", {
-			registerResponse: "Registration Failed",
-			errors: errors
-		});
+		res.status(422).json({ errors: errors });
 	} else {
+		console.log("NO ERRORS REGISTER ELSE BRANCH!!!");
 		var name = req.body.name;
 		var email = req.body.email;
 		//check if same
@@ -290,10 +283,7 @@ app.post("/api/register", function(req, res) {
 					var emailErrorJSON = JSON.parse(jsonString);
 					console.log("errors is: ");
 					console.log(emailErrorJSON.msg);
-					// res.render("register", {
-					// 	registerResponse: "Registration Failed",
-					// 	errors: emailErrorJSON
-					// });
+					res.status(422).json({ errors: emailErrorJSON });
 				} else {
 					//proceed with INSERT query
 					console.log("no duplicate emails");
@@ -358,43 +348,24 @@ function authenticationMiddleware() {
 }
 //----------------------END AUTHENTICATION-----------------
 
-//authenticationMiddleware makes sure its visible only if youre registered+logged in
-app.get("/profile", authenticationMiddleware(), function(req, res) {
-	const nameQuery = "SELECT name from users WHERE id=?";
-	getConnection().query(nameQuery, [req.user.user_id], (err, profileInfo) => {
-		if (err) {
-			console.log("failed" + err);
-			res.sendStatus(500);
-			return;
-		} else {
-			res.render("profile.ejs", { profileName: profileInfo[0].name });
-		}
-	});
-});
-
 app.get("/api/getUserAuth", (req, res) => {
-	//console.log("USER ID FOR QUERY IS:" + req.user);
+	console.log("FIRST: GETUSERAUTH");
 	//if logged in...
 	if (req.session.passport) {
-		console.log("auth got here");
+		console.log("true auth got here");
 		res.send(JSON.parse(true));
 	} else {
+		console.log("false auth got here");
 		res.send(JSON.parse(false));
 	}
 });
 
-app.get("/api/getUserInfo", (req, res) => {
-	console.log("GETUSERINFO CALLED!!!!!!!");
-	console.log("user id is: ", req.session.passport.user.user_id);
-	console.log("session info: ", req.session.passport);
-	console.log("user info: ", req.session.passport.user);
+function loginWithoutRegister(req, res) {
 	const nameQuery = "SELECT name from users WHERE id=?";
-	//console.log("USER ID FOR QUERY IS:" + req.user);
-	//if logged in...
 	if (req.session.passport) {
 		getConnection().query(
 			nameQuery,
-			[req.session.passport.user],
+			[req.session.passport.user.user_id],
 			(err, profileInfo) => {
 				if (err) {
 					console.log("failed" + err);
@@ -409,6 +380,50 @@ app.get("/api/getUserInfo", (req, res) => {
 					const tempJSON = `{ "firstName": "${
 						profileInfo[0].name
 					}", "isAuth": ${req.isAuthenticated()}, "userID": ${
+						req.session.passport.user.user_id
+					} }`;
+					console.log("finalJSON is: " + tempJSON);
+					res.send(tempJSON);
+				}
+			}
+		);
+	}
+}
+
+function loginWithRegister(req, res) {
+	console.log("req.session.passport.user.user_id + is NOT int");
+
+	console.log("is int check: " + req.session.passport.user);
+	console.log(
+		"req.session.passport.user.user_id prints: ",
+		req.session.passport.user.user_id
+	);
+	//var regularLoginUserName = req.session.passport.user.user_id;
+
+	console.log("eq.session.passport prints: ", req.session.passport);
+
+	console.log("req.session.passport.user prints ", req.session.passport.user);
+	const nameQuery = "SELECT name from users WHERE id=?";
+	//console.log("USER ID FOR QUERY IS:" + req.user);
+	//if logged in...
+	if (req.session.passport) {
+		getConnection().query(
+			nameQuery,
+			[req.session.passport.user],
+			(err, profileInfo) => {
+				if (err) {
+					console.log("failed" + err);
+					res.sendStatus(500);
+					return;
+				} else {
+					console.log("GET HERE?????????????");
+
+					console.log("profile info: ", profileInfo);
+
+					tempName = profileInfo[0].name;
+					const tempJSON = `{ "firstName": "${
+						profileInfo[0].name
+					}", "isAuth": ${req.isAuthenticated()}, "userID": ${
 						req.session.passport.user
 					} }`;
 					console.log("finalJSON is: " + tempJSON);
@@ -417,11 +432,24 @@ app.get("/api/getUserInfo", (req, res) => {
 			}
 		);
 	}
+}
+
+//post register user name: req.session.passport.user  (will give 81)
+//post login user name: req.session.passport.user  (will give 81)
+app.get("/api/getUserInfo", (req, res) => {
+	console.log("SECOND: getuserinfO");
+	//var self = this;
+	if (isNaN(req.session.passport.user.user_id)) {
+		loginWithRegister(req, res);
+	} else {
+		loginWithoutRegister(req, res);
+	}
 });
 
 app.get("/api/getUserReviews", (req, res) => {
+	console.log("THIRD: GETUSERAUTH");
 	const getUserReviewQuery = "SELECT p_id from reviews WHERE user_id=?";
-	//console.log("USER ID FOR QUERY IS:" + req.user);
+	console.log("REVIEWS: USER ID FOR QUERY IS:" + req.session.passport.user);
 	//if logged in...
 	if (req.session.passport) {
 		getConnection().query(
@@ -511,20 +539,6 @@ app.post("/results.html", (req, res) => {
 	);
 });
 
-// Tutorial API
-// app.get("/api/hello", (req, res) => {
-// 	res.send({ express: "Hello From Express" });
-// });
-
-// app.post("/api/world", (req, res) => {
-// 	console.log(req.body);
-// 	res.send(
-// 		`I received your POST request. This is what you sent me: ${
-// 			req.body.post
-// 		}`
-// 	);
-// });
-
 //format "2014-02-17T00:00-0500", ISO 8601
 function getMoon() {
 	var now = new Date();
@@ -567,10 +581,7 @@ app.post("/api/getParks", (req, res) => {
 				return;
 			}
 			var weatherJSON = JSON.parse(JSON.stringify(results));
-			// begin weather
-			//console.log("RESULTS IS: ", weatherJSON);
-			//console.log("RESULTS IS: ", weatherJSON[0].lat);
-			// begin weather
+
 			var weatherArr = [];
 			weatherURL = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lng}&cnt=50&appid=${weatherKey1}`;
 			axios
@@ -618,13 +629,7 @@ app.post("/api/getParks", (req, res) => {
 								Math.pow(cityLat - parkLat, 2) +
 									Math.pow(cityLng - parkLng, 2)
 							);
-							// console.log(
-							// 	"distance for the " +
-							// 		j +
-							// 		"th city is: " +
-							// 		dist +
-							// 		" in kilometers!!!"
-							// );
+
 							if (distance < minDist) {
 								minDist = distance;
 								closestCity = j;

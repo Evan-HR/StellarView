@@ -43,7 +43,7 @@ class Login extends Component {
 	};
 
 	closeModal = () => {
-		this.setState({ ...this.state, modalIsOpen: false });
+		this.setState({ ...this.state, modalIsOpen: false, errorDB: false });
 	};
 
 	handleEmailChange = changeEvent => {
@@ -62,26 +62,26 @@ class Login extends Component {
 		this.setState({
 			errorDB: true
 		});
-	}
+	};
 
-	errorMsg(){
-		if(this.state.errorDB==true){
-			return (<div class="alert alert-danger" role="alert">
-			Invalid login credentials! Please try again
-		  </div>)
+	errorMsg() {
+		if (this.state.errorDB == true) {
+			return (
+				<div class="alert alert-danger" role="alert">
+					Invalid login credentials! Please try again
+				</div>
+			);
 		}
-	
 	}
 
-	loginSuccess=()=>{
+	loginSuccess = () => {
 		console.log("get here for some reason?");
 		this.setState({
-			modalIsOpen:false
-		})
-		
-		this.props.handleLogin();
-	}
+			modalIsOpen: false
+		});
 
+		this.props.handleLogin();
+	};
 
 	onSubmit = e => {
 		e.preventDefault();
@@ -91,20 +91,14 @@ class Login extends Component {
 				password: this.state.userPassword
 			})
 			//this.loginSuccess() will run function automatically
-			.then(
-				this.loginSuccess
-				
-				)
-			
+			.then(this.loginSuccess)
+
 			.catch(err => {
-				console.error("ERROR OCCURRED!",err);
+				console.error("ERROR OCCURRED!", err);
 				this.handleErrorAlert();
-				//.then(this.closemModal) is needed 
-				
+				//.then(this.closemModal) is needed
 			});
-		}
-
-
+	};
 
 	render() {
 		return (
@@ -154,9 +148,6 @@ class Login extends Component {
 						</div>
 
 						{this.errorMsg()}
-						
-						
-
 					</div>
 				</Modal>
 			</React.Fragment>

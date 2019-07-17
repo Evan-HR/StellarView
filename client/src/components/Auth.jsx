@@ -37,15 +37,16 @@ export class Auth extends React.Component {
 		});
 	}
 
+	//for register function
 	handleLogin = () => {
 		console.log("REGISTER GOT HERE, should be FIRST");
 
 		this.getUserInfo();
-		this.getUserReviews();
+		//this.getUserReviews();
 	};
 
 	getUserAuth() {
-		console.log("GET USER AUTH HAS ENTERED!");
+		console.log("FIRST: GETUSERAUTH()");
 		var self = this;
 		axios
 			.get("/api/getUserAuth")
@@ -73,7 +74,7 @@ export class Auth extends React.Component {
 	}
 
 	getUserInfo() {
-		console.log("GET USER INFO GOT HERE");
+		console.log("SECOND: getUserInfo()");
 		axios
 			.get("/api/getUserInfo")
 
@@ -90,6 +91,7 @@ export class Auth extends React.Component {
 	}
 
 	getUserReviews() {
+		console.log("THIRD: getUserReviews()");
 		axios
 			.get("/api/getUserReviews")
 
