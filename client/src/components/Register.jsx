@@ -28,10 +28,10 @@ const modalStyle = {
 
 class Register extends Component {
 	state = {
-        userName:"",
+		userName: "",
 		userEmail: "",
-        userPassword1: "",
-        userPassword2:"",
+		userPassword1: "",
+		userPassword2: "",
 		errorDB: false,
 		modalIsOpen: false
 	};
@@ -46,9 +46,8 @@ class Register extends Component {
 
 	closeModal = () => {
 		this.setState({ ...this.state, modalIsOpen: false });
-    };
-    
-    
+	};
+
 	handleNameChange = changeEvent => {
 		this.setState({
 			userName: changeEvent.target.value
@@ -65,9 +64,9 @@ class Register extends Component {
 		this.setState({
 			userPassword1: changeEvent.target.value
 		});
-    };
-    
-    handlePasswordChange2 = changeEvent => {
+	};
+
+	handlePasswordChange2 = changeEvent => {
 		this.setState({
 			userPassword2: changeEvent.target.value
 		});
@@ -77,51 +76,45 @@ class Register extends Component {
 		this.setState({
 			errorDB: true
 		});
-	}
+	};
 
-	errorMsg(){
-		if(this.state.errorDB==true){
-			return (<div class="alert alert-danger" role="alert">
-			Unable to register!
-		  </div>)
+	errorMsg() {
+		if (this.state.errorDB == true) {
+			return (
+				<div class="alert alert-danger" role="alert">
+					Unable to register!
+				</div>
+			);
 		}
-	
 	}
 
-	registerSuccess=()=>{
+	registerSuccess = () => {
 		console.log("get here for some reason?");
 		this.setState({
-			modalIsOpen:false
-		})
-		
+			modalIsOpen: false
+		});
+		console.log("REG SUCCESS, GOING TO LOGIN NOW");
 		this.props.handleLogin();
-	}
-
+	};
 
 	onSubmit = e => {
 		e.preventDefault();
 		axios
 			.post("/api/register", {
-                name: this.state.userName,
+				name: this.state.userName,
 				email: this.state.userEmail,
-                password1: this.state.userPassword1,
-                password2: this.state.userPassword2
+				password1: this.state.userPassword1,
+				password2: this.state.userPassword2
 			})
 			//this.loginSuccess() will run function automatically
-			.then(
-				this.registerSuccess
-				
-				)
-			
+			.then(this.registerSuccess)
+
 			.catch(err => {
-				console.error("ERROR OCCURRED!",err);
+				console.error("ERROR OCCURRED!", err);
 				this.handleErrorAlert();
-				//.then(this.closemModal) is needed 
-				
+				//.then(this.closemModal) is needed
 			});
-		}
-
-
+	};
 
 	render() {
 		return (
@@ -147,9 +140,6 @@ class Register extends Component {
 						</div>
 						<div className="login-form">
 							<form>
-
-
-
 								<input
 									type="text"
 									placeholder="Preferred Name"
@@ -157,7 +147,7 @@ class Register extends Component {
 									onChange={this.handleNameChange}
 									required
 								/>
-                                							<input
+								<input
 									type="email"
 									placeholder="Email"
 									name="email"
@@ -171,7 +161,7 @@ class Register extends Component {
 									onChange={this.handlePasswordChange1}
 									required
 								/>
-                                							<input
+								<input
 									type="password"
 									placeholder="password"
 									name="password2"
@@ -188,9 +178,6 @@ class Register extends Component {
 						</div>
 
 						{this.errorMsg()}
-						
-						
-
 					</div>
 				</Modal>
 			</React.Fragment>

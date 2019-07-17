@@ -88,7 +88,7 @@ class NavBar extends Component {
 					}}
 				</AuthConsumer>
 
-				<Register />
+				<Register handleLogin={this.props.handleLogin} />
 
 				<NavBarFAQ />
 

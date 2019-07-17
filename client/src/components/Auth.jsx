@@ -17,12 +17,16 @@ export class Auth extends React.Component {
 			isLoggingIn: false,
 			userReviews: []
 		};
-		//console.log("GET HERE AFTER SUBMIT?");
+		console.log("AFTER REG, PRE-GETUSERAUTH, should be SECOND");
 		//this.getWeatherInfo();
 		this.getUserAuth();
+		console.log(
+			"AFTER REG and getUserAuth() in constructor, should be THIRD"
+		);
 		// this.getUserInfo();
 		// this.getUserReviews();
 		this.handleLogoutState = this.handleLogoutState.bind(this);
+		//this.getUserInfo = this.getUserInfo.bind(this);
 	}
 
 	handleLogoutState() {
@@ -34,29 +38,29 @@ export class Auth extends React.Component {
 	}
 
 	handleLogin = () => {
-		console.log("FORCE UPDATE RUN???????????????");
+		console.log("REGISTER GOT HERE, should be FIRST");
 
 		this.getUserInfo();
 		this.getUserReviews();
 	};
 
-	getUserAuth(){
+	getUserAuth() {
+		console.log("GET USER AUTH HAS ENTERED!");
+		var self = this;
 		axios
 			.get("/api/getUserAuth")
-			.then(function (response) {
-				if(response.data==true){
-					this.getUserInfo();
-					this.getUserReviews();
-
+			.then(function(response) {
+				console.log("response is: ", response.data);
+				if (response.data == true) {
+					console.log("get here ya?");
+					self.getUserInfo();
+					self.getUserReviews();
 				}
-				
-			  })
+			})
 
 			.catch(error => {
 				console.log(error);
 			});
-		
-
 	}
 
 	getWeatherInfo() {
@@ -69,6 +73,7 @@ export class Auth extends React.Component {
 	}
 
 	getUserInfo() {
+		console.log("GET USER INFO GOT HERE");
 		axios
 			.get("/api/getUserInfo")
 

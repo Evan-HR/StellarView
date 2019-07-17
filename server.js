@@ -169,7 +169,6 @@ app.get("/logout", function(req, res) {
 	req.session.destroy(() => {
 		res.clearCookie("connect.sid");
 		res.redirect("/");
-		
 	});
 });
 
@@ -183,8 +182,6 @@ app.post(
 	})
 );
 //----------------------END LOGIN--------------------------------------//
-
-
 
 //get reviews from db
 app.get("/api/getReviews", function(req, res) {
@@ -241,9 +238,9 @@ app.post("/api/storeReview", function(req, res) {
 });
 
 app.post("/api/register", function(req, res) {
-	console.log("name is: " , req.body.name)
-	console.log("name is: " , req.body.email)
-	console.log("name is: " , req.body.password1)
+	console.log("name is: ", req.body.name);
+	console.log("name is: ", req.body.email);
+	console.log("name is: ", req.body.password1);
 	//client-side validation
 	req.checkBody("name", "Preferred name cannot be empty.").notEmpty();
 	req.checkBody(
@@ -276,6 +273,8 @@ app.post("/api/register", function(req, res) {
 		//check if same
 		var password = req.body.password1;
 
+		console.log("name email and password: " + name, email, password);
+
 		const emailQuery = "SELECT * from users WHERE email=?";
 		getConnection().query(emailQuery, [email], (err, results, fields) => {
 			if (err) {
@@ -291,10 +290,10 @@ app.post("/api/register", function(req, res) {
 					var emailErrorJSON = JSON.parse(jsonString);
 					console.log("errors is: ");
 					console.log(emailErrorJSON.msg);
-					res.render("register", {
-						registerResponse: "Registration Failed",
-						errors: emailErrorJSON
-					});
+					// res.render("register", {
+					// 	registerResponse: "Registration Failed",
+					// 	errors: emailErrorJSON
+					// });
 				} else {
 					//proceed with INSERT query
 					console.log("no duplicate emails");
@@ -324,6 +323,7 @@ app.post("/api/register", function(req, res) {
 									req.login(user_id, function(err) {
 										//will return successfully registered user to homepage
 										res.redirect("/");
+										//res.locals.isAuthenticated = req.isAuthenticated();
 									});
 								}
 							}
@@ -373,45 +373,43 @@ app.get("/profile", authenticationMiddleware(), function(req, res) {
 });
 
 app.get("/api/getUserAuth", (req, res) => {
-
 	//console.log("USER ID FOR QUERY IS:" + req.user);
 	//if logged in...
 	if (req.session.passport) {
-		console.log("auth got here")
+		console.log("auth got here");
 		res.send(JSON.parse(true));
-		
-	}else{
+	} else {
 		res.send(JSON.parse(false));
 	}
-	
 });
 
 app.get("/api/getUserInfo", (req, res) => {
-	console.log("user id is: ",req.session.passport.user.user_id)
-	console.log("session info: ",req.session.passport)
-	console.log("user info: ",req.session.passport.user)
+	console.log("GETUSERINFO CALLED!!!!!!!");
+	console.log("user id is: ", req.session.passport.user.user_id);
+	console.log("session info: ", req.session.passport);
+	console.log("user info: ", req.session.passport.user);
 	const nameQuery = "SELECT name from users WHERE id=?";
 	//console.log("USER ID FOR QUERY IS:" + req.user);
 	//if logged in...
 	if (req.session.passport) {
 		getConnection().query(
 			nameQuery,
-			[req.session.passport.user.user_id],
+			[req.session.passport.user],
 			(err, profileInfo) => {
 				if (err) {
 					console.log("failed" + err);
 					res.sendStatus(500);
 					return;
 				} else {
-					console.log("GET HERE?");
-					console.log("profile info: ",profileInfo[0]);
+					console.log("GET HERE?????????????");
+					console.log("profile info: ", profileInfo[0]);
 					//START HERE ! PROFILEINFO[NAME] DOESN'T EXIST. FIGURE OUT THE PROPER CALL WITH PRINT STATEMTNS
 					//console.log("NAME IN QUERY: " + profileInfo[0].name);
 					tempName = profileInfo[0].name;
 					const tempJSON = `{ "firstName": "${
 						profileInfo[0].name
 					}", "isAuth": ${req.isAuthenticated()}, "userID": ${
-						req.session.passport.user.user_id
+						req.session.passport.user
 					} }`;
 					console.log("finalJSON is: " + tempJSON);
 					res.send(tempJSON);
@@ -419,7 +417,6 @@ app.get("/api/getUserInfo", (req, res) => {
 			}
 		);
 	}
-	
 });
 
 app.get("/api/getUserReviews", (req, res) => {
@@ -436,13 +433,15 @@ app.get("/api/getUserReviews", (req, res) => {
 					res.sendStatus(500);
 					return;
 				} else {
-					tempReviews = [];
-					for (var i = 0; i < reviewResults.length; i++) {
-						tempReviews.push(reviewResults[i].p_id);
-					}
+					if (reviewResults.length > 0) {
+						tempReviews = [];
+						for (var i = 0; i < reviewResults.length; i++) {
+							tempReviews.push(reviewResults[i].p_id);
+						}
 
-					console.log(tempReviews);
-					res.send(tempReviews);
+						console.log("reviews is: ", tempReviews);
+						res.send(tempReviews);
+					}
 				}
 			}
 		);
@@ -593,8 +592,6 @@ app.post("/api/getParks", (req, res) => {
 						weatherArr.push(city);
 						//console.log("weather arr is : ", weatherArr);
 					}
-
-
 
 					// weather assigning:
 					for (var i = 0; i < weatherJSON.length; i++) {
