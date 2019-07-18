@@ -59,15 +59,16 @@ class NavBar extends Component {
 									</a>
 								</li>
 							);
-						} else {
-							return (
-								<li className="nav-item">
-									<a className="nav-link" href="/login.html">
-										Profile
-									</a>
-								</li>
-							);
-						}
+						} 
+						// else {
+						// 	return (
+						// 		<li className="nav-item">
+						// 			<a className="nav-link" href="/login.html">
+						// 				Profile
+						// 			</a>
+						// 		</li>
+						// 	);
+						// }
 					}}
 				</AuthConsumer>
 

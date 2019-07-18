@@ -36,10 +36,7 @@ class App extends Component {
 														userName={x.firstName}
 													/>
 												);
-											else
-												return (
-													<Redirect to="/login.html" />
-												);
+											else return <Redirect to="/" />;
 										}
 									}}
 								/>
