@@ -186,6 +186,7 @@ class ParkMap extends Component {
 		//Add new markers if possible
 		if (this.props.location.length !== 0) {
 			console.log("Adding markers..");
+			this.googleMapBounds = new window.google.maps.LatLngBounds();
 			this.addCurrentLocationMarker();
 			//Sometimes crashes here, probably because parkList is JSON and not an array
 			//Crash is fixed I think? Notify if it happens again
