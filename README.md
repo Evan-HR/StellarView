@@ -33,6 +33,14 @@ CREATE TABLE users (
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8
 ```
 ```
+CREATE TABLE `favorite_parks` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `park_id` int(11) NOT NULL,
+ `user_id` int(11) NOT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+```
+```
 CREATE TABLE `reviews` (
  `id` int(25) unsigned NOT NULL AUTO_INCREMENT,
  `p_id` int(25) NOT NULL,
