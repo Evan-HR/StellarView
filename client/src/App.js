@@ -6,7 +6,7 @@ import ParksComponent from "./components/ParksComponent";
 import NavBar from "./components/NavBar";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Profile from "./components/Profile";
-// import Reviews from "./components/Reviews";
+import Login from "./components/Login";
 
 class App extends Component {
 	//RENDER --> ReactDOM.render(<App />, document.getElementById("root"));
@@ -16,22 +16,8 @@ class App extends Component {
 		return (
 			<div className="App">
 				<Router>
-					<NavBar handleLogoutState={this.props.handleLogoutState} />{" "}
-					{/* <AuthConsumer>
-					{" "}
-					{({ isAuth }) => (
-						<Route
-							render={props =>
-								isAuth ? (
-									<Component {...props} />
-								) : (
-									<Redirect to="/" />
-								)
-							}
-							{...rest}
-						/>
-					)}{" "}
-				</AuthConsumer> */}
+					<NavBar handleLogoutState={this.props.handleLogoutState} 
+					handleLogin={this.props.handleLogin} />
 					<Route path="/" exact component={ParksComponent} />
 					<AuthConsumer>
 						{x => {
