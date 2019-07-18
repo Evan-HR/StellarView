@@ -16,8 +16,10 @@ class App extends Component {
 		return (
 			<div className="App">
 				<Router>
-					<NavBar handleLogoutState={this.props.handleLogoutState} 
-					handleLogin={this.props.handleLogin} />
+					<NavBar
+						handleLogoutState={this.props.handleLogoutState}
+						handleLogin={this.props.handleLogin}
+					/>
 					<Route path="/" exact component={ParksComponent} />
 					<AuthConsumer>
 						{x => {
