@@ -5,11 +5,11 @@
 Backend node server can be connected to via `http://localhost:5000/`\
 Frontend react server can be connected to via `http://localhost:3000/`
 
-## Traditional Setup
+## Database Setup
 
 Install XAMPP, run MYSQL and APACHE\
-go to: localhost/phpmyadmin\
-create database:
+Go to: localhost/phpmyadmin\
+Create database:
 ```
 CREATE TABLE `ontario_parks` (
  `id` int(25) NOT NULL AUTO_INCREMENT,
@@ -22,9 +22,31 @@ CREATE TABLE `ontario_parks` (
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12488 DEFAULT CHARSET=utf8
 ```
-(additional info via MESSENGER)
+```
+CREATE TABLE users (
+ id smallint(9) NOT NULL AUTO_INCREMENT,
+ email varchar(70) NOT NULL,
+ name varchar(50) DEFAULT NULL,
+ password varchar(300) NOT NULL,
+ PRIMARY KEY (id),
+ UNIQUE KEY email (email)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8
+```
+```
+CREATE TABLE `reviews` (
+ `id` int(25) unsigned NOT NULL AUTO_INCREMENT,
+ `p_id` int(25) NOT NULL,
+ `score` smallint(5) unsigned NOT NULL,
+ `name` varchar(20) DEFAULT NULL,
+ `user_id` int(25) unsigned NOT NULL,
+ `review` varchar(2000) DEFAULT NULL,
+ PRIMARY KEY (`id`),
+ KEY `fk_reviews` (`p_id`),
+ CONSTRAINT `fk_reviews` FOREIGN KEY (`p_id`) REFERENCES `ontario_parks` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8
+```
 
-## reactPlayground Development Mode
+## Server Development Mode
 
 First time:
 ```
@@ -121,19 +143,5 @@ app.post('/login', passport.authenticate('local', {
 }));
 ```
 install `npm install passport-local` because i used a local\
-strategy database, this might need to be diff on server-side\
+strategy database, this might need to be diff on server-side
 
-reviews query: 
-```
-CREATE TABLE `reviews` (
- `id` int(25) unsigned NOT NULL AUTO_INCREMENT,
- `p_id` int(25) NOT NULL,
- `score` smallint(5) unsigned NOT NULL,
- `name` varchar(20) DEFAULT NULL,
- `user_id` int(25) unsigned NOT NULL,
- `review` varchar(2000) DEFAULT NULL,
- PRIMARY KEY (`id`),
- KEY `fk_reviews` (`p_id`),
- CONSTRAINT `fk_reviews` FOREIGN KEY (`p_id`) REFERENCES `ontario_parks` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8
-```
