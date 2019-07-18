@@ -22,19 +22,17 @@ class App extends Component {
 					/>
 					<Route path="/" exact component={ParksComponent} />
 					<AuthConsumer>
-						{x => {
-							console.log(x);
+						{authState => {
+							console.log(authState);
 							return (
 								<Route
 									path="/profile"
 									render={() => {
-										console.log(x);
-										if (x.isAuth !== null) {
-											if (x.isAuth === true)
+										console.log(authState);
+										if (authState.isAuth !== null) {
+											if (authState.isAuth === true)
 												return (
-													<Profile
-														userName={x.firstName}
-													/>
+													<Profile {...authState} />
 												);
 											else return <Redirect to="/" />;
 										}
