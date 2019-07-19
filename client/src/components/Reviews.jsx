@@ -218,7 +218,6 @@ class BaseReviews extends Component {
 	render() {
 		return (
 			<div>
-				pizza
 				{this.renderReviewsSwitch(this.state.switchCase)}
 				{this.renderReviewsDiv()}
 			</div>
