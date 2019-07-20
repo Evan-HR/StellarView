@@ -503,6 +503,27 @@ app.get("/park/:id", function(req, res) {
 	});
 });
 
+app.post("/api/postFavSpot", (req, res) => {
+	console.log("body: ", req.body);
+	console.log("user_id: " + req.body.params.user_id);
+	console.log("park_id: " + req.body.params.park_id);
+
+	const insertFavParkQuery =
+	"INSERT INTO favorite_parks (park_id, user_id) VALUES (?, ?)";
+	getConnection().query(
+		insertFavParkQuery,
+		[req.body.params.user_id, req.body.params.park_id],
+		(err, results) => {
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
+			}
+			res.end();
+		}
+	);
+});
+
 //note, res.send sends the HTTP response, res.end ends the response process
 app.post("/results.html", (req, res) => {
 	console.log("Latitude entered: " + req.body.lat);
