@@ -21,7 +21,6 @@ lng = coord[1]
 url = f"http://api.openweathermap.org/data/2.5/find?lat={lat}&lon={lng}&cnt=50&APPID={config.OPEN_WEATHER_API_KEY}"
 print(url)
 response = requests.get(url)
-# response = requests.get(f'http://api.openweathermap.org/data/2.5/box/city?bbox=-82.43659184,42.2636709,-80.2994317,44.4901755,35&APPID=08c7fcf7e68ec973d48dda2ba76e8314')
 weather = response.json()
 stations = [station for station in weather["list"]]
 maxLat = max([station["coord"]["lat"] for station in stations])
