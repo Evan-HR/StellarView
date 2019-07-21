@@ -722,14 +722,20 @@ app.post("/api/getParks", (req, res) => {
 					var temparr = [];
 					temparr.push(weatherJSON);
 
+					let reply = {
+						parks: weatherJSON,
+						moonPercent: percentMoon,
+						moonType: moonType
+					};
 					//console.log(temparr);
-					temparr.push(parseInt(percentMoon));
-					temparr.push(moonType);
+					// temparr.push(parseInt(percentMoon));
+					// temparr.push(moonType);
+					console.log("Response:", reply);
 					//console.log(weatherJSON);
-					console.log("temparr is: ", temparr);
-					console.log("moon illum", temparr[1]);
-					console.log("moon type", temparr[2]);
-					res.send(temparr);
+					// console.log("temparr is: ", temparr);
+					// console.log("moon illum", temparr[1]);
+					// console.log("moon type", temparr[2]);
+					res.send(reply);
 					//res.send(results);
 				})
 
