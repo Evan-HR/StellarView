@@ -19,6 +19,67 @@ class ParkTable extends Component {
         }
     */
 
+	renderMoonData() {
+		if (this.props.parkList.length > 0) {
+			var moonDataString = "";
+			var moonIllum = this.props.moon;
+			var moonType = this.props.moonType;
+			moonDataString = `The moon is ${moonType}, meaning it is ${moonIllum}% illuminated.`;
+
+			return moonDataString;
+		}
+	}
+
+	renderParkCardList = () => {
+		if (this.props.parkList.length > 0) {
+			return (
+				<div >
+					{this.props.parkList.map(this.renderParkCard)}
+				</div>
+			);
+		} else {
+			return (
+				<div className="text-center">
+					<div
+						className="card text-white bg-danger mb-3"
+						// style={{ "max-width": "18rem" }}
+					>
+						<div className="card-header">No parks available.</div>
+						{/* <div className="card-body">
+						<h5 className="card-title">Danger card title</h5>
+						<p className="card-text">
+							Some quick example text to build on the card title
+							and make up the bulk of the card's content.
+						</p>
+					</div> */}
+					</div>
+				</div>
+			);
+		}
+	};
+
+	renderParkCard = park => {
+		return (
+			<div
+				className="card mb-3"
+				style={{ textTransform: "capitalize" }}
+			>
+				<div className="card-header text-white bg-primary">
+					{park.name_alt}
+				</div>
+				<div className="card-body bg-light">
+					{/* <h5 className="card-title">Primary card title</h5> */}
+					<p className="card-text">
+						{park.light_pol} <br />
+						{parseFloat(park.distance).toFixed(2)}km <br />
+						{park.cloudDesc} <br />
+						{park.humidity}% Humidity <br />
+					</p>
+				</div>
+			</div>
+		);
+	};
+
 	renderParkTable = () => {
 		if (this.props.parkList.length > 0) {
 			return this.props.parkList.map(this.renderPark);
@@ -34,17 +95,6 @@ class ParkTable extends Component {
 			);
 		}
 	};
-
-	renderMoonData() {
-		if (this.props.parkList.length > 0) {
-			var moonDataString = "";
-			var moonIllum = this.props.moon;
-			var moonType = this.props.moonType;
-			moonDataString = `The moon is ${moonType}, meaning it is ${moonIllum}% illuminated.`;
-
-			return moonDataString;
-		}
-	}
 
 	renderPark = park => (
 		<tr>
@@ -64,8 +114,9 @@ class ParkTable extends Component {
 		return (
 			<div className="border border-primary">
 				{this.renderMoonData()}
+				{this.renderParkCardList()}
 
-				<table className="table table-hover">
+				{/* <table className="table table-hover">
 					<thead>
 						<tr>
 							<th>Name</th>
@@ -79,7 +130,7 @@ class ParkTable extends Component {
 						</tr>
 					</thead>
 					<tbody>{this.renderParkTable()}</tbody>
-				</table>
+				</table> */}
 			</div>
 		);
 	}
