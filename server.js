@@ -719,19 +719,19 @@ app.post("/api/getParks", (req, res) => {
 						moonType = "Last Quarter";
 					}
 
-					var temparr = [];
-					temparr.push(weatherJSON);
+					// var temparr = [];
+					// temparr.push(weatherJSON);
 
 					let reply = {
 						parks: weatherJSON,
 						moonPercent: percentMoon,
 						moonType: moonType
 					};
-					//console.log(temparr);
+					// console.log(temparr);
 					// temparr.push(parseInt(percentMoon));
 					// temparr.push(moonType);
 					console.log("Response:", reply);
-					//console.log(weatherJSON);
+					// console.log(weatherJSON);
 					// console.log("temparr is: ", temparr);
 					// console.log("moon illum", temparr[1]);
 					// console.log("moon type", temparr[2]);
