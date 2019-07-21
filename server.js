@@ -176,6 +176,39 @@ app.post(
 	})
 );
 //----------------------END LOGIN--------------------------------------//
+//get favSpots from db
+app.get("/api/getUserFavSpots", function(req, res) {
+	//order in query :p_id, score, name, user_id, review
+	//id is autoincrement so dont worry about that
+	//"SELECT name, light_pol, lat, lng from ontario_parks WHERE id=?";
+	const getFavSpotsQuery =
+		"SELECT park_id from favorite_parks where user_id = ?";
+
+	console.log("user_id is: ", req.session.passport.user);
+
+	getConnection().query(
+		getFavSpotsQuery,
+		[req.session.passport.user.user_id],
+		(err, favSpots) => {
+			console.log("favspots pre array is: ", favSpots);
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
+			} else {
+				if (favSpots.length > 0) {
+					tempSpots = [];
+					for (var i = 0; i < favSpots.length; i++) {
+						tempSpots.push(favSpots[i].park_id);
+					}
+
+					console.log("tempSpots is: ", tempSpots);
+					res.send(tempSpots);
+				}
+			}
+		}
+	);
+});
 
 //get reviews from db
 app.get("/api/getReviews", function(req, res) {
@@ -449,12 +482,14 @@ app.get("/api/getUserInfo", (req, res) => {
 app.get("/api/getUserReviews", (req, res) => {
 	console.log("THIRD: GETUSERAUTH");
 	const getUserReviewQuery = "SELECT p_id from reviews WHERE user_id=?";
-	console.log("REVIEWS: USER ID FOR QUERY IS:" + req.session.passport.user);
+	console.log(
+		"REVIEWS: USER ID FOR QUERY IS:" + req.session.passport.user.user_id
+	);
 	//if logged in...
 	if (req.session.passport) {
 		getConnection().query(
 			getUserReviewQuery,
-			[req.session.passport.user],
+			[req.session.passport.user.user_id],
 			(err, reviewResults) => {
 				if (err) {
 					console.log("failed" + err);
@@ -501,6 +536,27 @@ app.get("/park/:id", function(req, res) {
 		});
 		res.end();
 	});
+});
+
+app.post("/api/postFavSpot", (req, res) => {
+	console.log("body: ", req.body);
+	console.log("user_id: " + req.body.params.user_id);
+	console.log("park_id: " + req.body.params.park_id);
+
+	const insertFavParkQuery =
+		"INSERT INTO favorite_parks (park_id, user_id) VALUES (?, ?)";
+	getConnection().query(
+		insertFavParkQuery,
+		[req.body.params.park_id, req.body.params.user_id],
+		(err, results) => {
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
+			}
+			res.end();
+		}
+	);
 });
 
 //note, res.send sends the HTTP response, res.end ends the response process
