@@ -47,9 +47,21 @@ class BaseParksComponent extends Component {
 		console.log(reqData);
 		// this.updateHistoryQuery(reqData);
 		this.setState({ isFetchingParks: true });
+		let storageKey = JSON.stringify(reqData);
+		let localData = sessionStorage.getItem(storageKey);
 
-		let localData = sessionStorage.getItem(JSON.stringify(reqData));
-
+		if (localData) {
+			//Check if it's expired
+			let data = JSON.parse(localData);
+			let now = new Date();
+			let expiration = new Date(data[3]);
+			expiration.setMinutes(expiration.getMinutes() + 60);
+			if (!data[3] || now.getTime() > expiration.getTime()) {
+				console.log("Removing expired data from storage:", data);
+				localData = false;
+				sessionStorage.removeItem(storageKey);
+			}
+		}
 		if (localData) {
 			console.log("Loaded from storage:", JSON.parse(localData));
 			this.setState({
@@ -74,6 +86,8 @@ class BaseParksComponent extends Component {
 						fetchReq: reqData,
 						isFetchingParks: false
 					});
+					let d = new Date();
+					response.data[3] = d.getTime();
 					sessionStorage.setItem(
 						JSON.stringify(reqData),
 						JSON.stringify(response.data)
