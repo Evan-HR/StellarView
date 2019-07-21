@@ -38,7 +38,7 @@ class BaseReviews extends Component {
 		) {
 			console.log("siwtch case 2");
 			this.setState({ switchCase: "loggedInNotReviewed" });
-		} else if (this.props.context.isAuth === false) {
+		} else if (this.props.context.isAuth == false || this.props.context.isAuth == null) {
 			console.log("siwtch case 3");
 			this.setState({ switchCase: "notLoggedIn" });
 		}

@@ -13,7 +13,7 @@ export class Auth extends React.Component {
 		this.state = {
 			firstName: null,
 			userID: null,
-			isAuth: false,
+			isAuth: null,
 			isLoggingIn: false,
 			userReviews: [],
 			userFavorites: []
