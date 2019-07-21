@@ -94,64 +94,69 @@ class ParkMap extends Component {
 	addParkMarker = park => {
 		//TODO: See if possible to modularize this function
 		//MAKE SURE ITS A FLOAT FROM DATABASE!
+
 		let location = { lat: parseFloat(park.lat), lng: parseFloat(park.lng) };
-
-		var marker = new window.google.maps.Marker({
-			position: location,
-			map: this.googleMap,
-			title: park.name,
-			icon: {
-				url:
-					park.name === "Unknown"
-						? "http://maps.google.com/mapfiles/kml/pal2/icon12.png"
-						: "http://maps.google.com/mapfiles/kml/pal2/icon4.png",
-				anchor: new window.google.maps.Point(16, 16),
-				scaledSize: new window.google.maps.Size(21, 21)
-			}
-		});
-
-		marker.addListener("click", () => {
-			console.log("Clicked marker at", marker.title);
-			let lighPolStatus = () => {
-				if (park.light_pol > 2) {
-					return <b className="bg-danger text-white">bad</b>;
-				} else if (park.light_pol > 1) {
-					return <b className="bg-warning text-dark">okay</b>;
-				} else {
-					return <b className="bg-success text-white">perfect</b>;
-				}
-			};
-			let newModalContent = (
-				<React.Fragment>
-					<div className="modal-header">
-						<h1>
-							{park.name === "Unknown" && park.name_alt
-								? park.name_alt
-								: park.name}
-						</h1>
-					</div>
-					<div className="modal-body">
-						<img
-							src={
-								"https://placeimg.com/400/400/nature?" +
-								Math.random()
-							}
-							className="img-responsive"
-						/>
-						<p>
-							{" "}
-							This park is located at {location.lat},{" "}
-							{location.lng}. The light pollution level here is{" "}
-							{park.light_pol}, which is {lighPolStatus()}.{" "}
-						</p>
-						<Reviews parkID={park.id} />
-					</div>
-				</React.Fragment>
-			);
-			this.openModal(newModalContent);
-		});
-		this.markers.push(marker); //Maybe this can be moved out of the function
 		this.googleMapBounds.extend(location);
+
+		if (this.props.markers[park.id]) {
+			console.log("Park marker already on map!");
+		} else {
+			var marker = new window.google.maps.Marker({
+				position: location,
+				map: this.googleMap,
+				title: park.name,
+				icon: {
+					url:
+						park.name === "Unknown"
+							? "http://maps.google.com/mapfiles/kml/pal2/icon12.png"
+							: "http://maps.google.com/mapfiles/kml/pal2/icon4.png",
+					anchor: new window.google.maps.Point(16, 16),
+					scaledSize: new window.google.maps.Size(21, 21)
+				}
+			});
+
+			marker.addListener("click", () => {
+				console.log("Clicked marker at", marker.title);
+				let lighPolStatus = () => {
+					if (park.light_pol > 2) {
+						return <b className="bg-danger text-white">bad</b>;
+					} else if (park.light_pol > 1) {
+						return <b className="bg-warning text-dark">okay</b>;
+					} else {
+						return <b className="bg-success text-white">perfect</b>;
+					}
+				};
+				let newModalContent = (
+					<React.Fragment>
+						<div className="modal-header">
+							<h1>
+								{park.name === "Unknown" && park.name_alt
+									? park.name_alt
+									: park.name}
+							</h1>
+						</div>
+						<div className="modal-body">
+							<img
+								src={
+									"https://placeimg.com/400/400/nature?" +
+									Math.random()
+								}
+								className="img-responsive"
+							/>
+							<p>
+								{" "}
+								This park is located at {location.lat},{" "}
+								{location.lng}. The light pollution level here
+								is {park.light_pol}, which is {lighPolStatus()}.{" "}
+							</p>
+							<Reviews parkID={park.id} />
+						</div>
+					</React.Fragment>
+				);
+				this.openModal(newModalContent);
+			});
+			this.props.markers[park.id] = marker; //Maybe this can be moved out of the function
+		}
 	};
 
 	/**
@@ -171,16 +176,17 @@ class ParkMap extends Component {
 		//Clear existing markers
 		//TODO: Definitely possible to optimize
 		// -Not deleting markers when there's no change? But then have to check for changes
-		console.log("#Markers:", this.props.markers.length);
+		console.log("#Markers:", Object.keys(this.props.markers).length);
 		if (this.props.markers.currentLocation) {
 			this.props.markers.currentLocation.setMap(null);
 			delete this.props.markers.currentLocation;
 		}
 
-		if (this.markers.length > 0) {
-			console.log("Removing markers..");
-			this.markers.map(marker => marker.setMap(null));
-			this.markers = [];
+		// if (Object.keys(this.props.markers).length > 1) {
+		// 	this.props.markers.map()
+		// }
+		for (let markerKey in this.props.markers) {
+			console.log(markerKey);
 		}
 
 		//Add new markers if possible
@@ -193,11 +199,16 @@ class ParkMap extends Component {
 			console.log("Drawing parks:", this.props.parkList);
 			this.googleMapBounds = new window.google.maps.LatLngBounds();
 			this.props.parkList.map(this.addParkMarker);
-			if (this.markers.length > 0) {
+			if (
+				Object.keys(this.props.markers).length > 1 &&
+				this.props.markers.currentLocation
+			) {
 				this.googleMap.panToBounds(this.googleMapBounds);
 				this.googleMap.fitBounds(this.googleMapBounds);
 			} else {
-				this.googleMap.setCenter(this.props.markers.currentLocation.position);
+				this.googleMap.setCenter(
+					this.props.markers.currentLocation.position
+				);
 				this.googleMap.setZoom(10);
 			}
 		}

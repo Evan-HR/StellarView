@@ -204,7 +204,7 @@ class ParkForm extends Component {
 
 	//MaterialUISlider
 	handleLightPolChange = (changeEvent, value) => {
-		console.log(changeEvent, value);
+		// console.log(changeEvent, value);
 		this.setState({
 			reqData: {
 				...this.state.reqData,
