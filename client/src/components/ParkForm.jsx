@@ -3,6 +3,9 @@ import React, { Component } from "react";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import qs from "qs";
+import { makeStyles } from "@material-ui/core/styles";
+import Slider from "@material-ui/core/Slider";
+import { sizing } from "@material-ui/system";
 
 class ParkForm extends Component {
 	state = {
@@ -10,7 +13,7 @@ class ParkForm extends Component {
 			lat: "",
 			lng: "",
 			dist: "25",
-			lightpol: "",
+			lightpol: "1.5",
 			error: "",
 			placeName: ""
 		},
@@ -175,11 +178,17 @@ class ParkForm extends Component {
 		);
 	};
 
-	handleDistanceChange = changeEvent => {
+	//Material UI
+	handleDistanceChange = (changeEvent, value) => {
 		this.setState({
-			reqData: { ...this.state.reqData, dist: changeEvent.target.value }
+			reqData: { ...this.state.reqData, dist: value }
 		});
 	};
+	// handleDistanceChange = changeEvent => {
+	// 	this.setState({
+	// 		reqData: { ...this.state.reqData, dist: changeEvent.target.value }
+	// 	});
+	// };
 
 	handleLatChange = changeEvent => {
 		this.setState({
@@ -193,14 +202,25 @@ class ParkForm extends Component {
 		});
 	};
 
-	handleLightPolChange = changeEvent => {
+	//MaterialUISlider
+	handleLightPolChange = (changeEvent, value) => {
+		console.log(changeEvent, value);
 		this.setState({
 			reqData: {
 				...this.state.reqData,
-				lightpol: changeEvent.target.value
+				lightpol: value
 			}
 		});
 	};
+
+	// handleLightPolChange = changeEvent => {
+	// 	this.setState({
+	// 		reqData: {
+	// 			...this.state.reqData,
+	// 			lightpol: changeEvent.target.value
+	// 		}
+	// 	});
+	// };
 
 	//props to send one-way information to parksComponent
 	//this.state is the "X" in getParks()
@@ -365,7 +385,7 @@ class ParkForm extends Component {
 						<strong>{this.renderLocationSpinner()}</strong>
 					</button>
 				</form>
-				<form>
+				<form className="mx-5">
 					<br />
 					<input
 						placeholder="Latitude"
@@ -396,6 +416,7 @@ class ParkForm extends Component {
 					<br />
 					<b>Distance:</b>
 					<br />
+					{/*
 					<input
 						type="radio"
 						value="5"
@@ -454,7 +475,7 @@ class ParkForm extends Component {
 					<br />
 					<input
 						placeholder="Max Light Pollution"
-						type="number"
+						type="range"
 						min="0"
 						max="40"
 						step="any"
@@ -462,6 +483,33 @@ class ParkForm extends Component {
 						name="lightpol"
 						value={this.state.reqData.lightpol || ""}
 						required
+						onChange={this.handleLightPolChange}
+					/> */}
+					<Slider
+						defaultValue={this.state.reqData.dist}
+						// getAriaValueText={valuetext}
+						aria-labelledby="discrete-slider-custom"
+						min={5}
+						max={200}
+						step={1}
+						valueLabelDisplay="auto"
+						marks={marksDist}
+						// value={this.state.reqData.lightpol}
+						onChange={this.handleDistanceChange}
+					/>
+					<br />
+					<b>Light Pollution:</b>
+					<br />
+					<Slider
+						defaultValue={this.state.reqData.lightpol}
+						// getAriaValueText={valuetext}
+						aria-labelledby="discrete-slider-custom"
+						min={0}
+						max={6}
+						step={0.05}
+						valueLabelDisplay="auto"
+						marks={marksLight}
+						// value={this.state.reqData.lightpol}
 						onChange={this.handleLightPolChange}
 					/>
 					<br />
@@ -486,5 +534,51 @@ class ParkForm extends Component {
 		);
 	}
 }
+
+const marksDist = [
+	{
+		value: 5,
+		label: "5"
+	},
+	{
+		value: 25,
+		label: "25"
+	},
+	{
+		value: 50,
+		label: "50"
+	},
+	{
+		value: 100,
+		label: "100"
+	},
+	{
+		value: 200,
+		label: "200"
+	}
+];
+
+const marksLight = [
+	{
+		value: 0,
+		label: "0"
+	},
+	{
+		value: 0.4,
+		label: "0.4"
+	},
+	{
+		value: 1,
+		label: "1"
+	},
+	{
+		value: 3,
+		label: "3"
+	},
+	{
+		value: 6,
+		label: "6"
+	}
+];
 
 export default withRouter(ParkForm);
