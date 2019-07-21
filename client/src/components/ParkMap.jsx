@@ -26,7 +26,7 @@ class ParkMap extends Component {
 		this.parkModalChild = React.createRef();
 		this.modalContent = "No content";
 		this.markers = [];
-		this.currentLocationMarker = null;
+		// this.currentLocationMarker = null;
 	}
 
 	componentDidMount() {
@@ -65,7 +65,7 @@ class ParkMap extends Component {
 			lat: this.props.location.lat,
 			lng: this.props.location.lng
 		};
-		this.currentLocationMarker = new window.google.maps.Marker({
+		this.props.markers.currentLocation = new window.google.maps.Marker({
 			position: location,
 			icon: {
 				url:
@@ -171,10 +171,10 @@ class ParkMap extends Component {
 		//Clear existing markers
 		//TODO: Definitely possible to optimize
 		// -Not deleting markers when there's no change? But then have to check for changes
-		console.log("#Markers:", this.markers.length);
-		if (this.currentLocationMarker) {
-			this.currentLocationMarker.setMap(null);
-			this.currentLocationMarker = null;
+		console.log("#Markers:", this.props.markers.length);
+		if (this.props.markers.currentLocation) {
+			this.props.markers.currentLocation.setMap(null);
+			delete this.props.markers.currentLocation;
 		}
 
 		if (this.markers.length > 0) {
@@ -197,7 +197,7 @@ class ParkMap extends Component {
 				this.googleMap.panToBounds(this.googleMapBounds);
 				this.googleMap.fitBounds(this.googleMapBounds);
 			} else {
-				this.googleMap.setCenter(this.currentLocationMarker.position);
+				this.googleMap.setCenter(this.props.markers.currentLocation.position);
 				this.googleMap.setZoom(10);
 			}
 		}
