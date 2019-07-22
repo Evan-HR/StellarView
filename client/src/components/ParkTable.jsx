@@ -19,6 +19,11 @@ class ParkTable extends Component {
         }
     */
 
+	constructor(props) {
+		super(props);
+		this.isAnimating = {};
+	}
+
 	renderMoonData() {
 		if (this.props.parkList.length > 0) {
 			var moonDataString = "";
@@ -61,15 +66,21 @@ class ParkTable extends Component {
 					<button
 						className="btn btn-link text-white"
 						onMouseEnter={() => {
-							console.log("Setting bounce..");
-							this.props.markers[park.id].setAnimation(
-								window.google.maps.Animation.BOUNCE
-							);
+							if (!this.isAnimating[park.id]) {
+								this.isAnimating[park.id] = true;
+								console.log(this.isAnimating);
+								this.props.markers[park.id].setAnimation(
+									window.google.maps.Animation.BOUNCE
+								);
+								setTimeout(() => {
+									this.props.markers[park.id].setAnimation(
+										null
+									);
+									delete this.isAnimating[park.id];
+								}, 700);
+							}
 						}}
-						onMouseLeave={() => {
-							console.log("Setting bounce..");
-							this.props.markers[park.id].setAnimation(null);
-						}}
+						onMouseLeave={() => {}}
 						onClick={() => {
 							this.props.googleMap.panTo(
 								this.props.markers[park.id].position
