@@ -32,11 +32,7 @@ class ParkTable extends Component {
 
 	renderParkCardList = () => {
 		if (this.props.parkList.length > 0) {
-			return (
-				<div >
-					{this.props.parkList.map(this.renderParkCard)}
-				</div>
-			);
+			return <div>{this.props.parkList.map(this.renderParkCard)}</div>;
 		} else {
 			return (
 				<div className="text-center">
@@ -60,12 +56,33 @@ class ParkTable extends Component {
 
 	renderParkCard = park => {
 		return (
-			<div
-				className="card mb-3"
-				style={{ textTransform: "capitalize" }}
-			>
+			<div className="card mb-3" style={{ textTransform: "capitalize" }}>
 				<div className="card-header text-white bg-primary">
-					{park.name_alt}
+					<button
+						className="btn btn-link text-white"
+						onMouseEnter={() => {
+							console.log("Setting bounce..");
+							this.props.markers[park.id].setAnimation(
+								window.google.maps.Animation.BOUNCE
+							);
+						}}
+						onMouseLeave={() => {
+							console.log("Setting bounce..");
+							this.props.markers[park.id].setAnimation(null);
+						}}
+						onClick={() => {
+							this.props.googleMap.panTo(
+								this.props.markers[park.id].position
+							);
+							this.props.googleMap.setZoom(10);
+							window.google.maps.event.trigger(
+								this.props.markers[park.id],
+								"click"
+							);
+						}}
+					>
+						{park.name_alt ? park.name_alt : park.name}
+					</button>
 				</div>
 				<div className="card-body bg-light">
 					{/* <h5 className="card-title">Primary card title</h5> */}
