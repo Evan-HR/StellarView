@@ -34,7 +34,10 @@ export class Auth extends React.Component {
 		this.setState({
 			firstName: null,
 			userID: null,
-			isAuth: false
+			isAuth: false,
+			
+			userReviews: [],
+			userFavorites: []
 		});
 	}
 
