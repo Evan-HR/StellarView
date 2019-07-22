@@ -74,7 +74,6 @@ class ParkMap extends Component {
 			},
 			map: this.googleMap
 		});
-		this.googleMapBounds.extend(location);
 	};
 
 	//Unfortunately, due to the way markers are, opening modal needs to be done from here
@@ -96,7 +95,6 @@ class ParkMap extends Component {
 		//MAKE SURE ITS A FLOAT FROM DATABASE!
 
 		let location = { lat: parseFloat(park.lat), lng: parseFloat(park.lng) };
-		this.googleMapBounds.extend(location);
 
 		if (this.props.markers[park.id]) {
 			console.log("Park marker already on map!");
@@ -181,28 +179,39 @@ class ParkMap extends Component {
 			this.props.markers.currentLocation.setMap(null);
 			delete this.props.markers.currentLocation;
 		}
-
-		// if (Object.keys(this.props.markers).length > 1) {
-		// 	this.props.markers.map()
-		// }
+		// console.log(this.props.parkList.map(park => park.id.toString()));
 		for (let markerKey in this.props.markers) {
-			console.log(markerKey);
+			if (
+				!this.props.parkList
+					.map(park => park.id.toString())
+					.includes(markerKey)
+			) {
+				// console.log("Deleting marker:", markerKey);
+				this.props.markers[markerKey].setMap(null);
+				delete this.props.markers[markerKey];
+			}
 		}
 
 		//Add new markers if possible
 		if (this.props.location.length !== 0) {
 			console.log("Adding markers..");
-			this.googleMapBounds = new window.google.maps.LatLngBounds();
+			// this.googleMapBounds = new window.google.maps.LatLngBounds();
 			this.addCurrentLocationMarker();
 			//Sometimes crashes here, probably because parkList is JSON and not an array
 			//Crash is fixed I think? Notify if it happens again
 			console.log("Drawing parks:", this.props.parkList);
-			this.googleMapBounds = new window.google.maps.LatLngBounds();
+			// this.googleMapBounds = new window.google.maps.LatLngBounds();
 			this.props.parkList.map(this.addParkMarker);
 			if (
 				Object.keys(this.props.markers).length > 1 &&
 				this.props.markers.currentLocation
 			) {
+				this.googleMapBounds = new window.google.maps.LatLngBounds();
+				for (let marker in this.props.markers) {
+					this.googleMapBounds.extend(
+						this.props.markers[marker].position
+					);
+				}
 				this.googleMap.panToBounds(this.googleMapBounds);
 				this.googleMap.fitBounds(this.googleMapBounds);
 			} else {
