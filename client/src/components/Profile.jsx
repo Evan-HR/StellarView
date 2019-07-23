@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import axios from "axios";
-import ParkTable from "./ParkTable";
+import ParkTableProfile from "./ParkTableProfile";
 
 class Profile extends Component {
 	state = {
 		parks: [],
-		moon: "",
 		profileInfoLoaded: false,
-		moonType: "",
-		parkProfileData: {}
+		parkDataLoaded:false,
+		parkProfileData: {},
+		parkDataForTable:{}
 	};
 
 	componentDidMount() {
@@ -26,36 +26,67 @@ class Profile extends Component {
 			},
 			profileInfoLoaded: true
 		});
+		
+		
 	}
 
 	getParks = () => {
-		axios
-			.post("/api/getProfileParks", this.state.parkProfileData)
-			.then(response => {
-				console.log("profile response:", response.data);
-				// this.setState({
-				// 	parks: response.data[0],
-				// 	moon: response.data[1],
-				// 	moonType: response.data[2]
-				// });
-			})
-			.catch(err => {
-				//console.error(err);
-			});
+		axios.post("/api/getProfileParks", this.state.parkProfileData)
+  .then((response) => {
+	  console.log("response from first call: ",response)
+    return axios.post("/api/getProfileParksWeather",response.data); // using response.data
+  })
+  .then((response) => {
+	console.log('Response from second call', response);
+	this.setState({
+		parkDataForTable: response.data,
+		parkDataLoaded: true
+	});
+  });
+
+		// axios
+		// 	.post("/api/getProfileParks", this.state.parkProfileData)
+		// 	.then(response => {
+		// 		console.log("profile response:", response.data);
+
+		// 	})
+			
+		// 	.catch(err => {
+		// 		//console.error(err);
+		// 	});
 	};
 
-	render() {
-		if (this.state.profileInfoLoaded === true) {
+	sendToParkTable = () =>{
+		console.log("sendtoParkTable() reached!");
+		console.log("profileInfoLoaded : "+this.state.profileInfoLoaded)
+		console.log("parkDataLoaded : "+this.state.parkDataLoaded)
+		if(this.state.parkDataLoaded ===false){
 			this.getParks();
 		}
+		
+		if(this.state.profileInfoLoaded ===true&&this.state.parkDataLoaded===true){
+			return(
+				<ParkTableProfile
+							parkList={this.state.parkDataForTable
+								
+							}
+							// moon={this.state.moon}
+							// moonType={this.state.moonType}
+						/>
+				)
+		}
+		
+	}
 
+
+
+	render() {
+// if(this.state.profileInfoLoaded==true){
+// 	this.getParks();
+// }
 		return (
 			<div>
-				<ParkTable
-					parkList={this.state.parks}
-					moon={this.state.moon}
-					moonType={this.state.moonType}
-				/>
+				{this.sendToParkTable()}
 			</div>
 		);
 	}

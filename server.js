@@ -646,7 +646,8 @@ app.post("/api/getProfileParks", (req, res) => {
 		const lng = req.body.lng;
 		var parkData = JSON.parse(JSON.stringify(results));
 
-		for (let park in parkData) {
+		
+		for (var park in parkData) {
 			park = parkData[park];
 			park.dist =
 				6371 *
@@ -674,114 +675,97 @@ app.post("/api/getProfileParks", (req, res) => {
 
 			park.moon = percentMoon;
 			park.moonType = moonType;
+
+			//axios goes here normally
+				
+
+			
+
 		}
-		console.log("Park data is: ", parkData);
 
-		//var dist = 6371 * acos( cos( radians(  ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin( radians( ? ) ) * sin( radians( lat ) ) ) )
-
-		// var weatherJSON = JSON.parse(JSON.stringify(results));
-
-		// var weatherArr = [];
-		// weatherURL = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lng}&cnt=50&appid=${weatherKey1}`;
-		// axios
-		// 	.get(weatherURL)
-		// 	.then(function(response) {
-		// 		for (var i = 0; i < response.data.list.length; i++) {
-		// 			var elem = response.data.list[i];
-		// 			//console.log("elem is: ", elem);
-		// 			var city = {};
-		// 			city.name = elem.name;
-		// 			city.clouds = elem.clouds.all;
-		// 			city.cloudDesc = elem.weather[0].description;
-		// 			city.humidity = elem.main.humidity;
-		// 			city.lat = elem.coord.lat;
-		// 			city.lng = elem.coord.lon;
-
-		// 			//console.log("city is:", city);
-
-		// 			weatherArr.push(city);
-		// 			//console.log("weather arr is : ", weatherArr);
-		// 		}
-
-		// 		// weather assigning:
-		// 		for (var i = 0; i < weatherJSON.length; i++) {
-		// 			var minDist = 300000; // higher than any coord distance
-		// 			var closestCity = -1; //variable represents index of closest city; initialized as -ve, will throw err if no closer city
-		// 			for (var j = 0; j < weatherArr.length; j++) {
-		// 				var cityLat = parseFloat(weatherArr[j].lat);
-		// 				var cityLng = parseFloat(weatherArr[j].lng);
-		// 				var parkLat = parseFloat(weatherJSON[i].lat);
-		// 				var parkLng = parseFloat(weatherJSON[i].lng);
-
-		// 				var theta = parkLng - cityLng;
-		// 				var dist =
-		// 					Math.sin((parkLat * Math.PI) / 180) *
-		// 						Math.sin((cityLat * Math.PI) / 180) +
-		// 					Math.cos((parkLng * Math.PI) / 180) *
-		// 						Math.cos((cityLng * Math.PI) / 180) *
-		// 						Math.cos((theta * Math.PI) / 180);
-		// 				dist = Math.acos(dist);
-		// 				dist = (dist * 20014.1238528) / Math.PI;
-		// 				//console.log(dist);
-
-		// 				var distance = Math.sqrt(
-		// 					Math.pow(cityLat - parkLat, 2) +
-		// 						Math.pow(cityLng - parkLng, 2)
-		// 				);
-
-		// 				if (distance < minDist) {
-		// 					minDist = distance;
-		// 					closestCity = j;
-		// 				}
-		// 				weatherJSON[i].clouds = weatherArr[closestCity].clouds; // PARKS JSON FOR i GETS NEW COMPONENT 'weather' WITH DATA FROM CLOSEST CITY
-		// 				weatherJSON[i].humidity =
-		// 					weatherArr[closestCity].humidity;
-		// 				weatherJSON[i].cloudDesc =
-		// 					weatherArr[closestCity].cloudDesc;
-		// 				weatherJSON[i].city = weatherArr[closestCity].name;
-		// 			}
-
-		// 			// can u get the km distance between each park
-		// 			//like what does 'closest' mean do we know that yet?
-		// 			// lets look at some of the #s
-		// 		}
-
-		// 		//moon stuff
-		// 		var phaseInfo = getMoon();
-		// 		var moonType = "";
-		// 		var percentMoon = parseFloat(phaseInfo.illuminated) * 100;
-
-		// 		if (inRange(percentMoon, 0, 25)) {
-		// 			moonType = "New Moon";
-		// 		} else if (inRange(percentMoon, 25, 50)) {
-		// 			moonType = "First Quarter";
-		// 		} else if (inRange(percentMoon, 50, 75)) {
-		// 			moonType = "Full Moon";
-		// 		} else if (inRange(percentMoon, 75, 100)) {
-		// 			moonType = "Last Quarter";
-		// 		}
-
-		// 		var temparr = [];
-		// 		temparr.push(weatherJSON);
-
-		// 		//console.log(temparr);
-		// 		temparr.push(parseInt(percentMoon));
-		// 		temparr.push(moonType);
-		// 		//console.log(weatherJSON);
-		// 		console.log("temparr is: ", temparr);
-		// 		console.log("moon illum", temparr[1]);
-		// 		console.log("moon type", temparr[2]);
-		// 		res.send(temparr);
-		// 		//res.send(results);
-		// 	})
-
-		// .catch(function(response) {
-		// 	console.log(response);
-		// });
-
-		//res.send({ location: [lat, lng], parks: results, mapAPIKey: mapsKey1 });
+		res.send(parkData);
+		
+		//res.send(getParkWeatherAxios(parkData));
 	});
 });
+
+app.post("/api/getProfileParksWeather",(req,res)=>{
+
+	console.log("getprofparks got here");
+	
+	console.log("getprofileparksweather body: ",req.body[0].name);
+	var parkData = req.body;
+
+	parkDataLength = Object.keys( parkData ).length;
+	for (let park in parkData) {
+		park = parkData[park];
+		console.log(park.id);
+	//weather 
+	weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${park.lat}&lon=${park.lng}&appid=${weatherKey1}`;
+	var counter = 0;
+		axios
+		.get(weatherURL)
+		.then(function(response) {
+			counter = counter+1;
+			console.log("counter is: " + counter)
+			console.log("currently appending to: ",park.name)
+			//console.log("cloud log is: ",response.data.clouds.all)
+			park.clouds = response.data.clouds.all
+			park.cloudDesc = "dunno lmao"
+			park.humidity =  response.data.main.humidity
+
+			if(counter ==parkDataLength){
+				console.log("final park data is :",parkData)
+				res.send(parkData);
+			}
+			
+			
+			
+
+			})
+			.catch(function(response) {
+				console.log(response);
+			})
+}})
+
+
+
+function getParkWeatherAxios(parkData){
+
+	parkDataLength = Object.keys( parkData ).length;
+	for (var park in parkData) {
+		park = parkData[park];
+		console.log(park.id);
+	//weather 
+	weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${park.lat}&lon=${park.lng}&appid=${weatherKey1}`;
+	var counter = 0;
+		axios
+		.get(weatherURL)
+		.then(function(response) {
+			counter = counter+1;
+			console.log("counter is: " + counter)
+			//console.log("cloud log is: ",response.data.clouds.all)
+			park.clouds = response.data.clouds.all
+			park.cloudDesc = "dunno lmao"
+			park.humidity =  response.data.main.humidity
+
+			if(counter ==parkDataLength){
+				console.log("final park data is :",parkData)
+				return(parkData);
+			}
+			
+			
+
+			})
+			.catch(function(response) {
+				console.log(response);
+			})
+
+
+	}
+
+	
+}
 
 //YOU NEED THE / in the ADDRESS!!
 //don't put "getParks", must be "/name"
