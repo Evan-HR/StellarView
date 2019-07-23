@@ -51,15 +51,27 @@ class BaseParksComponent extends Component {
 		console.log(reqData);
 		// this.updateHistoryQuery(reqData);
 		this.setState({ isFetchingParks: true });
+		let storageKey = JSON.stringify(reqData);
+		let localData = sessionStorage.getItem(storageKey);
 
-		let localData = sessionStorage.getItem(JSON.stringify(reqData));
-
+		if (localData) {
+			//Check if it's expired
+			let data = JSON.parse(localData);
+			let now = new Date();
+			let expiration = new Date(data.timestamp);
+			expiration.setMinutes(expiration.getMinutes() + 60);
+			if (!data.timestamp || now.getTime() > expiration.getTime()) {
+				console.log("Removing expired data from storage:", data);
+				localData = false;
+				sessionStorage.removeItem(storageKey);
+			}
+		}
 		if (localData) {
 			console.log("Loaded from storage:", JSON.parse(localData));
 			this.setState({
-				parks: JSON.parse(localData)[0],
-				moon: JSON.parse(localData)[1],
-				moonType: JSON.parse(localData)[2],
+				parks: JSON.parse(localData).parks,
+				moon: JSON.parse(localData).moonPercent,
+				moonType: JSON.parse(localData).moonType,
 				fetchReq: reqData,
 				isFetchingParks: false
 			});
@@ -72,12 +84,14 @@ class BaseParksComponent extends Component {
 				.then(response => {
 					console.log(response.data);
 					this.setState({
-						parks: response.data[0],
-						moon: response.data[1],
-						moonType: response.data[2],
+						parks: response.data.parks,
+						moon: response.data.moonPercent,
+						moonType: response.data.moonType,
 						fetchReq: reqData,
 						isFetchingParks: false
 					});
+					let d = new Date();
+					response.data.timestamp = d.getTime();
 					sessionStorage.setItem(
 						JSON.stringify(reqData),
 						JSON.stringify(response.data)

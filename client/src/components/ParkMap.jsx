@@ -5,6 +5,7 @@ import React, { Component, createRef } from "react";
 // import ReactDOM from "react-dom";
 import ParkMapModal from "./ParkMapModal";
 import Reviews from "./Reviews";
+import FavPark from "./FavPark";
 
 /* Notes:
 Couldn't figure out how to make google.etc work, 

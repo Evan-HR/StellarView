@@ -18,6 +18,7 @@ class BaseReviews extends Component {
 	}
 
 	componentDidMount() {
+		console.log("reviews comp did mount got here!");
 		console.log("parkID is: " + this.props.parkID);
 
 		//get review status from user and db
@@ -37,7 +38,7 @@ class BaseReviews extends Component {
 		) {
 			console.log("siwtch case 2");
 			this.setState({ switchCase: "loggedInNotReviewed" });
-		} else if (this.props.context.isAuth === false) {
+		} else if (this.props.context.isAuth == false || this.props.context.isAuth == null) {
 			console.log("siwtch case 3");
 			this.setState({ switchCase: "notLoggedIn" });
 		}
@@ -172,6 +173,14 @@ class BaseReviews extends Component {
 		);
 	}
 
+	renderUserNotLoggedIn() {
+		return (
+			<div class="alert alert-warning" role="alert">
+				You must be logged in to submit a review!
+			</div>
+		);
+	}
+
 	renderReviewsSwitch(param) {
 		switch (param) {
 			case "loggedInHasReviewed":
@@ -181,8 +190,9 @@ class BaseReviews extends Component {
 				console.log("loggedinNotreviewed got here");
 				return this.renderUserNoReview();
 			case "notLoggedIn":
-				console.log("notLoggedI  got here");
-				return "You must be logged-in to submit a review";
+				console.log("notLoggedIn  got here");
+				return this.renderUserNotLoggedIn();
+			//return "You must be logged-in to submit a review";
 			default:
 				return null;
 		}
@@ -218,7 +228,6 @@ class BaseReviews extends Component {
 	render() {
 		return (
 			<div>
-				pizza
 				{this.renderReviewsSwitch(this.state.switchCase)}
 				{this.renderReviewsDiv()}
 			</div>

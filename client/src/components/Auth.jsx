@@ -15,7 +15,8 @@ export class Auth extends React.Component {
 			userID: null,
 			isAuth: null,
 			isLoggingIn: false,
-			userReviews: []
+			userReviews: [],
+			userFavorites: []
 		};
 		console.log("AFTER REG, PRE-GETUSERAUTH, should be SECOND");
 		//this.getWeatherInfo();
@@ -56,6 +57,7 @@ export class Auth extends React.Component {
 					console.log("get here ya?");
 					self.getUserInfo();
 					self.getUserReviews();
+					self.getUserFavSpots();
 				}
 			})
 
@@ -83,6 +85,22 @@ export class Auth extends React.Component {
 					firstName: data.firstName,
 					isAuth: data.isAuth,
 					userID: data.userID
+				});
+			})
+			.catch(error => {
+				console.log(error);
+			});
+	}
+
+	getUserFavSpots() {
+		console.log("FOURTH: getUserFavSpots()");
+		axios
+			.get("/api/getUserFavSpots")
+
+			.then(favSpots => {
+				console.log("fav spots: ", favSpots);
+				this.setState({
+					userFavorites: favSpots.data
 				});
 			})
 			.catch(error => {
