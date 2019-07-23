@@ -37,6 +37,7 @@ class BaseParkForm extends Component {
 	// componentDidMount runs RIGHT after post-render
 	componentDidMount() {
 		// this.getMyLocation();
+		console.log("USER LOC: ", this.props.userLocation);
 
 		//On page load, load results from query is possible
 		console.log("Form mounted, searching...");
@@ -410,7 +411,7 @@ class BaseParkForm extends Component {
 						className="btn btn-primary m-1"
 						type="button"
 						disabled={this.state.isLoadingLocation}
-						onClick={this.getMyLocation}
+						//onClick={this.getMyLocation}
 					>
 						<strong>{this.renderLocationSpinner()}</strong>
 					</button>

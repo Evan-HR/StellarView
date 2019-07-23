@@ -596,6 +596,12 @@ app.post("/results.html", (req, res) => {
 });
 
 //format "2014-02-17T00:00-0500", ISO 8601
+function getMoonProfile(userTime) {
+	var phaseInfo = lune.phase(userTime);
+	return phaseInfo;
+}
+
+//format "2014-02-17T00:00-0500", ISO 8601
 function getMoon() {
 	var now = new Date();
 	var isoDate = now.toISOString();
@@ -608,8 +614,157 @@ function getMoon() {
 	return phaseInfo;
 }
 
+function toRadians(angle) {
+	console.log("RADIANS FUNC RAN!!?!?!?!?");
+	return angle * (Math.PI / 180);
+}
+
 function inRange(x, min, max) {
 	return (x - min) * (x - max) <= 0;
+}
+
+app.post("/api/getProfileParks", (req, res) => {
+	console.log("body is: ", req.body);
+	var tempString = JSON.stringify(req.body.userFavs);
+	//console.log(tempString)
+	var inQuerySet = tempString
+		.split(/[\{\[]/)
+		.join("(")
+		.split(/[\}\]]/)
+		.join(")");
+	console.log("userFAVS query is: ", inQuerySet);
+	const queryString = `select * from ontario_parks where id in ${inQuerySet}`;
+
+	getConnection().query(queryString, [inQuerySet], (err, results) => {
+		if (err) {
+			console.log("failed" + err);
+			res.sendStatus(500);
+			return;
+		}
+		console.log("results is: ", results);
+		const lat = req.body.lat;
+		const lng = req.body.lng;
+		var parkData = JSON.parse(JSON.stringify(results));
+
+		
+		for (var park in parkData) {
+			park = parkData[park];
+			park.dist =
+				6371 *
+				Math.acos(
+					Math.cos(toRadians(lat)) *
+						Math.cos(toRadians(park.lat)) *
+						Math.cos(toRadians(park.lng) - toRadians(lng)) +
+						Math.sin(toRadians(lat)) * Math.sin(toRadians(park.lat))
+				);
+
+			//moon stuff
+			var phaseInfo = getMoon(req.body.userTime);
+			var moonType = "";
+			var percentMoon = parseFloat(phaseInfo.illuminated) * 100;
+
+			if (inRange(percentMoon, 0, 25)) {
+				moonType = "New Moon";
+			} else if (inRange(percentMoon, 25, 50)) {
+				moonType = "First Quarter";
+			} else if (inRange(percentMoon, 50, 75)) {
+				moonType = "Full Moon";
+			} else if (inRange(percentMoon, 75, 100)) {
+				moonType = "Last Quarter";
+			}
+
+			park.moon = percentMoon;
+			park.moonType = moonType;
+
+			//axios goes here normally
+				
+
+			
+
+		}
+
+		res.send(parkData);
+		
+		//res.send(getParkWeatherAxios(parkData));
+	});
+});
+
+app.post("/api/getProfileParksWeather",(req,res)=>{
+
+	console.log("getprofparks got here");
+	
+	console.log("getprofileparksweather body: ",req.body[0].name);
+	var parkData = req.body;
+
+	parkDataLength = Object.keys( parkData ).length;
+	for (let park in parkData) {
+		park = parkData[park];
+		console.log(park.id);
+	//weather 
+	weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${park.lat}&lon=${park.lng}&appid=${weatherKey1}`;
+	var counter = 0;
+		axios
+		.get(weatherURL)
+		.then(function(response) {
+			counter = counter+1;
+			console.log("counter is: " + counter)
+			console.log("currently appending to: ",park.name)
+			//console.log("cloud log is: ",response.data.clouds.all)
+			park.clouds = response.data.clouds.all
+			park.cloudDesc = "dunno lmao"
+			park.humidity =  response.data.main.humidity
+
+			if(counter ==parkDataLength){
+				console.log("final park data is :",parkData)
+				res.send(parkData);
+			}
+			
+			
+			
+
+			})
+			.catch(function(response) {
+				console.log(response);
+			})
+}})
+
+
+
+function getParkWeatherAxios(parkData){
+
+	parkDataLength = Object.keys( parkData ).length;
+	for (var park in parkData) {
+		park = parkData[park];
+		console.log(park.id);
+	//weather 
+	weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${park.lat}&lon=${park.lng}&appid=${weatherKey1}`;
+	var counter = 0;
+		axios
+		.get(weatherURL)
+		.then(function(response) {
+			counter = counter+1;
+			console.log("counter is: " + counter)
+			//console.log("cloud log is: ",response.data.clouds.all)
+			park.clouds = response.data.clouds.all
+			park.cloudDesc = "dunno lmao"
+			park.humidity =  response.data.main.humidity
+
+			if(counter ==parkDataLength){
+				console.log("final park data is :",parkData)
+				return(parkData);
+			}
+			
+			
+
+			})
+			.catch(function(response) {
+				console.log(response);
+			})
+
+
+	}
+
+	
 }
 
 //YOU NEED THE / in the ADDRESS!!
@@ -617,7 +772,7 @@ function inRange(x, min, max) {
 app.post("/api/getParks", (req, res) => {
 	//from bodyParser, parses the HTTP request
 	//from ParksComponent / React (getParks =>)
-	console.log("BODY IS: ", req.body);
+	//console.log("BODY IS: ", req.body);
 	//var requestData = JSON.parse(req.body);
 
 	const lat = req.body.lat;
@@ -719,22 +874,12 @@ app.post("/api/getParks", (req, res) => {
 						moonType = "Last Quarter";
 					}
 
-					// var temparr = [];
-					// temparr.push(weatherJSON);
-
 					let reply = {
 						parks: weatherJSON,
 						moonPercent: percentMoon,
 						moonType: moonType
 					};
-					// console.log(temparr);
-					// temparr.push(parseInt(percentMoon));
-					// temparr.push(moonType);
-					console.log("Response:", reply);
-					// console.log(weatherJSON);
-					// console.log("temparr is: ", temparr);
-					// console.log("moon illum", temparr[1]);
-					// console.log("moon type", temparr[2]);
+					console.log("Response ", reply);
 					res.send(reply);
 					//res.send(results);
 				})

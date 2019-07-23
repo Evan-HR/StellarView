@@ -11,6 +11,7 @@ class BaseParksComponent extends Component {
 		parks: [],
 		fetchReq: [],
 		moon: "",
+		moonType: "",
 		isMapLoaded: false,
 		isFetchingParks: false
 	};
