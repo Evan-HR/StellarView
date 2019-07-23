@@ -162,12 +162,17 @@ class ParkMap extends Component {
 	 * Center map on initial location passed in through prop
 	 */
 	centerMap = () => {
-		if (this.props.location.length !== 0) {
-			var latLng = new window.google.maps.LatLng(
-				this.props.location.lat,
-				this.props.location.lng
-			); //Makes a latlng
-			this.googleMap.panTo(latLng); //Make map global
+		if (
+			Object.keys(this.props.markers).length > 1 &&
+			this.props.markers.currentLocation
+		) {
+			this.googleMap.panToBounds(this.googleMapBounds);
+			this.googleMap.fitBounds(this.googleMapBounds);
+		} else {
+			this.googleMap.setCenter(
+				this.props.markers.currentLocation.position
+			);
+			this.googleMap.setZoom(10);
 		}
 	};
 
