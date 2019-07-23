@@ -31,7 +31,8 @@ class Login extends Component {
 		userEmail: "",
 		userPassword: "",
 		errorDB: false,
-		modalIsOpen: false
+		modalIsOpen: false,
+		loginSuccess: false
 	};
 
 	openModal = () => {
@@ -77,11 +78,13 @@ class Login extends Component {
 
 	loginSuccess = () => {
 		console.log("get here for some reason?");
-		this.setState({
-			modalIsOpen: false
-		});
-
-		this.props.handleLogin();
+		this.setState({ loginSuccess: true });
+		setTimeout(() => {
+			this.setState({
+				modalIsOpen: false
+			});
+			this.props.handleLogin();
+		}, 1250);
 	};
 
 	onSubmit = e => {
@@ -99,6 +102,45 @@ class Login extends Component {
 				this.handleErrorAlert();
 				//.then(this.closemModal) is needed
 			});
+	};
+
+	renderModalContent = () => {
+		if (!this.state.loginSuccess) {
+			return (
+				<div className="login-form">
+					<form>
+						<input
+							type="email"
+							placeholder="email"
+							name="email"
+							onChange={this.handleEmailChange}
+							required
+						/>
+						<input
+							type="password"
+							placeholder="password"
+							name="password"
+							onChange={this.handlePasswordChange}
+							required
+						/>
+						<button
+							className="btn btn-primary m-2"
+							onClick={e => this.onSubmit(e)}
+						>
+							Submit
+						</button>
+					</form>
+				</div>
+			);
+		} else {
+			return (
+				<div className="text-success text-center m-3">
+					<h1>
+						<b>✔ Login Successful!</b>
+					</h1>
+				</div>
+			);
+		}
 	};
 
 	render() {
@@ -123,30 +165,8 @@ class Login extends Component {
 						<div className="modal-header">
 							<h1>Login</h1>
 						</div>
-						<div className="login-form">
-							<form>
-								<input
-									type="email"
-									placeholder="email"
-									name="email"
-									onChange={this.handleEmailChange}
-									required
-								/>
-								<input
-									type="password"
-									placeholder="password"
-									name="password"
-									onChange={this.handlePasswordChange}
-									required
-								/>
-								<button
-									className="btn btn-primary m-2"
-									onClick={e => this.onSubmit(e)}
-								>
-									Submit
-								</button>
-							</form>
-						</div>
+
+						{this.renderModalContent()}
 
 						{this.errorMsg()}
 					</div>
