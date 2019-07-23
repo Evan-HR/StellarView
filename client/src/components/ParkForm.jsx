@@ -12,8 +12,8 @@ class ParkForm extends Component {
 		reqData: {
 			lat: "",
 			lng: "",
-			dist: "25",
-			lightpol: "1.5",
+			dist: 25,
+			lightpol: 1.5,
 			error: "",
 			placeName: ""
 		},
@@ -22,6 +22,12 @@ class ParkForm extends Component {
 		isInvalidLocation: false,
 		formErrors: {}
 	};
+
+	constructor(props) {
+		super(props);
+		this.sliderLight = this.state.reqData.lightpol;
+		this.sliderDist = this.state.reqData.dist;
+	}
 
 	//There are two cases when we would want to load results form url query:
 	// 1: We hit back/forward to go to previous searches
@@ -66,7 +72,7 @@ class ParkForm extends Component {
 							lat: query.lat,
 							lng: query.lng,
 							dist: query.dist,
-							lightpol: query.lightpol,
+							lightpol: parseFloat(query.lightpol),
 							error: ""
 						}
 					},
@@ -203,7 +209,7 @@ class ParkForm extends Component {
 	};
 
 	//MaterialUISlider
-	handleLightPolChange = (changeEvent, value) => {
+	handleLightPolChange = (e, value) => {
 		// console.log(changeEvent, value);
 		this.setState({
 			reqData: {
@@ -416,77 +422,8 @@ class ParkForm extends Component {
 					<br />
 					<b>Distance:</b>
 					<br />
-					{/*
-					<input
-						type="radio"
-						value="5"
-						name="dist"
-						required
-						checked={this.state.reqData.dist === "5"}
-						onChange={this.handleDistanceChange}
-					/>
-					less than 5 km
-					<br />
-					<input
-						type="radio"
-						value="25"
-						name="dist"
-						checked={this.state.reqData.dist === "25"}
-						onChange={this.handleDistanceChange}
-					/>
-					less than 25 km
-					<br />
-					<input
-						type="radio"
-						value="50"
-						name="dist"
-						checked={this.state.reqData.dist === "50"}
-						onChange={this.handleDistanceChange}
-					/>
-					less than 50 km
-					<br />
-					<input
-						type="radio"
-						value="100"
-						name="dist"
-						checked={this.state.reqData.dist === "100"}
-						onChange={this.handleDistanceChange}
-					/>
-					less than 100 km
-					<br />
-					<input
-						type="radio"
-						value="200"
-						name="dist"
-						checked={this.state.reqData.dist === "200"}
-						onChange={this.handleDistanceChange}
-					/>
-					less than 200 km
-					<br />
-					<input
-						type="radio"
-						value="300"
-						name="dist"
-						checked={this.state.reqData.dist === "300"}
-						onChange={this.handleDistanceChange}
-					/>
-					less than 300 km
-					<br />
-					<br />
-					<input
-						placeholder="Max Light Pollution"
-						type="range"
-						min="0"
-						max="40"
-						step="any"
-						id="lightpol"
-						name="lightpol"
-						value={this.state.reqData.lightpol || ""}
-						required
-						onChange={this.handleLightPolChange}
-					/> */}
 					<Slider
-						defaultValue={this.state.reqData.dist}
+						//defaultValue={this.state.reqData.dist}
 						// getAriaValueText={valuetext}
 						aria-labelledby="discrete-slider-custom"
 						min={5}
@@ -494,14 +431,14 @@ class ParkForm extends Component {
 						step={1}
 						valueLabelDisplay="auto"
 						marks={marksDist}
-						// value={this.state.reqData.lightpol}
+						value={this.state.reqData.dist}
 						onChange={this.handleDistanceChange}
 					/>
 					<br />
 					<b>Light Pollution:</b>
 					<br />
 					<Slider
-						defaultValue={this.state.reqData.lightpol}
+						//defaultValue={this.state.reqData.lightpol}
 						// getAriaValueText={valuetext}
 						aria-labelledby="discrete-slider-custom"
 						min={0}
@@ -509,8 +446,11 @@ class ParkForm extends Component {
 						step={0.05}
 						valueLabelDisplay="auto"
 						marks={marksLight}
-						// value={this.state.reqData.lightpol}
+						value={this.state.reqData.lightpol}
 						onChange={this.handleLightPolChange}
+						// onChangeCommitted={() =>
+						// 	this.handleLightPolChange(this.sliderLight)
+						// }
 					/>
 					<br />
 					{this.renderFormErrors()}
