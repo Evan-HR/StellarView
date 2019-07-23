@@ -44,6 +44,7 @@ class Login extends Component {
 
 	closeModal = () => {
 		this.setState({ ...this.state, modalIsOpen: false, errorDB: false });
+		document.body.style.overflow = "visible";
 	};
 
 	handleEmailChange = changeEvent => {

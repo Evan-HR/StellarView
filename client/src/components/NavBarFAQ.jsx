@@ -38,6 +38,7 @@ class NavBarFAQ extends Component {
 
 	closeModal = () => {
 		this.setState({ ...this.state, modalIsOpen: false });
+		document.body.style.overflow = "visible"; 
 	};
 
 	render() {
