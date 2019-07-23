@@ -3,14 +3,18 @@ import React, { Component } from "react";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import qs from "qs";
+import { makeStyles } from "@material-ui/core/styles";
+import Slider from "@material-ui/core/Slider";
+import { sizing } from "@material-ui/system";
+import { AuthConsumer } from "./AuthContext";
 
-class ParkForm extends Component {
+class BaseParkForm extends Component {
 	state = {
 		reqData: {
 			lat: "",
 			lng: "",
-			dist: "25",
-			lightpol: "",
+			dist: 25,
+			lightpol: 1.5,
 			error: "",
 			placeName: ""
 		},
@@ -19,6 +23,12 @@ class ParkForm extends Component {
 		isInvalidLocation: false,
 		formErrors: {}
 	};
+
+	constructor(props) {
+		super(props);
+		this.sliderLight = this.state.reqData.lightpol;
+		this.sliderDist = this.state.reqData.dist;
+	}
 
 	//There are two cases when we would want to load results form url query:
 	// 1: We hit back/forward to go to previous searches
@@ -64,7 +74,7 @@ class ParkForm extends Component {
 							lat: query.lat,
 							lng: query.lng,
 							dist: query.dist,
-							lightpol: query.lightpol,
+							lightpol: parseFloat(query.lightpol),
 							error: ""
 						}
 					},
@@ -103,7 +113,7 @@ class ParkForm extends Component {
 	 * For more info visit https://nominatim.org/release-docs/develop/api/Search/
 	 */
 	getPlaceCoordinates = () => {
-		this.setState({ ...this.state, isGeocodingLocation: true });
+		this.setState({ isGeocodingLocation: true });
 		axios
 			.get(
 				//Internet Explorer didn't want to connect to OSM server, so the request has to be proxied through heroku
@@ -115,7 +125,6 @@ class ParkForm extends Component {
 			.then(({ data }) => {
 				console.log(data);
 				this.setState({
-					...this.state,
 					isGeocodingLocation: false,
 					reqData: {
 						...this.state.reqData,
@@ -143,45 +152,72 @@ class ParkForm extends Component {
 	//    getCurrentPosition's callback, you either need to
 	//    bind the success callback or make use of arrow function.
 	getMyLocation = e => {
-		this.setState({ ...this.state, isLoadingLocation: true });
-
-		navigator.geolocation.getCurrentPosition(
-			position => {
-				this.setState({
-					...this.state,
-					reqData: {
-						...this.state.reqData,
-						lat: position.coords.latitude,
-						lng: position.coords.longitude,
-						error: null
-					},
-					isLoadingLocation: false
-				});
-				if (window.google) {
-					this.props.googleMap.panTo(
-						new window.google.maps.LatLng(
-							position.coords.latitude,
-							position.coords.longitude
-						)
-					);
+		this.setState({ isLoadingLocation: true });
+		console.log(this.props);
+		if (!this.props.authState.userLocation) {
+			navigator.geolocation.getCurrentPosition(
+				position => {
+					this.setState({
+						...this.state,
+						reqData: {
+							...this.state.reqData,
+							lat: position.coords.latitude,
+							lng: position.coords.longitude,
+							error: null
+						},
+						isLoadingLocation: false
+					});
+					if (window.google) {
+						this.props.googleMap.panTo(
+							new window.google.maps.LatLng(
+								position.coords.latitude,
+								position.coords.longitude
+							)
+						);
+					}
+				},
+				error => {
+					this.setState({
+						...this.state,
+						reqData: {
+							...this.state.reqData,
+							error: error.message
+						},
+						isLoadingLocation: false
+					});
+				},
+				{ enableHighAccuracy: true }
+			);
+		} else {
+			if (window.google) {
+				this.props.googleMap.panTo(
+					new window.google.maps.LatLng(
+						this.props.authState.userLocation.lat,
+						this.props.authState.userLocation.lng
+					)
+				);
+			}
+			this.setState({
+				reqData: {
+					...this.state.reqData,
+					lat: this.props.authState.userLocation.lat,
+					lng: this.props.authState.userLocation.lng
 				}
-			},
-			error => {
-				this.setState({
-					...this.state,
-					reqData: { ...this.state.reqData, error: error.message },
-					isLoadingLocation: false
-				});
-			},
-			{ enableHighAccuracy: true }
-		);
+			});
+		}
 	};
 
-	handleDistanceChange = changeEvent => {
+	//Material UI
+	handleDistanceChange = (changeEvent, value) => {
 		this.setState({
-			reqData: { ...this.state.reqData, dist: changeEvent.target.value }
+			reqData: { ...this.state.reqData, dist: value }
 		});
 	};
+	// handleDistanceChange = changeEvent => {
+	// 	this.setState({
+	// 		reqData: { ...this.state.reqData, dist: changeEvent.target.value }
+	// 	});
+	// };
 
 	handleLatChange = changeEvent => {
 		this.setState({
@@ -195,14 +231,25 @@ class ParkForm extends Component {
 		});
 	};
 
-	handleLightPolChange = changeEvent => {
+	//MaterialUISlider
+	handleLightPolChange = (e, value) => {
+		// console.log(changeEvent, value);
 		this.setState({
 			reqData: {
 				...this.state.reqData,
-				lightpol: changeEvent.target.value
+				lightpol: value
 			}
 		});
 	};
+
+	// handleLightPolChange = changeEvent => {
+	// 	this.setState({
+	// 		reqData: {
+	// 			...this.state.reqData,
+	// 			lightpol: changeEvent.target.value
+	// 		}
+	// 	});
+	// };
 
 	//props to send one-way information to parksComponent
 	//this.state is the "X" in getParks()
@@ -243,9 +290,11 @@ class ParkForm extends Component {
 			query.lightpol !== reqData.lightpol
 		) {
 			this.props.history.push({
-				search: `?lat=${reqData.lat}&lng=${reqData.lng}&dist=${
+				search: `?lat=${parseFloat(reqData.lat).toFixed(
+					4
+				)}&lng=${parseFloat(reqData.lng).toFixed(4)}&dist=${
 					reqData.dist
-				}&lightpol=${reqData.lightpol}`
+				}&lightpol=${parseFloat(reqData.lightpol).toFixed(2)}`
 			});
 		} else {
 			console.log("Attempting to repeat current search.");
@@ -297,7 +346,7 @@ class ParkForm extends Component {
 			return (
 				<React.Fragment>
 					<span class="spinner-border spinner-border-sm" />
-					Searching
+					Locating
 				</React.Fragment>
 			);
 		} else {
@@ -367,7 +416,7 @@ class ParkForm extends Component {
 						<strong>{this.renderLocationSpinner()}</strong>
 					</button>
 				</form>
-				<form>
+				<form className="mx-5">
 					<br />
 					<input
 						placeholder="Latitude"
@@ -398,73 +447,35 @@ class ParkForm extends Component {
 					<br />
 					<b>Distance:</b>
 					<br />
-					<input
-						type="radio"
-						value="5"
-						name="dist"
-						required
-						checked={this.state.reqData.dist === "5"}
+					<Slider
+						//defaultValue={this.state.reqData.dist}
+						// getAriaValueText={valuetext}
+						aria-labelledby="discrete-slider-custom"
+						min={5}
+						max={200}
+						step={1}
+						valueLabelDisplay="auto"
+						marks={marksDist}
+						value={parseFloat(this.state.reqData.dist)}
 						onChange={this.handleDistanceChange}
 					/>
-					less than 5 km
 					<br />
-					<input
-						type="radio"
-						value="25"
-						name="dist"
-						checked={this.state.reqData.dist === "25"}
-						onChange={this.handleDistanceChange}
-					/>
-					less than 25 km
+					<b>Light Pollution:</b>
 					<br />
-					<input
-						type="radio"
-						value="50"
-						name="dist"
-						checked={this.state.reqData.dist === "50"}
-						onChange={this.handleDistanceChange}
-					/>
-					less than 50 km
-					<br />
-					<input
-						type="radio"
-						value="100"
-						name="dist"
-						checked={this.state.reqData.dist === "100"}
-						onChange={this.handleDistanceChange}
-					/>
-					less than 100 km
-					<br />
-					<input
-						type="radio"
-						value="200"
-						name="dist"
-						checked={this.state.reqData.dist === "200"}
-						onChange={this.handleDistanceChange}
-					/>
-					less than 200 km
-					<br />
-					<input
-						type="radio"
-						value="300"
-						name="dist"
-						checked={this.state.reqData.dist === "300"}
-						onChange={this.handleDistanceChange}
-					/>
-					less than 300 km
-					<br />
-					<br />
-					<input
-						placeholder="Max Light Pollution"
-						type="number"
-						min="0"
-						max="40"
-						step="any"
-						id="lightpol"
-						name="lightpol"
-						value={this.state.reqData.lightpol || ""}
-						required
+					<Slider
+						//defaultValue={this.state.reqData.lightpol}
+						// getAriaValueText={valuetext}
+						aria-labelledby="discrete-slider-custom"
+						min={0}
+						max={6}
+						step={0.05}
+						valueLabelDisplay="auto"
+						marks={marksLight}
+						value={parseFloat(this.state.reqData.lightpol)}
 						onChange={this.handleLightPolChange}
+						// onChangeCommitted={() =>
+						// 	this.handleLightPolChange(this.sliderLight)
+						// }
 					/>
 					<br />
 					{this.renderFormErrors()}
@@ -488,5 +499,59 @@ class ParkForm extends Component {
 		);
 	}
 }
+
+const marksDist = [
+	{
+		value: 5,
+		label: "5"
+	},
+	{
+		value: 25,
+		label: "25"
+	},
+	{
+		value: 50,
+		label: "50"
+	},
+	{
+		value: 100,
+		label: "100"
+	},
+	{
+		value: 200,
+		label: "200"
+	}
+];
+
+const marksLight = [
+	{
+		value: 0,
+		label: "0"
+	},
+	{
+		value: 0.4,
+		label: "0.4"
+	},
+	{
+		value: 1,
+		label: "1"
+	},
+	{
+		value: 3,
+		label: "3"
+	},
+	{
+		value: 6,
+		label: "6"
+	}
+];
+
+const ParkForm = parkFormProps => (
+	<AuthConsumer>
+		{authState => (
+			<BaseParkForm {...{ ...parkFormProps, authState: authState }} />
+		)}
+	</AuthConsumer>
+);
 
 export default withRouter(ParkForm);

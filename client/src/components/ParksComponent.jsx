@@ -29,6 +29,10 @@ class BaseParksComponent extends Component {
 	constructor(props) {
 		super(props);
 		this.googleMap = false;
+		//I don't think markers should go in the state because, like googleMap,
+		// They're referenced in odd places and may update at weird times from the rest of doms
+		// Since they're google map things
+		this.markers = {};
 	}
 
 	handleMapLoaded = googleMapActual => {
@@ -126,6 +130,7 @@ class BaseParksComponent extends Component {
 					<div className="col">
 						<ParkMap
 							parkList={this.state.parks}
+							markers={this.markers}
 							location={this.state.fetchReq}
 							onMapLoaded={this.handleMapLoaded}
 						/>
@@ -136,6 +141,7 @@ class BaseParksComponent extends Component {
 							clearParks={this.clearParks}
 							isFetchingParks={this.state.isFetchingParks}
 							googleMap={this.googleMap}
+							markers={this.markers}
 						/>
 						<br />
 						<div
@@ -148,6 +154,8 @@ class BaseParksComponent extends Component {
 								parkList={this.state.parks}
 								moon={this.state.moon}
 								moonType={this.state.moonType}
+								googleMap={this.googleMap}
+								markers={this.markers}
 							/>
 						</div>
 					</div>

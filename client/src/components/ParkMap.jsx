@@ -27,7 +27,7 @@ class ParkMap extends Component {
 		this.parkModalChild = React.createRef();
 		this.modalContent = "No content";
 		this.markers = [];
-		this.currentLocationMarker = null;
+		// this.currentLocationMarker = null;
 	}
 
 	componentDidMount() {
@@ -66,7 +66,7 @@ class ParkMap extends Component {
 			lat: this.props.location.lat,
 			lng: this.props.location.lng
 		};
-		this.currentLocationMarker = new window.google.maps.Marker({
+		this.props.markers.currentLocation = new window.google.maps.Marker({
 			position: location,
 			icon: {
 				url:
@@ -75,7 +75,6 @@ class ParkMap extends Component {
 			},
 			map: this.googleMap
 		});
-		this.googleMapBounds.extend(location);
 	};
 
 	//Unfortunately, due to the way markers are, opening modal needs to be done from here
@@ -95,78 +94,85 @@ class ParkMap extends Component {
 	addParkMarker = park => {
 		//TODO: See if possible to modularize this function
 		//MAKE SURE ITS A FLOAT FROM DATABASE!
+
 		let location = { lat: parseFloat(park.lat), lng: parseFloat(park.lng) };
 
-		var marker = new window.google.maps.Marker({
-			position: location,
-			map: this.googleMap,
-			title: park.name,
-			icon: {
-				url:
-					park.name === "Unknown"
-						? "http://maps.google.com/mapfiles/kml/pal2/icon12.png"
-						: "http://maps.google.com/mapfiles/kml/pal2/icon4.png",
-				anchor: new window.google.maps.Point(16, 16),
-				scaledSize: new window.google.maps.Size(21, 21)
-			}
-		});
-
-		marker.addListener("click", () => {
-			console.log("Clicked marker at", marker.title);
-			let lighPolStatus = () => {
-				if (park.light_pol > 2) {
-					return <b className="bg-danger text-white">bad</b>;
-				} else if (park.light_pol > 1) {
-					return <b className="bg-warning text-dark">okay</b>;
-				} else {
-					return <b className="bg-success text-white">perfect</b>;
+		if (this.props.markers[park.id]) {
+			console.log("Park marker already on map!");
+		} else {
+			var marker = new window.google.maps.Marker({
+				position: location,
+				map: this.googleMap,
+				title: park.name,
+				icon: {
+					url:
+						park.name === "Unknown"
+							? "http://maps.google.com/mapfiles/kml/pal2/icon12.png"
+							: "http://maps.google.com/mapfiles/kml/pal2/icon4.png",
+					anchor: new window.google.maps.Point(16, 16),
+					scaledSize: new window.google.maps.Size(21, 21)
 				}
-			};
-			let newModalContent = (
-				<React.Fragment>
-					<div className="modal-header">
-						<h1>
-							{park.name === "Unknown" && park.name_alt
-								? park.name_alt
-								: park.name}
-						</h1>
-					</div>
+			});
 
-					<FavPark parkID={park.id} />
-					<div className="modal-body">
-						<img
-							src={
-								"https://placeimg.com/400/400/nature?" +
-								Math.random()
-							}
-							className="img-responsive"
-						/>
-						<p>
-							{" "}
-							This park is located at {location.lat},{" "}
-							{location.lng}. The light pollution level here is{" "}
-							{park.light_pol}, which is {lighPolStatus()}.{" "}
-						</p>
-						<Reviews parkID={park.id} />
-					</div>
-				</React.Fragment>
-			);
-			this.openModal(newModalContent);
-		});
-		this.markers.push(marker); //Maybe this can be moved out of the function
-		this.googleMapBounds.extend(location);
+			marker.addListener("click", () => {
+				console.log("Clicked marker at", marker.title);
+				let lighPolStatus = () => {
+					if (park.light_pol > 2) {
+						return <b className="bg-danger text-white">bad</b>;
+					} else if (park.light_pol > 1) {
+						return <b className="bg-warning text-dark">okay</b>;
+					} else {
+						return <b className="bg-success text-white">perfect</b>;
+					}
+				};
+				let newModalContent = (
+					<React.Fragment>
+						<div className="modal-header">
+							<h1>
+								{park.name === "Unknown" && park.name_alt
+									? park.name_alt
+									: park.name}
+							</h1>
+						</div>
+						<div className="modal-body">
+							<img
+								src={
+									"https://placeimg.com/400/400/nature?" +
+									Math.random()
+								}
+								className="img-responsive"
+							/>
+							<p>
+								{" "}
+								This park is located at {location.lat},{" "}
+								{location.lng}. The light pollution level here
+								is {park.light_pol}, which is {lighPolStatus()}.{" "}
+							</p>
+							<Reviews parkID={park.id} />
+						</div>
+					</React.Fragment>
+				);
+				this.openModal(newModalContent);
+			});
+			this.props.markers[park.id] = marker; //Maybe this can be moved out of the function
+		}
 	};
 
 	/**
 	 * Center map on initial location passed in through prop
 	 */
 	centerMap = () => {
-		if (this.props.location.length !== 0) {
-			var latLng = new window.google.maps.LatLng(
-				this.props.location.lat,
-				this.props.location.lng
-			); //Makes a latlng
-			this.googleMap.panTo(latLng); //Make map global
+		if (
+			Object.keys(this.props.markers).length > 1 &&
+			this.props.markers.currentLocation
+		) {
+			this.googleMap.panToBounds(this.googleMapBounds);
+			this.googleMap.fitBounds(this.googleMapBounds);
+		} else {
+			this.googleMap.setCenter(
+				this.props.markers.currentLocation.position
+			);
+			this.googleMap.setZoom(10);
 		}
 	};
 
@@ -174,33 +180,50 @@ class ParkMap extends Component {
 		//Clear existing markers
 		//TODO: Definitely possible to optimize
 		// -Not deleting markers when there's no change? But then have to check for changes
-		console.log("#Markers:", this.markers.length);
-		if (this.currentLocationMarker) {
-			this.currentLocationMarker.setMap(null);
-			this.currentLocationMarker = null;
+		console.log("#Markers:", Object.keys(this.props.markers).length);
+		if (this.props.markers.currentLocation) {
+			this.props.markers.currentLocation.setMap(null);
+			delete this.props.markers.currentLocation;
 		}
-
-		if (this.markers.length > 0) {
-			console.log("Removing markers..");
-			this.markers.map(marker => marker.setMap(null));
-			this.markers = [];
+		// console.log(this.props.parkList.map(park => park.id.toString()));
+		for (let markerKey in this.props.markers) {
+			if (
+				!this.props.parkList
+					.map(park => park.id.toString())
+					.includes(markerKey)
+			) {
+				// console.log("Deleting marker:", markerKey);
+				this.props.markers[markerKey].setMap(null);
+				delete this.props.markers[markerKey];
+			}
 		}
 
 		//Add new markers if possible
 		if (this.props.location.length !== 0) {
 			console.log("Adding markers..");
-			this.googleMapBounds = new window.google.maps.LatLngBounds();
+			// this.googleMapBounds = new window.google.maps.LatLngBounds();
 			this.addCurrentLocationMarker();
 			//Sometimes crashes here, probably because parkList is JSON and not an array
 			//Crash is fixed I think? Notify if it happens again
 			console.log("Drawing parks:", this.props.parkList);
-			this.googleMapBounds = new window.google.maps.LatLngBounds();
+			// this.googleMapBounds = new window.google.maps.LatLngBounds();
 			this.props.parkList.map(this.addParkMarker);
-			if (this.markers.length > 0) {
+			if (
+				Object.keys(this.props.markers).length > 1 &&
+				this.props.markers.currentLocation
+			) {
+				this.googleMapBounds = new window.google.maps.LatLngBounds();
+				for (let marker in this.props.markers) {
+					this.googleMapBounds.extend(
+						this.props.markers[marker].position
+					);
+				}
 				this.googleMap.panToBounds(this.googleMapBounds);
 				this.googleMap.fitBounds(this.googleMapBounds);
 			} else {
-				this.googleMap.setCenter(this.currentLocationMarker.position);
+				this.googleMap.setCenter(
+					this.props.markers.currentLocation.position
+				);
 				this.googleMap.setZoom(10);
 			}
 		}
