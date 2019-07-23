@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 class ParkCard extends Component {
 	state = {};
@@ -16,7 +17,9 @@ class ParkCard extends Component {
 							onMouseEnter={() => {
 								this.props.handleMouseOver(this.props.park.id);
 							}}
-							onMouseLeave={() => {}}
+							onMouseLeave={() => {
+								this.props.handleMouseLeave(this.props.park.id);
+							}}
 							onClick={() => {
 								this.props.handleMouseClick(this.props.park.id);
 							}}
@@ -42,5 +45,11 @@ class ParkCard extends Component {
 		);
 	}
 }
+
+ParkCard.defaultProps = {
+	handleMouseOver: () => {},
+	handleMouseLeave: () => {},
+	handleMouseClick: () => {}
+};
 
 export default ParkCard;
