@@ -455,7 +455,7 @@ class BaseParkForm extends Component {
 						step={1}
 						valueLabelDisplay="auto"
 						marks={marksDist}
-						value={this.state.reqData.dist}
+						value={parseFloat(this.state.reqData.dist)}
 						onChange={this.handleDistanceChange}
 					/>
 					<br />
@@ -470,7 +470,7 @@ class BaseParkForm extends Component {
 						step={0.05}
 						valueLabelDisplay="auto"
 						marks={marksLight}
-						value={this.state.reqData.lightpol}
+						value={parseFloat(this.state.reqData.lightpol)}
 						onChange={this.handleLightPolChange}
 						// onChangeCommitted={() =>
 						// 	this.handleLightPolChange(this.sliderLight)
