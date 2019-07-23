@@ -70,7 +70,7 @@ class Login extends Component {
 		if (this.state.errorDB == true) {
 			return (
 				<div class="alert alert-danger" role="alert">
-					Invalid login credentials! Please try again
+					❌ Invalid login credentials! Please try again
 				</div>
 			);
 		}
@@ -78,7 +78,7 @@ class Login extends Component {
 
 	loginSuccess = () => {
 		console.log("get here for some reason?");
-		this.setState({ loginSuccess: true });
+		this.setState({ loginSuccess: true, errorDB: false });
 		setTimeout(() => {
 			this.setState({
 				modalIsOpen: false
@@ -136,7 +136,7 @@ class Login extends Component {
 			return (
 				<div className="text-success text-center m-3">
 					<h1>
-						<b>✔ Login Successful!</b>
+						<b>✔️ Login Successful!</b>
 					</h1>
 				</div>
 			);
