@@ -154,7 +154,12 @@ class BaseParkForm extends Component {
 	getMyLocation = e => {
 		this.setState({ isLoadingLocation: true });
 		console.log(this.props);
-		if (!this.props.authState.userLocation) {
+		if (
+			!this.props.authState.userLocation ||
+			(this.props.authState.userLocation.lat === "" &&
+				this.props.authState.userLocation.lng === "")
+		) {
+			console.log("Getting new location");
 			navigator.geolocation.getCurrentPosition(
 				position => {
 					this.setState({
@@ -189,6 +194,7 @@ class BaseParkForm extends Component {
 				{ enableHighAccuracy: true }
 			);
 		} else {
+			console.log("Fetching auth location");
 			if (window.google) {
 				this.props.googleMap.panTo(
 					new window.google.maps.LatLng(
@@ -202,7 +208,8 @@ class BaseParkForm extends Component {
 					...this.state.reqData,
 					lat: this.props.authState.userLocation.lat,
 					lng: this.props.authState.userLocation.lng
-				}
+				},
+				isLoadingLocation: false
 			});
 		}
 	};
@@ -411,7 +418,7 @@ class BaseParkForm extends Component {
 						className="btn btn-primary m-1"
 						type="button"
 						disabled={this.state.isLoadingLocation}
-						//onClick={this.getMyLocation}
+						onClick={this.getMyLocation}
 					>
 						<strong>{this.renderLocationSpinner()}</strong>
 					</button>
