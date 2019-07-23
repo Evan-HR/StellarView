@@ -596,6 +596,12 @@ app.post("/results.html", (req, res) => {
 });
 
 //format "2014-02-17T00:00-0500", ISO 8601
+function getMoonProfile(userTime) {
+	var phaseInfo = lune.phase(userTime);
+	return phaseInfo;
+}
+
+//format "2014-02-17T00:00-0500", ISO 8601
 function getMoon() {
 	var now = new Date();
 	var isoDate = now.toISOString();
@@ -608,134 +614,174 @@ function getMoon() {
 	return phaseInfo;
 }
 
+function toRadians(angle) {
+	console.log("RADIANS FUNC RAN!!?!?!?!?");
+	return angle * (Math.PI / 180);
+}
+
 function inRange(x, min, max) {
 	return (x - min) * (x - max) <= 0;
 }
 
 app.post("/api/getProfileParks", (req, res) => {
-	console.log("body is: ",req.body);
-	var tempString = JSON.stringify(req.body)
+	console.log("body is: ", req.body);
+	var tempString = JSON.stringify(req.body.userFavs);
 	//console.log(tempString)
-	var inQuerySet = tempString.split(/[\{\[]/).join('(').split(/[\}\]]/).join(')')
-	console.log(inQuerySet)
-	const queryString = `select * from ontario_parks where id in ${inQuerySet}`
+	var inQuerySet = tempString
+		.split(/[\{\[]/)
+		.join("(")
+		.split(/[\}\]]/)
+		.join(")");
+	console.log("userFAVS query is: ", inQuerySet);
+	const queryString = `select * from ontario_parks where id in ${inQuerySet}`;
 
-	getConnection().query(
-		queryString,
-		[inQuerySet],
-		(err, results) => {
-			if (err) {
-				console.log("failed" + err);
-				res.sendStatus(500);
-				return;
-			}
-			var weatherJSON = JSON.parse(JSON.stringify(results));
-
-			var weatherArr = [];
-			weatherURL = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lng}&cnt=50&appid=${weatherKey1}`;
-			axios
-				.get(weatherURL)
-				.then(function(response) {
-					for (var i = 0; i < response.data.list.length; i++) {
-						var elem = response.data.list[i];
-						//console.log("elem is: ", elem);
-						var city = {};
-						city.name = elem.name;
-						city.clouds = elem.clouds.all;
-						city.cloudDesc = elem.weather[0].description;
-						city.humidity = elem.main.humidity;
-						city.lat = elem.coord.lat;
-						city.lng = elem.coord.lon;
-
-						//console.log("city is:", city);
-
-						weatherArr.push(city);
-						//console.log("weather arr is : ", weatherArr);
-					}
-
-					// weather assigning:
-					for (var i = 0; i < weatherJSON.length; i++) {
-						var minDist = 300000; // higher than any coord distance
-						var closestCity = -1; //variable represents index of closest city; initialized as -ve, will throw err if no closer city
-						for (var j = 0; j < weatherArr.length; j++) {
-							var cityLat = parseFloat(weatherArr[j].lat);
-							var cityLng = parseFloat(weatherArr[j].lng);
-							var parkLat = parseFloat(weatherJSON[i].lat);
-							var parkLng = parseFloat(weatherJSON[i].lng);
-
-							var theta = parkLng - cityLng;
-							var dist =
-								Math.sin((parkLat * Math.PI) / 180) *
-									Math.sin((cityLat * Math.PI) / 180) +
-								Math.cos((parkLng * Math.PI) / 180) *
-									Math.cos((cityLng * Math.PI) / 180) *
-									Math.cos((theta * Math.PI) / 180);
-							dist = Math.acos(dist);
-							dist = (dist * 20014.1238528) / Math.PI;
-							//console.log(dist);
-
-							var distance = Math.sqrt(
-								Math.pow(cityLat - parkLat, 2) +
-									Math.pow(cityLng - parkLng, 2)
-							);
-
-							if (distance < minDist) {
-								minDist = distance;
-								closestCity = j;
-							}
-							weatherJSON[i].clouds =
-								weatherArr[closestCity].clouds; // PARKS JSON FOR i GETS NEW COMPONENT 'weather' WITH DATA FROM CLOSEST CITY
-							weatherJSON[i].humidity =
-								weatherArr[closestCity].humidity;
-							weatherJSON[i].cloudDesc =
-								weatherArr[closestCity].cloudDesc;
-							weatherJSON[i].city = weatherArr[closestCity].name;
-						}
-
-						// can u get the km distance between each park
-						//like what does 'closest' mean do we know that yet?
-						// lets look at some of the #s
-					}
-
-					//moon stuff
-					var phaseInfo = getMoon();
-					var moonType = "";
-					var percentMoon = parseFloat(phaseInfo.illuminated) * 100;
-
-					if (inRange(percentMoon, 0, 25)) {
-						moonType = "New Moon";
-					} else if (inRange(percentMoon, 25, 50)) {
-						moonType = "First Quarter";
-					} else if (inRange(percentMoon, 50, 75)) {
-						moonType = "Full Moon";
-					} else if (inRange(percentMoon, 75, 100)) {
-						moonType = "Last Quarter";
-					}
-
-					var temparr = [];
-					temparr.push(weatherJSON);
-
-					//console.log(temparr);
-					temparr.push(parseInt(percentMoon));
-					temparr.push(moonType);
-					//console.log(weatherJSON);
-					console.log("temparr is: ", temparr);
-					console.log("moon illum", temparr[1]);
-					console.log("moon type", temparr[2]);
-					res.send(temparr);
-					//res.send(results);
-				})
-
-				.catch(function(response) {
-					console.log(response);
-				});
-
-			//res.send({ location: [lat, lng], parks: results, mapAPIKey: mapsKey1 });
+	getConnection().query(queryString, [inQuerySet], (err, results) => {
+		if (err) {
+			console.log("failed" + err);
+			res.sendStatus(500);
+			return;
 		}
-	);
+		console.log("results is: ", results);
+		const lat = req.body.lat;
+		const lng = req.body.lng;
+		var parkData = JSON.parse(JSON.stringify(results));
 
+		for (let park in parkData) {
+			park = parkData[park];
+			park.dist =
+				6371 *
+				Math.acos(
+					Math.cos(toRadians(lat)) *
+						Math.cos(toRadians(park.lat)) *
+						Math.cos(toRadians(park.lng) - toRadians(lng)) +
+						Math.sin(toRadians(lat)) * Math.sin(toRadians(park.lat))
+				);
 
-})
+			//moon stuff
+			var phaseInfo = getMoon(req.body.userTime);
+			var moonType = "";
+			var percentMoon = parseFloat(phaseInfo.illuminated) * 100;
+
+			if (inRange(percentMoon, 0, 25)) {
+				moonType = "New Moon";
+			} else if (inRange(percentMoon, 25, 50)) {
+				moonType = "First Quarter";
+			} else if (inRange(percentMoon, 50, 75)) {
+				moonType = "Full Moon";
+			} else if (inRange(percentMoon, 75, 100)) {
+				moonType = "Last Quarter";
+			}
+
+			park.moon = percentMoon;
+			park.moonType = moonType;
+		}
+		console.log("Park data is: ", parkData);
+
+		//var dist = 6371 * acos( cos( radians(  ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin( radians( ? ) ) * sin( radians( lat ) ) ) )
+
+		// var weatherJSON = JSON.parse(JSON.stringify(results));
+
+		// var weatherArr = [];
+		// weatherURL = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lng}&cnt=50&appid=${weatherKey1}`;
+		// axios
+		// 	.get(weatherURL)
+		// 	.then(function(response) {
+		// 		for (var i = 0; i < response.data.list.length; i++) {
+		// 			var elem = response.data.list[i];
+		// 			//console.log("elem is: ", elem);
+		// 			var city = {};
+		// 			city.name = elem.name;
+		// 			city.clouds = elem.clouds.all;
+		// 			city.cloudDesc = elem.weather[0].description;
+		// 			city.humidity = elem.main.humidity;
+		// 			city.lat = elem.coord.lat;
+		// 			city.lng = elem.coord.lon;
+
+		// 			//console.log("city is:", city);
+
+		// 			weatherArr.push(city);
+		// 			//console.log("weather arr is : ", weatherArr);
+		// 		}
+
+		// 		// weather assigning:
+		// 		for (var i = 0; i < weatherJSON.length; i++) {
+		// 			var minDist = 300000; // higher than any coord distance
+		// 			var closestCity = -1; //variable represents index of closest city; initialized as -ve, will throw err if no closer city
+		// 			for (var j = 0; j < weatherArr.length; j++) {
+		// 				var cityLat = parseFloat(weatherArr[j].lat);
+		// 				var cityLng = parseFloat(weatherArr[j].lng);
+		// 				var parkLat = parseFloat(weatherJSON[i].lat);
+		// 				var parkLng = parseFloat(weatherJSON[i].lng);
+
+		// 				var theta = parkLng - cityLng;
+		// 				var dist =
+		// 					Math.sin((parkLat * Math.PI) / 180) *
+		// 						Math.sin((cityLat * Math.PI) / 180) +
+		// 					Math.cos((parkLng * Math.PI) / 180) *
+		// 						Math.cos((cityLng * Math.PI) / 180) *
+		// 						Math.cos((theta * Math.PI) / 180);
+		// 				dist = Math.acos(dist);
+		// 				dist = (dist * 20014.1238528) / Math.PI;
+		// 				//console.log(dist);
+
+		// 				var distance = Math.sqrt(
+		// 					Math.pow(cityLat - parkLat, 2) +
+		// 						Math.pow(cityLng - parkLng, 2)
+		// 				);
+
+		// 				if (distance < minDist) {
+		// 					minDist = distance;
+		// 					closestCity = j;
+		// 				}
+		// 				weatherJSON[i].clouds = weatherArr[closestCity].clouds; // PARKS JSON FOR i GETS NEW COMPONENT 'weather' WITH DATA FROM CLOSEST CITY
+		// 				weatherJSON[i].humidity =
+		// 					weatherArr[closestCity].humidity;
+		// 				weatherJSON[i].cloudDesc =
+		// 					weatherArr[closestCity].cloudDesc;
+		// 				weatherJSON[i].city = weatherArr[closestCity].name;
+		// 			}
+
+		// 			// can u get the km distance between each park
+		// 			//like what does 'closest' mean do we know that yet?
+		// 			// lets look at some of the #s
+		// 		}
+
+		// 		//moon stuff
+		// 		var phaseInfo = getMoon();
+		// 		var moonType = "";
+		// 		var percentMoon = parseFloat(phaseInfo.illuminated) * 100;
+
+		// 		if (inRange(percentMoon, 0, 25)) {
+		// 			moonType = "New Moon";
+		// 		} else if (inRange(percentMoon, 25, 50)) {
+		// 			moonType = "First Quarter";
+		// 		} else if (inRange(percentMoon, 50, 75)) {
+		// 			moonType = "Full Moon";
+		// 		} else if (inRange(percentMoon, 75, 100)) {
+		// 			moonType = "Last Quarter";
+		// 		}
+
+		// 		var temparr = [];
+		// 		temparr.push(weatherJSON);
+
+		// 		//console.log(temparr);
+		// 		temparr.push(parseInt(percentMoon));
+		// 		temparr.push(moonType);
+		// 		//console.log(weatherJSON);
+		// 		console.log("temparr is: ", temparr);
+		// 		console.log("moon illum", temparr[1]);
+		// 		console.log("moon type", temparr[2]);
+		// 		res.send(temparr);
+		// 		//res.send(results);
+		// 	})
+
+		// .catch(function(response) {
+		// 	console.log(response);
+		// });
+
+		//res.send({ location: [lat, lng], parks: results, mapAPIKey: mapsKey1 });
+	});
+});
 
 //YOU NEED THE / in the ADDRESS!!
 //don't put "getParks", must be "/name"
@@ -844,22 +890,12 @@ app.post("/api/getParks", (req, res) => {
 						moonType = "Last Quarter";
 					}
 
-					// var temparr = [];
-					// temparr.push(weatherJSON);
-
 					let reply = {
 						parks: weatherJSON,
 						moonPercent: percentMoon,
 						moonType: moonType
 					};
-					// console.log(temparr);
-					// temparr.push(parseInt(percentMoon));
-					// temparr.push(moonType);
-					console.log("Response:", reply);
-					// console.log(weatherJSON);
-					// console.log("temparr is: ", temparr);
-					// console.log("moon illum", temparr[1]);
-					// console.log("moon type", temparr[2]);
+					console.log("Response ", reply);
 					res.send(reply);
 					//res.send(results);
 				})

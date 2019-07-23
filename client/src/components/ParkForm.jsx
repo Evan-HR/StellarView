@@ -27,6 +27,7 @@ class ParkForm extends Component {
 	// componentDidMount runs RIGHT after post-render
 	componentDidMount() {
 		// this.getMyLocation();
+		console.log("USER LOC: ", this.props.userLocation);
 
 		//On page load, load results from query is possible
 		console.log("Form mounted, searching...");
@@ -143,6 +144,7 @@ class ParkForm extends Component {
 	//    bind the success callback or make use of arrow function.
 	getMyLocation = e => {
 		this.setState({ ...this.state, isLoadingLocation: true });
+
 		navigator.geolocation.getCurrentPosition(
 			position => {
 				this.setState({
@@ -299,7 +301,7 @@ class ParkForm extends Component {
 				</React.Fragment>
 			);
 		} else {
-			return "My Location";
+			return "Near Me";
 		}
 	};
 
@@ -360,7 +362,7 @@ class ParkForm extends Component {
 						className="btn btn-primary m-1"
 						type="button"
 						disabled={this.state.isLoadingLocation}
-						onClick={this.getMyLocation}
+						//onClick={this.getMyLocation}
 					>
 						<strong>{this.renderLocationSpinner()}</strong>
 					</button>

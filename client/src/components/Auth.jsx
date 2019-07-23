@@ -15,6 +15,7 @@ export class Auth extends React.Component {
 			userID: null,
 			isAuth: null,
 			isLoggingIn: false,
+			userLocation: { lat: "", lng: "" },
 			userReviews: [],
 			userFavorites: []
 		};
@@ -30,12 +31,23 @@ export class Auth extends React.Component {
 		//this.getUserInfo = this.getUserInfo.bind(this);
 	}
 
+	componentDidMount() {
+		navigator.geolocation.getCurrentPosition(position => {
+			this.setState({
+				userLocation: {
+					lat: position.coords.latitude,
+					lng: position.coords.longitude
+				}
+			});
+		});
+	}
+
 	handleLogoutState() {
 		this.setState({
 			firstName: null,
 			userID: null,
 			isAuth: false,
-			
+
 			userReviews: [],
 			userFavorites: []
 		});
