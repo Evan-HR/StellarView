@@ -1,5 +1,6 @@
 //Displays park table
 import React, { Component } from "react";
+import ParkCard from "./ParkCard";
 
 class ParkTable extends Component {
 	state = {};
@@ -60,51 +61,26 @@ class ParkTable extends Component {
 	};
 
 	renderParkCard = park => {
-		return (
-			<div className="card mb-3" style={{ textTransform: "capitalize" }}>
-				<div className="card-header text-white bg-primary">
-					<button
-						className="btn btn-link text-white"
-						onMouseEnter={() => {
-							if (!this.isAnimating[park.id]) {
-								this.isAnimating[park.id] = true;
-								this.props.markers[park.id].setAnimation(
-									window.google.maps.Animation.BOUNCE
-								);
-								setTimeout(() => {
-									this.props.markers[park.id].setAnimation(
-										null
-									);
-									delete this.isAnimating[park.id];
-								}, 675);
-							}
-						}}
-						onMouseLeave={() => {}}
-						onClick={() => {
-							this.props.googleMap.panTo(
-								this.props.markers[park.id].position
-							);
-							this.props.googleMap.setZoom(10);
-							window.google.maps.event.trigger(
-								this.props.markers[park.id],
-								"click"
-							);
-						}}
-					>
-						{park.name_alt ? park.name_alt : park.name}
-					</button>
-				</div>
-				<div className="card-body bg-light">
-					{/* <h5 className="card-title">Primary card title</h5> */}
-					<p className="card-text">
-						{park.light_pol} <br />
-						{parseFloat(park.distance).toFixed(2)}km <br />
-						{park.cloudDesc} <br />
-						{park.humidity}% Humidity <br />
-					</p>
-				</div>
-			</div>
-		);
+		return <ParkCard park={park} handleMouseOver={this.handleCardMouseOver} handleMouseClick={this.handleCardMouseClick} />;
+	};
+
+	handleCardMouseOver = parkID => {
+		if (!this.isAnimating[parkID]) {
+			this.isAnimating[parkID] = true;
+			this.props.markers[parkID].setAnimation(
+				window.google.maps.Animation.BOUNCE
+			);
+			setTimeout(() => {
+				this.props.markers[parkID].setAnimation(null);
+				delete this.isAnimating[parkID];
+			}, 675);
+		}
+	};
+
+	handleCardMouseClick = parkID => {
+		this.props.googleMap.panTo(this.props.markers[parkID].position);
+		this.props.googleMap.setZoom(10);
+		window.google.maps.event.trigger(this.props.markers[parkID], "click");
 	};
 
 	renderParkTable = () => {
