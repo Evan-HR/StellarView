@@ -24,27 +24,6 @@ class NavBar extends Component {
 						Home
 					</a>
 				</li>
-				{/* <AuthConsumer>
-					{x => {
-						if (x.isAuth === true) {
-							return (
-								<li className="nav-item">
-									<button onClick={e => this.handleLogout(e)}>
-										Logout
-									</button>
-								</li>
-							);
-						} else {
-							return (
-								<li className="nav-item">
-									<a className="nav-link" href="/login.html">
-										Login
-									</a>
-								</li>
-							);
-						}
-					}}
-				</AuthConsumer> */}
 
 				<AuthConsumer>
 					{x => {
@@ -59,16 +38,7 @@ class NavBar extends Component {
 									</a>
 								</li>
 							);
-						} 
-						// else {
-						// 	return (
-						// 		<li className="nav-item">
-						// 			<a className="nav-link" href="/login.html">
-						// 				Profile
-						// 			</a>
-						// 		</li>
-						// 	);
-						// }
+						}
 					}}
 				</AuthConsumer>
 

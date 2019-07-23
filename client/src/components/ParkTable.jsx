@@ -68,7 +68,6 @@ class ParkTable extends Component {
 						onMouseEnter={() => {
 							if (!this.isAnimating[park.id]) {
 								this.isAnimating[park.id] = true;
-								console.log(this.isAnimating);
 								this.props.markers[park.id].setAnimation(
 									window.google.maps.Animation.BOUNCE
 								);
@@ -77,7 +76,7 @@ class ParkTable extends Component {
 										null
 									);
 									delete this.isAnimating[park.id];
-								}, 700);
+								}, 675);
 							}
 						}}
 						onMouseLeave={() => {}}

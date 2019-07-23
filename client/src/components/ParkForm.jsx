@@ -6,8 +6,9 @@ import qs from "qs";
 import { makeStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
 import { sizing } from "@material-ui/system";
+import { AuthConsumer } from "./AuthContext";
 
-class ParkForm extends Component {
+class BaseParkForm extends Component {
 	state = {
 		reqData: {
 			lat: "",
@@ -111,7 +112,7 @@ class ParkForm extends Component {
 	 * For more info visit https://nominatim.org/release-docs/develop/api/Search/
 	 */
 	getPlaceCoordinates = () => {
-		this.setState({ ...this.state, isGeocodingLocation: true });
+		this.setState({ isGeocodingLocation: true });
 		axios
 			.get(
 				//Internet Explorer didn't want to connect to OSM server, so the request has to be proxied through heroku
@@ -123,7 +124,6 @@ class ParkForm extends Component {
 			.then(({ data }) => {
 				console.log(data);
 				this.setState({
-					...this.state,
 					isGeocodingLocation: false,
 					reqData: {
 						...this.state.reqData,
@@ -151,37 +151,59 @@ class ParkForm extends Component {
 	//    getCurrentPosition's callback, you either need to
 	//    bind the success callback or make use of arrow function.
 	getMyLocation = e => {
-		this.setState({ ...this.state, isLoadingLocation: true });
-		navigator.geolocation.getCurrentPosition(
-			position => {
-				this.setState({
-					...this.state,
-					reqData: {
-						...this.state.reqData,
-						lat: position.coords.latitude,
-						lng: position.coords.longitude,
-						error: null
-					},
-					isLoadingLocation: false
-				});
-				if (window.google) {
-					this.props.googleMap.panTo(
-						new window.google.maps.LatLng(
-							position.coords.latitude,
-							position.coords.longitude
-						)
-					);
+		this.setState({ isLoadingLocation: true });
+		console.log(this.props);
+		if (!this.props.authState.userLocation) {
+			navigator.geolocation.getCurrentPosition(
+				position => {
+					this.setState({
+						...this.state,
+						reqData: {
+							...this.state.reqData,
+							lat: position.coords.latitude,
+							lng: position.coords.longitude,
+							error: null
+						},
+						isLoadingLocation: false
+					});
+					if (window.google) {
+						this.props.googleMap.panTo(
+							new window.google.maps.LatLng(
+								position.coords.latitude,
+								position.coords.longitude
+							)
+						);
+					}
+				},
+				error => {
+					this.setState({
+						...this.state,
+						reqData: {
+							...this.state.reqData,
+							error: error.message
+						},
+						isLoadingLocation: false
+					});
+				},
+				{ enableHighAccuracy: true }
+			);
+		} else {
+			if (window.google) {
+				this.props.googleMap.panTo(
+					new window.google.maps.LatLng(
+						this.props.authState.userLocation.lat,
+						this.props.authState.userLocation.lng
+					)
+				);
+			}
+			this.setState({
+				reqData: {
+					...this.state.reqData,
+					lat: this.props.authState.userLocation.lat,
+					lng: this.props.authState.userLocation.lng
 				}
-			},
-			error => {
-				this.setState({
-					...this.state,
-					reqData: { ...this.state.reqData, error: error.message },
-					isLoadingLocation: false
-				});
-			},
-			{ enableHighAccuracy: true }
-		);
+			});
+		}
 	};
 
 	//Material UI
@@ -267,9 +289,11 @@ class ParkForm extends Component {
 			query.lightpol !== reqData.lightpol
 		) {
 			this.props.history.push({
-				search: `?lat=${reqData.lat}&lng=${reqData.lng}&dist=${
+				search: `?lat=${parseFloat(reqData.lat).toFixed(
+					4
+				)}&lng=${parseFloat(reqData.lng).toFixed(4)}&dist=${
 					reqData.dist
-				}&lightpol=${reqData.lightpol}`
+				}&lightpol=${parseFloat(reqData.lightpol).toFixed(2)}`
 			});
 		} else {
 			console.log("Attempting to repeat current search.");
@@ -321,11 +345,11 @@ class ParkForm extends Component {
 			return (
 				<React.Fragment>
 					<span class="spinner-border spinner-border-sm" />
-					Searching
+					Locating
 				</React.Fragment>
 			);
 		} else {
-			return "My Location";
+			return "Near Me";
 		}
 	};
 
@@ -520,5 +544,13 @@ const marksLight = [
 		label: "6"
 	}
 ];
+
+const ParkForm = parkFormProps => (
+	<AuthConsumer>
+		{authState => (
+			<BaseParkForm {...{ ...parkFormProps, authState: authState }} />
+		)}
+	</AuthConsumer>
+);
 
 export default withRouter(ParkForm);
