@@ -3,14 +3,17 @@ import React, { Component } from "react";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import qs from "qs";
+import { makeStyles } from "@material-ui/core/styles";
+import Slider from "@material-ui/core/Slider";
+import { sizing } from "@material-ui/system";
 
 class ParkForm extends Component {
 	state = {
 		reqData: {
 			lat: "",
 			lng: "",
-			dist: "25",
-			lightpol: "",
+			dist: 25,
+			lightpol: 1.5,
 			error: "",
 			placeName: ""
 		},
@@ -19,6 +22,12 @@ class ParkForm extends Component {
 		isInvalidLocation: false,
 		formErrors: {}
 	};
+
+	constructor(props) {
+		super(props);
+		this.sliderLight = this.state.reqData.lightpol;
+		this.sliderDist = this.state.reqData.dist;
+	}
 
 	//There are two cases when we would want to load results form url query:
 	// 1: We hit back/forward to go to previous searches
@@ -63,7 +72,7 @@ class ParkForm extends Component {
 							lat: query.lat,
 							lng: query.lng,
 							dist: query.dist,
-							lightpol: query.lightpol,
+							lightpol: parseFloat(query.lightpol),
 							error: ""
 						}
 					},
@@ -175,11 +184,17 @@ class ParkForm extends Component {
 		);
 	};
 
-	handleDistanceChange = changeEvent => {
+	//Material UI
+	handleDistanceChange = (changeEvent, value) => {
 		this.setState({
-			reqData: { ...this.state.reqData, dist: changeEvent.target.value }
+			reqData: { ...this.state.reqData, dist: value }
 		});
 	};
+	// handleDistanceChange = changeEvent => {
+	// 	this.setState({
+	// 		reqData: { ...this.state.reqData, dist: changeEvent.target.value }
+	// 	});
+	// };
 
 	handleLatChange = changeEvent => {
 		this.setState({
@@ -193,14 +208,25 @@ class ParkForm extends Component {
 		});
 	};
 
-	handleLightPolChange = changeEvent => {
+	//MaterialUISlider
+	handleLightPolChange = (e, value) => {
+		// console.log(changeEvent, value);
 		this.setState({
 			reqData: {
 				...this.state.reqData,
-				lightpol: changeEvent.target.value
+				lightpol: value
 			}
 		});
 	};
+
+	// handleLightPolChange = changeEvent => {
+	// 	this.setState({
+	// 		reqData: {
+	// 			...this.state.reqData,
+	// 			lightpol: changeEvent.target.value
+	// 		}
+	// 	});
+	// };
 
 	//props to send one-way information to parksComponent
 	//this.state is the "X" in getParks()
@@ -365,7 +391,7 @@ class ParkForm extends Component {
 						<strong>{this.renderLocationSpinner()}</strong>
 					</button>
 				</form>
-				<form>
+				<form className="mx-5">
 					<br />
 					<input
 						placeholder="Latitude"
@@ -396,73 +422,35 @@ class ParkForm extends Component {
 					<br />
 					<b>Distance:</b>
 					<br />
-					<input
-						type="radio"
-						value="5"
-						name="dist"
-						required
-						checked={this.state.reqData.dist === "5"}
+					<Slider
+						//defaultValue={this.state.reqData.dist}
+						// getAriaValueText={valuetext}
+						aria-labelledby="discrete-slider-custom"
+						min={5}
+						max={200}
+						step={1}
+						valueLabelDisplay="auto"
+						marks={marksDist}
+						value={this.state.reqData.dist}
 						onChange={this.handleDistanceChange}
 					/>
-					less than 5 km
 					<br />
-					<input
-						type="radio"
-						value="25"
-						name="dist"
-						checked={this.state.reqData.dist === "25"}
-						onChange={this.handleDistanceChange}
-					/>
-					less than 25 km
+					<b>Light Pollution:</b>
 					<br />
-					<input
-						type="radio"
-						value="50"
-						name="dist"
-						checked={this.state.reqData.dist === "50"}
-						onChange={this.handleDistanceChange}
-					/>
-					less than 50 km
-					<br />
-					<input
-						type="radio"
-						value="100"
-						name="dist"
-						checked={this.state.reqData.dist === "100"}
-						onChange={this.handleDistanceChange}
-					/>
-					less than 100 km
-					<br />
-					<input
-						type="radio"
-						value="200"
-						name="dist"
-						checked={this.state.reqData.dist === "200"}
-						onChange={this.handleDistanceChange}
-					/>
-					less than 200 km
-					<br />
-					<input
-						type="radio"
-						value="300"
-						name="dist"
-						checked={this.state.reqData.dist === "300"}
-						onChange={this.handleDistanceChange}
-					/>
-					less than 300 km
-					<br />
-					<br />
-					<input
-						placeholder="Max Light Pollution"
-						type="number"
-						min="0"
-						max="40"
-						step="any"
-						id="lightpol"
-						name="lightpol"
-						value={this.state.reqData.lightpol || ""}
-						required
+					<Slider
+						//defaultValue={this.state.reqData.lightpol}
+						// getAriaValueText={valuetext}
+						aria-labelledby="discrete-slider-custom"
+						min={0}
+						max={6}
+						step={0.05}
+						valueLabelDisplay="auto"
+						marks={marksLight}
+						value={this.state.reqData.lightpol}
 						onChange={this.handleLightPolChange}
+						// onChangeCommitted={() =>
+						// 	this.handleLightPolChange(this.sliderLight)
+						// }
 					/>
 					<br />
 					{this.renderFormErrors()}
@@ -486,5 +474,51 @@ class ParkForm extends Component {
 		);
 	}
 }
+
+const marksDist = [
+	{
+		value: 5,
+		label: "5"
+	},
+	{
+		value: 25,
+		label: "25"
+	},
+	{
+		value: 50,
+		label: "50"
+	},
+	{
+		value: 100,
+		label: "100"
+	},
+	{
+		value: 200,
+		label: "200"
+	}
+];
+
+const marksLight = [
+	{
+		value: 0,
+		label: "0"
+	},
+	{
+		value: 0.4,
+		label: "0.4"
+	},
+	{
+		value: 1,
+		label: "1"
+	},
+	{
+		value: 3,
+		label: "3"
+	},
+	{
+		value: 6,
+		label: "6"
+	}
+];
 
 export default withRouter(ParkForm);
