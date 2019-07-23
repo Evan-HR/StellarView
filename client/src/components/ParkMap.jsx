@@ -134,6 +134,7 @@ class ParkMap extends Component {
 									: park.name}
 							</h1>
 						</div>
+						<FavPark parkID={park.id} />
 						<div className="modal-body">
 							<img
 								src={

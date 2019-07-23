@@ -646,7 +646,6 @@ app.post("/api/getProfileParks", (req, res) => {
 		const lng = req.body.lng;
 		var parkData = JSON.parse(JSON.stringify(results));
 
-		
 		for (var park in parkData) {
 			park = parkData[park];
 			park.dist =
@@ -677,94 +676,80 @@ app.post("/api/getProfileParks", (req, res) => {
 			park.moonType = moonType;
 
 			//axios goes here normally
-				
-
-			
-
 		}
 
 		res.send(parkData);
-		
+
 		//res.send(getParkWeatherAxios(parkData));
 	});
 });
 
-app.post("/api/getProfileParksWeather",(req,res)=>{
-
+app.post("/api/getProfileParksWeather", (req, res) => {
 	console.log("getprofparks got here");
-	
-	console.log("getprofileparksweather body: ",req.body[0].name);
+
+	console.log("getprofileparksweather body: ", req.body[0].name);
 	var parkData = req.body;
 
-	parkDataLength = Object.keys( parkData ).length;
+	parkDataLength = Object.keys(parkData).length;
 	for (let park in parkData) {
 		park = parkData[park];
 		console.log(park.id);
-	//weather 
-	weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${park.lat}&lon=${park.lng}&appid=${weatherKey1}`;
-	var counter = 0;
+		//weather
+		weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${
+			park.lat
+		}&lon=${park.lng}&appid=${weatherKey1}`;
+		var counter = 0;
 		axios
-		.get(weatherURL)
-		.then(function(response) {
-			counter = counter+1;
-			console.log("counter is: " + counter)
-			console.log("currently appending to: ",park.name)
-			//console.log("cloud log is: ",response.data.clouds.all)
-			park.clouds = response.data.clouds.all
-			park.cloudDesc = "dunno lmao"
-			park.humidity =  response.data.main.humidity
+			.get(weatherURL)
+			.then(function(response) {
+				counter = counter + 1;
+				console.log("counter is: " + counter);
+				console.log("currently appending to: ", park.name);
+				//console.log("cloud log is: ",response.data.clouds.all)
+				park.clouds = response.data.clouds.all;
+				park.cloudDesc = "dunno lmao";
+				park.humidity = response.data.main.humidity;
 
-			if(counter ==parkDataLength){
-				console.log("final park data is :",parkData)
-				res.send(parkData);
-			}
-			
-			
-			
-
+				if (counter == parkDataLength) {
+					console.log("final park data is :", parkData);
+					res.send(parkData);
+				}
 			})
 			.catch(function(response) {
 				console.log(response);
-			})
-}})
+			});
+	}
+});
 
-
-
-function getParkWeatherAxios(parkData){
-
-	parkDataLength = Object.keys( parkData ).length;
+function getParkWeatherAxios(parkData) {
+	parkDataLength = Object.keys(parkData).length;
 	for (var park in parkData) {
 		park = parkData[park];
 		console.log(park.id);
-	//weather 
-	weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${park.lat}&lon=${park.lng}&appid=${weatherKey1}`;
-	var counter = 0;
+		//weather
+		weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${
+			park.lat
+		}&lon=${park.lng}&appid=${weatherKey1}`;
+		var counter = 0;
 		axios
-		.get(weatherURL)
-		.then(function(response) {
-			counter = counter+1;
-			console.log("counter is: " + counter)
-			//console.log("cloud log is: ",response.data.clouds.all)
-			park.clouds = response.data.clouds.all
-			park.cloudDesc = "dunno lmao"
-			park.humidity =  response.data.main.humidity
+			.get(weatherURL)
+			.then(function(response) {
+				counter = counter + 1;
+				console.log("counter is: " + counter);
+				//console.log("cloud log is: ",response.data.clouds.all)
+				park.clouds = response.data.clouds.all;
+				park.cloudDesc = "dunno lmao";
+				park.humidity = response.data.main.humidity;
 
-			if(counter ==parkDataLength){
-				console.log("final park data is :",parkData)
-				return(parkData);
-			}
-			
-			
-
+				if (counter == parkDataLength) {
+					console.log("final park data is :", parkData);
+					return parkData;
+				}
 			})
 			.catch(function(response) {
 				console.log(response);
-			})
-
-
+			});
 	}
-
-	
 }
 
 //YOU NEED THE / in the ADDRESS!!
