@@ -61,7 +61,13 @@ class ParkTable extends Component {
 	};
 
 	renderParkCard = park => {
-		return <ParkCard park={park} handleMouseOver={this.handleCardMouseOver} handleMouseClick={this.handleCardMouseClick} />;
+		return (
+			<ParkCard
+				park={park}
+				handleMouseOver={this.handleCardMouseOver}
+				handleMouseClick={this.handleCardMouseClick}
+			/>
+		);
 	};
 
 	handleCardMouseOver = parkID => {
@@ -112,28 +118,22 @@ class ParkTable extends Component {
 		</tr>
 	);
 
+	renderLoading = () => {
+		return (
+			<div
+				class="spinner-grow text-primary"
+				style={{ width: "3rem", height: "3rem" }}
+			/>
+		);
+	};
+
 	render() {
 		console.log("ParkTable - rendered");
 		return (
 			<div className="border border-primary">
-				{this.renderMoonData()}
-				{this.renderParkCardList()}
-
-				{/* <table className="table table-hover">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Light</th>
-							<th>Distance</th>
-							<th>Cloud Coverage</th>
-							<th>Cloud Type</th>
-							<th>Humidity</th>
-							<th>Moon %</th>
-							<th>Moon Phase</th>
-						</tr>
-					</thead>
-					<tbody>{this.renderParkTable()}</tbody>
-				</table> */}
+				{this.props.isLoadingParks
+					? this.renderLoading()
+					: (this.renderMoonData(), this.renderParkCardList())}
 			</div>
 		);
 	}

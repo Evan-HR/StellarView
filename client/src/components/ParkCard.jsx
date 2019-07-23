@@ -32,7 +32,8 @@ class ParkCard extends Component {
 					<div className="card-body bg-light">
 						{/* <h5 className="card-title">Primary card title</h5> */}
 						<p className="card-text">
-							{this.props.park.light_pol} <br />
+							{parseFloat(this.props.park.light_pol).toFixed(2)}
+							<br />
 							{parseFloat(this.props.park.distance).toFixed(
 								2
 							)}km <br />

@@ -156,6 +156,7 @@ class BaseParksComponent extends Component {
 								moonType={this.state.moonType}
 								googleMap={this.googleMap}
 								markers={this.markers}
+								isLoadingParks={this.state.isFetchingParks}
 							/>
 						</div>
 					</div>
