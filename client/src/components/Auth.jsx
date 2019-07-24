@@ -17,7 +17,8 @@ export class Auth extends React.Component {
 			isLoggingIn: false,
 			userLocation: { lat: "", lng: "" },
 			userReviews: [],
-			userFavorites: []
+			userFavorites: [],
+			setUserLocation: this.setUserLocation
 		};
 		console.log("AFTER REG, PRE-GETUSERAUTH, should be SECOND");
 		//this.getWeatherInfo();
@@ -31,15 +32,19 @@ export class Auth extends React.Component {
 		//this.getUserInfo = this.getUserInfo.bind(this);
 	}
 
+	setUserLocation = (latArg, lngArg) => {
+		this.setState({ userLocation: { lat: latArg, lng: lngArg } });
+	};
+
 	componentDidMount() {
-		navigator.geolocation.getCurrentPosition(position => {
-			this.setState({
-				userLocation: {
-					lat: position.coords.latitude,
-					lng: position.coords.longitude
-				}
-			});
-		});
+		// navigator.geolocation.getCurrentPosition(position => {
+		// 	this.setState({
+		// 		userLocation: {
+		// 			lat: position.coords.latitude,
+		// 			lng: position.coords.longitude
+		// 		}
+		// 	});
+		// });
 	}
 
 	handleLogoutState() {

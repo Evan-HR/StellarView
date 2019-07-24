@@ -34,7 +34,16 @@ class ParkCard extends Component {
 						<p className="card-text">
 							{parseFloat(this.props.park.light_pol).toFixed(2)}
 							<br />
-							{parseFloat(this.props.park.distance).toFixed(2)}km
+							{this.props.park.distance < 9000 ? (
+								<React.Fragment>
+									{parseFloat(
+										this.props.park.distance
+									).toFixed(2)}
+									<b> km</b>
+								</React.Fragment>
+							) : (
+								<b className="text-muted">Location unknown</b>
+							)}
 							<br />
 							{this.props.park.cloudDesc} <br />
 							{this.props.park.humidity}% Humidity <br />
