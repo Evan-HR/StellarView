@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
+import StarReviews from "./StarReviews";
 import { AuthConsumer } from "./AuthContext";
 class BaseReviews extends Component {
 	state = {
-		name: "",
-		score: "",
+		score: 0,
 		review: "",
 		hasReviewed: false,
 		switchCase: "",
@@ -38,7 +38,10 @@ class BaseReviews extends Component {
 		) {
 			console.log("siwtch case 2");
 			this.setState({ switchCase: "loggedInNotReviewed" });
-		} else if (this.props.context.isAuth == false || this.props.context.isAuth == null) {
+		} else if (
+			this.props.context.isAuth == false ||
+			this.props.context.isAuth == null
+		) {
 			console.log("siwtch case 3");
 			this.setState({ switchCase: "notLoggedIn" });
 		}
@@ -109,7 +112,7 @@ class BaseReviews extends Component {
 	renderUserNoReview() {
 		return (
 			<form id="reviewForm">
-				<label>
+				{/* <label>
 					Name: <br />
 					<input
 						type="text"
@@ -118,8 +121,9 @@ class BaseReviews extends Component {
 						onChange={this.handleNameChange}
 						value={this.state.name}
 					/>
-				</label>
+				</label> */}
 				<br />
+				<StarReviews scoreProp={this.state.score} />
 				<label>
 					Score (1-5):
 					<br />
@@ -214,9 +218,9 @@ class BaseReviews extends Component {
 		}
 	};
 
-	handleNameChange = e => {
-		this.setState({ name: e.target.value });
-	};
+	// handleNameChange = e => {
+	// 	this.setState({ name: e.target.value });
+	// };
 	handleScoreChange = e => {
 		this.setState({ score: e.target.value });
 	};
