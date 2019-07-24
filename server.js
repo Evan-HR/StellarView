@@ -648,7 +648,7 @@ app.post("/api/getProfileParks", (req, res) => {
 
 		for (var park in parkData) {
 			park = parkData[park];
-			park.dist =
+			park.distance =
 				6371 *
 				Math.acos(
 					Math.cos(toRadians(lat)) *
