@@ -1,5 +1,6 @@
 //Displays park table
 import React, { Component } from "react";
+import ParkCard from "./ParkCard";
 
 class ParkTableProfile extends Component {
 	state = {};
@@ -47,25 +48,25 @@ class ParkTableProfile extends Component {
 	// }
 
 	renderPark = park => (
-		<tr>
-			<td>{park.name_alt}</td>
-			<td>{park.light_pol}</td>
-			<td>{park.dist}</td>
-			<td>{park.clouds}</td>
-			<td>{park.cloudDesc}</td>
-			<td>{park.humidity}</td>
-			<td>{park.moon}</td>
-			<td>{park.moonType}</td>
-		</tr>
+		<ParkCard park={park} />
+		// <tr>
+		// 	<td>{park.name_alt}</td>
+		// 	<td>{park.light_pol}</td>
+		// 	<td>{park.dist}</td>
+		// 	<td>{park.clouds}</td>
+		// 	<td>{park.cloudDesc}</td>
+		// 	<td>{park.humidity}</td>
+		// 	<td>{park.moon}</td>
+		// 	<td>{park.moonType}</td>
+		// </tr>
 	);
 
 	render() {
 		console.log("ParkTable - rendered");
 		return (
 			<div className="border border-primary">
-				
-
-				<table className="table table-hover">
+				{this.renderParkTable()}
+				{/* <table className="table table-hover">
 					<thead>
 						<tr>
 							<th>Name</th>
@@ -79,7 +80,7 @@ class ParkTableProfile extends Component {
 						</tr>
 					</thead>
 					<tbody>{this.renderParkTable()}</tbody>
-				</table>
+				</table> */}
 			</div>
 		);
 	}

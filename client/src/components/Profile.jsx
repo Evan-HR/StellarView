@@ -8,7 +8,8 @@ class Profile extends Component {
 		profileInfoLoaded: false,
 		parkDataLoaded: false,
 		parkProfileData: {},
-		parkDataForTable: {}
+		parkDataForTable: {},
+		isLoadingParks: false
 	};
 
 	componentDidMount() {
@@ -39,7 +40,8 @@ class Profile extends Component {
 				console.log("Response from second call", response);
 				this.setState({
 					parkDataForTable: response.data,
-					parkDataLoaded: true
+					parkDataLoaded: true,
+					isLoadingParks: false
 				});
 			});
 
@@ -60,6 +62,7 @@ class Profile extends Component {
 		console.log("profileInfoLoaded : " + this.state.profileInfoLoaded);
 		console.log("parkDataLoaded : " + this.state.parkDataLoaded);
 		if (this.state.parkDataLoaded === false) {
+			// this.setState({isLoadingParks: true})
 			this.getParks();
 		}
 

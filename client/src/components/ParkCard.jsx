@@ -34,9 +34,7 @@ class ParkCard extends Component {
 						<p className="card-text">
 							{parseFloat(this.props.park.light_pol).toFixed(2)}
 							<br />
-							{parseFloat(this.props.park.distance).toFixed(
-								2
-							)}km <br />
+							{this.props.park.dist}km <br />
 							{this.props.park.cloudDesc} <br />
 							{this.props.park.humidity}% Humidity <br />
 						</p>
@@ -47,6 +45,7 @@ class ParkCard extends Component {
 	}
 }
 
+//Default no-op functions if no prop, so that it doesn't complain about them not existing
 ParkCard.defaultProps = {
 	handleMouseOver: () => {},
 	handleMouseLeave: () => {},
