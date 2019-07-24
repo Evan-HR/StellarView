@@ -2,19 +2,35 @@ import React, { Component } from "react";
 import axios from "axios";
 import StarReviews from "./StarReviews";
 import { AuthConsumer } from "./AuthContext";
+import StarReviewsStatic from "./StarReviewsStatic";
 class BaseReviews extends Component {
-	state = {
-		score: 0,
-		review: "",
-		hasReviewed: false,
-		switchCase: "",
-		dbReviewList: []
-	};
+
+	constructor(props) {
+		super(props);
+		this.state = {
+			score: 0,
+			review: "",
+			hasReviewed: false,
+			switchCase: "",
+			noStarError:false,
+			avgScore:0,
+			numReviews:0,
+			dbReviewList: []
+		};
+		this.handleStarScore = this.handleStarScore.bind(this);
+	}
+
 
 	getHasReviewed() {
 		if (this.props.context.userReviews.includes(this.props.parkID)) {
 			this.setState({ hasReviewed: true });
 		}
+	}
+
+	handleStarScore(scoreProp) {
+		this.setState({
+			score:scoreProp
+		});
 	}
 
 	componentDidMount() {
@@ -54,12 +70,16 @@ class BaseReviews extends Component {
 			})
 			.then(response => {
 				console.log({ message: "Reviews Gathered!", response });
-
-				if (response.data.length > 0) {
+				if(response.status==204){
+					this.setState({
+						dbReviewList: [],
+						avgScore: 0
+					});
+				}else{
 					var tempReviewsArr;
 
 					console.log("BLAH!?");
-					tempReviewsArr = response.data.map(x => {
+					tempReviewsArr = response.data.reviews.map(x => {
 						return {
 							name: x.name,
 							score: x.score,
@@ -67,9 +87,16 @@ class BaseReviews extends Component {
 						};
 					});
 					this.setState({
-						dbReviewList: tempReviewsArr
+						dbReviewList: tempReviewsArr,
+						avgScore: response.data.averageScore,
+						numReviews: response.data.numReviews
+						//avgReceived: true
 					});
 				}
+
+				
+					
+				
 			})
 			.catch(error => {
 				console.log(error);
@@ -81,25 +108,47 @@ class BaseReviews extends Component {
 
 		const newReview = {
 			name: this.props.context.firstName,
+			user_id: this.props.context.userID,
 			score: this.state.score,
 			review: this.state.review,
 			parkID: this.props.parkID
 		};
 
-		axios
+		if(this.state.score < 1){
+			this.setState({
+				noStarError:true
+			});
+			
+
+		}else{
+			axios
 			.post("/api/storeReview", newReview)
 			.then(res => console.log(res.data))
 			.catch(err => console.log(err.response.data));
 		this.setState({
 			dbReviewList: [newReview, ...this.state.dbReviewList],
 			hasReviewed: true,
-			switchCase: "loggedInHasReviewed"
+			switchCase: "loggedInHasReviewed",
+			noStarError:false
 		});
 
 		//push parkID to userReviews in Auth context provider
 		//this.props.context.userReviews
 		this.props.context.userReviews.push(this.props.parkID);
+		}
+
 	};
+
+	renderErrorMsg() {
+		if(this.state.noStarError===true){
+			return (
+				<div class="alert alert-danger" role="alert">
+					You must click a star (1-5) before submission.
+				</div>
+			);
+		}
+
+	}
 
 	formatReviews = review => (
 		<tr>
@@ -123,21 +172,11 @@ class BaseReviews extends Component {
 					/>
 				</label> */}
 				<br />
-				<StarReviews scoreProp={this.state.score} />
-				<label>
-					Score (1-5):
-					<br />
-					<input
-						type="number"
-						min="1"
-						max="5"
-						name="score"
-						onChange={this.handleScoreChange}
-						value={this.state.score}
-					/>
-				</label>
+				
+				<StarReviews scoreProp={this.handleStarScore} />
+
 				<br />
-				Review
+				Share your thoughts!
 				<br />
 				<label>
 					<textarea
@@ -160,9 +199,32 @@ class BaseReviews extends Component {
 		);
 	}
 
+	renderStarAvg(){
+	
+			return(
+				<div>
+				<StarReviewsStatic avgScore = {this.state.avgScore}/>
+				<br/>
+				{this.state.numReviews} reviews
+				<br/>
+				score: {this.state.avgScore}/5
+				</div>
+
+						)
+
+
+		
+	}
+
 	renderReviewsDiv() {
 		return (
+		
 			<div className="border border-primary">
+
+				{this.renderStarAvg()}
+
+
+				{this.renderErrorMsg()}
 				<table className="table table-hover">
 					<tbody>
 						<tr>
@@ -174,8 +236,10 @@ class BaseReviews extends Component {
 					<tbody>{this.renderReviewTable()}</tbody>
 				</table>
 			</div>
+			
 		);
 	}
+
 
 	renderUserNotLoggedIn() {
 		return (
@@ -218,12 +282,7 @@ class BaseReviews extends Component {
 		}
 	};
 
-	// handleNameChange = e => {
-	// 	this.setState({ name: e.target.value });
-	// };
-	handleScoreChange = e => {
-		this.setState({ score: e.target.value });
-	};
+
 
 	handleReviewChange = e => {
 		this.setState({ review: e.target.value });
@@ -234,6 +293,7 @@ class BaseReviews extends Component {
 			<div>
 				{this.renderReviewsSwitch(this.state.switchCase)}
 				{this.renderReviewsDiv()}
+				
 			</div>
 		);
 	}

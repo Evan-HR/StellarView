@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import Ratings from "react-ratings-declarative";
 
 class StarReviews extends Component {
+	
 	state = {
-		rating: this.props.scoreProp
+		rating: 0
 	};
 
 	changeRating = newRating => {
-		this.props.scoreProp = newRating;
+		this.state.rating = newRating;
+		this.props.scoreProp(newRating);
 	};
 
 	render() {
@@ -17,11 +19,17 @@ class StarReviews extends Component {
 				widgetRatedColors="yellow"
 				changeRating={this.changeRating}
 			>
-				<Ratings.Widget />
-				<Ratings.Widget />
-				<Ratings.Widget />
-				<Ratings.Widget />
-				<Ratings.Widget />
+				<Ratings.Widget 
+				 rating={1}
+				/>
+				<Ratings.Widget 
+				 rating={2}/>
+				<Ratings.Widget 
+				 rating={3}/>
+				<Ratings.Widget 
+				 rating={4}/>
+				<Ratings.Widget 
+				 rating={5}/>
 			</Ratings>
 		);
 	}
