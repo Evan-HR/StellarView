@@ -17,6 +17,7 @@ export class Auth extends React.Component {
 			isLoggingIn: false,
 			userLocation: { lat: "", lng: "" },
 			userReviews: [],
+			hasFavSpots: false,
 			userFavorites: []
 		};
 		console.log("AFTER REG, PRE-GETUSERAUTH, should be SECOND");
@@ -47,6 +48,7 @@ export class Auth extends React.Component {
 			firstName: null,
 			userID: null,
 			isAuth: false,
+			hasFavSpots: false,
 
 			userReviews: [],
 			userFavorites: []
@@ -58,7 +60,7 @@ export class Auth extends React.Component {
 		console.log("REGISTER GOT HERE, should be FIRST");
 
 		this.getUserInfo();
-		//this.getUserReviews();
+		//this.getUserFavSpots();
 	};
 
 	getUserAuth() {
@@ -91,6 +93,7 @@ export class Auth extends React.Component {
 	}
 
 	getUserInfo() {
+		var self = this;
 		console.log("SECOND: getUserInfo()");
 		axios
 			.get("/api/getUserInfo")
@@ -101,6 +104,7 @@ export class Auth extends React.Component {
 					isAuth: data.isAuth,
 					userID: data.userID
 				});
+				self.getUserFavSpots();
 			})
 			.catch(error => {
 				console.log(error);
@@ -115,7 +119,8 @@ export class Auth extends React.Component {
 			.then(favSpots => {
 				console.log("fav spots: ", favSpots);
 				this.setState({
-					userFavorites: favSpots.data
+					userFavorites: favSpots.data,
+					hasFavSpots: true
 				});
 			})
 			.catch(error => {

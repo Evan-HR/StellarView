@@ -222,41 +222,38 @@ app.get("/api/getReviews", function(req, res) {
 		getReviewQuery,
 		[req.query.parkID],
 		(err, reviews) => {
-			if(reviews.length > 0){
+			if (reviews.length > 0) {
 				if (err) {
 					console.log("failed" + err);
 					res.sendStatus(500);
 					return;
 				} else {
-					console.log("REVIEWS about to be sent: ",reviews)
+					console.log("REVIEWS about to be sent: ", reviews);
 					var reviewsJSON = JSON.parse(JSON.stringify(reviews));
 					var score = 0;
 					var reviewsLength = Object.keys(reviewsJSON).length;
-					console.log("num reviews: "+ reviewsLength)
-					for (let review in reviewsJSON){
+					console.log("num reviews: " + reviewsLength);
+					for (let review in reviewsJSON) {
 						review = reviewsJSON[review];
-						console.log("score is : ",review.score)
-						score = score +  review.score;
-	
-						
+						console.log("score is : ", review.score);
+						score = score + review.score;
 					}
-				
-					var averageScore = Math.round( (score/reviewsLength) * 10) / 10
-					console.log("average score truncated is: "+averageScore);
-	
+
+					var averageScore =
+						Math.round((score / reviewsLength) * 10) / 10;
+					console.log("average score truncated is: " + averageScore);
+
 					let reply = {
 						reviews: reviews,
 						averageScore: averageScore,
-						numReviews:reviewsLength
+						numReviews: reviewsLength
 					};
-	
+
 					res.send(reply);
 				}
-			}
-			else{
+			} else {
 				res.sendStatus(204);
 			}
-
 		}
 	);
 });
@@ -521,25 +518,22 @@ app.get("/api/getUserReviews", (req, res) => {
 			(err, reviewResults) => {
 				//console.log("rev results",reviewResults);
 
-					if (err) {
-						console.log("failed" + err);
-						res.sendStatus(500);
-						return;
-					} else {
-						if (reviewResults.length > 0) {
-							tempReviews = [];
-							for (var i = 0; i < reviewResults.length; i++) {
-								tempReviews.push(reviewResults[i].p_id);
-							}
-	
-							console.log("reviews is: ", tempReviews);
-							res.send(tempReviews);
+				if (err) {
+					console.log("failed" + err);
+					res.sendStatus(500);
+					return;
+				} else {
+					if (reviewResults.length > 0) {
+						tempReviews = [];
+						for (var i = 0; i < reviewResults.length; i++) {
+							tempReviews.push(reviewResults[i].p_id);
 						}
+
+						console.log("reviews is: ", tempReviews);
+						res.send(tempReviews);
 					}
-
 				}
-
-			
+			}
 		);
 	}
 });
@@ -656,7 +650,7 @@ function inRange(x, min, max) {
 	return (x - min) * (x - max) <= 0;
 }
 
-app.post("/api/getProfileParks", (req, res) => {
+app.get("/api/getProfileParks", (req, res) => {
 	console.log("body is: ", req.body);
 	var tempString = JSON.stringify(req.body.userFavs);
 	//console.log(tempString)
@@ -717,7 +711,7 @@ app.post("/api/getProfileParks", (req, res) => {
 	});
 });
 
-app.post("/api/getProfileParksWeather", (req, res) => {
+app.get("/api/getProfileParksWeather", (req, res) => {
 	console.log("getprofparks got here");
 
 	console.log("getprofileparksweather body: ", req.body[0].name);
