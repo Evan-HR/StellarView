@@ -20,8 +20,8 @@ class NavBar extends Component {
 		return (
 			<ul className="nav justify-content-center">
 				<li className="nav-item">
-					<a className="nav-link" href="/">
-						Home
+					<a className="nav-link">
+						<Link to="/">Home</Link>
 					</a>
 				</li>
 
@@ -67,11 +67,6 @@ class NavBar extends Component {
 
 				<NavBarFAQ />
 
-				{/* <li class="nav-item">
-					<a class="nav-link" href="/faq">
-						FAQ
-					</a>
-				</li> */}
 				<AuthConsumer>
 					{x => {
 						if (x.isAuth === true) {

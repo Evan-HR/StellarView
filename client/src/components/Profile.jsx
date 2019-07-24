@@ -6,9 +6,10 @@ class Profile extends Component {
 	state = {
 		parks: [],
 		profileInfoLoaded: false,
-		parkDataLoaded:false,
+		parkDataLoaded: false,
 		parkProfileData: {},
-		parkDataForTable:{}
+		parkDataForTable: {},
+		isLoadingParks: false
 	};
 
 	componentDidMount() {
@@ -26,23 +27,23 @@ class Profile extends Component {
 			},
 			profileInfoLoaded: true
 		});
-		
-		
 	}
 
 	getParks = () => {
-		axios.post("/api/getProfileParks", this.state.parkProfileData)
-  .then((response) => {
-	  console.log("response from first call: ",response)
-    return axios.post("/api/getProfileParksWeather",response.data); // using response.data
-  })
-  .then((response) => {
-	console.log('Response from second call', response);
-	this.setState({
-		parkDataForTable: response.data,
-		parkDataLoaded: true
-	});
-  });
+		axios
+			.post("/api/getProfileParks", this.state.parkProfileData)
+			.then(response => {
+				console.log("response from first call: ", response);
+				return axios.post("/api/getProfileParksWeather", response.data); // using response.data
+			})
+			.then(response => {
+				console.log("Response from second call", response);
+				this.setState({
+					parkDataForTable: response.data,
+					parkDataLoaded: true,
+					isLoadingParks: false
+				});
+			});
 
 		// axios
 		// 	.post("/api/getProfileParks", this.state.parkProfileData)
@@ -50,42 +51,42 @@ class Profile extends Component {
 		// 		console.log("profile response:", response.data);
 
 		// 	})
-			
+
 		// 	.catch(err => {
 		// 		//console.error(err);
 		// 	});
 	};
 
-	sendToParkTable = () =>{
+	sendToParkTable = () => {
 		console.log("sendtoParkTable() reached!");
-		console.log("profileInfoLoaded : "+this.state.profileInfoLoaded)
-		console.log("parkDataLoaded : "+this.state.parkDataLoaded)
-		if(this.state.parkDataLoaded ===false){
+		console.log("profileInfoLoaded : " + this.state.profileInfoLoaded);
+		console.log("parkDataLoaded : " + this.state.parkDataLoaded);
+		if (this.state.parkDataLoaded === false) {
+			// this.setState({isLoadingParks: true})
 			this.getParks();
 		}
-		
-		if(this.state.profileInfoLoaded ===true&&this.state.parkDataLoaded===true){
-			return(
+
+		if (
+			this.state.profileInfoLoaded === true &&
+			this.state.parkDataLoaded === true
+		) {
+			return (
 				<ParkTableProfile
-							parkList={this.state.parkDataForTable
-								
-							}
-							// moon={this.state.moon}
-							// moonType={this.state.moonType}
-						/>
-				)
+					parkList={this.state.parkDataForTable}
+					// moon={this.state.moon}
+					// moonType={this.state.moonType}
+				/>
+			);
 		}
-		
-	}
-
-
+	};
 
 	render() {
-// if(this.state.profileInfoLoaded==true){
-// 	this.getParks();
-// }
+		// if(this.state.profileInfoLoaded==true){
+		// 	this.getParks();
+		// }
 		return (
 			<div>
+				Hello, {this.props.firstName}!
 				{this.sendToParkTable()}
 			</div>
 		);

@@ -1,5 +1,6 @@
 //Displays park table
 import React, { Component } from "react";
+import ParkCard from "./ParkCard";
 
 class ParkTable extends Component {
 	state = {};
@@ -61,50 +62,31 @@ class ParkTable extends Component {
 
 	renderParkCard = park => {
 		return (
-			<div className="card mb-3" style={{ textTransform: "capitalize" }}>
-				<div className="card-header text-white bg-primary">
-					<button
-						className="btn btn-link text-white"
-						onMouseEnter={() => {
-							if (!this.isAnimating[park.id]) {
-								this.isAnimating[park.id] = true;
-								this.props.markers[park.id].setAnimation(
-									window.google.maps.Animation.BOUNCE
-								);
-								setTimeout(() => {
-									this.props.markers[park.id].setAnimation(
-										null
-									);
-									delete this.isAnimating[park.id];
-								}, 675);
-							}
-						}}
-						onMouseLeave={() => {}}
-						onClick={() => {
-							this.props.googleMap.panTo(
-								this.props.markers[park.id].position
-							);
-							this.props.googleMap.setZoom(10);
-							window.google.maps.event.trigger(
-								this.props.markers[park.id],
-								"click"
-							);
-						}}
-					>
-						{park.name_alt ? park.name_alt : park.name}
-					</button>
-				</div>
-				<div className="card-body bg-light">
-					{/* <h5 className="card-title">Primary card title</h5> */}
-					<p className="card-text">
-						{park.light_pol} <br />
-						{parseFloat(park.distance).toFixed(2)}km <br />
-						{park.cloudDesc} <br />
-						{park.humidity}% Humidity <br />
-					</p>
-				</div>
-			</div>
+			<ParkCard
+				park={park}
+				handleMouseOver={this.handleCardMouseOver}
+				handleMouseClick={this.handleCardMouseClick}
+			/>
 		);
+	};
+
+	handleCardMouseOver = parkID => {
+		if (!this.isAnimating[parkID]) {
+			this.isAnimating[parkID] = true;
+			this.props.markers[parkID].setAnimation(
+				window.google.maps.Animation.BOUNCE
+			);
+			setTimeout(() => {
+				this.props.markers[parkID].setAnimation(null);
+				delete this.isAnimating[parkID];
+			}, 675);
+		}
+	};
+
+	handleCardMouseClick = parkID => {
+		this.props.googleMap.panTo(this.props.markers[parkID].position);
+		this.props.googleMap.setZoom(10);
+		window.google.maps.event.trigger(this.props.markers[parkID], "click");
 	};
 
 	renderParkTable = () => {
@@ -136,28 +118,22 @@ class ParkTable extends Component {
 		</tr>
 	);
 
+	renderLoading = () => {
+		return (
+			<div
+				class="spinner-grow text-primary"
+				style={{ width: "3rem", height: "3rem" }}
+			/>
+		);
+	};
+
 	render() {
 		console.log("ParkTable - rendered");
 		return (
 			<div className="border border-primary">
-				{this.renderMoonData()}
-				{this.renderParkCardList()}
-
-				{/* <table className="table table-hover">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Light</th>
-							<th>Distance</th>
-							<th>Cloud Coverage</th>
-							<th>Cloud Type</th>
-							<th>Humidity</th>
-							<th>Moon %</th>
-							<th>Moon Phase</th>
-						</tr>
-					</thead>
-					<tbody>{this.renderParkTable()}</tbody>
-				</table> */}
+				{this.props.isLoadingParks
+					? this.renderLoading()
+					: (this.renderMoonData(), this.renderParkCardList())}
 			</div>
 		);
 	}
