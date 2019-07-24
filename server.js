@@ -222,13 +222,41 @@ app.get("/api/getReviews", function(req, res) {
 		getReviewQuery,
 		[req.query.parkID],
 		(err, reviews) => {
-			if (err) {
-				console.log("failed" + err);
-				res.sendStatus(500);
-				return;
-			} else {
-				res.send(reviews);
+			if(reviews.length > 0){
+				if (err) {
+					console.log("failed" + err);
+					res.sendStatus(500);
+					return;
+				} else {
+					console.log("REVIEWS about to be sent: ",reviews)
+					var reviewsJSON = JSON.parse(JSON.stringify(reviews));
+					var score = 0;
+					var reviewsLength = Object.keys(reviewsJSON).length;
+					console.log("num reviews: "+ reviewsLength)
+					for (let review in reviewsJSON){
+						review = reviewsJSON[review];
+						console.log("score is : ",review.score)
+						score = score +  review.score;
+	
+						
+					}
+				
+					var averageScore = Math.round( (score/reviewsLength) * 10) / 10
+					console.log("average score truncated is: "+averageScore);
+	
+					let reply = {
+						reviews: reviews,
+						averageScore: averageScore,
+						numReviews:reviewsLength
+					};
+	
+					res.send(reply);
+				}
 			}
+			else{
+				res.sendStatus(204);
+			}
+
 		}
 	);
 });
@@ -251,7 +279,7 @@ app.post("/api/storeReview", function(req, res) {
 			req.body.parkID,
 			req.body.score,
 			req.body.name,
-			req.user.user_id,
+			req.body.user_id,
 			req.body.review
 		],
 		(err, profileInfo) => {
@@ -491,22 +519,27 @@ app.get("/api/getUserReviews", (req, res) => {
 			getUserReviewQuery,
 			[req.session.passport.user.user_id],
 			(err, reviewResults) => {
-				if (err) {
-					console.log("failed" + err);
-					res.sendStatus(500);
-					return;
-				} else {
-					if (reviewResults.length > 0) {
-						tempReviews = [];
-						for (var i = 0; i < reviewResults.length; i++) {
-							tempReviews.push(reviewResults[i].p_id);
-						}
+				//console.log("rev results",reviewResults);
 
-						console.log("reviews is: ", tempReviews);
-						res.send(tempReviews);
+					if (err) {
+						console.log("failed" + err);
+						res.sendStatus(500);
+						return;
+					} else {
+						if (reviewResults.length > 0) {
+							tempReviews = [];
+							for (var i = 0; i < reviewResults.length; i++) {
+								tempReviews.push(reviewResults[i].p_id);
+							}
+	
+							console.log("reviews is: ", tempReviews);
+							res.send(tempReviews);
+						}
 					}
+
 				}
-			}
+
+			
 		);
 	}
 });
