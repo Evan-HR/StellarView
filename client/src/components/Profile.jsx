@@ -3,38 +3,26 @@ import axios from "axios";
 import { AuthConsumer } from "./AuthContext";
 import ParkTableProfile from "./ParkTableProfile";
 
-
 class BaseProfile extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
-				//parks: this.props.context.userFavorites,
-				userFavorites: this.props.context.userFavorites,
-				lat: this.props.context.userLocation.lat,
-				lng: this.props.context.userLocation.lng,
+			//parks: this.props.context.userFavorites,
+			userFavorites: this.props.context.userFavorites,
+			lat: this.props.context.userLocation.lat,
+			lng: this.props.context.userLocation.lng,
 
-
-
-				profileInfoLoaded: false,
-				parkDataLoaded: false,
-				//parkProfileData: {},
-				parkDataForTable: {},
-				isLoadingParks: false,
-				testBoolInfoLoaded:false
-			
-		
+			profileInfoLoaded: false,
+			parkDataLoaded: false,
+			//parkProfileData: {},
+			parkDataForTable: {},
+			isLoadingParks: false
 		};
-
-		
-
 	}
 
-	componentDidMount(){
-	this.getParks();
-	}
-	
-
+	// componentDidMount() {
+	// 	this.getParks();
+	// }
 
 	// getProfileInfo=()=> {
 	// 	console.log("COMP DID MOUNT !!! THIS RUNS FIRST!!!!!!!!!");
@@ -57,31 +45,33 @@ class BaseProfile extends Component {
 	// }
 
 	getParks = () => {
-		console.log("-------------------got to getParks!")
-		console.log("userFavs is: ",this.props.context.userFavorites)
-		console.log("lat is: ",this.props.context.userLocation.lat)
+		console.log("-------------------got to getParks!");
+		console.log("userFavs is: ", this.props.context.userFavorites);
+		console.log("lat is: ", this.props.context.userLocation.lat);
+		console.log("hasFavSpots : ", this.props.context.hasFavSpots);
 
 		if (this.props.context.hasFavSpots == true) {
-			console.log("hasFavSpots got here")
+			console.log("hasFavSpots got here");
 			var now = new Date();
 			var isoDate = now.toISOString();
 			isoDate = new Date(isoDate);
 			//pass to getProfileParks
-var parkProfileData = {
-	userTime: isoDate,
+			var parkProfileData = {
+				userTime: isoDate,
 				// userFavs: this.props.context.userFavorites,
 				// lat: this.props.context.userLocation.lat,
 				// lng: this.props.context.userLocation.lng
-				userFavs: this.state.userFavorites,
+				userFavs: this.props.context.userFavorites,
 				lat: this.state.lat,
 				lng: this.state.lng
-}
+			};
 
-//var parkProfileDataJSON = JSON.parse(parkProfileData)
+			//var parkProfileDataJSON = JSON.parse(parkProfileData)
 
-
-
-console.log("console log before getProfileParks -- should crash after this: ",parkProfileData)
+			console.log(
+				"console log before getProfileParks -- should crash after this: ",
+				parkProfileData
+			);
 
 			axios
 				.post("/api/getProfileParks", parkProfileData)
@@ -97,54 +87,37 @@ console.log("console log before getProfileParks -- should crash after this: ",pa
 					this.setState({
 						parkDataForTable: response.data,
 						parkDataLoaded: true,
-						testBoolInfoLoaded:true,
+
 						isLoadingParks: false
 					});
 				});
-				
 		}
 	};
 
 	sendToParkTable = () => {
 		console.log("sendtoParkTable hath entered");
-		console.log("testboolInfoLoad is : "+this.state.testBoolInfoLoaded);
-		// // console.log("sendtoParkTable() reached!");
-		// // console.log("profileInfoLoaded : " + this.state.profileInfoLoaded);
-		// console.log(
-		// 	"IS PARK DATA LOADED? IF FALSE, RUN GETPARKS(): " +
-		// 		this.state.parkDataLoaded
-		// );
+		//console.log("testboolInfoLoad is : " + this.state.testBoolInfoLoaded);
 
-		if(this.state.testBoolInfoLoaded===true){
-			// if (this.state.parkDataLoaded === false) {
-			// 	// this.setState({isLoadingParks: true})
-			// 	this.getParks();
-			// }
-			console.log("testBoolInfo reached!")
-	
-			if (
-				this.state.parkDataLoaded === true
-			) {
-				return (
-					<ParkTableProfile
-						parkList={this.state.parkDataForTable}
-						// moon={this.state.moon}
-						// moonType={this.state.moonType}
-					/>
-				);
-			}
+		if (this.state.parkDataLoaded === true) {
+			return (
+				<ParkTableProfile
+					parkList={this.state.parkDataForTable}
+					// moon={this.state.moon}
+					// moonType={this.state.moonType}
+				/>
+			);
+		} else {
+			this.getParks();
 		}
-
-		
 	};
 
 	render() {
-		console.log("RENDER!!!! STATE IS BELOW:")
-		console.log("USER ID IS : ", this.props.context.userID)
-		console.log("USER LAT IS : ", this.props.context.userLocation.lat)
-		console.log("USER FAV PARKS", this.props.context.userFavorites)
-		console.log("HAS FAV SPOTS", this.props.context.hasFavSpots)
-		console.log(this.state)
+		console.log("RENDER!!!! STATE IS BELOW:");
+		console.log("USER ID IS : ", this.props.context.userID);
+		console.log("USER LAT IS : ", this.props.context.userLocation.lat);
+		console.log("USER FAV PARKS", this.props.context.userFavorites);
+		console.log("HAS FAV SPOTS", this.props.context.hasFavSpots);
+		console.log(this.state);
 		return (
 			<div>
 				Hello, {this.props.context.firstName}!<br />
@@ -155,17 +128,7 @@ console.log("console log before getProfileParks -- should crash after this: ",pa
 }
 
 const Profile = props => (
-	
-	<AuthConsumer>
-
-		{x => <BaseProfile context={x} />}
-	</AuthConsumer>
+	<AuthConsumer>{x => <BaseProfile context={x} />}</AuthConsumer>
 );
 
-
-
-
 export default Profile;
-
-
-

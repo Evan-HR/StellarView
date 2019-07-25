@@ -184,29 +184,58 @@ app.get("/api/getUserFavSpots", function(req, res) {
 	const getFavSpotsQuery =
 		"SELECT park_id from favorite_parks where user_id = ?";
 
-	console.log("user_id is: ", req.session.passport.user);
+	if (isNaN(req.session.passport.user.user_id)) {
+		getConnection().query(
+			getFavSpotsQuery,
+			[req.session.passport.user],
+			(err, favSpots) => {
+				console.log("favspots pre array is: ", favSpots);
+				if (err) {
+					console.log("failed" + err);
+					res.sendStatus(500);
+					return;
+				} else {
+					if (favSpots.length > 0) {
+						tempSpots = [];
+						for (var i = 0; i < favSpots.length; i++) {
+							tempSpots.push(favSpots[i].park_id);
+						}
 
-	getConnection().query(
-		getFavSpotsQuery,
-		[req.session.passport.user.user_id],
-		(err, favSpots) => {
-			console.log("favspots pre array is: ", favSpots);
-			if (err) {
-				console.log("failed" + err);
-				res.sendStatus(500);
-				return;
-			} else {
-				if (favSpots.length > 0) {
-					tempSpots = [];
-					for (var i = 0; i < favSpots.length; i++) {
-						tempSpots.push(favSpots[i].park_id);
+						console.log("tempSpots is: ", tempSpots);
+						res.send(tempSpots);
 					}
-
-					console.log("tempSpots is: ", tempSpots);
-					res.send(tempSpots);
 				}
 			}
-		}
+		);
+	} else {
+		getConnection().query(
+			getFavSpotsQuery,
+			[req.session.passport.user.user_id],
+			(err, favSpots) => {
+				console.log("favspots pre array is: ", favSpots);
+				if (err) {
+					console.log("failed" + err);
+					res.sendStatus(500);
+					return;
+				} else {
+					if (favSpots.length > 0) {
+						tempSpots = [];
+						for (var i = 0; i < favSpots.length; i++) {
+							tempSpots.push(favSpots[i].park_id);
+						}
+
+						console.log("tempSpots is: ", tempSpots);
+						res.send(tempSpots);
+					}
+				}
+			}
+		);
+	}
+
+	console.log("req.session.passport.user: ", req.session.passport.user);
+	console.log(
+		"req.session.passport.user.user_id: ",
+		req.session.passport.user.user_id
 	);
 });
 
@@ -732,7 +761,6 @@ app.post("/api/getProfileParksWeather", (req, res) => {
 				counter = counter + 1;
 				console.log("counter is: " + counter);
 				console.log("currently appending to: ", park.name);
-				//console.log("cloud log is: ",response.data.clouds.all)
 				park.clouds = response.data.clouds.all;
 				park.cloudDesc = "dunno lmao";
 				park.humidity = response.data.main.humidity;
