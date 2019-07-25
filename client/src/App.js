@@ -32,7 +32,7 @@ class App extends Component {
 										if (authState.isAuth !== null) {
 											if (authState.isAuth === true)
 												return (
-													<Profile {...authState} />
+													<Profile />
 												);
 											else return <Redirect to="/" />;
 										}

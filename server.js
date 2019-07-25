@@ -650,7 +650,7 @@ function inRange(x, min, max) {
 	return (x - min) * (x - max) <= 0;
 }
 
-app.get("/api/getProfileParks", (req, res) => {
+app.post("/api/getProfileParks", (req, res) => {
 	console.log("body is: ", req.body);
 	var tempString = JSON.stringify(req.body.userFavs);
 	//console.log(tempString)
@@ -711,7 +711,7 @@ app.get("/api/getProfileParks", (req, res) => {
 	});
 });
 
-app.get("/api/getProfileParksWeather", (req, res) => {
+app.post("/api/getProfileParksWeather", (req, res) => {
 	console.log("getprofparks got here");
 
 	console.log("getprofileparksweather body: ", req.body[0].name);
