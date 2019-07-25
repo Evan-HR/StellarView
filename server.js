@@ -135,9 +135,10 @@ passport.use(
 						console.log(results[0].password.toString());
 						const hash = results[0].password.toString();
 
+						//used to be user.results[0].id
 						bcrypt.compare(password, hash, function(err, response) {
 							if (response === true) {
-								return done(null, { user_id: results[0].id });
+								return done(null, results[0].id);
 							} else {
 								return done(null, false);
 							}
@@ -185,6 +186,7 @@ app.get("/api/getUserFavSpots", function(req, res) {
 		"SELECT park_id from favorite_parks where user_id = ?";
 
 	if (isNaN(req.session.passport.user.user_id)) {
+		console.log("NEWLY REGISTERED USER GOT HERE!!!!!!!!!!!!!!!!!");
 		getConnection().query(
 			getFavSpotsQuery,
 			[req.session.passport.user],
@@ -208,6 +210,7 @@ app.get("/api/getUserFavSpots", function(req, res) {
 			}
 		);
 	} else {
+		console.log("LOGGED IN  USER GOT HERE!!!!!!!!!!!!!!!!!");
 		getConnection().query(
 			getFavSpotsQuery,
 			[req.session.passport.user.user_id],
@@ -395,6 +398,10 @@ app.post("/api/register", function(req, res) {
 										"user ID is: " + results[1][0].user_id
 									);
 									const user_id = results[1][0].user_id;
+									console.log(
+										"!!!!!!user id AFTER REGISTER is!!!!!!!!!!! : ",
+										user_id
+									);
 									//should be user_id that was just created
 									//login function returns data to serializeUser function below
 									req.login(user_id, function(err) {
@@ -411,6 +418,11 @@ app.post("/api/register", function(req, res) {
 		});
 	}
 });
+
+// passport.serializeUser(function(user, done){
+//     console.log('OK')//is show in console
+//     done(null, user.id);
+// });
 
 //----------------------BEGIN AUTHENTICATION-----------------
 passport.serializeUser(function(user_id, done) {
@@ -534,16 +546,14 @@ app.get("/api/getUserInfo", (req, res) => {
 });
 
 app.get("/api/getUserReviews", (req, res) => {
-	console.log("THIRD: GETUSERAUTH");
+	console.log("GET USER REVIEWS GET HERE!???!??!?!?!?");
 	const getUserReviewQuery = "SELECT p_id from reviews WHERE user_id=?";
-	console.log(
-		"REVIEWS: USER ID FOR QUERY IS:" + req.session.passport.user.user_id
-	);
+	console.log("REVIEWS: USER ID FOR QUERY IS:" + req.session.passport.user);
 	//if logged in...
 	if (req.session.passport) {
 		getConnection().query(
 			getUserReviewQuery,
-			[req.session.passport.user.user_id],
+			[req.session.passport.user],
 			(err, reviewResults) => {
 				//console.log("rev results",reviewResults);
 

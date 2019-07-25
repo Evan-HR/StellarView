@@ -46,9 +46,11 @@ class BaseFavPark extends Component {
 				}
 			})
 			.then(response => {
+				//TODO: send handler to auth about fav spots
 				console.log({ message: "Fav Spot is: ", response });
 				this.setState({ buttonPressed: true });
 				this.props.context.userFavorites.push(this.props.parkID);
+				this.props.context.hasFavSpots = true;
 			})
 			.catch(error => {
 				console.log(error);
