@@ -19,7 +19,8 @@ export class Auth extends React.Component {
 			userReviews: [],
 			hasFavSpots: false,
 			hasNoSpots: false,
-			userFavorites: []
+			userFavorites: [],
+			setUserLocation: this.setUserLocation
 		};
 		console.log("AFTER REG, PRE-GETUSERAUTH, should be SECOND");
 		//this.getWeatherInfo();
@@ -33,15 +34,19 @@ export class Auth extends React.Component {
 		//this.getUserInfo = this.getUserInfo.bind(this);
 	}
 
+	setUserLocation = (latArg, lngArg) => {
+		this.setState({ userLocation: { lat: latArg, lng: lngArg } });
+	};
+
 	componentDidMount() {
-		navigator.geolocation.getCurrentPosition(position => {
-			this.setState({
-				userLocation: {
-					lat: position.coords.latitude,
-					lng: position.coords.longitude
-				}
-			});
-		});
+		// navigator.geolocation.getCurrentPosition(position => {
+		// 	this.setState({
+		// 		userLocation: {
+		// 			lat: position.coords.latitude,
+		// 			lng: position.coords.longitude
+		// 		}
+		// 	});
+		// });
 	}
 
 	handleLogoutState() {
@@ -120,21 +125,18 @@ export class Auth extends React.Component {
 
 			.then(favSpots => {
 				if (favSpots.status == 204) {
-					console.log("204!!!!!!! NO FAV SPOTS!!")
+					console.log("204!!!!!!! NO FAV SPOTS!!");
 					this.setState({
 						hasNoSpots: true
-						
+					});
+				} else {
+					console.log("fav spots: ", favSpots);
+					this.setState({
+						userFavorites: favSpots.data,
+						hasFavSpots: true,
+						hasNoSpots: false
 					});
 				}
-					else{
-						console.log("fav spots: ", favSpots);
-						this.setState({
-							userFavorites: favSpots.data,
-							hasFavSpots: true,
-							hasNoSpots: false
-						});
-					}
-
 			})
 			.catch(error => {
 				console.log(error);

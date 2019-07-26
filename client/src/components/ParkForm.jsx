@@ -180,6 +180,10 @@ class BaseParkForm extends Component {
 							)
 						);
 					}
+					this.props.authState.setUserLocation(
+						position.coords.latitude,
+						position.coords.longitude
+					);
 				},
 				error => {
 					this.setState({
