@@ -131,9 +131,14 @@ class ParkTable extends Component {
 		console.log("ParkTable - rendered");
 		return (
 			<div className="border border-primary">
-				{this.props.isLoadingParks
-					? this.renderLoading()
-					: (this.renderMoonData(), this.renderParkCardList())}
+				{this.props.isLoadingParks ? (
+					this.renderLoading()
+				) : (
+					<React.Fragment>
+						{this.renderMoonData()}
+						{this.renderParkCardList()}
+					</React.Fragment>
+				)}
 			</div>
 		);
 	}
