@@ -454,6 +454,8 @@ app.get("/api/getUserReviews", (req, res) => {
 
 						console.log("reviews is: ", tempReviews);
 						res.send(tempReviews);
+					}else{
+						res.sendStatus(204);
 					}
 				}
 			}
