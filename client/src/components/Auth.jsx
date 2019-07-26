@@ -17,6 +17,8 @@ export class Auth extends React.Component {
 			isLoggingIn: false,
 			userLocation: { lat: "", lng: "" },
 			userReviews: [],
+			hasFavSpots: false,
+			hasNoSpots: false,
 			userFavorites: [],
 			setUserLocation: this.setUserLocation
 		};
@@ -52,7 +54,8 @@ export class Auth extends React.Component {
 			firstName: null,
 			userID: null,
 			isAuth: false,
-
+			hasFavSpots: false,
+			hasNoSpots: false,
 			userReviews: [],
 			userFavorites: []
 		});
@@ -63,7 +66,7 @@ export class Auth extends React.Component {
 		console.log("REGISTER GOT HERE, should be FIRST");
 
 		this.getUserInfo();
-		//this.getUserReviews();
+		//this.getUserFavSpots();
 	};
 
 	getUserAuth() {
@@ -76,8 +79,8 @@ export class Auth extends React.Component {
 				if (response.data == true) {
 					console.log("get here ya?");
 					self.getUserInfo();
-					self.getUserReviews();
-					self.getUserFavSpots();
+					// self.getUserReviews();
+					// self.getUserFavSpots();
 				}
 			})
 
@@ -96,6 +99,7 @@ export class Auth extends React.Component {
 	}
 
 	getUserInfo() {
+		var self = this;
 		console.log("SECOND: getUserInfo()");
 		axios
 			.get("/api/getUserInfo")
@@ -106,6 +110,8 @@ export class Auth extends React.Component {
 					isAuth: data.isAuth,
 					userID: data.userID
 				});
+				self.getUserFavSpots();
+				self.getUserReviews();
 			})
 			.catch(error => {
 				console.log(error);
@@ -118,10 +124,19 @@ export class Auth extends React.Component {
 			.get("/api/getUserFavSpots")
 
 			.then(favSpots => {
-				console.log("fav spots: ", favSpots);
-				this.setState({
-					userFavorites: favSpots.data
-				});
+				if (favSpots.status == 204) {
+					console.log("204!!!!!!! NO FAV SPOTS!!");
+					this.setState({
+						hasNoSpots: true
+					});
+				} else {
+					console.log("fav spots: ", favSpots);
+					this.setState({
+						userFavorites: favSpots.data,
+						hasFavSpots: true,
+						hasNoSpots: false
+					});
+				}
 			})
 			.catch(error => {
 				console.log(error);
@@ -129,6 +144,9 @@ export class Auth extends React.Component {
 	}
 
 	getUserReviews() {
+		console.log(
+			"GETUSERREVIEWS GOT HERE  -  SHOULD BE ONLY ONCE!!!!!!!!!!!"
+		);
 		console.log("THIRD: getUserReviews()");
 		axios
 			.get("/api/getUserReviews")
