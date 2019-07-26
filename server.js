@@ -102,7 +102,6 @@ app.use(passport.session());
 
 app.use(function(req, res, next) {
 	res.locals.isAuthenticated = req.isAuthenticated();
-	console.log("USER IS AUTHENTICATED?? :" + res.locals.isAuthenticated);
 	next();
 });
 
@@ -115,8 +114,6 @@ passport.use(
 			usernameField: "email"
 		},
 		function(username, password, done) {
-			console.log("email is: " + username);
-			console.log("password is: " + password);
 			const passQuery = "SELECT id,password from users WHERE email=?";
 			getConnection().query(
 				passQuery,
@@ -150,13 +147,6 @@ passport.use(
 	)
 );
 
-/**
- * When you call req.logout(), req.session.destroy(),
- * and req.redirect('/') synchronously (one after the other)
- *  like he does in the video, you may get an error in the console
- * about an unhandled promise. This is because req.session.destroy()
- *  is asynchronous, so you may be redirected before your session has been destroyed.
- */
 app.get("/logout", function(req, res) {
 	console.log("LOG OUT GOT HERE!???!?");
 	req.logout();
@@ -177,16 +167,9 @@ app.post(
 	})
 );
 //----------------------END LOGIN--------------------------------------//
-//get favSpots from db
 app.get("/api/getUserFavSpots", function(req, res) {
-	//order in query :p_id, score, name, user_id, review
-	//id is autoincrement so dont worry about that
-	//"SELECT name, light_pol, lat, lng from ontario_parks WHERE id=?";
 	const getFavSpotsQuery =
 		"SELECT park_id from favorite_parks where user_id = ?";
-
-	if (isNaN(req.session.passport.user.user_id)) {
-		console.log("NEWLY REGISTERED USER GOT HERE!!!!!!!!!!!!!!!!!");
 		getConnection().query(
 			getFavSpotsQuery,
 			[req.session.passport.user],
@@ -206,47 +189,18 @@ app.get("/api/getUserFavSpots", function(req, res) {
 						console.log("tempSpots is: ", tempSpots);
 						res.send(tempSpots);
 					}
-				}
-			}
-		);
-	} else {
-		console.log("LOGGED IN  USER GOT HERE!!!!!!!!!!!!!!!!!");
-		getConnection().query(
-			getFavSpotsQuery,
-			[req.session.passport.user.user_id],
-			(err, favSpots) => {
-				console.log("favspots pre array is: ", favSpots);
-				if (err) {
-					console.log("failed" + err);
-					res.sendStatus(500);
-					return;
-				} else {
-					if (favSpots.length > 0) {
-						tempSpots = [];
-						for (var i = 0; i < favSpots.length; i++) {
-							tempSpots.push(favSpots[i].park_id);
-						}
-
-						console.log("tempSpots is: ", tempSpots);
-						res.send(tempSpots);
+					else {
+						res.sendStatus(204);
 					}
 				}
 			}
 		);
-	}
+	} );
 
-	console.log("req.session.passport.user: ", req.session.passport.user);
-	console.log(
-		"req.session.passport.user.user_id: ",
-		req.session.passport.user.user_id
-	);
-});
+
 
 //get reviews from db
 app.get("/api/getReviews", function(req, res) {
-	//order in query :p_id, score, name, user_id, review
-	//id is autoincrement so dont worry about that
-	//"SELECT name, light_pol, lat, lng from ontario_parks WHERE id=?";
 	const getReviewQuery =
 		"SELECT name, score, review from reviews where p_id = ?";
 
@@ -322,9 +276,6 @@ app.post("/api/storeReview", function(req, res) {
 });
 
 app.post("/api/register", function(req, res) {
-	console.log("name is: ", req.body.name);
-	console.log("name is: ", req.body.email);
-	console.log("name is: ", req.body.password1);
 	//client-side validation
 	req.checkBody("name", "Preferred name cannot be empty.").notEmpty();
 	req.checkBody(
@@ -346,11 +297,8 @@ app.post("/api/register", function(req, res) {
 	const errors = req.validationErrors();
 
 	if (errors) {
-		console.log("ERRORS BRANCH!!");
-		console.log(`errors: ${JSON.stringify(errors)}`);
 		res.status(422).json({ errors: errors });
 	} else {
-		console.log("NO ERRORS REGISTER ELSE BRANCH!!!");
 		var name = req.body.name;
 		var email = req.body.email;
 		//check if same
@@ -375,9 +323,8 @@ app.post("/api/register", function(req, res) {
 					console.log(emailErrorJSON.msg);
 					res.status(422).json({ errors: emailErrorJSON });
 				} else {
-					//proceed with INSERT query
-					console.log("no duplicate emails");
-					//query info
+					//proceed with INSERT query, no duplicate emails
+	
 					const insertQuery =
 						"INSERT into users (name, email, password) VALUES (?,?,?); SELECT LAST_INSERT_ID() as user_id;";
 
@@ -392,22 +339,11 @@ app.post("/api/register", function(req, res) {
 									res.sendStatus(500);
 									return;
 								} else {
-									console.log("THIS RAN!!!!!!!!!!!!!!");
-
-									console.log(
-										"user ID is: " + results[1][0].user_id
-									);
 									const user_id = results[1][0].user_id;
-									console.log(
-										"!!!!!!user id AFTER REGISTER is!!!!!!!!!!! : ",
-										user_id
-									);
-									//should be user_id that was just created
-									//login function returns data to serializeUser function below
 									req.login(user_id, function(err) {
 										//will return successfully registered user to homepage
 										res.redirect("/");
-										//res.locals.isAuthenticated = req.isAuthenticated();
+										
 									});
 								}
 							}
@@ -459,52 +395,14 @@ app.get("/api/getUserAuth", (req, res) => {
 	}
 });
 
-function loginWithoutRegister(req, res) {
+
+
+
+//post register user name: req.session.passport.user  (will give 81)
+//post login user name: req.session.passport.user  (will give 81)
+app.get("/api/getUserInfo", (req, res) => {
+	console.log("SECOND: getuserinfO");
 	const nameQuery = "SELECT name from users WHERE id=?";
-	if (req.session.passport) {
-		getConnection().query(
-			nameQuery,
-			[req.session.passport.user.user_id],
-			(err, profileInfo) => {
-				if (err) {
-					console.log("failed" + err);
-					res.sendStatus(500);
-					return;
-				} else {
-					console.log("GET HERE?????????????");
-					console.log("profile info: ", profileInfo[0]);
-					//START HERE ! PROFILEINFO[NAME] DOESN'T EXIST. FIGURE OUT THE PROPER CALL WITH PRINT STATEMTNS
-					//console.log("NAME IN QUERY: " + profileInfo[0].name);
-					tempName = profileInfo[0].name;
-					const tempJSON = `{ "firstName": "${
-						profileInfo[0].name
-					}", "isAuth": ${req.isAuthenticated()}, "userID": ${
-						req.session.passport.user.user_id
-					} }`;
-					console.log("finalJSON is: " + tempJSON);
-					res.send(tempJSON);
-				}
-			}
-		);
-	}
-}
-
-function loginWithRegister(req, res) {
-	console.log("req.session.passport.user.user_id + is NOT int");
-
-	console.log("is int check: " + req.session.passport.user);
-	console.log(
-		"req.session.passport.user.user_id prints: ",
-		req.session.passport.user.user_id
-	);
-	//var regularLoginUserName = req.session.passport.user.user_id;
-
-	console.log("eq.session.passport prints: ", req.session.passport);
-
-	console.log("req.session.passport.user prints ", req.session.passport.user);
-	const nameQuery = "SELECT name from users WHERE id=?";
-	//console.log("USER ID FOR QUERY IS:" + req.user);
-	//if logged in...
 	if (req.session.passport) {
 		getConnection().query(
 			nameQuery,
@@ -531,24 +429,10 @@ function loginWithRegister(req, res) {
 			}
 		);
 	}
-}
-
-//post register user name: req.session.passport.user  (will give 81)
-//post login user name: req.session.passport.user  (will give 81)
-app.get("/api/getUserInfo", (req, res) => {
-	console.log("SECOND: getuserinfO");
-	//var self = this;
-	if (isNaN(req.session.passport.user.user_id)) {
-		loginWithRegister(req, res);
-	} else {
-		loginWithoutRegister(req, res);
-	}
 });
 
 app.get("/api/getUserReviews", (req, res) => {
-	console.log("GET USER REVIEWS GET HERE!???!??!?!?!?");
-	const getUserReviewQuery = "SELECT p_id from reviews WHERE user_id=?";
-	console.log("REVIEWS: USER ID FOR QUERY IS:" + req.session.passport.user);
+	const getUserReviewQuery = "SELECT p_id from reviews WHERE user_id=?";	
 	//if logged in...
 	if (req.session.passport) {
 		getConnection().query(
@@ -817,13 +701,7 @@ function getParkWeatherAxios(parkData) {
 	}
 }
 
-//YOU NEED THE / in the ADDRESS!!
-//don't put "getParks", must be "/name"
 app.post("/api/getParks", (req, res) => {
-	//from bodyParser, parses the HTTP request
-	//from ParksComponent / React (getParks =>)
-	//console.log("BODY IS: ", req.body);
-	//var requestData = JSON.parse(req.body);
 
 	const lat = req.body.lat;
 	const lng = req.body.lng;
@@ -938,8 +816,7 @@ app.post("/api/getParks", (req, res) => {
 					console.log(response);
 				});
 
-			//res.send({ location: [lat, lng], parks: results, mapAPIKey: mapsKey1 });
 		}
 	);
 });
-/*** HELLO REACT ***/
+

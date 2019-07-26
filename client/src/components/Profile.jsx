@@ -91,6 +91,8 @@ class BaseProfile extends Component {
 						isLoadingParks: false
 					});
 				});
+		}else{
+			console.log("NAAAAATHING!")
 		}
 	};
 
@@ -98,7 +100,7 @@ class BaseProfile extends Component {
 		console.log("sendtoParkTable hath entered");
 		//console.log("testboolInfoLoad is : " + this.state.testBoolInfoLoaded);
 
-		if (this.state.parkDataLoaded === true) {
+		if (this.state.parkDataLoaded === true && this.props.context.hasNoSpots===false) {
 			return (
 				<ParkTableProfile
 					parkList={this.state.parkDataForTable}
@@ -106,10 +108,27 @@ class BaseProfile extends Component {
 					// moonType={this.state.moonType}
 				/>
 			);
-		} else {
+		} 
+			else {
 			this.getParks();
 		}
 	};
+
+	renderNoSpotsMsg=()=>{
+		if(this.props.context.hasNoSpots===true){
+
+		
+		return (
+			<tr>
+				<td colSpan={3}>
+					<strong style={{ color: "red" }}>
+						You have not added any parks to your favorites!
+					</strong>
+				</td>
+			</tr>
+		);
+		}
+	}
 
 	render() {
 		console.log("RENDER!!!! STATE IS BELOW:");
@@ -121,6 +140,7 @@ class BaseProfile extends Component {
 		return (
 			<div>
 				Hello, {this.props.context.firstName}!<br />
+				{this.renderNoSpotsMsg()}
 				{this.sendToParkTable()}
 			</div>
 		);

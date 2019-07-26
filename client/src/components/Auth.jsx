@@ -18,6 +18,7 @@ export class Auth extends React.Component {
 			userLocation: { lat: "", lng: "" },
 			userReviews: [],
 			hasFavSpots: false,
+			hasNoSpots: false,
 			userFavorites: []
 		};
 		console.log("AFTER REG, PRE-GETUSERAUTH, should be SECOND");
@@ -49,7 +50,7 @@ export class Auth extends React.Component {
 			userID: null,
 			isAuth: false,
 			hasFavSpots: false,
-
+			hasNoSpots: false,
 			userReviews: [],
 			userFavorites: []
 		});
@@ -118,11 +119,22 @@ export class Auth extends React.Component {
 			.get("/api/getUserFavSpots")
 
 			.then(favSpots => {
-				console.log("fav spots: ", favSpots);
-				this.setState({
-					userFavorites: favSpots.data,
-					hasFavSpots: true
-				});
+				if (favSpots.status == 204) {
+					console.log("204!!!!!!! NO FAV SPOTS!!")
+					this.setState({
+						hasNoSpots: true
+						
+					});
+				}
+					else{
+						console.log("fav spots: ", favSpots);
+						this.setState({
+							userFavorites: favSpots.data,
+							hasFavSpots: true,
+							hasNoSpots: false
+						});
+					}
+
 			})
 			.catch(error => {
 				console.log(error);
