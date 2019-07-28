@@ -44,9 +44,9 @@ class App extends Component {
 		this.setState({ responseToPost: body });
 	};
 
-	getParks = reqData => {
+	getParkData = reqData => {
 		console.log(JSON.stringify(reqData));
-		fetch("/api/getParks", {
+		fetch("/api/getParkData", {
 			method: "POST", //Important
 			headers: {
 				Accept: "application/json",
@@ -86,7 +86,7 @@ class App extends Component {
 		return (
 			<div className="App">
 				<button
-					onClick={this.getParks.bind(this, reqData)}
+					onClick={this.getParkData.bind(this, reqData)}
 					type="button"
 				>
 					Get parks at

@@ -21,7 +21,7 @@ class BaseProfile extends Component {
 	}
 
 	// componentDidMount() {
-	// 	this.getParks();
+	// 	this.getParkData();
 	// }
 
 	// getProfileInfo=()=> {
@@ -44,8 +44,8 @@ class BaseProfile extends Component {
 	// 	});
 	// }
 
-	getParks = () => {
-		console.log("-------------------got to getParks!");
+	getParkData = () => {
+		console.log("-------------------got to getParkData!");
 		console.log("userFavs is: ", this.props.context.userFavorites);
 		console.log("lat is: ", this.props.context.userLocation.lat);
 		console.log("hasFavSpots : ", this.props.context.hasFavSpots);
@@ -110,7 +110,7 @@ class BaseProfile extends Component {
 			);
 		} 
 			else {
-			this.getParks();
+			this.getParkData();
 		}
 	};
 

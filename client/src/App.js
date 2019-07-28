@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { AuthProvider, AuthConsumer } from "./components/AuthContext";
 
 import "./App.css";
-import ParksComponent from "./components/ParksComponent";
+import ParksData from "./components/ParksData";
 import NavBar from "./components/NavBar";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Profile from "./components/Profile";
@@ -20,7 +20,7 @@ class App extends Component {
 						handleLogoutState={this.props.handleLogoutState}
 						handleLogin={this.props.handleLogin}
 					/>
-					<Route path="/" exact component={ParksComponent} />
+					<Route path="/" exact component={ParksData} />
 					<AuthConsumer>
 						{authState => {
 							console.log(authState);

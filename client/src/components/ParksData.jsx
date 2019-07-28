@@ -6,7 +6,7 @@ import ParkMap from "./ParkMap";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import axios from "axios";
 
-class BaseParksComponent extends Component {
+class BaseParksData extends Component {
 	state = {
 		parks: [],
 		fetchReq: [],
@@ -41,14 +41,14 @@ class BaseParksComponent extends Component {
 	};
 
 	//Request parks from server
-	//getParks is a function, weird react notation perhaps?
+	//getParkData is a function, weird react notation perhaps?
 	//note, reqData could be X, just a variable name! int x=
 
 	//YOU NEED THE / in the ADDRESS!!
-	//don't put "getParks", must be "/name"
-	//getParks gets called, and does a fetch to
-	//app.post("/api/getParks")
-	getParks = reqData => {
+	//don't put "getParkData", must be "/name"
+	//getParkData gets called, and does a fetch to
+	//app.post("/api/getParkData")
+	getParkData = reqData => {
 		console.log(reqData);
 		// this.updateHistoryQuery(reqData);
 		this.setState({ isFetchingParks: true });
@@ -81,7 +81,7 @@ class BaseParksComponent extends Component {
 			// fetchingState.isFetching = true;
 			// this.setState(fetchingState);
 			axios
-				.post("/api/getParks", reqData)
+				.post("/api/getParkData", reqData)
 				.then(response => {
 					console.log(response.data);
 					this.setState({
@@ -113,13 +113,13 @@ class BaseParksComponent extends Component {
 
 	//recursively calls render on it's children
 	render() {
-		console.log("ParksComponent - rendered");
+		console.log("ParksData - rendered");
 
 		//"copies" into temp array parks
 		// const parks = this.state.parks;
 
 		//let clearButtonClass = this.clearButtonClass();
-		//bind(this,reqData) passes reqData to getParks
+		//bind(this,reqData) passes reqData to getParkData
 		//bind seems to be needed for onClick buttons /w args
 
 		return (
@@ -137,7 +137,7 @@ class BaseParksComponent extends Component {
 					</div>
 					<div className="col">
 						<ParkForm
-							fetchParks={this.getParks}
+							fetchParks={this.getParkData}
 							clearParks={this.clearParks}
 							isFetchingParks={this.state.isFetchingParks}
 							googleMap={this.googleMap}
@@ -167,16 +167,16 @@ class BaseParksComponent extends Component {
 	}
 }
 
-const ParksComponent = parkProps => (
+const ParksData = parkProps => (
 	<Router>
 		<Route
 			path="/"
 			render={routerProps => (
 				//Combine props passed to parkForm with router props
-				<BaseParksComponent {...{ ...parkProps, ...routerProps }} />
+				<BaseParksData {...{ ...parkProps, ...routerProps }} />
 			)}
 		/>
 	</Router>
 );
 
-export default ParksComponent;
+export default ParksData;

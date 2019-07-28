@@ -105,18 +105,18 @@ class ParkTable extends Component {
 		}
 	};
 
-	renderPark = park => (
-		<tr>
-			<td>{park.name_alt}</td>
-			<td>{park.light_pol}</td>
-			<td>{park.distance}</td>
-			<td>{park.clouds}</td>
-			<td>{park.cloudDesc}</td>
-			<td>{park.humidity}</td>
-			<td>{this.props.moon}</td>
-			<td>{this.props.moonType}</td>
-		</tr>
-	);
+	// renderPark = park => (
+	// 	<tr>
+	// 		<td>{park.name_alt}</td>
+	// 		<td>{park.light_pol}</td>
+	// 		<td>{park.distance}</td>
+	// 		<td>{park.clouds}</td>
+	// 		<td>{park.cloudDesc}</td>
+	// 		<td>{park.humidity}</td>
+	// 		<td>{this.props.moon}</td>
+	// 		<td>{this.props.moonType}</td>
+	// 	</tr>
+	// );
 
 	renderLoading = () => {
 		return (
