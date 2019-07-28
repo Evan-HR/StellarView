@@ -170,34 +170,31 @@ app.post(
 app.get("/api/getUserFavSpots", function(req, res) {
 	const getFavSpotsQuery =
 		"SELECT park_id from favorite_parks where user_id = ?";
-		getConnection().query(
-			getFavSpotsQuery,
-			[req.session.passport.user],
-			(err, favSpots) => {
-				console.log("favspots pre array is: ", favSpots);
-				if (err) {
-					console.log("failed" + err);
-					res.sendStatus(500);
-					return;
-				} else {
-					if (favSpots.length > 0) {
-						tempSpots = [];
-						for (var i = 0; i < favSpots.length; i++) {
-							tempSpots.push(favSpots[i].park_id);
-						}
+	getConnection().query(
+		getFavSpotsQuery,
+		[req.session.passport.user],
+		(err, favSpots) => {
+			console.log("favspots pre array is: ", favSpots);
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
+			} else {
+				if (favSpots.length > 0) {
+					tempSpots = [];
+					for (var i = 0; i < favSpots.length; i++) {
+						tempSpots.push(favSpots[i].park_id);
+					}
 
-						console.log("tempSpots is: ", tempSpots);
-						res.send(tempSpots);
-					}
-					else {
-						res.sendStatus(204);
-					}
+					console.log("tempSpots is: ", tempSpots);
+					res.send(tempSpots);
+				} else {
+					res.sendStatus(204);
 				}
 			}
-		);
-	} );
-
-
+		}
+	);
+});
 
 //get reviews from db
 app.get("/api/getReviews", function(req, res) {
@@ -324,7 +321,7 @@ app.post("/api/register", function(req, res) {
 					res.status(422).json({ errors: emailErrorJSON });
 				} else {
 					//proceed with INSERT query, no duplicate emails
-	
+
 					const insertQuery =
 						"INSERT into users (name, email, password) VALUES (?,?,?); SELECT LAST_INSERT_ID() as user_id;";
 
@@ -343,7 +340,6 @@ app.post("/api/register", function(req, res) {
 									req.login(user_id, function(err) {
 										//will return successfully registered user to homepage
 										res.redirect("/");
-										
 									});
 								}
 							}
@@ -395,9 +391,6 @@ app.get("/api/getUserAuth", (req, res) => {
 	}
 });
 
-
-
-
 //post register user name: req.session.passport.user  (will give 81)
 //post login user name: req.session.passport.user  (will give 81)
 app.get("/api/getUserInfo", (req, res) => {
@@ -432,7 +425,7 @@ app.get("/api/getUserInfo", (req, res) => {
 });
 
 app.get("/api/getUserReviews", (req, res) => {
-	const getUserReviewQuery = "SELECT p_id from reviews WHERE user_id=?";	
+	const getUserReviewQuery = "SELECT p_id from reviews WHERE user_id=?";
 	//if logged in...
 	if (req.session.passport) {
 		getConnection().query(
@@ -454,7 +447,7 @@ app.get("/api/getUserReviews", (req, res) => {
 
 						console.log("reviews is: ", tempReviews);
 						res.send(tempReviews);
-					}else{
+					} else {
 						res.sendStatus(204);
 					}
 				}
@@ -575,7 +568,7 @@ function inRange(x, min, max) {
 	return (x - min) * (x - max) <= 0;
 }
 
-app.post("/api/getProfileParks", (req, res) => {
+app.post("/api/getProfileParks", async (req, res) => {
 	console.log("body is: ", req.body);
 	var tempString = JSON.stringify(req.body.userFavs);
 	//console.log(tempString)
@@ -598,8 +591,15 @@ app.post("/api/getProfileParks", (req, res) => {
 		const lng = req.body.lng;
 		var parkData = JSON.parse(JSON.stringify(results));
 
-		for (var park in parkData) {
-			park = parkData[park];
+		// weatherResults = {}
+		// for (var parkKey in parkData) {
+
+		// }
+
+		// await Promise.all()
+
+		for (var parkKey in parkData) {
+			park = parkData[parkKey];
 			park.distance =
 				6371 *
 				Math.acos(
@@ -636,13 +636,19 @@ app.post("/api/getProfileParks", (req, res) => {
 	});
 });
 
-app.post("/api/getProfileParksWeather", (req, res) => {
+app.post("/api/getProfileParksWeather", async (req, res) => {
 	console.log("getprofparks got here");
 
-	console.log("getprofileparksweather body: ", req.body[0].name);
-	var parkData = req.body;
+	console.log("getprofileparksweather body: ", req.body.parkData[0].name);
+	console.log("ParkData body: ", req.body);
+	var parkData = req.body.parkData;
+	console.log("User time is:", req.body.userTime);
 
 	parkDataLength = Object.keys(parkData).length;
+	let weatherPromises = parkData.map(park => getParkWeatherAxios(park));
+	await Promise.all(weatherPromises);
+	console.log("Weather results:", weatherPromises);
+
 	for (let park in parkData) {
 		park = parkData[park];
 		console.log(park.id);
@@ -672,46 +678,28 @@ app.post("/api/getProfileParksWeather", (req, res) => {
 	}
 });
 
-function getParkWeatherAxios(parkData) {
-	parkDataLength = Object.keys(parkData).length;
-	for (var park in parkData) {
-		park = parkData[park];
-		console.log(park.id);
-		//weather
-		weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${
-			park.lat
-		}&lon=${park.lng}&appid=${weatherKey1}`;
-		var counter = 0;
-		axios
-			.get(weatherURL)
-			.then(function(response) {
-				counter = counter + 1;
-				console.log("counter is: " + counter);
-				//console.log("cloud log is: ",response.data.clouds.all)
-				park.clouds = response.data.clouds.all;
-				park.cloudDesc = "dunno lmao";
-				park.humidity = response.data.main.humidity;
-
-				if (counter == parkDataLength) {
-					console.log("final park data is :", parkData);
-					return parkData;
-				}
-			})
-			.catch(function(response) {
-				console.log(response);
-			});
-	}
+function getParkWeatherAxios(park) {
+	weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${
+		park.lat
+	}&lon=${park.lng}&appid=${weatherKey1}`;
+	var counter = 0;
+	return axios
+		.get(weatherURL)
+		.then(function(response) {
+			return response;
+		})
+		.catch(function(response) {
+			console.log(response);
+			return false;
+		});
 }
 
-
-
 app.post("/api/getParkData", (req, res) => {
-//STEP 1: PARSE USER FORM DATA 
+	//STEP 1: PARSE USER FORM DATA
 	const lat = req.body.lat;
 	const lng = req.body.lng;
 	const dist = req.body.dist;
 	const lightpol = req.body.lightpol;
-
 
 	//STEP 2: GET PARKS FROM DATABASE USING USER INPUT PARAMS
 	//6371 is km, 3959 is miles
@@ -732,152 +720,170 @@ app.post("/api/getParkData", (req, res) => {
 			var reviewIDs = [];
 
 			for (var i = 0; i < initialResults.length; i++) {
-			
 				reviewIDs.push(initialResults[i].id);
-
 			}
 
-			console.log("reviewIDS: ",reviewIDs)
+			console.log("reviewIDS: ", reviewIDs);
 			var reviewIDs = JSON.stringify(reviewIDs);
 			var inParkIDSet = reviewIDs
-		.split(/[\{\[]/)
-		.join("(")
-		.split(/[\}\]]/)
-		.join(")");
+				.split(/[\{\[]/)
+				.join("(")
+				.split(/[\}\]]/)
+				.join(")");
 
-		console.log("reviewIDS after processing: ",inParkIDSet)
+			console.log("reviewIDS after processing: ", inParkIDSet);
 
-		
-		//STEP 4: GET USER REVIEWS FROM PARKS THAT HAVE BEEN RETURNED IN STEP 2
-		
-		const allReviewsQuery = `select AVG(score)as avgScore,count(*) as numReviews,p_id from reviews where p_id in ${inParkIDSet} group by p_id`;
-		
-		getConnection().query(allReviewsQuery, [inParkIDSet], (err, reviewsResults) => {
-			if (err) {
-				console.log("failed" + err);
-				res.sendStatus(500);
-				return;
-			}
-			//console.log("results is: ", reviewsResults);
-			var reviewsJSON = JSON.parse(JSON.stringify(reviewsResults));
-			console.log("reviews is: ",reviewsJSON);
+			//STEP 4: GET USER REVIEWS FROM PARKS THAT HAVE BEEN RETURNED IN STEP 2
 
-			//STEP 5: GET WEATHER FOR PARKS
-			var weatherArr = [];
-			weatherURL = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lng}&cnt=50&appid=${weatherKey1}`;
-			axios
-				.get(weatherURL)
-				.then(function(response) {
-					for (var i = 0; i < response.data.list.length; i++) {
-						var elem = response.data.list[i];
-						//console.log("elem is: ", elem);
-						var city = {};
-						city.name = elem.name;
-						city.clouds = elem.clouds.all;
-						city.cloudDesc = elem.weather[0].description;
-						city.humidity = elem.main.humidity;
-						city.lat = elem.coord.lat;
-						city.lng = elem.coord.lon;
+			const allReviewsQuery = `select AVG(score)as avgScore,count(*) as numReviews,p_id from reviews where p_id in ${inParkIDSet} group by p_id`;
 
-						//console.log("city is:", city);
-
-						weatherArr.push(city);
-						//console.log("weather arr is : ", weatherArr);
+			getConnection().query(
+				allReviewsQuery,
+				[inParkIDSet],
+				(err, reviewsResults) => {
+					if (err) {
+						console.log("failed" + err);
+						res.sendStatus(500);
+						return;
 					}
+					//console.log("results is: ", reviewsResults);
+					var reviewsJSON = JSON.parse(
+						JSON.stringify(reviewsResults)
+					);
+					console.log("reviews is: ", reviewsJSON);
 
-					// weather assigning:
-					for (var i = 0; i < parkDataJSON.length; i++) {
+					//STEP 5: GET WEATHER FOR PARKS
+					var weatherArr = [];
+					weatherURL = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lng}&cnt=50&appid=${weatherKey1}`;
+					axios
+						.get(weatherURL)
+						.then(function(response) {
+							for (
+								var i = 0;
+								i < response.data.list.length;
+								i++
+							) {
+								var elem = response.data.list[i];
+								//console.log("elem is: ", elem);
+								var city = {};
+								city.name = elem.name;
+								city.clouds = elem.clouds.all;
+								city.cloudDesc = elem.weather[0].description;
+								city.humidity = elem.main.humidity;
+								city.lat = elem.coord.lat;
+								city.lng = elem.coord.lon;
 
-						
-						var minDist = 300000; // higher than any coord distance
-						var closestCity = -1; //variable represents index of closest city; initialized as -ve, will throw err if no closer city
-						for (var j = 0; j < weatherArr.length; j++) {
-						
-							var cityLat = parseFloat(weatherArr[j].lat);
-							var cityLng = parseFloat(weatherArr[j].lng);
-							var parkLat = parseFloat(parkDataJSON[i].lat);
-							var parkLng = parseFloat(parkDataJSON[i].lng);
+								//console.log("city is:", city);
 
-							var theta = parkLng - cityLng;
-							var dist =
-								Math.sin((parkLat * Math.PI) / 180) *
-									Math.sin((cityLat * Math.PI) / 180) +
-								Math.cos((parkLng * Math.PI) / 180) *
-									Math.cos((cityLng * Math.PI) / 180) *
-									Math.cos((theta * Math.PI) / 180);
-							dist = Math.acos(dist);
-							dist = (dist * 20014.1238528) / Math.PI;
-							//console.log(dist);
-
-							var distance = Math.sqrt(
-								Math.pow(cityLat - parkLat, 2) +
-									Math.pow(cityLng - parkLng, 2)
-							);
-
-							if (distance < minDist) {
-								minDist = distance;
-								closestCity = j;
+								weatherArr.push(city);
+								//console.log("weather arr is : ", weatherArr);
 							}
-							parkDataJSON[i].clouds =
-								weatherArr[closestCity].clouds; // PARKS JSON FOR i GETS NEW COMPONENT 'weather' WITH DATA FROM CLOSEST CITY
-							parkDataJSON[i].humidity =
-								weatherArr[closestCity].humidity;
-							parkDataJSON[i].cloudDesc =
-								weatherArr[closestCity].cloudDesc;
-							parkDataJSON[i].city = weatherArr[closestCity].name;
-						}
 
-						for (var x = 0; x < reviewsJSON.length; x++) {
-							if (reviewsJSON[x].p_id == parkDataJSON[i].id) {
-								console.log("found matching ID! ",reviewsJSON[x].p_id)
-								parkDataJSON[i].avgScore = reviewsJSON[x].avgScore;	
-								parkDataJSON[i].numReviews = reviewsJSON[x].numReviews;	
+							// weather assigning:
+							for (var i = 0; i < parkDataJSON.length; i++) {
+								var minDist = 300000; // higher than any coord distance
+								var closestCity = -1; //variable represents index of closest city; initialized as -ve, will throw err if no closer city
+								for (var j = 0; j < weatherArr.length; j++) {
+									var cityLat = parseFloat(weatherArr[j].lat);
+									var cityLng = parseFloat(weatherArr[j].lng);
+									var parkLat = parseFloat(
+										parkDataJSON[i].lat
+									);
+									var parkLng = parseFloat(
+										parkDataJSON[i].lng
+									);
+
+									var theta = parkLng - cityLng;
+									var dist =
+										Math.sin((parkLat * Math.PI) / 180) *
+											Math.sin(
+												(cityLat * Math.PI) / 180
+											) +
+										Math.cos((parkLng * Math.PI) / 180) *
+											Math.cos(
+												(cityLng * Math.PI) / 180
+											) *
+											Math.cos((theta * Math.PI) / 180);
+									dist = Math.acos(dist);
+									dist = (dist * 20014.1238528) / Math.PI;
+									//console.log(dist);
+
+									var distance = Math.sqrt(
+										Math.pow(cityLat - parkLat, 2) +
+											Math.pow(cityLng - parkLng, 2)
+									);
+
+									if (distance < minDist) {
+										minDist = distance;
+										closestCity = j;
+									}
+									parkDataJSON[i].clouds =
+										weatherArr[closestCity].clouds; // PARKS JSON FOR i GETS NEW COMPONENT 'weather' WITH DATA FROM CLOSEST CITY
+									parkDataJSON[i].humidity =
+										weatherArr[closestCity].humidity;
+									parkDataJSON[i].cloudDesc =
+										weatherArr[closestCity].cloudDesc;
+									parkDataJSON[i].city =
+										weatherArr[closestCity].name;
+								}
+
+								for (var x = 0; x < reviewsJSON.length; x++) {
+									if (
+										reviewsJSON[x].p_id ==
+										parkDataJSON[i].id
+									) {
+										console.log(
+											"found matching ID! ",
+											reviewsJSON[x].p_id
+										);
+										parkDataJSON[i].avgScore =
+											reviewsJSON[x].avgScore;
+										parkDataJSON[i].numReviews =
+											reviewsJSON[x].numReviews;
+									}
+								}
+
+								// can u get the km distance between each park
+								//like what does 'closest' mean do we know that yet?
+								// lets look at some of the #s
 							}
-						}
 
-						// can u get the km distance between each park
-						//like what does 'closest' mean do we know that yet?
-						// lets look at some of the #s
-					}
+							//STEP 7: GET MOON DATA
+							var phaseInfo = getMoon();
+							var moonType = "";
+							var percentMoon =
+								parseFloat(phaseInfo.illuminated) * 100;
 
-					//STEP 7: GET MOON DATA
-					var phaseInfo = getMoon();
-					var moonType = "";
-					var percentMoon = parseFloat(phaseInfo.illuminated) * 100;
+							if (inRange(percentMoon, 0, 25)) {
+								moonType = "New Moon";
+							} else if (inRange(percentMoon, 25, 50)) {
+								moonType = "First Quarter";
+							} else if (inRange(percentMoon, 50, 75)) {
+								moonType = "Full Moon";
+							} else if (inRange(percentMoon, 75, 100)) {
+								moonType = "Last Quarter";
+							}
 
-					if (inRange(percentMoon, 0, 25)) {
-						moonType = "New Moon";
-					} else if (inRange(percentMoon, 25, 50)) {
-						moonType = "First Quarter";
-					} else if (inRange(percentMoon, 50, 75)) {
-						moonType = "Full Moon";
-					} else if (inRange(percentMoon, 75, 100)) {
-						moonType = "Last Quarter";
-					}
+							//reviewsJSON
 
+							//STEP 9: FORMAT RESPONSE JSON
+							let reply = {
+								parks: parkDataJSON,
+								moonPercent: percentMoon,
+								moonType: moonType
+							};
+							console.log("Response ", reply);
 
-					//reviewsJSON
+							//STEP 10: SEND DATA TO FRONT-END
+							res.send(reply);
+							//res.send(results);
+						})
 
-
-//STEP 9: FORMAT RESPONSE JSON
-					let reply = {
-						parks: parkDataJSON,
-						moonPercent: percentMoon,
-						moonType: moonType
-					};
-					console.log("Response ", reply);
-
-//STEP 10: SEND DATA TO FRONT-END
-					res.send(reply);
-					//res.send(results);
-				})
-
-				.catch(function(response) {
-					console.log(response);
-				});
-
-			})
+						.catch(function(response) {
+							console.log(response);
+						});
+				}
+			);
 		}
 	);
 });
-
