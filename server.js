@@ -703,26 +703,66 @@ function getParkWeatherAxios(parkData) {
 	}
 }
 
-app.post("/api/getParks", (req, res) => {
 
+
+app.post("/api/getParkData", (req, res) => {
+//STEP 1: PARSE USER FORM DATA 
 	const lat = req.body.lat;
 	const lng = req.body.lng;
 	const dist = req.body.dist;
 	const lightpol = req.body.lightpol;
+
+
+	//STEP 2: GET PARKS FROM DATABASE USING USER INPUT PARAMS
 	//6371 is km, 3959 is miles
-	const queryString =
+	const queryFromUserForm =
 		"SELECT *, ( 6371 * acos( cos( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin( radians( ? ) ) * sin( radians( lat ) ) ) ) AS distance FROM ontario_parks HAVING distance <= ? AND light_pol <= ? ORDER BY distance ASC";
 	getConnection().query(
-		queryString,
+		queryFromUserForm,
 		[lat, lng, lat, dist, lightpol],
-		(err, results) => {
+		(err, initialResults) => {
 			if (err) {
 				console.log("failed" + err);
 				res.sendStatus(500);
 				return;
 			}
-			var weatherJSON = JSON.parse(JSON.stringify(results));
+			var parkDataJSON = JSON.parse(JSON.stringify(initialResults));
 
+			//STEP 3 : GET PARKIDS FOR REVIEWS ARRAY
+			var reviewIDs = [];
+
+			for (var i = 0; i < initialResults.length; i++) {
+			
+				reviewIDs.push(initialResults[i].id);
+
+			}
+
+			console.log("reviewIDS: ",reviewIDs)
+			var reviewIDs = JSON.stringify(reviewIDs);
+			var inParkIDSet = reviewIDs
+		.split(/[\{\[]/)
+		.join("(")
+		.split(/[\}\]]/)
+		.join(")");
+
+		console.log("reviewIDS after processing: ",inParkIDSet)
+
+		
+		//STEP 4: GET USER REVIEWS FROM PARKS THAT HAVE BEEN RETURNED IN STEP 2
+		
+		const allReviewsQuery = `select AVG(score)as avgScore,count(*) as numReviews,p_id from reviews where p_id in ${inParkIDSet} group by p_id`;
+		
+		getConnection().query(allReviewsQuery, [inParkIDSet], (err, reviewsResults) => {
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
+			}
+			//console.log("results is: ", reviewsResults);
+			var reviewsJSON = JSON.parse(JSON.stringify(reviewsResults));
+			console.log("reviews is: ",reviewsJSON);
+
+			//STEP 5: GET WEATHER FOR PARKS
 			var weatherArr = [];
 			weatherURL = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lng}&cnt=50&appid=${weatherKey1}`;
 			axios
@@ -746,14 +786,17 @@ app.post("/api/getParks", (req, res) => {
 					}
 
 					// weather assigning:
-					for (var i = 0; i < weatherJSON.length; i++) {
+					for (var i = 0; i < parkDataJSON.length; i++) {
+
+						
 						var minDist = 300000; // higher than any coord distance
 						var closestCity = -1; //variable represents index of closest city; initialized as -ve, will throw err if no closer city
 						for (var j = 0; j < weatherArr.length; j++) {
+						
 							var cityLat = parseFloat(weatherArr[j].lat);
 							var cityLng = parseFloat(weatherArr[j].lng);
-							var parkLat = parseFloat(weatherJSON[i].lat);
-							var parkLng = parseFloat(weatherJSON[i].lng);
+							var parkLat = parseFloat(parkDataJSON[i].lat);
+							var parkLng = parseFloat(parkDataJSON[i].lng);
 
 							var theta = parkLng - cityLng;
 							var dist =
@@ -775,13 +818,21 @@ app.post("/api/getParks", (req, res) => {
 								minDist = distance;
 								closestCity = j;
 							}
-							weatherJSON[i].clouds =
+							parkDataJSON[i].clouds =
 								weatherArr[closestCity].clouds; // PARKS JSON FOR i GETS NEW COMPONENT 'weather' WITH DATA FROM CLOSEST CITY
-							weatherJSON[i].humidity =
+							parkDataJSON[i].humidity =
 								weatherArr[closestCity].humidity;
-							weatherJSON[i].cloudDesc =
+							parkDataJSON[i].cloudDesc =
 								weatherArr[closestCity].cloudDesc;
-							weatherJSON[i].city = weatherArr[closestCity].name;
+							parkDataJSON[i].city = weatherArr[closestCity].name;
+						}
+
+						for (var x = 0; x < reviewsJSON.length; x++) {
+							if (reviewsJSON[x].p_id == parkDataJSON[i].id) {
+								console.log("found matching ID! ",reviewsJSON[x].p_id)
+								parkDataJSON[i].avgScore = reviewsJSON[x].avgScore;	
+								parkDataJSON[i].numReviews = reviewsJSON[x].numReviews;	
+							}
 						}
 
 						// can u get the km distance between each park
@@ -789,7 +840,7 @@ app.post("/api/getParks", (req, res) => {
 						// lets look at some of the #s
 					}
 
-					//moon stuff
+					//STEP 7: GET MOON DATA
 					var phaseInfo = getMoon();
 					var moonType = "";
 					var percentMoon = parseFloat(phaseInfo.illuminated) * 100;
@@ -804,12 +855,19 @@ app.post("/api/getParks", (req, res) => {
 						moonType = "Last Quarter";
 					}
 
+
+					//reviewsJSON
+
+
+//STEP 9: FORMAT RESPONSE JSON
 					let reply = {
-						parks: weatherJSON,
+						parks: parkDataJSON,
 						moonPercent: percentMoon,
 						moonType: moonType
 					};
 					console.log("Response ", reply);
+
+//STEP 10: SEND DATA TO FRONT-END
 					res.send(reply);
 					//res.send(results);
 				})
@@ -818,6 +876,7 @@ app.post("/api/getParks", (req, res) => {
 					console.log(response);
 				});
 
+			})
 		}
 	);
 });

@@ -262,9 +262,9 @@ class BaseParkForm extends Component {
 	// 	});
 	// };
 
-	//props to send one-way information to parksComponent
-	//this.state is the "X" in getParks()
-	//fetchP(x) --> getparks(x)
+	//props to send one-way information to ParksData
+	//this.state is the "X" in getParkData()
+	//fetchP(x) --> getParkData(x)
 	onSubmit = e => {
 		if (e) e.preventDefault();
 		//console.log(this.state.reqData);
@@ -276,7 +276,7 @@ class BaseParkForm extends Component {
 		} else {
 			this.setState({ ...this.state, formErrors: errors });
 		}
-		//getparks(reqdata) of parent
+		//getParkData(reqdata) of parent
 	};
 
 	convertReqToFloat = reqData => {
@@ -418,7 +418,7 @@ class BaseParkForm extends Component {
 						🔎
 					</button>
 					<button
-						// onClick={this.getParks.bind(this, this.state.formInput)}
+						// onClick={this.getParkData.bind(this, this.state.formInput)}
 						className="btn btn-primary m-1"
 						type="button"
 						disabled={this.state.isLoadingLocation}
