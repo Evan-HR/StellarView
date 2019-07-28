@@ -859,6 +859,8 @@ app.post("/api/getParkData", (req, res) => {
 							//STEP 7: GET MOON DATA
 							console.log("User time is: ", utime);
 							var phaseInfo = getMoon(utime);
+
+							console.log("Moon status: ", phaseInfo);
 							let moonPercent = phaseInfo.fraction;
 							var moonType = phaseInfo.phase;
 
@@ -875,7 +877,7 @@ app.post("/api/getParkData", (req, res) => {
 								moonType = "Last Quarter";
 							}
 
-							moonType = phaseInfo.phase;
+							//moonType = phaseInfo.phase;
 
 							//reviewsJSON
 
