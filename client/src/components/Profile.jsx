@@ -77,9 +77,11 @@ class BaseProfile extends Component {
 				.post("/api/getProfileParks", parkProfileData)
 				.then(response => {
 					console.log("response from first call: ", response);
+					var d = new Date();
+					var userTime = d.getTime();
 					return axios.post(
 						"/api/getProfileParksWeather",
-						response.data
+						{userTime: userTime, parkData: response.data}
 					); // using response.data
 				})
 				.then(response => {
