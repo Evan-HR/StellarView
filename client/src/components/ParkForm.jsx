@@ -270,9 +270,19 @@ class BaseParkForm extends Component {
 		//console.log(this.state.reqData);
 		const errors = this.validate(this.state.reqData);
 		if (errors.length === 0) {
-			this.setState({ ...this.state, formErrors: [] });
+			var d = new Date();
+			this.setState({
+				...this.state,
+				formErrors: [],
+				reqData: { ...this.state.reqData, utime: d.getTime() }
+			});
 			this.updateHistoryQuery(this.state.reqData);
-			this.props.fetchParks(this.convertReqToFloat(this.state.reqData));
+			this.props.fetchParks(
+				this.convertReqToFloat({
+					...this.state.reqData,
+					utime: d.getTime()
+				})
+			);
 		} else {
 			this.setState({ ...this.state, formErrors: errors });
 		}
@@ -284,7 +294,8 @@ class BaseParkForm extends Component {
 			lat: parseFloat(reqData.lat),
 			lng: parseFloat(reqData.lng),
 			dist: parseFloat(reqData.dist),
-			lightpol: parseFloat(reqData.lightpol)
+			lightpol: parseFloat(reqData.lightpol),
+			utime: parseFloat(reqData.utime)
 		};
 	};
 
