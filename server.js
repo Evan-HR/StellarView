@@ -651,7 +651,7 @@ app.post("/api/getProfileParks", async (req, res) => {
 app.post("/api/getProfileParksWeather", async (req, res) => {
 	console.log("getprofparks got here");
 
-	console.log("getprofileparksweather body: ", req.body.parkData[0].name);
+	//console.log("getprofileparksweather body: ", req.body.parkData[0].name);
 	console.log("ParkData body: ", req.body);
 	var parkData = req.body.parkData;
 	var userTime = req.body.userTime;
@@ -672,27 +672,62 @@ app.post("/api/getProfileParksWeather", async (req, res) => {
 });
 
 function getParkWeatherAxios(park, userTime) {
-	weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${
+	weatherURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${
 		park.lat
 	}&lon=${park.lng}&appid=${weatherKey1}`;
+	console.log(weatherURL);
 
-	console.log(
-		"Sun data:",
-		suncalc.getTimes(new Date(userTime), park.lat, park.lng)
-	);
+	var times = suncalc.getTimes(new Date(userTime), park.lat, park.lng);
+
+	console.log("Sun data:", times);
+
+	var nightTime = new Date(times.night);
+	console.log(nightTime);
 
 	return axios
 		.get(weatherURL)
 		.then(function(response) {
+			//console.log("Weather data:", response.data);
+
+			response = response.data;
+
+			let weatherInstance = null;
+
+			for (var i = 0; i < response.cnt; i++) {
+				console.log(
+					new Date(response.list[i].dt_txt).getTime(),
+					nightTime.getTime(),
+					new Date(response.list[i].dt_txt).getTime() >
+						nightTime.getTime()
+				);
+				if (
+					new Date(response.list[i].dt_txt).getTime() >
+					nightTime.getTime()
+				) {
+					console.log(
+						"Success! Looking at ",
+						i,
+						":",
+						response.list[i]
+					);
+					weatherInstance = response.list[i];
+					break;
+				}
+			}
+
+			console.log(weatherInstance);
+
 			park.weather = {
-				clouds: response.data.clouds.all,
-				cloudDesc: response.data.weather.description,
-				humidity: response.data.main.humidity,
-				temp: response.data.main.temp
+				time: new Date(response.list[i].dt_txt).getTime(),
+				city: response.city.name,
+				clouds: weatherInstance.clouds.all,
+				cloudDesc: weatherInstance.weather[0].description,
+				humidity: weatherInstance.main.humidity,
+				temp: weatherInstance.main.temp
 			};
-			park.clouds = response.data.clouds.all;
-			park.cloudDesc = "dunno lmao";
-			park.humidity = response.data.main.humidity;
+			// park.clouds = response.data.clouds.all;
+			// park.cloudDesc = "dunno lmao";
+			// park.humidity = response.data.main.humidity;
 			return park;
 		})
 		.catch(function(response) {
