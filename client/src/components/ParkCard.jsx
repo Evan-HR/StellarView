@@ -35,7 +35,6 @@ class ParkCard extends Component {
 		console.log("RENDER LETTER GRADE GET HERE??");
 		return 2 * 3;
 	};
-
 	render() {
 		return (
 			<React.Fragment>
@@ -77,9 +76,15 @@ class ParkCard extends Component {
 								<b className="text-muted">Location unknown</b>
 							)}
 							<br />
-							{this.props.park.cloudDesc} <br />
-							{this.props.park.clouds}% <br />
-							{this.props.park.humidity}% Humidity <br />
+							{this.props.park.weather.city} forecast for{" "}
+							{new Date(
+								this.props.park.weather.time
+							).toLocaleString()}
+							: <br />
+							{this.props.park.weather.cloudDesc} <br />
+							{this.props.park.weather.temp} °C
+							<br />
+							{this.props.park.weather.humidity}% Humidity <br />
 							{this.renderReviewScore(this.props.park.avgScore)}
 							<br />
 							{this.renderNumReviews(this.props.park.numReviews)}
