@@ -269,6 +269,7 @@ app.post("/api/storeReview", function(req, res) {
 				res.sendStatus(500);
 				return;
 			}
+			res.end();
 		}
 	);
 });

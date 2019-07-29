@@ -108,6 +108,8 @@ class BaseReviews extends Component {
 			parkID: this.props.parkID
 		};
 
+		console.log("review array to be posted: ", newReview);
+
 		if (this.state.score < 1) {
 			this.setState({
 				noStarError: true
@@ -115,22 +117,28 @@ class BaseReviews extends Component {
 		} else {
 			axios
 				.post("/api/storeReview", newReview)
-				.then(res => console.log(res.data))
-				.catch(err => console.log(err.response.data));
-			this.setState({
-				dbReviewList: [newReview, ...this.state.dbReviewList],
-				avgScore:
-					this.state.avgScore +
-					newReview.score / (this.state.numReviews + 1),
-				hasReviewed: true,
-				numReviews: this.state.numReviews + 1,
-				switchCase: "loggedInHasReviewed",
-				noStarError: false
-			});
+				.then(res => {
+					console.log("POST REVIEW GOT HERE?!?!?!?!?");
 
-			//push parkID to userReviews in Auth context provider
-			//this.props.context.userReviews
-			this.props.context.userReviews.push(this.props.parkID);
+					//push parkID to userReviews in Auth context provider
+					//this.props.context.userReviews
+
+					this.setState({
+						dbReviewList: [newReview, ...this.state.dbReviewList],
+						avgScore:
+							(this.state.avgScore +
+							newReview.score) / (this.state.numReviews + 1),
+						hasReviewed: true,
+						numReviews: this.state.numReviews + 1,
+						switchCase: "loggedInHasReviewed",
+						noStarError: false
+					});
+					this.props.context.userReviews.push(this.props.parkID);
+				})
+
+				.catch(error => {
+					console.log(error);
+				});
 		}
 	};
 
