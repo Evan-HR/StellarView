@@ -78,6 +78,7 @@ class ParkCard extends Component {
 							).toLocaleString()}
 							: <br />
 							{this.props.park.weather.cloudDesc} <br />
+							{this.props.park.weather.temp} °C<br />
 							{this.props.park.weather.humidity}% Humidity <br />
 							{this.renderReviewScore(this.props.park.avgScore)}
 							<br />

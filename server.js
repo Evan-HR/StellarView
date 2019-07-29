@@ -798,7 +798,7 @@ app.post("/api/getParkData", (req, res) => {
 					//STEP 5: GET WEATHER FOR PARKS
 
 					var weatherArr = [];
-					weatherURL = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lng}&cnt=50&appid=${weatherKey1}`;
+					weatherURL = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lng}&cnt=50&appid=${weatherKey1}&units=metric`;
 					axios
 						.get(weatherURL)
 						.then(function(response) {
@@ -814,6 +814,7 @@ app.post("/api/getParkData", (req, res) => {
 								city.clouds = elem.clouds.all;
 								city.cloudDesc = elem.weather[0].description;
 								city.humidity = elem.main.humidity;
+								city.temp = elem.main.temp;
 								city.lat = elem.coord.lat;
 								city.lng = elem.coord.lon;
 
@@ -862,6 +863,9 @@ app.post("/api/getParkData", (req, res) => {
 										closestCity = j;
 									}
 									parkDataJSON[i].weather = {};
+									parkDataJSON[
+										i
+									].weather.time = new Date().getTime();
 									parkDataJSON[i].weather.clouds =
 										weatherArr[closestCity].clouds; // PARKS JSON FOR i GETS NEW COMPONENT 'weather' WITH DATA FROM CLOSEST CITY
 									parkDataJSON[i].weather.humidity =
@@ -870,6 +874,8 @@ app.post("/api/getParkData", (req, res) => {
 										weatherArr[closestCity].cloudDesc;
 									parkDataJSON[i].weather.city =
 										weatherArr[closestCity].name;
+									parkDataJSON[i].weather.temp =
+										weatherArr[closestCity].temp;
 								}
 
 								for (var x = 0; x < reviewsJSON.length; x++) {
