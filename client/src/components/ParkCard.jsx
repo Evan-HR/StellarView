@@ -31,6 +31,11 @@ class ParkCard extends Component {
 		}
 	}
 
+	renderLetterGrade = () => {
+		console.log("RENDER LETTER GRADE GET HERE??");
+		return 2 * 3;
+	};
+
 	render() {
 		return (
 			<React.Fragment>
@@ -73,10 +78,13 @@ class ParkCard extends Component {
 							)}
 							<br />
 							{this.props.park.cloudDesc} <br />
+							{this.props.park.clouds}% <br />
 							{this.props.park.humidity}% Humidity <br />
 							{this.renderReviewScore(this.props.park.avgScore)}
 							<br />
 							{this.renderNumReviews(this.props.park.numReviews)}
+							<br />
+							{this.renderLetterGrade()}
 						</p>
 					</div>
 				</div>
