@@ -51,7 +51,7 @@ class BaseFavPark extends Component {
 				this.setState({ buttonPressed: true });
 				this.props.context.userFavorites.push(this.props.parkID);
 				this.props.context.hasFavSpots = true;
-				this.props.context.hasNoSpots= false;
+				this.props.context.hasNoSpots = false;
 			})
 			.catch(error => {
 				console.log(error);
