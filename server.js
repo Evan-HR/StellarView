@@ -8,6 +8,7 @@ const expressValidator = require("express-validator");
 //const http = require('http');
 const request = require("request");
 const axios = require("axios");
+const suncalc = require("suncalc");
 //moon phases
 var lune = require("lune");
 
@@ -546,14 +547,26 @@ function getMoonProfile(userTime) {
 	return phaseInfo;
 }
 
-//format "2014-02-17T00:00-0500", ISO 8601
-function getMoon() {
-	var now = new Date();
-	var isoDate = now.toISOString();
-	isoDate = new Date(isoDate);
-	var phaseInfo = lune.phase(isoDate);
+function getMoon(userTime) {
+	var time = new Date(userTime);
+
+	//var phaseDates = lune.phase_hunt(isoDate);
+	var phaseInfo = suncalc.getMoonIllumination(time);
 	return phaseInfo;
 }
+
+//format "2014-02-17T00:00-0500", ISO 8601
+// function getMoon() {
+// 	var now = new Date();
+// 	var isoDate = now.toISOString();
+// 	isoDate = new Date(isoDate);
+// 	//console.log("date is:"+isoDate);
+// 	//use phase_hunt to get next dates,
+
+// 	//var phaseDates = lune.phase_hunt(isoDate);
+// 	var phaseInfo = lune.phase(isoDate);
+// 	return phaseInfo;
+// }
 
 function toRadians(angle) {
 	console.log("RADIANS FUNC RAN!!?!?!?!?");
@@ -564,7 +577,7 @@ function inRange(x, min, max) {
 	return (x - min) * (x - max) <= 0;
 }
 
-app.post("/api/getProfileParks", (req, res) => {
+app.post("/api/getProfileParks", async (req, res) => {
 	console.log("body is: ", req.body);
 	var tempString = JSON.stringify(req.body.userFavs);
 	//console.log(tempString)
@@ -587,8 +600,15 @@ app.post("/api/getProfileParks", (req, res) => {
 		const lng = req.body.lng;
 		var parkData = JSON.parse(JSON.stringify(results));
 
-		for (var park in parkData) {
-			park = parkData[park];
+		// weatherResults = {}
+		// for (var parkKey in parkData) {
+
+		// }
+
+		// await Promise.all()
+
+		for (var parkKey in parkData) {
+			park = parkData[parkKey];
 			park.distance =
 				6371 *
 				Math.acos(
@@ -601,20 +621,23 @@ app.post("/api/getProfileParks", (req, res) => {
 			//moon stuff
 			var phaseInfo = getMoon(req.body.userTime);
 			var moonType = "";
-			var percentMoon = parseFloat(phaseInfo.illuminated) * 100;
+			var percentMoon = phaseInfo.phase;
 
-			if (inRange(percentMoon, 0, 25)) {
+			if (
+				inRange(percentMoon, 0, 0.125) ||
+				inRange(percentMoon, 0.875, 1)
+			) {
 				moonType = "New Moon";
-			} else if (inRange(percentMoon, 25, 50)) {
+			} else if (inRange(percentMoon, 0.125, 0.375)) {
 				moonType = "First Quarter";
-			} else if (inRange(percentMoon, 50, 75)) {
+			} else if (inRange(percentMoon, 0.375, 0.625)) {
 				moonType = "Full Moon";
-			} else if (inRange(percentMoon, 75, 100)) {
+			} else if (inRange(percentMoon, 0.625, 0.875)) {
 				moonType = "Last Quarter";
 			}
 
-			park.moon = percentMoon;
-			park.moonType = moonType;
+			park.moon = phaseInfo.fraction;
+			park.moonType = phaseInfo.phase;
 
 			//axios goes here normally
 		}
@@ -625,71 +648,57 @@ app.post("/api/getProfileParks", (req, res) => {
 	});
 });
 
-app.post("/api/getProfileParksWeather", (req, res) => {
+app.post("/api/getProfileParksWeather", async (req, res) => {
 	console.log("getprofparks got here");
 
-	console.log("getprofileparksweather body: ", req.body[0].name);
-	var parkData = req.body;
+	console.log("getprofileparksweather body: ", req.body.parkData[0].name);
+	console.log("ParkData body: ", req.body);
+	var parkData = req.body.parkData;
+	var userTime = req.body.userTime;
+	console.log("User time is:", req.body.userTime);
 
 	parkDataLength = Object.keys(parkData).length;
+
+	let weatherData = parkData.map(park => getParkWeatherAxios(park, userTime));
+	await Promise.all(weatherData);
+	console.log("Weather results:", weatherData);
+
 	for (let park in parkData) {
 		park = parkData[park];
 		console.log(park.id);
-		//weather
-		weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${
-			park.lat
-		}&lon=${park.lng}&appid=${weatherKey1}`;
-		var counter = 0;
-		axios
-			.get(weatherURL)
-			.then(function(response) {
-				counter = counter + 1;
-				console.log("counter is: " + counter);
-				console.log("currently appending to: ", park.name);
-				park.clouds = response.data.clouds.all;
-				park.cloudDesc = "dunno lmao";
-				park.humidity = response.data.main.humidity;
-
-				if (counter == parkDataLength) {
-					console.log("final park data is :", parkData);
-					res.send(parkData);
-				}
-			})
-			.catch(function(response) {
-				console.log(response);
-			});
 	}
+
+	res.send(parkData);
 });
 
-function getParkWeatherAxios(parkData) {
-	parkDataLength = Object.keys(parkData).length;
-	for (var park in parkData) {
-		park = parkData[park];
-		console.log(park.id);
-		//weather
-		weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${
-			park.lat
-		}&lon=${park.lng}&appid=${weatherKey1}`;
-		var counter = 0;
-		axios
-			.get(weatherURL)
-			.then(function(response) {
-				counter = counter + 1;
-				console.log("counter is: " + counter);
-				//console.log("cloud log is: ",response.data.clouds.all)
-				park.clouds = response.data.clouds.all;
-				park.cloudDesc = "dunno lmao";
-				park.humidity = response.data.main.humidity;
+function getParkWeatherAxios(park, userTime) {
+	weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${
+		park.lat
+	}&lon=${park.lng}&appid=${weatherKey1}`;
 
-				if (counter == parkDataLength) {
-					console.log("final park data is :", parkData);
-					return parkData;
-				}
-			})
-			.catch(function(response) {
-				console.log(response);
-			});
-	}
+	console.log(
+		"Sun data:",
+		suncalc.getTimes(new Date(userTime), park.lat, park.lng)
+	);
+
+	return axios
+		.get(weatherURL)
+		.then(function(response) {
+			park.weather = {
+				clouds: response.data.clouds.all,
+				cloudDesc: response.data.weather.description,
+				humidity: response.data.main.humidity,
+				temp: response.data.main.temp
+			};
+			park.clouds = response.data.clouds.all;
+			park.cloudDesc = "dunno lmao";
+			park.humidity = response.data.main.humidity;
+			return park;
+		})
+		.catch(function(response) {
+			console.log(response);
+			return false;
+		});
 }
 
 app.post("/api/getParkData", (req, res) => {
@@ -698,6 +707,7 @@ app.post("/api/getParkData", (req, res) => {
 	const lng = req.body.lng;
 	const dist = req.body.dist;
 	const lightpol = req.body.lightpol;
+	const utime = new Date(req.body.utime);
 
 	//STEP 2: GET PARKS FROM DATABASE USING USER INPUT PARAMS
 	//6371 is km, 3959 is miles
@@ -847,27 +857,34 @@ app.post("/api/getParkData", (req, res) => {
 							}
 
 							//STEP 7: GET MOON DATA
-							var phaseInfo = getMoon();
-							var moonType = "";
-							var percentMoon =
-								parseFloat(phaseInfo.illuminated) * 100;
+							console.log("User time is: ", utime);
+							var phaseInfo = getMoon(utime);
 
-							if (inRange(percentMoon, 0, 25)) {
+							console.log("Moon status: ", phaseInfo);
+							let moonPercent = phaseInfo.fraction;
+							var moonType = phaseInfo.phase;
+
+							if (
+								inRange(phaseInfo.phase, 0, 0.125) ||
+								inRange(phaseInfo.phase, 0.875, 1)
+							) {
 								moonType = "New Moon";
-							} else if (inRange(percentMoon, 25, 50)) {
+							} else if (inRange(phaseInfo.phase, 0.125, 0.375)) {
 								moonType = "First Quarter";
-							} else if (inRange(percentMoon, 50, 75)) {
+							} else if (inRange(phaseInfo.phase, 0.375, 0.625)) {
 								moonType = "Full Moon";
-							} else if (inRange(percentMoon, 75, 100)) {
+							} else if (inRange(phaseInfo.phase, 0.625, 0.875)) {
 								moonType = "Last Quarter";
 							}
+
+							//moonType = phaseInfo.phase;
 
 							//reviewsJSON
 
 							//STEP 9: FORMAT RESPONSE JSON
 							let reply = {
 								parks: parkDataJSON,
-								moonPercent: percentMoon,
+								moonPercent: moonPercent,
 								moonType: moonType
 							};
 							console.log("Response ", reply);
