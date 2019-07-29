@@ -271,9 +271,11 @@ class BaseParkForm extends Component {
 		const errors = this.validate(this.state.reqData);
 		if (errors.length === 0) {
 			var d = new Date();
+
 			this.setState({
 				...this.state,
 				formErrors: [],
+
 				reqData: { ...this.state.reqData, utime: d.getTime() }
 			});
 			this.updateHistoryQuery(this.state.reqData);
@@ -295,7 +297,7 @@ class BaseParkForm extends Component {
 			lng: parseFloat(reqData.lng),
 			dist: parseFloat(reqData.dist),
 			lightpol: parseFloat(reqData.lightpol),
-			utime: parseFloat(reqData.utime)
+			utime: reqData.utime
 		};
 	};
 

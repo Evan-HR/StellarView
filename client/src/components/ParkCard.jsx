@@ -1,8 +1,35 @@
 import React, { Component } from "react";
+import StarReviewsStatic from "./StarReviewsStatic";
 import PropTypes from "prop-types";
 
 class ParkCard extends Component {
 	state = {};
+
+	renderNumReviews(numReviews) {
+		if (numReviews == 1) {
+			return <div>{numReviews} review</div>;
+		} else if (!numReviews) {
+			return <div>No reviews</div>;
+		} else {
+			return <div>{numReviews} reviews</div>;
+		}
+	}
+
+	renderReviewScore(reviewScore) {
+		if (reviewScore) {
+			return (
+				<div>
+					<StarReviewsStatic avgScore={reviewScore} />
+				</div>
+			);
+		} else {
+			return (
+				<div>
+					<StarReviewsStatic avgScore={0} />
+				</div>
+			);
+		}
+	}
 
 	render() {
 		return (
@@ -47,6 +74,9 @@ class ParkCard extends Component {
 							<br />
 							{this.props.park.cloudDesc} <br />
 							{this.props.park.humidity}% Humidity <br />
+							{this.renderReviewScore(this.props.park.avgScore)}
+							<br />
+							{this.renderNumReviews(this.props.park.numReviews)}
 						</p>
 					</div>
 				</div>
