@@ -720,7 +720,7 @@ function getParkWeatherAxios(park, userTime) {
 			console.log(weatherInstance);
 
 			park.weather = {
-				time: new Date(response.list[i].dt_txt).getTime(),
+				time: new Date(weatherInstance.dt_txt).getTime(),
 				city: response.city.name,
 				clouds: weatherInstance.clouds.all,
 				cloudDesc: weatherInstance.weather[0].description,
@@ -943,7 +943,7 @@ app.post("/api/getParkData", async (req, res) => {
 						for (var i = 0; i < clusters[clusterNum].length; i++) {
 							parkDataJSON[clusters[clusterNum][i]].weather = {
 								time: new Date(
-									response.list[i].dt_txt
+									weatherInstance.dt_txt
 								).getTime(),
 								city: response.city.name,
 								clouds: weatherInstance.clouds.all,
