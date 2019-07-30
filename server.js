@@ -9,6 +9,8 @@ const expressValidator = require("express-validator");
 const request = require("request");
 const axios = require("axios");
 const suncalc = require("suncalc");
+const clustering = require("density-clustering");
+const geolib = require("geolib");
 //moon phases
 var lune = require("lune");
 
@@ -719,7 +721,7 @@ function getParkWeatherAxios(park, userTime) {
 			console.log(weatherInstance);
 
 			park.weather = {
-				time: new Date(response.list[i].dt_txt).getTime(),
+				time: new Date(weatherInstance.dt_txt).getTime(),
 				city: response.city.name,
 				clouds: weatherInstance.clouds.all,
 				cloudDesc: weatherInstance.weather[0].description,
@@ -737,7 +739,7 @@ function getParkWeatherAxios(park, userTime) {
 		});
 }
 
-app.post("/api/getParkData", (req, res) => {
+app.post("/api/getParkData", async (req, res) => {
 	//STEP 1: PARSE USER FORM DATA
 	const lat = req.body.lat;
 	const lng = req.body.lng;
@@ -784,7 +786,7 @@ app.post("/api/getParkData", (req, res) => {
 			getConnection().query(
 				allReviewsQuery,
 				[inParkIDSet],
-				(err, reviewsResults) => {
+				async (err, reviewsResults) => {
 					if (err) {
 						console.log("failed" + err);
 						res.sendStatus(500);
@@ -796,8 +798,199 @@ app.post("/api/getParkData", (req, res) => {
 					);
 					console.log("reviews is: ", reviewsJSON);
 
-					//STEP 5: GET WEATHER FOR PARKS
+					for (var i = 0; i < parkDataJSON.length; i++) {
+						parkDataJSON[i].weather = {};
+						for (var x = 0; x < reviewsJSON.length; x++) {
+							if (reviewsJSON[x].p_id == parkDataJSON[i].id) {
+								console.log(
+									"found matching ID! ",
+									reviewsJSON[x].p_id
+								);
+								parkDataJSON[i].avgScore =
+									reviewsJSON[x].avgScore;
+								parkDataJSON[i].numReviews =
+									reviewsJSON[x].numReviews;
+							}
+						}
+					}
 
+					//STEP 5: GET WEATHER FOR PARKS
+					var dataset = [];
+					for (var i = 0; i < parkDataJSON.length; i++) {
+						dataset[i] = [parkDataJSON[i].lat, parkDataJSON[i].lng];
+					}
+
+					function kmeansDistance(p, q) {
+						return geolib.getDistance(
+							{ lat: p[0], lng: p[1] },
+							{ lat: q[0], lat: q[1] }
+						);
+					}
+					var kmeans = new clustering.KMEANS();
+					// parameters: 3 - number of clusters
+					var clusterCount = Math.round(parkDataJSON.length / 5); //TODO: FInd a better cluster
+					if (clusterCount > 10) clusterCount = 10;
+					var clusters = kmeans.run(
+						dataset,
+						clusterCount,
+						kmeansDistance
+					);
+
+					let clusterCentroids = [];
+					for (
+						var clusterNum = 0;
+						clusterNum < clusters.length;
+						clusterNum++
+					) {
+						let clusterCoordinates = [];
+						for (var i = 0; i < clusters[clusterNum].length; i++) {
+							clusterCoordinates.push({
+								lat: parkDataJSON[clusters[clusterNum][i]].lat,
+								lng: parkDataJSON[clusters[clusterNum][i]].lng
+							});
+						}
+						//console.log(clusterCoordinates);
+						let clusterCentroid = geolib.getCenter(
+							clusterCoordinates
+						);
+						//console.log(clusterCentroid);
+
+						let clusterDist = [];
+						for (var i = 0; i < clusters[clusterNum].length; i++) {
+							parkDataJSON[
+								clusters[clusterNum][i]
+							].cluster = clusterNum;
+							clusterDist.push(
+								geolib.getDistance(
+									{
+										lat:
+											parkDataJSON[
+												clusters[clusterNum][i]
+											].lat,
+										lng:
+											parkDataJSON[
+												clusters[clusterNum][i]
+											].lng
+									},
+									clusterCentroid
+								)
+							);
+						}
+
+						console.log(
+							"Cluster",
+							clusterNum,
+							"...Max dist:",
+							Math.max.apply(null, clusterDist),
+							"...Avg dist:",
+							clusterDist.reduce((a, b) => a + b) /
+								clusterDist.length
+						);
+
+						//TODO: CHECK IF CLUSTERDIST IS OKAY
+						clusterCentroids.push(clusterCentroid);
+					}
+					console.log(clusterCentroids);
+					for (
+						var clusterNum = 0;
+						clusterNum < clusters.length;
+						clusterNum++
+					) {
+						weatherURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${
+							clusterCentroids[clusterNum].latitude
+						}&lon=${
+							clusterCentroids[clusterNum].longitude
+						}&cnt=50&appid=${weatherKey1}&units=metric`;
+
+						console.log(weatherURL);
+
+						let response = await axios
+							.get(weatherURL)
+							.then(response => response.data)
+							.catch(false);
+
+						var times = suncalc.getTimes(
+							new Date(utime),
+							clusterCentroids[clusterNum].latitude,
+							clusterCentroids[clusterNum].longitude
+						);
+						var nightTime = new Date(times.night);
+						let weatherInstance = null;
+
+						for (var i = 0; i < response.cnt; i++) {
+							console.log(
+								new Date(response.list[i].dt_txt).getTime(),
+								nightTime.getTime(),
+								new Date(response.list[i].dt_txt).getTime() >
+									nightTime.getTime()
+							);
+							if (
+								new Date(response.list[i].dt_txt).getTime() >
+								nightTime.getTime()
+							) {
+								console.log(
+									"Success! Looking at ",
+									i,
+									":",
+									response.list[i]
+								);
+								weatherInstance = response.list[i];
+								break;
+							}
+						}
+
+						console.log(weatherInstance);
+
+						for (var i = 0; i < clusters[clusterNum].length; i++) {
+							parkDataJSON[clusters[clusterNum][i]].weather = {
+								time: new Date(
+									weatherInstance.dt_txt
+								).getTime(),
+								city: response.city.name,
+								clouds: weatherInstance.clouds.all,
+								cloudDesc:
+									weatherInstance.weather[0].description,
+								humidity: weatherInstance.main.humidity,
+								temp: weatherInstance.main.temp
+							};
+						}
+					}
+
+					//console.log(clusters);
+
+					var phaseInfo = getMoon(utime);
+
+					let moonPercent = phaseInfo.fraction;
+					var moonType = phaseInfo.phase;
+
+					if (
+						inRange(phaseInfo.phase, 0, 0.125) ||
+						inRange(phaseInfo.phase, 0.875, 1)
+					) {
+						moonType = "New Moon";
+					} else if (inRange(phaseInfo.phase, 0.125, 0.375)) {
+						moonType = "First Quarter";
+					} else if (inRange(phaseInfo.phase, 0.375, 0.625)) {
+						moonType = "Full Moon";
+					} else if (inRange(phaseInfo.phase, 0.625, 0.875)) {
+						moonType = "Last Quarter";
+					}
+
+					//moonType = phaseInfo.phase;
+
+					//reviewsJSON
+
+					//STEP 9: FORMAT RESPONSE JSON
+					let reply = {
+						parks: parkDataJSON,
+						moonPercent: moonPercent,
+						moonType: moonType
+					};
+					//console.log("Response ", reply);
+
+					//STEP 10: SEND DATA TO FRONT-END
+					res.send(reply);
+					/*
 					var weatherArr = [];
 					weatherURL = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lng}&cnt=50&appid=${weatherKey1}&units=metric`;
 					axios
@@ -941,7 +1134,7 @@ app.post("/api/getParkData", (req, res) => {
 
 						.catch(function(response) {
 							console.log(response);
-						});
+						});*/
 				}
 			);
 		}
