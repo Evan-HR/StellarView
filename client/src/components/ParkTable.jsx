@@ -64,6 +64,7 @@ class ParkTable extends Component {
 		return (
 			<ParkCard
 				park={park}
+				moon={this.props.moon}
 				handleMouseOver={this.handleCardMouseOver}
 				handleMouseClick={this.handleCardMouseClick}
 			/>

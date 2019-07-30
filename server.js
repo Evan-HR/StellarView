@@ -269,6 +269,7 @@ app.post("/api/storeReview", function(req, res) {
 				res.sendStatus(500);
 				return;
 			}
+			res.end();
 		}
 	);
 });
@@ -930,8 +931,9 @@ app.post("/api/getParkData", (req, res) => {
 								moonPercent: moonPercent,
 								moonType: moonType
 							};
-							console.log("Response ", reply);
-
+							//console.log("Response ", parkDataJSON);
+							//console.log("weather response: ", reply.parks.weather);
+							console.log("Response reply: ", reply)
 							//STEP 10: SEND DATA TO FRONT-END
 							res.send(reply);
 							//res.send(results);

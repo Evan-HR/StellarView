@@ -16,10 +16,10 @@ export class Auth extends React.Component {
 			isAuth: null,
 			isLoggingIn: false,
 			userLocation: { lat: "", lng: "" },
-			userReviews: [],
 			hasFavSpots: false,
 			hasNoSpots: false,
 			userFavorites: [],
+			userReviews: [],
 			setUserLocation: this.setUserLocation
 		};
 		console.log("AFTER REG, PRE-GETUSERAUTH, should be SECOND");
@@ -106,6 +106,7 @@ export class Auth extends React.Component {
 
 			.then(({ data }) => {
 				this.setState({
+					
 					firstName: data.firstName,
 					isAuth: data.isAuth,
 					userID: data.userID
@@ -152,9 +153,12 @@ export class Auth extends React.Component {
 			.get("/api/getUserReviews")
 
 			.then(reviews => {
+
+					if (!reviews.status == 204) {
 				this.setState({
 					userReviews: reviews.data
 				});
+			}
 			})
 			.catch(error => {
 				console.log(error);
