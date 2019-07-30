@@ -105,13 +105,17 @@ class ParkMap extends Component {
 				map: this.googleMap,
 				title: park.name,
 				icon: {
-					url:
-						park.name === "Unknown"
-							? "http://maps.google.com/mapfiles/kml/pal2/icon12.png"
-							: "http://maps.google.com/mapfiles/kml/pal2/icon4.png",
-					anchor: new window.google.maps.Point(16, 16),
-					scaledSize: new window.google.maps.Size(21, 21)
+					url: `http://maps.google.com/mapfiles/kml/paddle/${park.cluster +
+						1}-lv.png`
 				}
+				// icon: {
+				// 	url:
+				// 		park.name === "Unknown"
+				// 			? "http://maps.google.com/mapfiles/kml/pal2/icon12.png"
+				// 			: "http://maps.google.com/mapfiles/kml/pal2/icon4.png",
+				// 	anchor: new window.google.maps.Point(16, 16),
+				// 	scaledSize: new window.google.maps.Size(21, 21)
+				// }
 			});
 
 			marker.addListener("click", () => {
@@ -191,7 +195,7 @@ class ParkMap extends Component {
 			if (
 				!this.props.parkList
 					.map(park => park.id.toString())
-					.includes(markerKey)
+					.includes(markerKey) || true
 			) {
 				// console.log("Deleting marker:", markerKey);
 				this.props.markers[markerKey].setMap(null);
