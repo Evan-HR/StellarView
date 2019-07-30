@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import StarReviewsStatic from "./StarReviewsStatic";
 import PropTypes from "prop-types";
+var grade = require("letter-grade");
 
 class ParkCard extends Component {
 	state = {};
@@ -31,9 +32,49 @@ class ParkCard extends Component {
 		}
 	}
 
+	inRange(x, min, max) {
+		return (x - min) * (x - max) <= 0;
+	}
+
 	renderLetterGrade = () => {
-		console.log("RENDER LETTER GRADE GET HERE??");
-		return 2 * 3;
+		const moon = this.props.moon;
+		const humidity = this.props.park.weather.humidity / 100;
+		const cloudCov = this.props.park.weather.clouds / 100;
+		const lightPol = this.props.park.light_pol;
+
+		//addition between these
+		var moonScore = 0.45 * (-1 * (2 * this.props.moon - 1));
+		var lightPolScore = 0.25 * (((-1 * 1) / 3) * (lightPol - 3));
+		var humidityScore = 0;
+		if (humidity < 0.4) {
+			humidityScore += 0.15 * 1;
+		} else if (this.inRange(humidity, 0.4, 0.8)) {
+			humidityScore += 0.15 * (-2.5 * humidity + 2);
+		} else if (0.8 < humidity) {
+			humidityScore += 0;
+		}
+		var cloudScore = 0;
+		if (cloudCov < 0.2) {
+			cloudScore += 0.15 * 1;
+		} else if (this.inRange(cloudCov, 0.2, 0.4)) {
+			cloudScore += 0.15 * (-5 * cloudCov + 2);
+		} else if (0.4 < cloudCov) {
+			cloudScore += 0;
+		}
+
+		const finalScore =
+			moonScore + cloudScore + humidityScore + lightPolScore;
+		//print to be sure
+		console.log(
+			" park: " + this.props.park.name_alt + " moon: " + moon,
+			"moonScore: " + moonScore + " humidity: " + humidity,
+			" humidityScore: " + humidityScore + " lightpollution: " + lightPol,
+			" lightPolScore: " + lightPolScore + " cloudcov: " + cloudCov,
+			" cloudScore: " + cloudScore
+		);
+		console.log(" finalScore: " + finalScore);
+
+		return grade(finalScore * 100);
 	};
 	render() {
 		return (
@@ -89,7 +130,7 @@ class ParkCard extends Component {
 							<br />
 							{this.renderNumReviews(this.props.park.numReviews)}
 							<br />
-							{this.renderLetterGrade()}
+							Overall score: {this.renderLetterGrade()}
 						</p>
 					</div>
 				</div>
