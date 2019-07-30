@@ -951,7 +951,28 @@ app.post("/api/getParkData", async (req, res) => {
 								cloudDesc:
 									weatherInstance.weather[0].description,
 								humidity: weatherInstance.main.humidity,
-								temp: weatherInstance.main.temp
+								temp: weatherInstance.main.temp,
+								stationCoord: {
+									lat: response.city.coord.lat,
+									lng: response.city.coord.lon
+								},
+								stationDist:
+									geolib.getDistance(
+										{
+											lat:
+												parkDataJSON[
+													clusters[clusterNum][i]
+												].lat,
+											lng:
+												parkDataJSON[
+													clusters[clusterNum][i]
+												].lng
+										},
+										{
+											lat: response.city.coord.lat,
+											lng: response.city.coord.lon
+										}
+									) / 1000
 							};
 						}
 					}
