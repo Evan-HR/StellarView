@@ -7,6 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
 import { sizing } from "@material-ui/system";
 import { AuthConsumer } from "./AuthContext";
+import styled from 'styled-components';
 
 class BaseParkForm extends Component {
 	state = {
@@ -375,6 +376,7 @@ class BaseParkForm extends Component {
 			);
 		} else {
 			return "Near Me";
+			
 		}
 	};
 
@@ -430,6 +432,7 @@ class BaseParkForm extends Component {
 					>
 						🔎
 					</button>
+
 					<button
 						// onClick={this.getParkData.bind(this, this.state.formInput)}
 						className="btn btn-primary m-1"
@@ -438,6 +441,14 @@ class BaseParkForm extends Component {
 						onClick={this.getMyLocation}
 					>
 						<strong>{this.renderLocationSpinner()}</strong>
+					</button>
+					<button
+						className="btn btn-danger m-2"
+						onClick={this.props.clearParks}
+						// className={this.clearButtonClass()}
+						type="button"
+					>
+						<strong>Clear</strong>
 					</button>
 				</form>
 				<form className="mx-5">
@@ -503,21 +514,17 @@ class BaseParkForm extends Component {
 					/>
 					<br />
 					{this.renderFormErrors()}
-					<button
-						className="btn btn-primary m-2"
+
+
+					<MainButton
+						
 						onClick={e => this.onSubmit(e)}
 						disabled={this.props.isFetchingParks}
 					>
-						Submit
-					</button>
-					<button
-						className="btn btn-danger m-2"
-						onClick={this.props.clearParks}
-						// className={this.clearButtonClass()}
-						type="button"
-					>
-						<strong>Clear</strong>
-					</button>
+						Stargaze
+					</MainButton>
+
+
 				</form>
 			</div>
 		);
@@ -579,3 +586,48 @@ const ParkForm = parkFormProps => (
 );
 
 export default withRouter(ParkForm);
+
+
+
+////////////////////////////////////////////
+const MainButton = styled.button`
+
+background-color: transparent;
+	display: inline-block;
+	border-color: transparent;
+  	padding: 1.5em 2.6em;
+  	border-radius: 0;
+	color: black;
+  	margin-top:2rem;
+  	font-weight: bold;
+  	font-size: 0.8rem;
+  	letter-spacing: 1px;
+  	text-transform: uppercase;
+  	text-decoration: none;
+	position: relative;
+	transition: all 250ms ease;
+	&:before,
+	&:after{
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		border: 2px solid;
+		transition: .25s;
+	}
+	&:before{
+		transform: translateX(-.25em) translateY(.25em);
+	}
+	&:after{
+		transform: translateX(.25em) translateY(-.25em);
+	}
+	
+	&:hover{
+		&:before,
+		&:after{
+			transform: translateX(0) translateY(0);
+		}
+	}
+`

@@ -5,6 +5,7 @@ import App from "../App";
 import axios from "axios";
 //import { Cookies } from "react-cookie";
 
+
 // {"cookie":{"originalMaxAge":null,"expires":null,
 // "httpOnly":true,"path":"/"},"passport":{"user":{"user_id":81}}}
 export class Auth extends React.Component {
@@ -168,6 +169,7 @@ export class Auth extends React.Component {
 	render() {
 		return (
 			<AuthProvider value={this.state}>
+				
 				<App
 					handleLogoutState={this.handleLogoutState}
 					handleLogin={this.handleLogin}
