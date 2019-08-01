@@ -984,17 +984,22 @@ app.post("/api/getParkData", async (req, res) => {
 					let moonPercent = phaseInfo.fraction;
 					var moonType = phaseInfo.phase;
 
-					if (
-						inRange(phaseInfo.phase, 0, 0.125) ||
-						inRange(phaseInfo.phase, 0.875, 1)
-					) {
+					if (inRange(phaseInfo.phase, 0, 0.125)) {
 						moonType = "New Moon";
-					} else if (inRange(phaseInfo.phase, 0.125, 0.375)) {
+					} else if (inRange(phaseInfo.phase, 0.125, 0.25)) {
+						moonType = "Waxing Crescent";
+					} else if (inRange(phaseInfo.phase, 0.25, 0.375)) {
 						moonType = "First Quarter";
-					} else if (inRange(phaseInfo.phase, 0.375, 0.625)) {
+					} else if (inRange(phaseInfo.phase, 0.375, 0.5)) {
+						moonType = "Waxing Gibbous";
+					} else if (inRange(phaseInfo.phase, 0.5, 0.625)) {
 						moonType = "Full Moon";
-					} else if (inRange(phaseInfo.phase, 0.625, 0.875)) {
+					} else if (inRange(phaseInfo.phase, 0.625, 0.75)) {
+						moonType = "Waning Gibbous";
+					} else if (inRange(phaseInfo.phase, 0.75, 0.875)) {
 						moonType = "Last Quarter";
+					} else if (inRange(phaseInfo.phase, 0.875, 1)) {
+						moonType = "Waning Cresent";
 					}
 
 					//moonType = phaseInfo.phase;

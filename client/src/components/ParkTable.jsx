@@ -1,6 +1,22 @@
 //Displays park table
 import React, { Component } from "react";
 import ParkCard from "./ParkCard";
+import styled from "styled-components";
+//moon images, in proper order
+import newMoon from "./style/Media/Moon/moon-phase-new.svg";
+import waxingCrescent from "./style/Media/Moon/moon-phase-waxingcrescent.svg";
+
+import firstQuarter from "./style/Media/Moon/moon-phase-firstquarter.svg";
+
+import waxingGibbous from "./style/Media/Moon/moon-phase-waxinggibbous.svg";
+
+import fullMoon from "./style/Media/Moon/moon-phase-full.svg";
+
+import waningGibbous from "./style/Media/Moon/moon-phase-waninggibbous.svg";
+
+import lastQuarter from "./style/Media/Moon/moon-phase-lastquarter.svg";
+
+import waningCrescent from "./style/Media/Moon/moon-phase-waningcrescent.svg";
 
 class ParkTable extends Component {
 	state = {};
@@ -26,13 +42,36 @@ class ParkTable extends Component {
 	}
 
 	renderMoonData() {
+		function inRange(x, min, max) {
+			return (x - min) * (x - max) <= 0;
+		}
 		if (this.props.parkList.length > 0) {
 			var moonDataString = "";
 			var moonIllum = this.props.moon;
+			moonIllum = Math.round(moonIllum * 100) / 100;
 			var moonType = this.props.moonType;
-			moonDataString = `The moon is ${moonType}, meaning it is ${moonIllum}% illuminated.`;
+			var moonSVG;
 
-			return moonDataString;
+			moonDataString = `The moon is ${moonType}, meaning it is ${moonIllum}% illuminated.`;
+			if (inRange(moonIllum, 0, 0.125)) {
+				moonSVG = newMoon;
+			} else if (inRange(moonIllum, 0.125, 0.25)) {
+				moonSVG = "Waxing Crescent";
+			} else if (inRange(moonIllum, 0.25, 0.375)) {
+				moonSVG = waxingCrescent;
+			} else if (inRange(moonIllum, 0.375, 0.5)) {
+				moonSVG = waxingGibbous;
+			} else if (inRange(moonIllum, 0.5, 0.625)) {
+				moonSVG = fullMoon;
+			} else if (inRange(moonIllum, 0.625, 0.75)) {
+				moonSVG = waningGibbous;
+			} else if (inRange(moonIllum, 0.75, 0.875)) {
+				moonSVG = lastQuarter;
+			} else if (inRange(moonIllum, 0.875, 1)) {
+				moonSVG = waningCrescent;
+			}
+
+			return <MoonStyle src={moonSVG} alt="Moon phase" />;
 		}
 	}
 
@@ -146,3 +185,10 @@ class ParkTable extends Component {
 }
 
 export default ParkTable;
+
+///////////////////////////////////////////////////////////////
+
+const MoonStyle = styled.img`
+	padding-top: 15px;
+	padding-bottom: 15px;
+`;
