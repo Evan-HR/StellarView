@@ -7,8 +7,7 @@ import Login from "./Login";
 import Register from "./Register";
 import NavBarMobile from "./NavBarMobile";
 import NavBarDesktop from "./NavBarDesktop";
-import styled from 'styled-components';
-
+import styled from "styled-components";
 
 class NavBar extends Component {
 	state = {};
@@ -23,66 +22,68 @@ class NavBar extends Component {
 	render() {
 		return (
 			<MyNavBar>
-				<NavBarDesktop/>
-			{/* <NavBarMobile/> */}
-			
-			<ul className="nav justify-content-center">
-				<li className="nav-item">
-					<a className="nav-link">
-						<Link to="/">Home</Link>
-					</a>
-				</li>
+				<NavBarDesktop />
+				{/* <NavBarMobile /> */}
 
-				<AuthConsumer>
-					{x => {
-						if (x.isAuth === true) {
-							return (
-								<li className="nav-item">
-									<a
-										className="nav-link"
-										//href="/profile"
-									>
-										<Link to="/profile">Profile</Link>
-									</a>
-								</li>
-							);
-						}
-					}}
-				</AuthConsumer>
+				<ul className="nav justify-content-center">
+					<li className="nav-item">
+						<a className="nav-link">
+							<Link to="/">Home</Link>
+						</a>
+					</li>
 
-				<AuthConsumer>
-					{x => {
-						if (x.isAuth === true) {
-							return (
-								<li class="nav-item">
-									<button
-										className="btn btn-link"
-										onClick={e => this.handleLogout(e)}
-									>
-										Logout
-									</button>
-								</li>
-							);
-						} else {
-							return (
-								<Login handleLogin={this.props.handleLogin} />
-							);
-						}
-					}}
-				</AuthConsumer>
+					<AuthConsumer>
+						{x => {
+							if (x.isAuth === true) {
+								return (
+									<li className="nav-item">
+										<a
+											className="nav-link"
+											//href="/profile"
+										>
+											<Link to="/profile">Profile</Link>
+										</a>
+									</li>
+								);
+							}
+						}}
+					</AuthConsumer>
 
-				<Register handleLogin={this.props.handleLogin} />
+					<AuthConsumer>
+						{x => {
+							if (x.isAuth === true) {
+								return (
+									<li class="nav-item">
+										<button
+											className="btn btn-link"
+											onClick={e => this.handleLogout(e)}
+										>
+											Logout
+										</button>
+									</li>
+								);
+							} else {
+								return (
+									<Login
+										handleLogin={this.props.handleLogin}
+									/>
+								);
+							}
+						}}
+					</AuthConsumer>
 
-				<NavBarFAQ />
+					<Register handleLogin={this.props.handleLogin} />
 
-				<AuthConsumer>
-					{x => {
-						if (x.isAuth === true) {
-							return "hello, " + x.firstName;
-						}
-					}}
-				</AuthConsumer>
-			</ul>
+					<NavBarFAQ />
+
+					<AuthConsumer>
+						{x => {
+							if (x.isAuth === true) {
+								return "hello, " + x.firstName;
+							}
+						}}
+					</AuthConsumer>
+				</ul>
 			</MyNavBar>
 		);
 	}
@@ -93,11 +94,8 @@ export default withRouter(NavBar);
 ///////////////////////////////////////////////
 
 const MyNavBar = styled.div`
-display: flex;
-flex-flow: column nowrap;
-justify-content: flex-start;
-list-style: none;
-
-`
-
-
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: flex-start;
+	list-style: none;
+`;

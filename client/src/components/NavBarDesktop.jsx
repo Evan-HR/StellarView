@@ -54,6 +54,11 @@ align-items: center;
 width: 35vw;
 
 list-style: none;
+
+/* On screens that are 768px or less*/
+@media screen and (max-width: 768px) {
+    display: none;
+}
 }
 
 .link{

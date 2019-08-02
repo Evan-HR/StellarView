@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Profile from "./components/Profile";
 import Login from "./components/Login";
+import ToolBar from "./components/ToolBar/Toolbar";
 
 import { createGlobalStyle } from "styled-components";
 import { ThemeProvider } from "styled-components";
@@ -19,29 +20,32 @@ class App extends Component {
 			<React.Fragment>
 				<GlobalStyle />
 				<Router>
-					<NavBar
-						handleLogoutState={this.props.handleLogoutState}
-						handleLogin={this.props.handleLogin}
-					/>
-					<Route path="/" exact component={ParksData} />
-					<AuthConsumer>
-						{authState => {
-							console.log(authState);
-							return (
-								<Route
-									path="/profile"
-									render={() => {
-										console.log(authState);
-										if (authState.isAuth !== null) {
-											if (authState.isAuth === true)
-												return <Profile />;
-											else return <Redirect to="/" />;
-										}
-									}}
-								/>
-							);
-						}}
-					</AuthConsumer>
+					<ToolBar />
+					<main style={{ marginTop: "100px" }}>
+						<NavBar
+							handleLogoutState={this.props.handleLogoutState}
+							handleLogin={this.props.handleLogin}
+						/>
+						<Route path="/" exact component={ParksData} />
+						<AuthConsumer>
+							{authState => {
+								console.log(authState);
+								return (
+									<Route
+										path="/profile"
+										render={() => {
+											console.log(authState);
+											if (authState.isAuth !== null) {
+												if (authState.isAuth === true)
+													return <Profile />;
+												else return <Redirect to="/" />;
+											}
+										}}
+									/>
+								);
+							}}
+						</AuthConsumer>
+					</main>
 				</Router>
 			</React.Fragment>
 		);
@@ -72,8 +76,8 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body{
-	margin-left: 10%;
-	margin-right: 10%;
+	/* margin-left: 10%;
+	margin-right: 10%; */
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
