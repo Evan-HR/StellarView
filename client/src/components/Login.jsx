@@ -67,7 +67,7 @@ class Login extends Component {
 	};
 
 	errorMsg() {
-		if (this.state.errorDB == true) {
+		if (this.state.errorDB === true) {
 			return (
 				<div class="alert alert-danger" role="alert">
 					❌ Invalid login credentials! Please try again

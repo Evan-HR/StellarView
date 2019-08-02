@@ -5,6 +5,10 @@ import NavBarFAQ from "./NavBarFAQ";
 import { withRouter, Link } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
+import NavBarMobile from "./NavBarMobile";
+import NavBarDesktop from "./NavBarDesktop";
+import styled from 'styled-components';
+
 
 class NavBar extends Component {
 	state = {};
@@ -18,6 +22,10 @@ class NavBar extends Component {
 
 	render() {
 		return (
+			<MyNavBar>
+				<NavBarDesktop/>
+			{/* <NavBarMobile/> */}
+			
 			<ul className="nav justify-content-center">
 				<li className="nav-item">
 					<a className="nav-link">
@@ -75,8 +83,21 @@ class NavBar extends Component {
 					}}
 				</AuthConsumer>
 			</ul>
+			</MyNavBar>
 		);
 	}
 }
 
 export default withRouter(NavBar);
+
+///////////////////////////////////////////////
+
+const MyNavBar = styled.div`
+display: flex;
+flex-flow: column nowrap;
+justify-content: flex-start;
+list-style: none;
+
+`
+
+

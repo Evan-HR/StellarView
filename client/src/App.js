@@ -6,8 +6,9 @@ import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Profile from "./components/Profile";
 import Login from "./components/Login";
 
-import { createGlobalStyle  } from 'styled-components';
-
+import { createGlobalStyle } from "styled-components";
+import { ThemeProvider } from "styled-components";
+import { theme } from "./theme";
 
 class App extends Component {
 	//RENDER --> ReactDOM.render(<App />, document.getElementById("root"));
@@ -16,7 +17,7 @@ class App extends Component {
 		console.log("App - rendered");
 		return (
 			<React.Fragment>
-				<GlobalStyle/>
+				<GlobalStyle />
 				<Router>
 					<NavBar
 						handleLogoutState={this.props.handleLogoutState}
@@ -33,9 +34,7 @@ class App extends Component {
 										console.log(authState);
 										if (authState.isAuth !== null) {
 											if (authState.isAuth === true)
-												return (
-													<Profile />
-												);
+												return <Profile />;
 											else return <Redirect to="/" />;
 										}
 									}}
@@ -44,7 +43,7 @@ class App extends Component {
 						}}
 					</AuthConsumer>
 				</Router>
-				</React.Fragment>
+			</React.Fragment>
 		);
 	}
 }
@@ -61,10 +60,10 @@ export default App;
 //'Yeseva One', cursive;
 //font-family: 'Barlow', sans-serif;
 
-const GlobalStyle  = createGlobalStyle`
+const GlobalStyle = createGlobalStyle`
 
 
-@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono|Barlow|IBM+Plex+Sans|Major+Mono+Display|Nunito+Sans|Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono|Rubik|Barlow|IBM+Plex+Sans|Major+Mono+Display|Nunito+Sans|Open+Sans&display=swap');
 
 
 html {
@@ -78,13 +77,12 @@ body{
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #212529;
   text-align: left;
-  background-color: #fff;
+  background-color: ${props => props.theme.background3};
 	
   font-family: 'Barlow', sans-serif;
 	text-align: center;
 
 }
 
-`
+`;

@@ -7,7 +7,7 @@ class ParkCard extends Component {
 	state = {};
 
 	renderNumReviews(numReviews) {
-		if (numReviews == 1) {
+		if (numReviews === 1) {
 			return <div>{numReviews} review</div>;
 		} else if (!numReviews) {
 			return <div>No reviews</div>;

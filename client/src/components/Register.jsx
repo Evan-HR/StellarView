@@ -81,7 +81,7 @@ class Register extends Component {
 	};
 
 	errorMsg() {
-		if (this.state.errorDB == true) {
+		if (this.state.errorDB === true) {
 			return this.state.regErrors.map(errors => {
 				return (
 					<div class="alert alert-danger" role="alert">

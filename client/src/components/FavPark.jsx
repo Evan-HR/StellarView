@@ -14,7 +14,7 @@ class BaseFavPark extends Component {
 		});
 	};
 	handleWarningMsg = () => {
-		if (this.state.clickedNoAuth == true) {
+		if (this.state.clickedNoAuth === true) {
 			return (
 				<div class="alert alert-warning" role="alert">
 					You must be logged-in to add to favorites!
@@ -60,10 +60,10 @@ class BaseFavPark extends Component {
 
 	favSpotButton = () => {
 		//console.log("BUTTON CLICKED!!");
-		if (this.props.context.isAuth == true) {
+		if (this.props.context.isAuth === true) {
 			if (
-				this.state.buttonPressed == false &&
-				this.state.hasFaved == false
+				this.state.buttonPressed === false &&
+				this.state.hasFaved === false
 			) {
 				return (
 					<button

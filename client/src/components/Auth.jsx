@@ -77,7 +77,7 @@ export class Auth extends React.Component {
 			.get("/api/getUserAuth")
 			.then(function(response) {
 				console.log("response is: ", response.data);
-				if (response.data == true) {
+				if (response.data === true) {
 					console.log("get here ya?");
 					self.getUserInfo();
 					// self.getUserReviews();
@@ -126,7 +126,7 @@ export class Auth extends React.Component {
 			.get("/api/getUserFavSpots")
 
 			.then(favSpots => {
-				if (favSpots.status == 204) {
+				if (favSpots.status === 204) {
 					console.log("204!!!!!!! NO FAV SPOTS!!");
 					this.setState({
 						hasNoSpots: true
@@ -155,7 +155,7 @@ export class Auth extends React.Component {
 
 			.then(reviews => {
 
-					if (!reviews.status == 204) {
+					if (!reviews.status === 204) {
 				this.setState({
 					userReviews: reviews.data
 				});
