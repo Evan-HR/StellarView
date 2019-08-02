@@ -7,6 +7,9 @@ import Profile from "./components/Profile";
 import Login from "./components/Login";
 
 import { createGlobalStyle  } from 'styled-components';
+import {ThemeProvider} from 'styled-components';
+import {theme} from './theme'
+
 
 
 class App extends Component {
@@ -64,7 +67,7 @@ export default App;
 const GlobalStyle  = createGlobalStyle`
 
 
-@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono|Barlow|IBM+Plex+Sans|Major+Mono+Display|Nunito+Sans|Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono|Rubik|Barlow|IBM+Plex+Sans|Major+Mono+Display|Nunito+Sans|Open+Sans&display=swap');
 
 
 html {
@@ -78,9 +81,8 @@ body{
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #212529;
   text-align: left;
-  background-color: #fff;
+  background-color: ${props => props.theme.background3};
 	
   font-family: 'Barlow', sans-serif;
 	text-align: center;

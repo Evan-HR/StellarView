@@ -68,7 +68,7 @@ class BaseReviews extends Component {
 			})
 			.then(response => {
 				console.log({ message: "Reviews Gathered!", response });
-				if (response.status == 204) {
+				if (response.status === 204) {
 					this.setState({
 						dbReviewList: [],
 						avgScore: 0
@@ -200,7 +200,7 @@ class BaseReviews extends Component {
 	}
 
 	renderScore() {
-		if (this.state.avgScore == 0) {
+		if (this.state.avgScore === 0) {
 			return "";
 		} else {
 			return this.state.avgScore + "/5";
@@ -208,7 +208,7 @@ class BaseReviews extends Component {
 	}
 
 	renderNumReviews() {
-		if (this.state.numReviews == 1) {
+		if (this.state.numReviews === 1) {
 			return <div>{this.state.numReviews} review</div>;
 		} else {
 			return <div>{this.state.numReviews} reviews</div>;
