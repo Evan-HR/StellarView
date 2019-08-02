@@ -1,10 +1,14 @@
 import React from "react";
 import "./Toolbar.css";
+import hamburgerMenu from "../style/Media/sharp-menu-24px.svg";
+import styled from "styled-components";
 
 const toolbar = props => (
 	<header className="toolbar">
 		<nav className="toolbar__navigation">
-			<div />
+			<Hamburger>
+				<img src={hamburgerMenu} alt="Menu" />
+			</Hamburger>
 			<div className="toolbar__logo">
 				<a href="/">STELLARVIEW</a>
 			</div>
@@ -27,3 +31,17 @@ const toolbar = props => (
 );
 
 export default toolbar;
+
+/////////////////////////////////////////////////////
+const Hamburger = styled.button`
+	background: none;
+	height: 6vh;
+	width: 6vh;
+	border: none;
+	display: block;
+
+	/* On screens that are 768px or less*/
+	@media screen and (max-width: 768px) {
+		display: block;
+	}
+`;

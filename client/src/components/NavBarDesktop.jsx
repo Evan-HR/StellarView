@@ -1,24 +1,23 @@
-import React from 'react';
-import styled from 'styled-components';
-import Navlinks from './Navlinks';
-import hamburgerMenu from "./style/Media/outline-menu-24px.svg";
+import React from "react";
+import styled from "styled-components";
+import Navlinks from "./Navlinks";
+import hamburgerMenu from "./style/Media/sharp-menu-24px.svg";
 
 const NavBarDesktop = () => {
-    return ( 
-        <DesktopNav>
-        <div className = "logo">stellarview</div>
-        <Navlinks/>
-        <Hamburger>
-            <img src={hamburgerMenu} alt="Menu"/>
-        </Hamburger>
+	return (
+		<DesktopNav>
+			<div className="logo">stellarview</div>
+			<Navlinks />
+			<Hamburger>
+				<svg src={hamburgerMenu} alt="Menu" />
+			</Hamburger>
+		</DesktopNav>
+	);
+};
 
-        </DesktopNav>
-     );
-}
- 
 export default NavBarDesktop;
 
-// recall, flex A flex container expands items to fill 
+// recall, flex A flex container expands items to fill
 // available free space, or shrinks them to prevent overflow.
 //vh 15% height means 15% of the viewport's height
 // font-family: 'Open Sans', sans-serif;
@@ -69,18 +68,17 @@ text-decoration: none;
 }
 
 
-`
+`;
 
 const Hamburger = styled.button`
-background: transparent;
-height: 6vh;
-width: 6vh;
-border: none;
-display:none;
+	background: transparent;
+	height: 6vh;
+	width: 6vh;
+	border: none;
+	display: none;
 
-
-/* On screens that are 768px or less*/
-@media screen and (max-width: 768px) {
-    display: block;
-}
-`
+	/* On screens that are 768px or less*/
+	@media screen and (max-width: 768px) {
+		display: block;
+	}
+`;
