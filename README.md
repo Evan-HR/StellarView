@@ -10,7 +10,7 @@ Frontend react server can be connected to via `http://localhost:3000/`
 Install XAMPP, run MYSQL and APACHE\
 Go to: localhost/phpmyadmin\
 Create database:
-```
+```sql
 CREATE TABLE `ontario_parks` (
  `id` int(25) NOT NULL AUTO_INCREMENT,
  `osm_id` int(25) NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE `ontario_parks` (
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12488 DEFAULT CHARSET=utf8
 ```
-```
+```sql
 CREATE TABLE users (
  id smallint(9) NOT NULL AUTO_INCREMENT,
  email varchar(70) NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE users (
  UNIQUE KEY email (email)
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8
 ```
-```
+```sql
 CREATE TABLE `favorite_parks` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
  `park_id` int(11) NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE `favorite_parks` (
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 ```
-```
+```sql
 CREATE TABLE `reviews` (
  `id` int(25) unsigned NOT NULL AUTO_INCREMENT,
  `p_id` int(25) NOT NULL,
@@ -83,7 +83,7 @@ use Contexts!\
 const UserContext = React.createContext()\
 this returns both a provider and a consumer, properties of UserContext\
 to set up provider:
-```
+```jsx
 render(){
 return(
 <UserContext.Provider value = {this.state.user}>
@@ -91,7 +91,7 @@ return(
 </UserContext.Provider>
 ```
 Now suppose a NavBar() function/component is in main
-```
+```jsx
 function NavBar(){
 return(
  <UserContext.Consumer>
@@ -102,7 +102,7 @@ return(
 ```
 You'll get a "render not a function" ,so that's why you use arrow function!
 
-```
+```jsx
 function NavBar(){
 return(
 	<UserContext.Consumer>
@@ -118,12 +118,12 @@ But, this is kinda #gross no?\
 solution: useContext hooks!\
 what is a hook? - let you use state without writing a class
 
-```
+```jsx
 import React, {useContext} from 'react':
 ```
 
 Then, you can keep your provider wrapper, but you don't need the consumer wrapper
-```
+```jsx
 function Navbar() {
   const { firstName, lastName } = useContext(UserContext);
 
@@ -144,12 +144,11 @@ https://codesandbox.io/s/5zv4xm1pyk
 
 
 ## SESSION INFO
-```
+```jsx
 app.post('/login', passport.authenticate('local', {
     successRedirect: '/profile',
     failureRedirect: '/login'
 }));
 ```
-install `npm install passport-local` because i used a local\
+install `npm install passport-local` because I used a local\
 strategy database, this might need to be diff on server-side
-
