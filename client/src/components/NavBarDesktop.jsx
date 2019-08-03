@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Navlinks from './Navlinks';
-import hamburgerMenu from "./style/Media/outline-menu-24px.svg";
+import hamburgerMenu from "./style/Media/sharp-menu-24px.svg";
 
 const NavBarDesktop = () => {
     return ( 

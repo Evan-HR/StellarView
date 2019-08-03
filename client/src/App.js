@@ -6,21 +6,49 @@ import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Profile from "./components/Profile";
 import Login from "./components/Login";
 import ToolBar from "./components/ToolBar/Toolbar";
+import SideDrawer from "./components/ToolBar/SideDrawer";
+import Backdrop from "./components/Backdrop/Backdrop";
 
 import { createGlobalStyle } from "styled-components";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
 
 class App extends Component {
+state = {
+	sideDrawerOpen : false
+};
+
+//if sidedraweropen, save as false
+	drawerToggleClickHandler = () =>{
+		this.setState(
+			(prevState)=>{
+				return{sideDrawerOpen: !prevState.sideDrawerOpen};
+			}
+		);
+
+	};
+
+backdropClickHandler = () =>{
+	this.setState({sideDrawerOpen:false});
+};
+
 	//RENDER --> ReactDOM.render(<App />, document.getElementById("root"));
 	render() {
+		
+		let backdrop;
+		if(this.state.sideDrawerOpen){
+		
+			backdrop = <Backdrop click = {this.backdropClickHandler}/>
+		}
 		//console.log("parks ", parks);
 		console.log("App - rendered");
 		return (
 			<React.Fragment>
 				<GlobalStyle />
 				<Router>
-					<ToolBar />
+					<ToolBar drawerClickHandler = {this.drawerToggleClickHandler} />
+					<SideDrawer show={this.state.sideDrawerOpen}/>
+					{backdrop}
 					<main style={{ marginTop: "100px" }}>
 						<NavBar
 							handleLogoutState={this.props.handleLogoutState}
@@ -69,11 +97,13 @@ const GlobalStyle = createGlobalStyle`
 
 @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono|Rubik|Barlow|IBM+Plex+Sans|Major+Mono+Display|Nunito+Sans|Open+Sans&display=swap');
 
+height: 100%;
 
 html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  height: 100%;
 }
 body{
 	/* margin-left: 10%;
@@ -86,6 +116,7 @@ body{
 	
   font-family: 'Barlow', sans-serif;
 	text-align: center;
+	height: 100%;
 
 }
 
