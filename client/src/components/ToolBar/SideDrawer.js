@@ -1,28 +1,47 @@
-import React from "react";
-//import './SideDrawer.css';
+import React, { Component } from "react";
+import DrawerToggleButton from "./DrawerToggleButton";
 import styled from "styled-components";
+import { AuthProvider, AuthConsumer } from "../AuthContext";
+import { withRouter, Link } from "react-router-dom";
+import Login from "../Login";
+import axios from "axios";
+import Register from "../Register";
+import NavBarFAQ from "../NavBarFAQ";
 
-const sideDrawer = props => {
-	return (
-		<SideDrawerStyle open={props.show}>
-			<ul>
-				<li>
-					<a href="/">Login</a>
-				</li>
-				<li>
-					<a href="/">Register</a>
-				</li>
-				<li>
-					<a href="/">Favorites</a>
-				</li>
-			</ul>
-		</SideDrawerStyle>
-	);
-};
+class SideDrawer extends Component {
+	state = {};
 
-export default sideDrawer;
+	render() {
+		return (
+			<SideDrawerStyle open={this.props.show}>
+				<ul>
+					<li>
+						<a href="/" onClick={this.props.close}>
+							Favorites
+						</a>
+					</li>
+					<li>
+						<a href="/" onClick={this.props.close}>
+							Login
+						</a>
+					</li>
+					<li>
+						<a href="/" onClick={this.props.close}>
+							Register
+						</a>
+					</li>
+					<li>
+						<NavBarFAQ onClick={this.props.close} />
+					</li>
+				</ul>
+			</SideDrawerStyle>
+		);
+	}
+}
 
-//////////////////////////////////////////
+export default SideDrawer;
+
+/////////////////////////////////////////////////////
 
 const SideDrawerStyle = styled.nav`
 	height: 100%;
@@ -39,10 +58,12 @@ const SideDrawerStyle = styled.nav`
 
 	ul {
 		height: 100%;
+		padding-left: 15%;
 		list-style: none;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
+		text-align: left;
 	}
 
 	a {
@@ -51,7 +72,8 @@ const SideDrawerStyle = styled.nav`
 		font-size: 1.5rem;
 	}
 
-	a:hover,a:active{
+	a:hover,
+	a:active {
 		color: grey;
 	}
 

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Modal from "react-modal";
+import { withRouter, Link } from "react-router-dom";
 
 const modalStyle = {
 	overlay: {
@@ -38,18 +39,15 @@ class NavBarFAQ extends Component {
 
 	closeModal = () => {
 		this.setState({ ...this.state, modalIsOpen: false });
-		document.body.style.overflow = "visible"; 
+		document.body.style.overflow = "visible";
 	};
 
 	render() {
 		return (
 			<React.Fragment>
-				<button
-					className="btn btn-link"
-					onClick={() => this.openModal()}
-				>
-					FAQ
-				</button>
+				<a onClick={() => this.openModal()}>
+					<Link>FAQ</Link>
+				</a>
 				<Modal
 					className="modal-dialog"
 					closeTimeoutMS={150}

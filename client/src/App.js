@@ -14,31 +14,30 @@ import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
 
 class App extends Component {
-state = {
-	sideDrawerOpen : false
-};
-
-//if sidedraweropen, save as false
-	drawerToggleClickHandler = () =>{
-		this.setState(
-			(prevState)=>{
-				return{sideDrawerOpen: !prevState.sideDrawerOpen};
-			}
-		);
-
+	state = {
+		sideDrawerOpen: false
 	};
 
-backdropClickHandler = () =>{
-	this.setState({sideDrawerOpen:false});
-};
+	//if sidedraweropen, save as false
+	drawerToggleClickHandler = () => {
+		this.setState(prevState => {
+			return { sideDrawerOpen: !prevState.sideDrawerOpen };
+		});
+	};
+
+	sideDrawerLinkClickHandler = () => {
+		this.setState({ sideDrawerOpen: false });
+	};
+
+	backdropClickHandler = () => {
+		this.setState({ sideDrawerOpen: false });
+	};
 
 	//RENDER --> ReactDOM.render(<App />, document.getElementById("root"));
 	render() {
-		
 		let backdrop;
-		if(this.state.sideDrawerOpen){
-		
-			backdrop = <Backdrop click = {this.backdropClickHandler}/>
+		if (this.state.sideDrawerOpen) {
+			backdrop = <Backdrop click={this.backdropClickHandler} />;
 		}
 		//console.log("parks ", parks);
 		console.log("App - rendered");
@@ -46,14 +45,19 @@ backdropClickHandler = () =>{
 			<React.Fragment>
 				<GlobalStyle />
 				<Router>
-					<ToolBar drawerClickHandler = {this.drawerToggleClickHandler} />
-					<SideDrawer show={this.state.sideDrawerOpen}/>
+					<ToolBar
+						drawerClickHandler={this.drawerToggleClickHandler}
+						handleLogoutState={this.props.handleLogoutState}
+						handleLogin={this.props.handleLogin}
+					/>
+					<SideDrawer
+						show={this.state.sideDrawerOpen}
+						close={this.sideDrawerLinkClickHandler}
+						handleLogoutState={this.props.handleLogoutState}
+						handleLogin={this.props.handleLogin}
+					/>
 					{backdrop}
 					<main style={{ marginTop: "100px" }}>
-						<NavBar
-							handleLogoutState={this.props.handleLogoutState}
-							handleLogin={this.props.handleLogin}
-						/>
 						<Route path="/" exact component={ParksData} />
 						<AuthConsumer>
 							{authState => {

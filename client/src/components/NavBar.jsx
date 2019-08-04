@@ -22,7 +22,6 @@ class NavBar extends Component {
 	render() {
 		return (
 			<MyNavBar>
-
 				<ul className="nav justify-content-center">
 					<li className="nav-item">
 						<a className="nav-link">

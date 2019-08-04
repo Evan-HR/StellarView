@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Modal from "react-modal";
+import { withRouter, Link } from "react-router-dom";
 
 const modalStyle = {
 	overlay: {
@@ -146,12 +147,9 @@ class Login extends Component {
 	render() {
 		return (
 			<React.Fragment>
-				<button
-					className="btn btn-link"
-					onClick={() => this.openModal()}
-				>
-					Login
-				</button>
+				<a onClick={() => this.openModal()}>
+					<Link>Login</Link>
+				</a>
 				<Modal
 					className="modal-dialog"
 					closeTimeoutMS={150}

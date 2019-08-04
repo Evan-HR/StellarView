@@ -1,7 +1,7 @@
 .toolbar {
 	position: fixed;
 	width: 100%;
-	background: transparent;
+	background: black;
 	height: 90px;
 	top: 0;
 	left: 0;
@@ -24,21 +24,17 @@
 	margin: 0;
 	padding: 0;
 	display: flex;
-	
 }
 
 .toolbar_navigation-items li {
 	padding: 0 0.75rem;
-	
 }
 /* On screens that are 768px or less*/
 @media screen and (max-width: 768px) {
-	.toolbar_navigation-items{
+	.toolbar_navigation-items {
 		display: none;
-		
 	}
 }
-
 
 .spacer {
 	flex: 1;
