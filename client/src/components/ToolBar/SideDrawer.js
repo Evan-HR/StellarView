@@ -1,46 +1,67 @@
-import React from 'react';
+import React from "react";
 //import './SideDrawer.css';
-import styled,{ css }  from 'styled-components';
+import styled from "styled-components";
 
-const sideDrawer = props =>{
-let drawerClasses = 'side-drawer';
-if(props.show){
-    drawerClasses = 'side-drawer open';
-}
-    return(
-		<sideDrawerStyle>
-<nav className={drawerClasses}>
-    <ul>
-					<li>
-						<a href="/">Login</a>
-					</li>
-					<li>
-						<a href="/">Register</a>
-					</li>
-					<li>
-						<a href="/">Favorites</a>
-					</li>
-				</ul>
-  
-</nav>
-</sideDrawerStyle>
-);
-    };
+const sideDrawer = props => {
+	return (
+		<SideDrawerStyle open={props.show}>
+			<ul>
+				<li>
+					<a href="/">Login</a>
+				</li>
+				<li>
+					<a href="/">Register</a>
+				</li>
+				<li>
+					<a href="/">Favorites</a>
+				</li>
+			</ul>
+		</SideDrawerStyle>
+	);
+};
 
 export default sideDrawer;
 
 //////////////////////////////////////////
 
-const Tab = styled.button`
-  width: 100%;
-  outline: 0;
-  border: 0;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  line-height: 0.2;
+const SideDrawerStyle = styled.nav`
+	height: 100%;
+	background: white;
+	box-shadow: 1px 0px 7px rgba(0, 0, 0, 0.5);
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 70%;
+	max-width: 400px;
+	z-index: 8;
+	transform: translateX(-100%);
+	transition: transform 0.3s ease-out;
 
-  ${({ active }) => active && `
-    background: blue;
+	ul {
+		height: 100%;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	a {
+		color: black;
+		text-decoration: none;
+		font-size: 1.5rem;
+	}
+
+	a:hover,a:active{
+		color: grey;
+	}
+
+	li {
+		margin: 0.5rem 0;
+	}
+
+	${({ open }) =>
+		open &&
+		`
+    transform: translateX(0);
   `}
 `;
