@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Modal from "react-modal";
+import "./modal.css";
 import { withRouter, Link } from "react-router-dom";
 
 const modalStyle = {
@@ -54,7 +55,7 @@ class NavBarFAQ extends Component {
 					isOpen={this.state.modalIsOpen}
 					onAfterOpen={this.afterOpenModal}
 					onRequestClose={this.closeModal}
-					// style={modalStyle}
+					style={modalStyle}
 					contentLabel="FAQ Modal"
 				>
 					<div className="modal-content">

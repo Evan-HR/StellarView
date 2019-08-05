@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Modal from "react-modal";
+import "./modal.css";
 import { withRouter, Link } from "react-router-dom";
 
 const modalStyle = {
@@ -9,8 +10,7 @@ const modalStyle = {
 		top: 0,
 		left: 0,
 		right: 0,
-		bottom: 0,
-		background: "rgba(0,0,0,0.75)"
+		bottom: 0
 	},
 	content: {
 		top: "50%",
@@ -156,7 +156,6 @@ class Login extends Component {
 					isOpen={this.state.modalIsOpen}
 					onAfterOpen={this.afterOpenModal}
 					onRequestClose={this.closeModal}
-					// style={modalStyle}
 					contentLabel="FAQ Modal"
 				>
 					<div className="modal-content">

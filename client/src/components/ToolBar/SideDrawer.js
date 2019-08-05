@@ -10,28 +10,67 @@ import NavBarFAQ from "../NavBarFAQ";
 
 class SideDrawer extends Component {
 	state = {};
+	handleLogout(e) {
+		e.preventDefault();
+		axios.get("/logout");
+		this.props.handleLogoutState();
+	}
 
 	render() {
 		return (
 			<SideDrawerStyle open={this.props.show}>
 				<ul>
+					<AuthConsumer>
+						{x => {
+							if (x.isAuth === true) {
+								return (
+									<li>
+										<a onClick={this.props.close}>
+											<Link to="/profile">Favorites</Link>
+										</a>
+									</li>
+								);
+							}
+						}}
+					</AuthConsumer>
+					<AuthConsumer>
+						{x => {
+							if (x.isAuth === true) {
+								return (
+									<li>
+										<a onClick={e => this.handleLogout(e)}>
+											<Link>Logout</Link>
+										</a>
+									</li>
+								);
+							} else {
+								return (
+									<li>
+										<a onClick={this.props.close}>
+											<Login
+												onClick={this.props.close}
+												handleLogin={
+													this.props.handleLogin
+												}
+											/>
+										</a>
+									</li>
+								);
+							}
+						}}
+					</AuthConsumer>
 					<li>
-						<a href="/" onClick={this.props.close}>
-							Favorites
+						<a onClick={this.props.close}>
+							<Register
+								onClick={this.props.close}
+								handleLogin={this.props.handleLogin}
+							/>
 						</a>
 					</li>
 					<li>
-						<a href="/" onClick={this.props.close}>
-							Login
+						<a onClick={this.props.close}>
+							<NavBarFAQ onClick={this.props.close} />
 						</a>
-					</li>
-					<li>
-						<a href="/" onClick={this.props.close}>
-							Register
-						</a>
-					</li>
-					<li>
-						<NavBarFAQ onClick={this.props.close} />
 					</li>
 				</ul>
 			</SideDrawerStyle>
