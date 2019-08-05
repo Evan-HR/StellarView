@@ -6,7 +6,7 @@ import { withRouter, Link } from "react-router-dom";
 import Login from "../Login";
 import axios from "axios";
 import Register from "../Register";
-import NavBarFAQ from "../NavBarFAQ";
+import FAQ from "../FAQ";
 
 class SideDrawer extends Component {
 	state = {};
@@ -69,7 +69,7 @@ class SideDrawer extends Component {
 					</li>
 					<li>
 						<a onClick={this.props.close}>
-							<NavBarFAQ onClick={this.props.close} />
+						<Link to="/faq">FAQ</Link>
 						</a>
 					</li>
 				</ul>
@@ -84,11 +84,11 @@ export default SideDrawer;
 
 const SideDrawerStyle = styled.nav`
 	height: 100%;
-	background: white;
+	background: ${props => props.theme.background3};
 	box-shadow: 1px 0px 7px rgba(0, 0, 0, 0.5);
 	position: fixed;
 	top: 0;
-	left: 0;
+	left: -10px;
 	width: 70%;
 	max-width: 400px;
 	z-index: 8;
@@ -113,7 +113,7 @@ const SideDrawerStyle = styled.nav`
 
 	a:hover,
 	a:active {
-		color: grey;
+		color: ${props => props.theme.primaryLight};
 	}
 
 	li {

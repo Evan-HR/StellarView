@@ -4,28 +4,6 @@ import Modal from "react-modal";
 import "./modal.css";
 import { withRouter, Link } from "react-router-dom";
 
-const modalStyle = {
-	overlay: {
-		position: "fixed",
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0
-	},
-	content: {
-		top: "50%",
-		left: "50%",
-		right: "auto",
-		bottom: "auto",
-		borderRadius: "25px",
-		marginRight: "-50%",
-		transform: "translate(-50%, -50%)",
-		width: "95%",
-		maxWidth: "600px",
-		height: "95%",
-		overflowY: "auto"
-	}
-};
 
 class Login extends Component {
 	state = {

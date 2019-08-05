@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { AuthProvider, AuthConsumer } from "./components/AuthContext";
 import ParksData from "./components/ParksData";
-import NavBar from "./components/NavBar";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Profile from "./components/Profile";
 import Login from "./components/Login";
@@ -12,6 +11,7 @@ import Backdrop from "./components/Backdrop/Backdrop";
 import { createGlobalStyle } from "styled-components";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
+import FAQ from "./components/FAQ";
 
 class App extends Component {
 	state = {
@@ -59,6 +59,7 @@ class App extends Component {
 					{backdrop}
 					<main style={{ marginTop: "100px" }}>
 						<Route path="/" exact component={ParksData} />
+						<Route path="/faq" component={FAQ} />
 						<AuthConsumer>
 							{authState => {
 								console.log(authState);
@@ -108,10 +109,11 @@ html {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   height: 100%;
+  overflow-x: hidden;
 }
 body{
-	/* margin-left: 10%;
-	margin-right: 10%; */
+	/* margin-left: 2%;
+	margin-right: 2%; */
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;

@@ -4,7 +4,8 @@
 	opacity: 0;
 	overflow-x: hidden;
 	overflow-y: auto;
-	background: rgba(0, 0, 0, 0.4) !important;
+	background: rgba(0, 0, 0, 0.45) !important;
+	
 }
 
 .ReactModal__Overlay--after-open {
@@ -60,8 +61,10 @@
 }
 
 .modal-dialog {
-	position: relative;
-	width: auto;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 	margin: 0.5rem;
 	pointer-events: none;
 }
@@ -146,9 +149,9 @@
 	pointer-events: auto;
 	background-color: #fff;
 	background-clip: padding-box;
-	border: 1px solid rgba(0, 0, 0, 0.2);
-	border-radius: 0.3rem;
-	outline: 0;
+	-webkit-box-shadow: 0px 4px 8px 1px rgba(0,0,0,0.54);
+	-moz-box-shadow: 0px 4px 8px 1px rgba(0,0,0,0.54);
+	box-shadow: 0px 4px 8px 1px rgba(0,0,0,0.54);
 }
 
 .modal-backdrop {

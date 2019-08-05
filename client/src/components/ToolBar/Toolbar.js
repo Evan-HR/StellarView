@@ -6,7 +6,9 @@ import { withRouter, Link } from "react-router-dom";
 import Login from "../Login";
 import axios from "axios";
 import Register from "../Register";
-import NavBarFAQ from "../NavBarFAQ";
+import FAQ from "../FAQ";
+import logo from "../style/Media/LogoVectorGoldA.svg"
+
 
 class Toolbar extends Component {
 	state = {};
@@ -26,8 +28,17 @@ class Toolbar extends Component {
 							click={this.props.drawerClickHandler}
 						/>
 					</div>
+					
 					<div className="toolbar__logo">
-						<Link to="/">STELLARGAZE</Link>
+					
+						<a>
+						
+						<Link to="/">
+					
+						<img src={logo} alt="Home"/>
+				
+						</Link>
+						</a>
 					</div>
 					<div className="spacer" />
 					<div className="toolbar_navigation-items">
@@ -80,7 +91,9 @@ class Toolbar extends Component {
 								/>
 							</li>
 							<li>
-								<NavBarFAQ />
+								<a>
+									<Link to="/faq">FAQ</Link>
+								</a>
 							</li>
 						</ul>
 					</div>
@@ -122,7 +135,7 @@ const ToolbarStyle = styled.header`
 	}
 
 	.toolbar_navigation-items li {
-		padding: 0 0.75rem;
+		padding: 0 1rem;
 	}
 	/* On screens that are 768px or less*/
 	@media screen and (max-width: 768px) {
@@ -137,12 +150,29 @@ const ToolbarStyle = styled.header`
 
 	.toolbar_navigation-items a:hover,
 	.toolbar_navigation-items a:active {
-		color: papayawhip;
+		/* padding-bottom: 2.05em;
+		border-bottom: 3px solid ${props => props.theme.gold}; */
+		color:  ${props => props.theme.primaryLight};
 	}
 
-	.toolbar__logo a {
+	.toolbar__logo{
+		display: block;
+max-width: 100%;
+max-height:100%;
+:hover{
+	-webkit-transform: scale(1.03);
+        -ms-transform: scale(1.03);
+        transform: scale(1.03);
+		transition:all 0.8s ease;
+	}
+
+
+	}
+
+
+	/* .toolbar__logo a {
 		color: white;
 		text-decoration: none;
 		font-size: 2rem;
-	}
+	} */
 `;
