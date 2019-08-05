@@ -7,7 +7,7 @@ import Login from "../Login";
 import axios from "axios";
 import Register from "../Register";
 import FAQ from "../FAQ";
-import logo from "../style/Media/LogoVectorGoldA.svg"
+import logo from "../style/Media/LogoBlueGrey.svg"
 
 
 class Toolbar extends Component {
