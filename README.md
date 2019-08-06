@@ -1,4 +1,4 @@
-# StarFinder
+# STELLARGAZE
 **⚠️⚠️⚠️!!!NOTE: DO NOT COMMIT ANY API KEY INFORMATION!!!⚠️⚠️⚠️**
 
 ## On Ports
