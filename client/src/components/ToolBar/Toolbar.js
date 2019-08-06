@@ -114,12 +114,19 @@ const ToolbarStyle = styled.header`
 	height: 90px;
 	top: 0;
 	left: 0;
+	z-index: 100;
 
 	.toolbar__navigation {
 		display: flex;
 		align-items: center;
 		height: 100%;
-		padding: 0 2rem;
+		/* padding: 0 9rem; */
+		margin-left: 8%;
+		margin-right: 6.9%;
+		@media screen and (max-width: 768px){
+			margin-left: 3%;
+		}
+		
 	}
 
 	.toolbar_navigation-items a {
@@ -141,6 +148,10 @@ const ToolbarStyle = styled.header`
 	@media screen and (max-width: 768px) {
 		.toolbar_navigation-items {
 			display: none;
+			
+		}
+		.toolbar__navigation{
+			padding: 0 0rem;
 		}
 	}
 

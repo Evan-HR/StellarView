@@ -7,7 +7,7 @@ import Login from "./components/Login";
 import ToolBar from "./components/ToolBar/Toolbar";
 import SideDrawer from "./components/ToolBar/SideDrawer";
 import Backdrop from "./components/Backdrop/Backdrop";
-
+import styled from "styled-components";
 import { createGlobalStyle } from "styled-components";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
@@ -57,7 +57,8 @@ class App extends Component {
 						handleLogin={this.props.handleLogin}
 					/>
 					{backdrop}
-					<main style={{ marginTop: "100px" }}>
+					<CenterContainer>
+			
 						<Route path="/" exact component={ParksData} />
 						<Route path="/faq" component={FAQ} />
 						<AuthConsumer>
@@ -78,7 +79,8 @@ class App extends Component {
 								);
 							}}
 						</AuthConsumer>
-					</main>
+					
+					</CenterContainer>
 				</Router>
 			</React.Fragment>
 		);
@@ -96,6 +98,18 @@ export default App;
 // font-family: 'IBM Plex Sans', sans-serif;
 //'Yeseva One', cursive;
 //font-family: 'Barlow', sans-serif;
+
+const  CenterContainer = styled.div`
+
+ /* margin-top: 100px;
+ display: flex;
+ justify-content: center;
+ padding: 0 50px;
+ width: 960px;
+    margin: auto; */
+ 
+
+`;
 
 const GlobalStyle = createGlobalStyle`
 

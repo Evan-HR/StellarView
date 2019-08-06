@@ -19,6 +19,7 @@ display: block;
 cursor: pointer;
 
 margin-right: 2em;
+margin-top: 0.8em;
 
 object{
 	pointer-events: none;
