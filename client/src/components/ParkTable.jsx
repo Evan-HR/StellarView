@@ -11,6 +11,7 @@ import fullMoon from "./style/Media/Moon/moon-phase-full.svg";
 import waningGibbous from "./style/Media/Moon/moon-phase-waninggibbous.svg";
 import lastQuarter from "./style/Media/Moon/moon-phase-lastquarter.svg";
 import waningCrescent from "./style/Media/Moon/moon-phase-waningcrescent.svg";
+import { Transition, animated } from "react-spring/renderprops";
 
 class ParkTable extends Component {
 	state = {};
@@ -82,7 +83,24 @@ class ParkTable extends Component {
 
 	renderParkCardList = () => {
 		if (this.props.parkList.length > 0) {
-			return <div>{this.props.parkList.map(this.renderParkCard)}</div>;
+			return (
+				<Transition
+					native
+					items={this.props.parkList}
+					keys={item => item.id}
+					from={{ transform: "translate3d(-40px,0,0)", opacity: 0 }}
+					enter={{ transform: "translate3d(0,0px,0)", opacity: 1 }}
+					leave={{ transform: "translate3d(-40px,0,0)", opacity: 0 }}
+					//update={[{ opacity: 0.5 }, { opacity: 1 }]}
+				>
+					{item => props => (
+						<animated.div style={props}>
+							{this.renderParkCard(item)}
+						</animated.div>
+					)}
+				</Transition>
+			);
+			// return <div>{this.props.parkList.map(this.renderParkCard)}</div>;
 		} else {
 			return (
 				<div className="text-center">

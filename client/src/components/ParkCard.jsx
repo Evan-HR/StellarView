@@ -65,14 +65,14 @@ class ParkCard extends Component {
 		const finalScore =
 			moonScore + cloudScore + humidityScore + lightPolScore;
 		//print to be sure
-		console.log(
-			" park: " + this.props.park.name_alt + " moon: " + moon,
-			"moonScore: " + moonScore + " humidity: " + humidity,
-			" humidityScore: " + humidityScore + " lightpollution: " + lightPol,
-			" lightPolScore: " + lightPolScore + " cloudcov: " + cloudCov,
-			" cloudScore: " + cloudScore
-		);
-		console.log(" finalScore: " + finalScore);
+		// console.log(
+		// 	" park: " + this.props.park.name_alt + " moon: " + moon,
+		// 	"moonScore: " + moonScore + " humidity: " + humidity,
+		// 	" humidityScore: " + humidityScore + " lightpollution: " + lightPol,
+		// 	" lightPolScore: " + lightPolScore + " cloudcov: " + cloudCov,
+		// 	" cloudScore: " + cloudScore
+		// );
+		// console.log(" finalScore: " + finalScore);
 
 		return grade(finalScore * 100);
 	};
