@@ -195,7 +195,8 @@ class ParkMap extends Component {
 			if (
 				!this.props.parkList
 					.map(park => park.id.toString())
-					.includes(markerKey) || true
+					.includes(markerKey) ||
+				true
 			) {
 				// console.log("Deleting marker:", markerKey);
 				this.props.markers[markerKey].setMap(null);
@@ -250,7 +251,7 @@ class ParkMap extends Component {
 				<div
 					ref={this.googleMapRef}
 					className="border border-primary"
-					style={{ width: "100%", height: "100%", zIndex:"-1"}}
+					style={{ width: "100%", height: "100%" }}
 				/>
 				{/* <div>
 					<button onClick={this.centerMap}>Re-center</button>
