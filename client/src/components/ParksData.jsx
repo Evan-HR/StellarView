@@ -5,6 +5,7 @@ import ParkTable from "./ParkTable";
 import ParkMap from "./ParkMap";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import axios from "axios";
+import styled from "styled-components";
 
 class BaseParksData extends Component {
 	state = {
@@ -13,7 +14,8 @@ class BaseParksData extends Component {
 		moon: "",
 		moonType: "",
 		isMapLoaded: false,
-		isFetchingParks: false
+		isFetchingParks: false,
+		showForm: true
 	};
 	/* Note - park object is:
         {
@@ -111,6 +113,39 @@ class BaseParksData extends Component {
 		this.setState({ parks: [], fetchReq: [] });
 	};
 
+	renderParkMap = () => {
+		if (this.state.parks.length > 0) {
+			return (
+				<div className="ParkMapStyle">
+					<ParkMap
+						parkList={this.state.parks}
+						markers={this.markers}
+						location={this.state.fetchReq}
+						onMapLoaded={this.handleMapLoaded}
+					/>
+				</div>
+			);
+		} else {
+			return <b>No park map :)</b>;
+		}
+	};
+
+	renderParkForm = () => {
+		if (true) {
+			return (
+				<div className="ParkFormStyle">
+					<ParkForm
+						fetchParks={this.getParkData}
+						clearParks={this.clearParks}
+						isFetchingParks={this.state.isFetchingParks}
+						googleMap={this.googleMap}
+						markers={this.markers}
+					/>
+				</div>
+			);
+		}
+	};
+
 	//recursively calls render on it's children
 	render() {
 		console.log("ParksData - rendered");
@@ -123,46 +158,33 @@ class BaseParksData extends Component {
 		//bind seems to be needed for onClick buttons /w args
 
 		return (
-			<div className="ParksDiv">
-				{/* <div className="container"> */}
+			<MainContentWrapper active={this.state.showForm}>
+				{this.renderParkMap()}
+				{/* <div className="ParkMapStyle"> Where am I </div> */}
+				<div className="RightSideContainer">
+					<button
+						onClick={() => {
+							this.setState({ showForm: !this.state.showForm });
+						}}
+					>
+						Toggle form
+					</button>
+					{this.renderParkForm()}
 
-				<div className="row">
-					<div className="col">
-						<ParkMap
+					<div className="MoonStyle">MOON</div>
+
+					<div className="ParkTableStyle">
+						<ParkTable
 							parkList={this.state.parks}
-							markers={this.markers}
-							location={this.state.fetchReq}
-							onMapLoaded={this.handleMapLoaded}
-						/>
-					</div>
-					<div className="col">
-						<ParkForm
-							fetchParks={this.getParkData}
-							clearParks={this.clearParks}
-							isFetchingParks={this.state.isFetchingParks}
+							moon={this.state.moon}
+							moonType={this.state.moonType}
 							googleMap={this.googleMap}
 							markers={this.markers}
+							isLoadingParks={this.state.isFetchingParks}
 						/>
-						<br />
-						<div
-							style={{
-								maxHeight: "300px",
-								overflowY: "scroll"
-							}}
-						>
-							<ParkTable
-								parkList={this.state.parks}
-								moon={this.state.moon}
-								moonType={this.state.moonType}
-								googleMap={this.googleMap}
-								markers={this.markers}
-								isLoadingParks={this.state.isFetchingParks}
-							/>
-						</div>
 					</div>
 				</div>
-				{/* </div> */}
-			</div>
+			</MainContentWrapper>
 		);
 	}
 }
@@ -180,3 +202,47 @@ const ParksData = parkProps => (
 );
 
 export default ParksData;
+
+//////////////////////////////////////////
+
+const MainContentWrapper = styled.div`
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-column-gap: 10px;
+	grid-row-gap: 10px;
+	grid-template-areas: "map rightSide";
+
+	.ParkMapStyle {
+		grid-area: map;
+		/* background-color: maroon; */
+		max-height: 100vh;
+	}
+	.RightSideContainer {
+		grid-area: rightSide;
+		overflow-y: scroll;
+		overflow-x: hidden;
+	}
+	.ParkFormStyle {
+		grid-area: form;
+		background-color: limegreen;
+		${({ active }) => active && `display: none;`}
+	}
+	/* .MoonStyle {
+		grid-area: moon;
+		background-color: orange;
+	} */
+	.ParkTableStyle {
+		${({ active }) => {
+			if (active) return `max-height:600px;`;
+			else return `max-height:300px`;
+		}}
+	}
+
+	margin: 0 auto 0 auto;
+	margin-top: 8rem;
+	overflow: hidden;
+	width: 85%;
+	@media screen and (max-width: 768px) {
+		width: 95%;
+	}
+`;

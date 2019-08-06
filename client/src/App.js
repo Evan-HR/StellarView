@@ -1,47 +1,86 @@
 import React, { Component } from "react";
 import { AuthProvider, AuthConsumer } from "./components/AuthContext";
 import ParksData from "./components/ParksData";
-import NavBar from "./components/NavBar";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Profile from "./components/Profile";
 import Login from "./components/Login";
-
+import ToolBar from "./components/ToolBar/Toolbar";
+import SideDrawer from "./components/ToolBar/SideDrawer";
+import Backdrop from "./components/Backdrop/Backdrop";
+import styled from "styled-components";
 import { createGlobalStyle } from "styled-components";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
+import FAQ from "./components/FAQ";
 
 class App extends Component {
+	state = {
+		sideDrawerOpen: false
+	};
+
+	//if sidedraweropen, save as false
+	drawerToggleClickHandler = () => {
+		this.setState(prevState => {
+			return { sideDrawerOpen: !prevState.sideDrawerOpen };
+		});
+	};
+
+	sideDrawerLinkClickHandler = () => {
+		this.setState({ sideDrawerOpen: false });
+	};
+
+	backdropClickHandler = () => {
+		this.setState({ sideDrawerOpen: false });
+	};
+
 	//RENDER --> ReactDOM.render(<App />, document.getElementById("root"));
 	render() {
+		let backdrop;
+		if (this.state.sideDrawerOpen) {
+			backdrop = <Backdrop click={this.backdropClickHandler} />;
+		}
 		//console.log("parks ", parks);
 		console.log("App - rendered");
 		return (
 			<React.Fragment>
 				<GlobalStyle />
 				<Router>
-					<NavBar
+					<ToolBar
+						drawerClickHandler={this.drawerToggleClickHandler}
 						handleLogoutState={this.props.handleLogoutState}
 						handleLogin={this.props.handleLogin}
 					/>
-					<Route path="/" exact component={ParksData} />
-					<AuthConsumer>
-						{authState => {
-							console.log(authState);
-							return (
-								<Route
-									path="/profile"
-									render={() => {
-										console.log(authState);
-										if (authState.isAuth !== null) {
-											if (authState.isAuth === true)
-												return <Profile />;
-											else return <Redirect to="/" />;
-										}
-									}}
-								/>
-							);
-						}}
-					</AuthConsumer>
+					<SideDrawer
+						show={this.state.sideDrawerOpen}
+						close={this.sideDrawerLinkClickHandler}
+						handleLogoutState={this.props.handleLogoutState}
+						handleLogin={this.props.handleLogin}
+					/>
+					{backdrop}
+					<CenterContainer>
+			
+						<Route path="/" exact component={ParksData} />
+						<Route path="/faq" component={FAQ} />
+						<AuthConsumer>
+							{authState => {
+								console.log(authState);
+								return (
+									<Route
+										path="/profile"
+										render={() => {
+											console.log(authState);
+											if (authState.isAuth !== null) {
+												if (authState.isAuth === true)
+													return <Profile />;
+												else return <Redirect to="/" />;
+											}
+										}}
+									/>
+								);
+							}}
+						</AuthConsumer>
+					
+					</CenterContainer>
 				</Router>
 			</React.Fragment>
 		);
@@ -60,20 +99,35 @@ export default App;
 //'Yeseva One', cursive;
 //font-family: 'Barlow', sans-serif;
 
+const  CenterContainer = styled.div`
+
+ /* margin-top: 100px;
+ display: flex;
+ justify-content: center;
+ padding: 0 50px;
+ width: 960px;
+    margin: auto; */
+ 
+
+`;
+
 const GlobalStyle = createGlobalStyle`
 
 
 @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono|Rubik|Barlow|IBM+Plex+Sans|Major+Mono+Display|Nunito+Sans|Open+Sans&display=swap');
 
+height: 100%;
 
 html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  height: 100%;
+  overflow-x: hidden;
 }
 body{
-	margin-left: 10%;
-	margin-right: 10%;
+	/* margin-left: 2%;
+	margin-right: 2%; */
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
@@ -82,6 +136,7 @@ body{
 	
   font-family: 'Barlow', sans-serif;
 	text-align: center;
+	height: 100%;
 
 }
 
