@@ -5,22 +5,16 @@ import styled from "styled-components";
 //moon images, in proper order
 import newMoon from "./style/Media/Moon/moon-phase-new.svg";
 import waxingCrescent from "./style/Media/Moon/moon-phase-waxingcrescent.svg";
-
 import firstQuarter from "./style/Media/Moon/moon-phase-firstquarter.svg";
-
 import waxingGibbous from "./style/Media/Moon/moon-phase-waxinggibbous.svg";
-
 import fullMoon from "./style/Media/Moon/moon-phase-full.svg";
-
 import waningGibbous from "./style/Media/Moon/moon-phase-waninggibbous.svg";
-
 import lastQuarter from "./style/Media/Moon/moon-phase-lastquarter.svg";
-
 import waningCrescent from "./style/Media/Moon/moon-phase-waningcrescent.svg";
 
 class ParkTable extends Component {
 	state = {};
-	/* Note - park object is:
+	/* Note [OUT OF DATE] - park object is:
         {
        { id: 6817,
 [0]     osm_id: 217500775,
@@ -53,22 +47,33 @@ class ParkTable extends Component {
 			var moonSVG;
 
 			moonDataString = `The moon is ${moonType}, meaning it is ${moonIllum}% illuminated.`;
-			if (inRange(moonIllum, 0, 0.125)) {
+			//8 phases, 0/1 is peak new moon and 0.5 is full moon, so:
+			//Length of phase => 1/8= 0.125
+			//New moon start => 0-(0.125/2)=-0.0625 >> 0.9375
+			//New moon end => 0+0.0625 >> 0.0625
+			//etc...
+			if (
+				inRange(moonIllum, 0.9375, 1) ||
+				inRange(moonIllum, 0, 0.0625)
+			) {
 				moonSVG = newMoon;
-			} else if (inRange(moonIllum, 0.125, 0.25)) {
-				moonSVG = "Waxing Crescent";
-			} else if (inRange(moonIllum, 0.25, 0.375)) {
+			} else if (inRange(moonIllum, 0.0625, 0.1875)) {
 				moonSVG = waxingCrescent;
-			} else if (inRange(moonIllum, 0.375, 0.5)) {
+			} else if (inRange(moonIllum, 0.1875, 0.3125)) {
+				moonSVG = firstQuarter;
+			} else if (inRange(moonIllum, 0.3125, 0.4375)) {
 				moonSVG = waxingGibbous;
-			} else if (inRange(moonIllum, 0.5, 0.625)) {
+			} else if (inRange(moonIllum, 0.4375, 0.5625)) {
 				moonSVG = fullMoon;
-			} else if (inRange(moonIllum, 0.625, 0.75)) {
+			} else if (inRange(moonIllum, 0.5625, 0.6875)) {
 				moonSVG = waningGibbous;
-			} else if (inRange(moonIllum, 0.75, 0.875)) {
+			} else if (inRange(moonIllum, 0.6875, 0.8125)) {
 				moonSVG = lastQuarter;
-			} else if (inRange(moonIllum, 0.875, 1)) {
+			} else if (inRange(moonIllum, 0.8125, 0.9375)) {
 				moonSVG = waningCrescent;
+			} else {
+				console.console.warn("Moon value error");
+				moonSVG = newMoon;
 			}
 
 			return <MoonStyle src={moonSVG} alt="Moon phase" />;
@@ -81,18 +86,8 @@ class ParkTable extends Component {
 		} else {
 			return (
 				<div className="text-center">
-					<div
-						className="card text-white bg-danger mb-3"
-						// style={{ "max-width": "18rem" }}
-					>
+					<div className="card text-white bg-danger mb-3">
 						<div className="card-header">No parks available.</div>
-						{/* <div className="card-body">
-						<h5 className="card-title">Danger card title</h5>
-						<p className="card-text">
-							Some quick example text to build on the card title
-							and make up the bulk of the card's content.
-						</p>
-					</div> */}
 					</div>
 				</div>
 			);
@@ -144,19 +139,6 @@ class ParkTable extends Component {
 			);
 		}
 	};
-
-	// renderPark = park => (
-	// 	<tr>
-	// 		<td>{park.name_alt}</td>
-	// 		<td>{park.light_pol}</td>
-	// 		<td>{park.distance}</td>
-	// 		<td>{park.clouds}</td>
-	// 		<td>{park.cloudDesc}</td>
-	// 		<td>{park.humidity}</td>
-	// 		<td>{this.props.moon}</td>
-	// 		<td>{this.props.moonType}</td>
-	// 	</tr>
-	// );
 
 	renderLoading = () => {
 		return (
