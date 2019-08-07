@@ -130,7 +130,7 @@ class Register extends Component {
 		return (
 			<React.Fragment>
 				<a onClick={() => this.openModal()}>
-					<Link>Register</Link>
+					<Link>register</Link>
 				</a>
 				<Modal
 					className="modal-dialog"

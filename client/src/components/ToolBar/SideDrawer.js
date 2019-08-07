@@ -69,7 +69,7 @@ class SideDrawer extends Component {
 					</li>
 					<li>
 						<a onClick={this.props.close}>
-						<Link to="/faq">FAQ</Link>
+						<Link to="/faq">faq</Link>
 						</a>
 					</li>
 				</ul>
@@ -107,13 +107,17 @@ const SideDrawerStyle = styled.nav`
 
 	a {
 		color: black;
+		transition: color 0.2s ease;
 		text-decoration: none;
 		font-size: 1.5rem;
+		
 	}
 
 	a:hover,
 	a:active {
 		color: ${props => props.theme.primaryLight};
+		transition: color 0.2s ease;
+
 	}
 
 	li {

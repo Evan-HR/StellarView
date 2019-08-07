@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const drawerToggleButton = props =>(
 <Hamburger onClick={props.click}>
-<object type="image/svg+xml" data={hamburgerMenu}/>
+<img src={hamburgerMenu}/>
 </Hamburger>
 );
 
@@ -18,15 +18,16 @@ border: none;
 display: block;
 cursor: pointer;
 
-margin-right: 2em;
+margin-right: 1em;
 margin-top: 0.8em;
 
-object{
+img{
 	pointer-events: none;
 }
 
 /* On screens that are 768px or more*/
 @media screen and (min-width: 768px) {
 	display: none;
+
 }
 `

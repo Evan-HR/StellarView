@@ -126,7 +126,7 @@ class Login extends Component {
 		return (
 			<React.Fragment>
 				<a onClick={() => this.openModal()}>
-					<Link>Login</Link>
+					<Link>login</Link>
 				</a>
 				<Modal
 					className="modal-dialog"
@@ -138,7 +138,7 @@ class Login extends Component {
 				>
 					<div className="modal-content">
 						<div className="modal-header">
-							<h1>Login</h1>
+							<h1>login</h1>
 						</div>
 
 						{this.renderModalContent()}

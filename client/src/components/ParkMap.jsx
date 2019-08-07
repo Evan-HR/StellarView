@@ -252,9 +252,7 @@ class ParkMap extends Component {
 					className="border border-primary"
 					style={{ width: "100%", height: "100%" }}
 				/>
-				{/* <div>
-					<button onClick={this.centerMap}>Re-center</button>
-				</div>{" "} */}
+				
 				<ParkMapModal ref={this.parkModalChild} />
 			</React.Fragment>
 		);
