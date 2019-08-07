@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
 import { sizing } from "@material-ui/system";
 import { AuthConsumer } from "./AuthContext";
-import styled from 'styled-components';
+import styled from "styled-components";
 
 class BaseParkForm extends Component {
 	state = {
@@ -309,10 +309,10 @@ class BaseParkForm extends Component {
 			ignoreQueryPrefix: true
 		});
 		if (
-			query.lat !== reqData.lat ||
-			query.lng !== reqData.lng ||
-			query.dist !== reqData.dist ||
-			query.lightpol !== reqData.lightpol
+			query.lat !== parseFloat(reqData.lat).toFixed(4) ||
+			query.lng !== parseFloat(reqData.lng).toFixed(4) ||
+			query.dist !== reqData.dist.toString() ||
+			query.lightpol !== parseFloat(reqData.lightpol).toFixed(2)
 		) {
 			this.props.history.push({
 				search: `?lat=${parseFloat(reqData.lat).toFixed(
@@ -376,7 +376,6 @@ class BaseParkForm extends Component {
 			);
 		} else {
 			return "Near Me";
-			
 		}
 	};
 
@@ -515,16 +514,12 @@ class BaseParkForm extends Component {
 					<br />
 					{this.renderFormErrors()}
 
-
 					<MainButton
-						
 						onClick={e => this.onSubmit(e)}
 						disabled={this.props.isFetchingParks}
 					>
 						Stargaze
 					</MainButton>
-
-
 				</form>
 			</div>
 		);
@@ -587,47 +582,44 @@ const ParkForm = parkFormProps => (
 
 export default withRouter(ParkForm);
 
-
-
 ////////////////////////////////////////////
 const MainButton = styled.button`
-
-background-color: transparent;
+	background-color: transparent;
 	display: inline-block;
 	border-color: transparent;
-  	padding: 1.5em 2.6em;
-  	border-radius: 0;
+	padding: 1.5em 2.6em;
+	border-radius: 0;
 	color: black;
-  	margin-top:2rem;
-  	font-weight: bold;
-  	font-size: 0.8rem;
-  	letter-spacing: 1px;
-  	text-transform: uppercase;
-  	text-decoration: none;
+	margin-top: 2rem;
+	font-weight: bold;
+	font-size: 0.8rem;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	text-decoration: none;
 	position: relative;
 	transition: all 250ms ease;
 	&:before,
-	&:after{
-		content: '';
+	&:after {
+		content: "";
 		position: absolute;
 		left: 0;
 		top: 0;
 		width: 100%;
 		height: 100%;
 		border: 2px solid;
-		transition: .25s;
+		transition: 0.25s;
 	}
-	&:before{
-		transform: translateX(-.25em) translateY(.25em);
+	&:before {
+		transform: translateX(-0.25em) translateY(0.25em);
 	}
-	&:after{
-		transform: translateX(.25em) translateY(-.25em);
+	&:after {
+		transform: translateX(0.25em) translateY(-0.25em);
 	}
-	
-	&:hover{
+
+	&:hover {
 		&:before,
-		&:after{
+		&:after {
 			transform: translateX(0) translateY(0);
 		}
 	}
-`
+`;

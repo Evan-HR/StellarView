@@ -6,6 +6,7 @@ import ParkMap from "./ParkMap";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
+import { Spring, animated } from "react-spring/renderprops";
 
 class BaseParksData extends Component {
 	state = {
@@ -15,7 +16,9 @@ class BaseParksData extends Component {
 		moonType: "",
 		isMapLoaded: false,
 		isFetchingParks: false,
-		showForm: true
+		hideForm: false,
+		hideMap: true,
+		sortedBy: "dist"
 	};
 	/* Note - park object is:
         {
@@ -35,6 +38,10 @@ class BaseParksData extends Component {
 		// They're referenced in odd places and may update at weird times from the rest of doms
 		// Since they're google map things
 		this.markers = {};
+	}
+
+	inRange(x, min, max) {
+		return (x - min) * (x - max) <= 0;
 	}
 
 	handleMapLoaded = googleMapActual => {
@@ -86,6 +93,14 @@ class BaseParksData extends Component {
 				.post("/api/getParkData", reqData)
 				.then(response => {
 					console.log(response.data);
+					for (var i = 0; i < response.data.parks.length; i++) {
+						response.data.parks[i].score = this.parkScore(
+							response.data.moonPercent,
+							response.data.parks[i].weather.humidity / 100,
+							response.data.parks[i].weather.clouds / 100,
+							response.data.parks[i].light_pol / 100
+						);
+					}
 					this.setState({
 						parks: response.data.parks,
 						moon: response.data.moonPercent,
@@ -108,26 +123,67 @@ class BaseParksData extends Component {
 		}
 	};
 
+	parkScore = (moon, humidity, cloudCov, lightPol) => {
+		var moonScore = 0.45 * (-1 * (2 * moon - 1));
+		var lightPolScore = 0.25 * (((-1 * 1) / 3) * (lightPol - 3));
+		var humidityScore = 0;
+		if (humidity < 0.4) {
+			humidityScore += 0.15 * 1;
+		} else if (this.inRange(humidity, 0.4, 0.8)) {
+			humidityScore += 0.15 * (-2.5 * humidity + 2);
+		} else if (0.8 < humidity) {
+			humidityScore += 0;
+		}
+		var cloudScore = 0;
+		if (cloudCov < 0.2) {
+			cloudScore += 0.15 * 1;
+		} else if (this.inRange(cloudCov, 0.2, 0.4)) {
+			cloudScore += 0.15 * (-5 * cloudCov + 2);
+		} else if (0.4 < cloudCov) {
+			cloudScore += 0;
+		}
+
+		const finalScore =
+			moonScore + cloudScore + humidityScore + lightPolScore;
+		return finalScore;
+	};
+
 	//Clear button handler
 	clearParks = () => {
 		this.setState({ parks: [], fetchReq: [] });
 	};
 
 	renderParkMap = () => {
-		if (this.state.parks.length > 0) {
-			return (
-				<div className="ParkMapStyle">
-					<ParkMap
-						parkList={this.state.parks}
-						markers={this.markers}
-						location={this.state.fetchReq}
-						onMapLoaded={this.handleMapLoaded}
-					/>
-				</div>
-			);
-		} else {
-			return <b>No park map :)</b>;
-		}
+		return (
+			<Spring
+				native
+				//force
+				//config={{ tension: 2000, friction: 100, precision: 1 }}
+				from={{
+					transform: this.state.hideMap
+						? "translate3d(40px,0,0)"
+						: "translate3d(0,0,0)",
+					opacity: this.state.hideMap ? 0 : 1
+				}}
+				to={{
+					transform: this.state.hideMap
+						? "translate3d(0,0,0)"
+						: "translate3d(40px,0,0)",
+					opacity: this.state.hideMap ? 1 : 0
+				}}
+			>
+				{props => (
+					<animated.div className="ParkMapStyle" style={props}>
+						<ParkMap
+							parkList={this.state.parks}
+							markers={this.markers}
+							location={this.state.fetchReq}
+							onMapLoaded={this.handleMapLoaded}
+						/>
+					</animated.div>
+				)}
+			</Spring>
+		);
 	};
 
 	renderParkForm = () => {
@@ -146,6 +202,22 @@ class BaseParksData extends Component {
 		}
 	};
 
+	sortParksDist = () => {
+		let parksArray = this.state.parks;
+		parksArray.sort((a, b) =>
+			a.distance > b.distance ? 1 : b.distance > a.distance ? -1 : 0
+		);
+		this.setState({ parks: parksArray, sortedBy: "dist" });
+	};
+
+	sortParksScore = () => {
+		let parksArray = this.state.parks;
+		parksArray.sort((a, b) =>
+			a.score > b.score ? 1 : b.score > a.score ? -1 : 0
+		);
+		this.setState({ parks: parksArray, sortedBy: "score" });
+	};
+
 	//recursively calls render on it's children
 	render() {
 		console.log("ParksData - rendered");
@@ -158,13 +230,20 @@ class BaseParksData extends Component {
 		//bind seems to be needed for onClick buttons /w args
 
 		return (
-			<MainContentWrapper active={this.state.showForm}>
+			<MainContentWrapper active={this.state.hideForm}>
+				<button
+					onClick={() => {
+						this.setState({ hideMap: !this.state.hideMap });
+					}}
+				>
+					Toggle Map
+				</button>
 				{this.renderParkMap()}
 				{/* <div className="ParkMapStyle"> Where am I </div> */}
 				<div className="RightSideContainer">
 					<button
 						onClick={() => {
-							this.setState({ showForm: !this.state.showForm });
+							this.setState({ hideForm: !this.state.hideForm });
 						}}
 					>
 						Toggle form
@@ -174,6 +253,19 @@ class BaseParksData extends Component {
 					<div className="MoonStyle">MOON</div>
 
 					<div className="ParkTableStyle">
+						<b>Sort by:</b>
+						<button
+							onClick={this.sortParksDist}
+							disabled={this.state.sortedBy === "dist"}
+						>
+							Dist
+						</button>
+						<button
+							onClick={this.sortParksScore}
+							disabled={this.state.sortedBy === "score"}
+						>
+							Score
+						</button>
 						<ParkTable
 							parkList={this.state.parks}
 							moon={this.state.moon}
@@ -225,7 +317,6 @@ const MainContentWrapper = styled.div`
 	}
 	.ParkFormStyle {
 		grid-area: form;
-		background-color: limegreen;
 		${({ active }) => active && `display: none;`}
 	}
 	/* .MoonStyle {

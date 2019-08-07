@@ -195,7 +195,7 @@ class ParkMap extends Component {
 			if (
 				!this.props.parkList
 					.map(park => park.id.toString())
-					.includes(markerKey) || true
+					.includes(markerKey)
 			) {
 				// console.log("Deleting marker:", markerKey);
 				this.props.markers[markerKey].setMap(null);
