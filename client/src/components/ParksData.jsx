@@ -214,13 +214,14 @@ const MainContentWrapper = styled.div`
 
 	.ParkMapStyle {
 		grid-area: map;
-		/* background-color: maroon; */
 		max-height: 100vh;
+		background-color: maroon;
 	}
 	.RightSideContainer {
 		grid-area: rightSide;
 		overflow-y: scroll;
 		overflow-x: hidden;
+		background-color: blue;
 	}
 	.ParkFormStyle {
 		grid-area: form;

@@ -13,6 +13,7 @@ import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
 import FAQ from "./components/FAQ";
 
+
 class App extends Component {
 	state = {
 		sideDrawerOpen: false
@@ -42,7 +43,11 @@ class App extends Component {
 		//console.log("parks ", parks);
 		console.log("App - rendered");
 		return (
+
 			<React.Fragment>
+				    <div class="stars"></div>
+					<div class="twinkling"></div>
+
 				<GlobalStyle />
 				<Router>
 					<ToolBar
@@ -57,8 +62,11 @@ class App extends Component {
 						handleLogin={this.props.handleLogin}
 					/>
 					{backdrop}
-					<CenterContainer>
-			
+				
+				
+
+				
+				
 						<Route path="/" exact component={ParksData} />
 						<Route path="/faq" component={FAQ} />
 						<AuthConsumer>
@@ -80,9 +88,11 @@ class App extends Component {
 							}}
 						</AuthConsumer>
 					
-					</CenterContainer>
+				
 				</Router>
+				
 			</React.Fragment>
+			
 		);
 	}
 }
@@ -99,17 +109,7 @@ export default App;
 //'Yeseva One', cursive;
 //font-family: 'Barlow', sans-serif;
 
-const  CenterContainer = styled.div`
 
- /* margin-top: 100px;
- display: flex;
- justify-content: center;
- padding: 0 50px;
- width: 960px;
-    margin: auto; */
- 
-
-`;
 
 const GlobalStyle = createGlobalStyle`
 
@@ -122,17 +122,70 @@ html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  
+  
+
   height: 100%;
   overflow-x: hidden;
+  
 }
 body{
+	
 	/* margin-left: 2%;
 	margin-right: 2%; */
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
   text-align: left;
-  background-color: ${props => props.theme.background3};
+  background-color: black;
+
+
+@keyframes move-twink-back {
+    from {background-position:0 0;}
+    to {background-position:-10000px 5000px;}
+}
+@-webkit-keyframes move-twink-back {
+    from {background-position:0 0;}
+    to {background-position:-10000px 5000px;}
+}
+@-moz-keyframes move-twink-back {
+    from {background-position:0 0;}
+    to {background-position:-10000px 5000px;}
+}
+@-ms-keyframes move-twink-back {
+    from {background-position:0 0;}
+    to {background-position:-10000px 5000px;}
+}
+
+.stars, .twinkling {
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.stars {
+  background:#000 url(http://www.script-tutorials.com/demos/360/images/stars.png) repeat top center;
+  z-index:-2;
+}
+
+.twinkling{
+  background:transparent url(http://www.script-tutorials.com/demos/360/images/twinkling.png) repeat top center;
+  z-index:-1;
+
+  -moz-animation:move-twink-back 450s linear infinite;
+  -ms-animation:move-twink-back 450s linear infinite;
+  -o-animation:move-twink-back 450s linear infinite;
+  -webkit-animation:move-twink-back 450s linear infinite;
+  animation:move-twink-back 450s linear infinite;
+
+}
+
+
 	
   font-family: 'Barlow', sans-serif;
 	text-align: center;
