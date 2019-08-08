@@ -79,10 +79,10 @@ class BaseProfile extends Component {
 					console.log("response from first call: ", response);
 					var d = new Date();
 					var userTime = d.getTime();
-					return axios.post(
-						"/api/getProfileParksWeather",
-						{userTime: userTime, parkData: response.data}
-					); // using response.data
+					return axios.post("/api/getProfileParksWeather", {
+						userTime: userTime,
+						parkData: response.data
+					}); // using response.data
 				})
 				.then(response => {
 					console.log("Response from second call", response);
@@ -93,8 +93,8 @@ class BaseProfile extends Component {
 						isLoadingParks: false
 					});
 				});
-		}else{
-			console.log("NAAAAATHING!")
+		} else {
+			console.log("NAAAAATHING!");
 		}
 	};
 
@@ -102,7 +102,10 @@ class BaseProfile extends Component {
 		console.log("sendtoParkTable hath entered");
 		//console.log("testboolInfoLoad is : " + this.state.testBoolInfoLoaded);
 
-		if (this.state.parkDataLoaded === true && this.props.context.hasNoSpots===false) {
+		if (
+			this.state.parkDataLoaded === true &&
+			this.props.context.hasNoSpots === false
+		) {
 			return (
 				<ParkTableProfile
 					parkList={this.state.parkDataForTable}
@@ -110,27 +113,24 @@ class BaseProfile extends Component {
 					// moonType={this.state.moonType}
 				/>
 			);
-		} 
-			else {
+		} else {
 			this.getParkData();
 		}
 	};
 
-	renderNoSpotsMsg=()=>{
-		if(this.props.context.hasNoSpots===true){
-
-		
-		return (
-			<tr>
-				<td colSpan={3}>
-					<strong style={{ color: "red" }}>
-						You have not added any parks to your favorites!
-					</strong>
-				</td>
-			</tr>
-		);
+	renderNoSpotsMsg = () => {
+		if (this.props.context.hasNoSpots === true) {
+			return (
+				<tr>
+					<td colSpan={3}>
+						<strong style={{ color: "red" }}>
+							You have not added any parks to your favorites!
+						</strong>
+					</td>
+				</tr>
+			);
 		}
-	}
+	};
 
 	render() {
 		console.log("RENDER!!!! STATE IS BELOW:");
