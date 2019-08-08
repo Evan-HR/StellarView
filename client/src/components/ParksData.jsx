@@ -82,6 +82,7 @@ class BaseParksData extends Component {
 				parks: JSON.parse(localData).parks,
 				moon: JSON.parse(localData).moonPercent,
 				moonType: JSON.parse(localData).moonType,
+
 				fetchReq: reqData,
 				isFetchingParks: false
 			});
@@ -124,6 +125,10 @@ class BaseParksData extends Component {
 	};
 
 	parkScore = (moon, humidity, cloudCov, lightPol) => {
+		// console.log("MOON IS !!!!!!!!!!!!!!",moon)
+		// console.log("CLOUD COV IS !!!!!!!!!!!!!!",cloudCov)
+		// console.log("LIGHT POL IS !!!!!!!!!!!!!!",lightPol)
+		// console.log("humidity COV IS !!!!!!!!!!!!!!",humidity)
 		var moonScore = 0.45 * (-1 * (2 * moon - 1));
 		var lightPolScore = 0.25 * (((-1 * 1) / 3) * (lightPol - 3));
 		var humidityScore = 0;
@@ -145,6 +150,14 @@ class BaseParksData extends Component {
 
 		const finalScore =
 			moonScore + cloudScore + humidityScore + lightPolScore;
+		console.log(
+			"Moon score, cloudscore, humidity, lightpolscore ",
+			moonScore,
+			cloudScore,
+			humidityScore,
+			lightPolScore
+		);
+		console.log("final score: ", finalScore);
 		return finalScore;
 	};
 
@@ -230,16 +243,12 @@ class BaseParksData extends Component {
 		//bind seems to be needed for onClick buttons /w args
 
 		return (
-			<MainContentWrapper active={this.state.hideForm}>
-				<button
-					onClick={() => {
-						this.setState({ hideMap: !this.state.hideMap });
-					}}
-				>
-					Toggle Map
-				</button>
+			<MainContentWrapper
+				active={this.state.hideForm}
+				hideMap={this.state.hideMap}
+			>
 				{this.renderParkMap()}
-				{/* <div className="ParkMapStyle"> Where am I </div> */}
+				<div className="Placeholder1">I'm just a placeholder</div>
 				<div className="RightSideContainer">
 					<button
 						onClick={() => {
@@ -306,8 +315,13 @@ const MainContentWrapper = styled.div`
 
 	.ParkMapStyle {
 		grid-area: map;
-		max-height: 100vh;
+		max-height: 100%;
 		background-color: maroon;
+	}
+	.Placeholder1 {
+		display: none;
+		grid-area: placeholder1;
+		background-color: azure;
 	}
 	.RightSideContainer {
 		grid-area: rightSide;
@@ -334,7 +348,37 @@ const MainContentWrapper = styled.div`
 	margin-top: 8rem;
 	overflow: hidden;
 	width: 85%;
-	@media screen and (max-width: 768px) {
+	@media screen and (max-width: 769px) {
 		width: 95%;
+		grid-template-columns: 1fr;
+		grid-template-rows: ${props =>
+			props.hideMap ? "0px auto" : "50% auto"};
+		grid-template-areas:
+			"map"
+			"rightSide";
+		.Placeholder1 {
+			display: none;
+			grid-area: placeholder1;
+			background-color: azure;
+		}
+		.RightSideContainer {
+			overflow-y: visible;
+		}
+
+		.ParkMapStyle {
+			display: ${props => (props.hideMap ? "none" : "fixed")};
+		}
+	}
+	@media screen and (min-width: 769px) and (max-width: 1300px) {
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto auto;
+		grid-template-areas:
+			"map rightSide"
+			"placeholder1 rightSide";
+		.Placeholder1 {
+			display: block;
+			grid-area: placeholder1;
+			background-color: azure;
+		}
 	}
 `;
