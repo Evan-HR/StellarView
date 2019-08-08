@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import StarReviewsStatic from "./StarReviewsStatic";
 import PropTypes from "prop-types";
+import styled from "styled-components";
+
 var grade = require("letter-grade");
 
 class ParkCard extends Component {
@@ -78,31 +80,78 @@ class ParkCard extends Component {
 	};
 	render() {
 		return (
-			<React.Fragment>
-				<div
-					className="card mb-3"
-					style={{ textTransform: "capitalize" }}
-				>
-					<div className="card-header text-white bg-primary">
-						<button
-							className="btn btn-link text-white"
-							onMouseEnter={() => {
-								this.props.handleMouseOver(this.props.park.id);
-							}}
-							onMouseLeave={() => {
-								this.props.handleMouseLeave(this.props.park.id);
-							}}
-							onClick={() => {
-								this.props.handleMouseClick(this.props.park.id);
-							}}
-						>
-							{this.props.park.name_alt
-								? this.props.park.name_alt
-								: this.props.park.name}
-						</button>
+			<div className="card mb-3" style={{ textTransform: "capitalize" }}>
+				<CardStyle>
+					<div className="ParkTitle">
+						<div className="card-header text-white bg-primary">
+							<button
+								className="btn btn-link text-white"
+								onMouseEnter={() => {
+									this.props.handleMouseOver(
+										this.props.park.id
+									);
+								}}
+								onMouseLeave={() => {
+									this.props.handleMouseLeave(
+										this.props.park.id
+									);
+								}}
+								onClick={() => {
+									this.props.handleMouseClick(
+										this.props.park.id
+									);
+								}}
+							>
+								{this.props.park.name_alt
+									? this.props.park.name_alt
+									: this.props.park.name}
+							</button>
+						</div>
 					</div>
-					<div className="card-body bg-light">
-						{/* <h5 className="card-title">Primary card title</h5> */}
+
+					<div className="ParkDist">
+						{this.props.park.distance < 9000 ? (
+							<React.Fragment>
+								{parseFloat(this.props.park.distance).toFixed(
+									2
+								)}
+							</React.Fragment>
+						) : (
+							<b>?</b>
+						)}
+						<b> km</b>
+					</div>
+
+					<div className="WeatherSVG">I'm an svg</div>
+
+					<div className="ParkTemp">
+						{this.props.park.weather.temp} °C
+					</div>
+
+					<div className="WeatherDesc">
+						{this.props.park.weather.cloudDesc}
+					</div>
+
+					<div className="WeatherInfo">
+						{this.props.park.weather.city} forecast for{" "}
+						{new Date(
+							this.props.park.weather.time
+						).toLocaleString()}
+					</div>
+
+					<div className="ParkScore">this.props.park.score</div>
+
+					<div className="StarRev">
+						{this.renderReviewScore(this.props.park.avgScore)}
+					</div>
+
+					<div className="NumRev">
+						{this.renderNumReviews(this.props.park.numReviews)}
+					</div>
+
+					<div className="MoreInfo">More Info</div>
+
+					{/* <div className="card-body bg-light">
 						<p className="card-text">
 							{parseFloat(this.props.park.light_pol).toFixed(2)}
 							<br />
@@ -132,9 +181,9 @@ class ParkCard extends Component {
 							<br />
 							Overall score: {this.renderLetterGrade()}
 						</p>
-					</div>
-				</div>
-			</React.Fragment>
+					</div> */}
+				</CardStyle>
+			</div>
 		);
 	}
 }
@@ -147,3 +196,60 @@ ParkCard.defaultProps = {
 };
 
 export default ParkCard;
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+const CardStyle = styled.div`
+	margin-bottom: 10px;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr 1fr 1fr;
+	grid-column-gap: 10px;
+	grid-row-gap: 10px;
+	grid-template-areas:
+		"ParkTitle   ParkTitle   ParkTitle   ParkDist"
+		"WeatherSVG  ParkTemp    WeatherDesc ParkScore"
+		"WeatherInfo WeatherInfo WeatherInfo ParkScore"
+		"StarRev     StarRev     NumRev      MoreInfo";
+
+	.ParkTitle {
+		grid-area: ParkTitle;
+		background-color: seashell;
+	}
+	.ParkDist {
+		grid-area: ParkDist;
+		background-color: peru;
+	}
+	.WeatherSVG {
+		grid-area: WeatherSVG;
+		background-color: azure;
+	}
+	.ParkTemp {
+		grid-area: ParkTemp;
+		background-color: wheat;
+	}
+	.ParkScore {
+		grid-area: ParkScore;
+		background-color: lightsalmon;
+	}
+	.StarRev {
+		grid-area: StarRev;
+		background-color: navajowhite;
+	}
+	.NumRev {
+		grid-area: NumRev;
+		background-color: thistle;
+	}
+	.MoreInfo {
+		grid-area: MoreInfo;
+		background-color: gainsboro;
+	}
+	.WeatherInfo {
+		grid-area: WeatherInfo;
+		background-color: greenyellow;
+	}
+	.WeatherDesc {
+		grid-area: WeatherDesc;
+		background-color: mintcream;
+	}
+`;
