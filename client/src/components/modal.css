@@ -4,13 +4,13 @@
 	opacity: 0;
 	overflow-x: hidden;
 	overflow-y: auto;
-	background: rgba(0, 0, 0, 0.45) !important;
-	
 }
+
+
+
 
 .ReactModal__Overlay--after-open {
 	opacity: 1;
-	transition: opacity 150ms ease-out;
 }
 
 .ReactModal__Content {
@@ -21,22 +21,29 @@
 .ReactModal__Content--after-open {
 	-webkit-transform: scale(1) rotateX(0deg);
 	transform: scale(1) rotateX(0deg);
-	transition: all 150ms ease-in;
+
 }
 
 .ReactModal__Overlay--before-close {
 	opacity: 0;
+
 }
 
 .ReactModal__Content--before-close {
 	-webkit-transform: scale(0.5) rotateX(30deg);
 	transform: scale(0.5) rotateX(30deg);
-	transition: all 150ms ease-in;
+
 }
 
 .ReactModal__Content.modal-dialog {
 	border: none;
-	background-color: transparent;
+	background-color: white;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	margin: 0.5rem;
+	pointer-events: none;
 }
 
 .modal-open {
@@ -48,31 +55,12 @@
 	overflow-y: auto;
 }
 
-.modal {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1050;
-	display: none;
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-	outline: 0;
-}
 
-.modal-dialog {
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	margin: 0.5rem;
-	pointer-events: none;
-}
 
 .modal.fade .modal-dialog {
-	transition: -webkit-transform 0.3s ease-out;
-	transition: transform 0.3s ease-out;
-	transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
+	transition: -webkit-transform 0.5s ease-out;
+	transition: transform 0.5s ease-out;
+	transition: transform 0.5s ease-out, -webkit-transform 0.5s ease-out;
 	-webkit-transform: translate(0, -50px);
 	transform: translate(0, -50px);
 }
@@ -147,7 +135,6 @@
 	flex-direction: column;
 	width: 100%;
 	pointer-events: auto;
-	background-color: #fff;
 	background-clip: padding-box;
 	-webkit-box-shadow: 0px 4px 8px 1px rgba(0,0,0,0.54);
 	-moz-box-shadow: 0px 4px 8px 1px rgba(0,0,0,0.54);
@@ -202,26 +189,6 @@
 	padding: 1rem;
 }
 
-.modal-footer {
-	display: -ms-flexbox;
-	display: flex;
-	-ms-flex-align: center;
-	align-items: center;
-	-ms-flex-pack: end;
-	justify-content: flex-end;
-	padding: 1rem;
-	border-top: 1px solid #dee2e6;
-	border-bottom-right-radius: 0.3rem;
-	border-bottom-left-radius: 0.3rem;
-}
-
-.modal-footer > :not(:first-child) {
-	margin-left: 0.25rem;
-}
-
-.modal-footer > :not(:last-child) {
-	margin-right: 0.25rem;
-}
 
 .modal-scrollbar-measure {
 	position: absolute;
@@ -265,3 +232,4 @@
 		max-width: 1140px;
 	}
 }
+

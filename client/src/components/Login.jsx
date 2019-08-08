@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Modal from "react-modal";
-import "./modal.css";
+
 import { withRouter, Link } from "react-router-dom";
+import styled from 'styled-components';
 
-
+Modal.setAppElement('#root');
 class Login extends Component {
 	state = {
 		userEmail: "",
@@ -49,7 +50,7 @@ class Login extends Component {
 		if (this.state.errorDB === true) {
 			return (
 				<div class="alert alert-danger" role="alert">
-					❌ Invalid login credentials! Please try again
+					Invalid login credentials! Please try again
 				</div>
 			);
 		}
@@ -115,26 +116,34 @@ class Login extends Component {
 			return (
 				<div className="text-success text-center m-3">
 					<h1>
-						<b>✔️ Login Successful!</b>
+						<b>Login Successful!</b>
 					</h1>
 				</div>
 			);
 		}
 	};
 
+
+
+//className changes model content, style gives you anything you specify to override defaults
+	
 	render() {
 		return (
 			<React.Fragment>
 				<a onClick={() => this.openModal()}>
 					<Link>login</Link>
 				</a>
+
+				
 				<Modal
-					className="modal-dialog"
-					closeTimeoutMS={150}
+					closeTimeoutMS={2000}
 					isOpen={this.state.modalIsOpen}
 					onAfterOpen={this.afterOpenModal}
 					onRequestClose={this.closeModal}
-					contentLabel="FAQ Modal"
+					contentLabel="Login Modal"
+					className="modal-dialog"
+					style={customStyles}
+				
 				>
 					<div className="modal-content">
 						<div className="modal-header">
@@ -152,3 +161,23 @@ class Login extends Component {
 }
 
 export default Login;
+
+/////////////////////////////////
+
+const customStyles = {
+	overlay: {
+		position: "fixed",
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: "black"
+	}
+	
+// 	,
+
+// 	content: {
+// backgroundColor:"green"
+// 	}
+
+};

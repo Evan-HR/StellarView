@@ -169,12 +169,12 @@ body{
 }
 
 .stars {
-  background:#000 url(http://www.script-tutorials.com/demos/360/images/stars.png) repeat top center;
+  background:#000 url("./components/style/Media/stars.png") repeat top center;
   z-index:-2;
 }
 
 .twinkling{
-  background:transparent url(http://www.script-tutorials.com/demos/360/images/twinkling.png) repeat top center;
+  background:transparent url("./components/style/Media/twinkling.png") repeat top center;
   z-index:-1;
 
   -moz-animation:move-twink-back 450s linear infinite;
