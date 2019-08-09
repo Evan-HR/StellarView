@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Modal from "react-modal";
+import backgroundImage from "../components/style/Media/darkerFormModal.png";
 
 import { withRouter, Link } from "react-router-dom";
-import styled from 'styled-components';
+import styled from "styled-components";
 
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 class Login extends Component {
 	state = {
 		userEmail: "",
@@ -123,10 +124,8 @@ class Login extends Component {
 		}
 	};
 
+	//className changes model content, style gives you anything you specify to override defaults
 
-
-//className changes model content, style gives you anything you specify to override defaults
-	
 	render() {
 		return (
 			<React.Fragment>
@@ -134,16 +133,14 @@ class Login extends Component {
 					<Link>login</Link>
 				</a>
 
-				
 				<Modal
-					closeTimeoutMS={2000}
+					closeTimeoutMS={800}
 					isOpen={this.state.modalIsOpen}
 					onAfterOpen={this.afterOpenModal}
 					onRequestClose={this.closeModal}
 					contentLabel="Login Modal"
 					className="modal-dialog"
 					style={customStyles}
-				
 				>
 					<div className="modal-content">
 						<div className="modal-header">
@@ -171,13 +168,13 @@ const customStyles = {
 		left: 0,
 		right: 0,
 		bottom: 0,
-		backgroundColor: "black"
+		backgroundColor: "black",
+		transition: "opacity 500ms ease-in-out"
 	}
-	
-// 	,
 
-// 	content: {
-// backgroundColor:"green"
-// 	}
+	// 	,
 
+	// 	content: {
+	// backgroundColor:"green"
+	// 	}
 };

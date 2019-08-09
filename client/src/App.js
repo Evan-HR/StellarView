@@ -12,7 +12,8 @@ import { createGlobalStyle } from "styled-components";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
 import FAQ from "./components/FAQ";
-
+import starBackground from "./components/style/Media/starsBackground.png";
+import starsTwinkle from "./components/style/Media/twinkling.png";
 
 class App extends Component {
 	state = {
@@ -43,12 +44,14 @@ class App extends Component {
 		//console.log("parks ", parks);
 		console.log("App - rendered");
 		return (
-
 			<React.Fragment>
-				    <div class="stars"></div>
-					<div class="twinkling"></div>
+				<div class="stars" />
+				<div class="twinkling" />
 
-				<GlobalStyle />
+				<GlobalStyle
+					starBackground={starBackground}
+					starsTwinkle={starsTwinkle}
+				/>
 				<Router>
 					<ToolBar
 						drawerClickHandler={this.drawerToggleClickHandler}
@@ -62,37 +65,29 @@ class App extends Component {
 						handleLogin={this.props.handleLogin}
 					/>
 					{backdrop}
-				
-				
 
-				
-				
-						<Route path="/" exact component={ParksData} />
-						<Route path="/faq" component={FAQ} />
-						<AuthConsumer>
-							{authState => {
-								console.log(authState);
-								return (
-									<Route
-										path="/profile"
-										render={() => {
-											console.log(authState);
-											if (authState.isAuth !== null) {
-												if (authState.isAuth === true)
-													return <Profile />;
-												else return <Redirect to="/" />;
-											}
-										}}
-									/>
-								);
-							}}
-						</AuthConsumer>
-					
-				
+					<Route path="/" exact component={ParksData} />
+					<Route path="/faq" component={FAQ} />
+					<AuthConsumer>
+						{authState => {
+							console.log(authState);
+							return (
+								<Route
+									path="/profile"
+									render={() => {
+										console.log(authState);
+										if (authState.isAuth !== null) {
+											if (authState.isAuth === true)
+												return <Profile />;
+											else return <Redirect to="/" />;
+										}
+									}}
+								/>
+							);
+						}}
+					</AuthConsumer>
 				</Router>
-				
 			</React.Fragment>
-			
 		);
 	}
 }
@@ -108,8 +103,6 @@ export default App;
 // font-family: 'IBM Plex Sans', sans-serif;
 //'Yeseva One', cursive;
 //font-family: 'Barlow', sans-serif;
-
-
 
 const GlobalStyle = createGlobalStyle`
 
@@ -167,21 +160,22 @@ body{
   height:100%;
   display:block;
 }
-
 .stars {
-  background:#000 url("./components/style/Media/stars.png") repeat top center;
+  background:#000 url(${props => props.starBackground}) repeat top center;
+  margin-top: 7%;
   z-index:-2;
 }
 
 .twinkling{
-  background:transparent url("./components/style/Media/twinkling.png") repeat top center;
+	margin-top:7%;
+  background: transparent url(${props => props.starsTwinkle}) repeat top center;
   z-index:-1;
 
-  -moz-animation:move-twink-back 450s linear infinite;
-  -ms-animation:move-twink-back 450s linear infinite;
-  -o-animation:move-twink-back 450s linear infinite;
-  -webkit-animation:move-twink-back 450s linear infinite;
-  animation:move-twink-back 450s linear infinite;
+  -moz-animation:move-twink-back 350s linear infinite;
+  -ms-animation:move-twink-back 350s linear infinite;
+  -o-animation:move-twink-back 350s linear infinite;
+  -webkit-animation:move-twink-back 350s linear infinite;
+  animation:move-twink-back 350s linear infinite;
 
 }
 

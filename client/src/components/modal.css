@@ -6,10 +6,10 @@
 	overflow-y: auto;
 }
 
-
-
-
 .ReactModal__Overlay--after-open {
+	background-image: url("../components/style/Media/darkerFormModal.png");
+	background-size: cover;
+	background-repeat: no-repeat;
 	opacity: 1;
 }
 
@@ -21,18 +21,15 @@
 .ReactModal__Content--after-open {
 	-webkit-transform: scale(1) rotateX(0deg);
 	transform: scale(1) rotateX(0deg);
-
 }
 
 .ReactModal__Overlay--before-close {
 	opacity: 0;
-
 }
 
 .ReactModal__Content--before-close {
 	-webkit-transform: scale(0.5) rotateX(30deg);
 	transform: scale(0.5) rotateX(30deg);
-
 }
 
 .ReactModal__Content.modal-dialog {
@@ -54,8 +51,6 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 }
-
-
 
 .modal.fade .modal-dialog {
 	transition: -webkit-transform 0.5s ease-out;
@@ -136,9 +131,9 @@
 	width: 100%;
 	pointer-events: auto;
 	background-clip: padding-box;
-	-webkit-box-shadow: 0px 4px 8px 1px rgba(0,0,0,0.54);
-	-moz-box-shadow: 0px 4px 8px 1px rgba(0,0,0,0.54);
-	box-shadow: 0px 4px 8px 1px rgba(0,0,0,0.54);
+	-webkit-box-shadow: 0px 4px 8px 1px rgba(0, 0, 0, 0.54);
+	-moz-box-shadow: 0px 4px 8px 1px rgba(0, 0, 0, 0.54);
+	box-shadow: 0px 4px 8px 1px rgba(0, 0, 0, 0.54);
 }
 
 .modal-backdrop {
@@ -189,7 +184,6 @@
 	padding: 1rem;
 }
 
-
 .modal-scrollbar-measure {
 	position: absolute;
 	top: -9999px;
@@ -232,4 +226,3 @@
 		max-width: 1140px;
 	}
 }
-
