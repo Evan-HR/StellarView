@@ -9,7 +9,15 @@ export const theme = {
     background3: '#f5f5f5',
     background4: '#f6f9fc',
     gold: '#D19155',
-    gold2: '#d99058'
+    gold2: '#d99058',
+    logoA: '#7c6e7e',
+    logoTele: '#515b75',
+    mauve: '#B4768A',
+    pink: '#DE8382',
+    green: '#556673',
+    modalOverlay: '#151515'
+
+
 
 
 }

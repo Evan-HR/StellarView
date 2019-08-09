@@ -108,7 +108,7 @@ class Login extends Component {
 							
 							onClick={e => this.onSubmit(e)}
 						>
-							Submit
+							SUBMIT
 						</button>
 						</LoginFormStyle>
 			
@@ -193,14 +193,19 @@ const customStyles = {
 };
 
 const LoginFormStyle=styled.form`
-width: 500px;
+width: 498px;
 /* padding: 40px;
 position: absolute;
 top: 50%;
 left: 50%;
 transform: translate(-50%,-50%); */
-background: #191919;
+background: ${props => props.theme.modalOverlay};
 text-align: center;
+  border-bottom-left-radius: 0.3rem;
+  border-bottom-right-radius: 0.3rem;
+-webkit-box-shadow: -1px 4px 8px 2px rgba(0,0,0,1);
+-moz-box-shadow: -1px 4px 8px 2px rgba(0,0,0,1);
+border-radius: -1px 4px 8px 2px rgba(0,0,0,1);
 
 .SubmitButton{
 	border:0;
@@ -208,17 +213,27 @@ text-align: center;
 	display: block;
 	margin: 20px auto;
 	text-align: center;
-	border: 2px solid #2ecc71;
-	padding: 14px 10px;
+	border: 2px solid ${props => props.theme.green};
+	padding: 14px 25px;
 	outline: none;
 	color: white;
 	border-radius: 24px;
 	transition: 0.25s;
 	cursor: pointer;
+	
 
 	&:hover{
-		background: #2ecc71;
+		background: ${props => props.theme.green};
 	}
+
+		&:active{
+		background: ${props => props.theme.gold2};
+		border: 2px solid ${props => props.theme.gold2};
+		/* padding: 17px 28px; */
+
+	}
+
+
 
 }
 
@@ -232,7 +247,7 @@ border:0;
 	display: block;
 	margin: 20px auto;
 	text-align: center;
-	border: 2px solid #3498db;
+	border: 2px solid ${props => props.theme.logoA};
 	padding: 14px 10px;
 	width: 200px;
 	outline: none;
@@ -242,7 +257,7 @@ border:0;
 
 	&:focus{
 		width: 280px;
-		border-color: aqua;
+		border-color: ${props => props.theme.gold2};
 	}
 
 `;

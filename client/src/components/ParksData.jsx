@@ -327,7 +327,7 @@ const MainContentWrapper = styled.div`
 		grid-area: rightSide;
 		overflow-y: scroll;
 		overflow-x: hidden;
-		background-color: blue;
+		background-color: whitesmoke;
 	}
 	.ParkFormStyle {
 		grid-area: form;
