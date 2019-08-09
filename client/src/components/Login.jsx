@@ -88,30 +88,30 @@ class Login extends Component {
 	renderModalContent = () => {
 		if (!this.state.loginSuccess) {
 			return (
-				<div className="login-form">
-					<form>
-						<input
-							type="email"
+				
+					<LoginFormStyle>
+						<Input type="email"
 							placeholder="email"
 							name="email"
 							onChange={this.handleEmailChange}
-							required
-						/>
-						<input
+							required/>
+
+						<Input
 							type="password"
 							placeholder="password"
 							name="password"
 							onChange={this.handlePasswordChange}
 							required
 						/>
-						<button
-							className="btn btn-primary m-2"
+						
+						<button className="SubmitButton"
+							
 							onClick={e => this.onSubmit(e)}
 						>
 							Submit
 						</button>
-					</form>
-				</div>
+						</LoginFormStyle>
+			
 			);
 		} else {
 			return (
@@ -142,15 +142,28 @@ class Login extends Component {
 					className="modal-dialog"
 					style={customStyles}
 				>
+					
 					<div className="modal-content">
 						<div className="modal-header">
-							<h1>login</h1>
+
+<HeaderStyle>
+<h1>LOGIN</h1>
+</HeaderStyle>
+
+						
+						
+							<button type="button" onClick={this.closeModal} className="close" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+</button>
 						</div>
 
 						{this.renderModalContent()}
 
 						{this.errorMsg()}
+
+
 					</div>
+					
 				</Modal>
 			</React.Fragment>
 		);
@@ -168,8 +181,8 @@ const customStyles = {
 		left: 0,
 		right: 0,
 		bottom: 0,
-		backgroundColor: "black",
-		transition: "opacity 500ms ease-in-out"
+		backgroundColor: 'rgba(0,0,0,0.9)',
+		transition: "opacity 400ms ease-in-out"
 	}
 
 	// 	,
@@ -178,3 +191,64 @@ const customStyles = {
 	// backgroundColor:"green"
 	// 	}
 };
+
+const LoginFormStyle=styled.form`
+width: 500px;
+/* padding: 40px;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%,-50%); */
+background: #191919;
+text-align: center;
+
+.SubmitButton{
+	border:0;
+	background:none;
+	display: block;
+	margin: 20px auto;
+	text-align: center;
+	border: 2px solid #2ecc71;
+	padding: 14px 10px;
+	outline: none;
+	color: white;
+	border-radius: 24px;
+	transition: 0.25s;
+	cursor: pointer;
+
+	&:hover{
+		background: #2ecc71;
+	}
+
+}
+
+
+
+`;
+
+const Input = styled.input`
+border:0;
+	background:none;
+	display: block;
+	margin: 20px auto;
+	text-align: center;
+	border: 2px solid #3498db;
+	padding: 14px 10px;
+	width: 200px;
+	outline: none;
+	color: white;
+	border-radius: 24px;
+	transition: 0.25s;
+
+	&:focus{
+		width: 280px;
+		border-color: aqua;
+	}
+
+`;
+
+const HeaderStyle = styled.div`
+	margin-left: 38%;
+	color: whitesmoke;
+`
+

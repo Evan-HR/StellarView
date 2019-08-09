@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Auth from "./components/Auth";
 import * as serviceWorker from "./serviceWorker";
-//import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/css/bootstrap.css";
 import {ThemeProvider} from 'styled-components';
 import {theme} from './theme'
 
