@@ -15,7 +15,8 @@ export const theme = {
     mauve: '#B4768A',
     pink: '#DE8382',
     green: '#556673',
-    modalOverlay: '#151515'
+    modalOverlay: '#151515',
+    darker: '#252629'
 
 
 

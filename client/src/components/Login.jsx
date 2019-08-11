@@ -88,30 +88,30 @@ class Login extends Component {
 	renderModalContent = () => {
 		if (!this.state.loginSuccess) {
 			return (
-				
-					<LoginFormStyle>
-						<Input type="email"
-							placeholder="email"
-							name="email"
-							onChange={this.handleEmailChange}
-							required/>
+				<LoginFormStyle>
+					<Input
+						type="email"
+						placeholder="email"
+						name="email"
+						onChange={this.handleEmailChange}
+						required
+					/>
 
-						<Input
-							type="password"
-							placeholder="password"
-							name="password"
-							onChange={this.handlePasswordChange}
-							required
-						/>
-						
-						<button className="SubmitButton"
-							
-							onClick={e => this.onSubmit(e)}
-						>
-							SUBMIT
-						</button>
-						</LoginFormStyle>
-			
+					<Input
+						type="password"
+						placeholder="password"
+						name="password"
+						onChange={this.handlePasswordChange}
+						required
+					/>
+
+					<button
+						className="SubmitButton"
+						onClick={e => this.onSubmit(e)}
+					>
+						SUBMIT
+					</button>
+				</LoginFormStyle>
 			);
 		} else {
 			return (
@@ -142,28 +142,26 @@ class Login extends Component {
 					className="modal-dialog"
 					style={customStyles}
 				>
-					
 					<div className="modal-content">
 						<div className="modal-header">
+							<HeaderStyle>
+								<h1>LOGIN</h1>
+							</HeaderStyle>
 
-<HeaderStyle>
-<h1>LOGIN</h1>
-</HeaderStyle>
-
-						
-						
-							<button type="button" onClick={this.closeModal} className="close" aria-label="Close">
-  <span aria-hidden="true">&times;</span>
-</button>
+							<button
+								type="button"
+								onClick={this.closeModal}
+								className="close"
+								aria-label="Close"
+							>
+								<span aria-hidden="true">&times;</span>
+							</button>
 						</div>
 
 						{this.renderModalContent()}
 
 						{this.errorMsg()}
-
-
 					</div>
-					
 				</Modal>
 			</React.Fragment>
 		);
@@ -181,7 +179,7 @@ const customStyles = {
 		left: 0,
 		right: 0,
 		bottom: 0,
-		backgroundColor: 'rgba(0,0,0,0.9)',
+		backgroundColor: "rgba(0,0,0,0.9)",
 		transition: "opacity 400ms ease-in-out"
 	}
 
@@ -192,58 +190,50 @@ const customStyles = {
 	// 	}
 };
 
-const LoginFormStyle=styled.form`
-width: 498px;
-/* padding: 40px;
+const LoginFormStyle = styled.form`
+	width: 498px;
+	/* padding: 40px;
 position: absolute;
 top: 50%;
 left: 50%;
 transform: translate(-50%,-50%); */
-background: ${props => props.theme.modalOverlay};
-text-align: center;
-  border-bottom-left-radius: 0.3rem;
-  border-bottom-right-radius: 0.3rem;
--webkit-box-shadow: -1px 4px 8px 2px rgba(0,0,0,1);
--moz-box-shadow: -1px 4px 8px 2px rgba(0,0,0,1);
-border-radius: -1px 4px 8px 2px rgba(0,0,0,1);
-
-.SubmitButton{
-	border:0;
-	background:none;
-	display: block;
-	margin: 20px auto;
+	background: ${props => props.theme.modalOverlay};
 	text-align: center;
-	border: 2px solid ${props => props.theme.green};
-	padding: 14px 25px;
-	outline: none;
-	color: white;
-	border-radius: 24px;
-	transition: 0.25s;
-	cursor: pointer;
-	
+	border-bottom-left-radius: 0.3rem;
+	border-bottom-right-radius: 0.3rem;
+	-webkit-box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 1);
+	-moz-box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 1);
+	box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 1);
 
-	&:hover{
-		background: ${props => props.theme.green};
+	.SubmitButton {
+		border: 0;
+		background: none;
+		display: block;
+		margin: 20px auto;
+		text-align: center;
+		border: 2px solid ${props => props.theme.green};
+		padding: 14px 25px;
+		outline: none;
+		color: white;
+		border-radius: 24px;
+		transition: 0.25s;
+		cursor: pointer;
+
+		&:hover {
+			background: ${props => props.theme.green};
+		}
+
+		&:active {
+			background: ${props => props.theme.gold2};
+			border: 2px solid ${props => props.theme.gold2};
+			/* padding: 17px 28px; */
+		}
 	}
-
-		&:active{
-		background: ${props => props.theme.gold2};
-		border: 2px solid ${props => props.theme.gold2};
-		/* padding: 17px 28px; */
-
-	}
-
-
-
-}
-
-
-
 `;
 
 const Input = styled.input`
-border:0;
-	background:none;
+	border: 0;
+	background: none;
 	display: block;
 	margin: 20px auto;
 	text-align: center;
@@ -255,15 +245,13 @@ border:0;
 	border-radius: 24px;
 	transition: 0.25s;
 
-	&:focus{
+	&:focus {
 		width: 280px;
 		border-color: ${props => props.theme.gold2};
 	}
-
 `;
 
 const HeaderStyle = styled.div`
 	margin-left: 38%;
 	color: whitesmoke;
-`
-
+`;

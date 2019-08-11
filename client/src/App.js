@@ -14,6 +14,7 @@ import { theme } from "./theme";
 import FAQ from "./components/FAQ";
 import starBackground from "./components/style/Media/starsBackground.png";
 import starsTwinkle from "./components/style/Media/twinkling.png";
+import StarBackground from "./components/StarBackground";
 
 class App extends Component {
 	state = {
@@ -45,13 +46,11 @@ class App extends Component {
 		console.log("App - rendered");
 		return (
 			<React.Fragment>
-				<div class="stars" />
-				<div class="twinkling" />
 
-				<GlobalStyle
-					starBackground={starBackground}
-					starsTwinkle={starsTwinkle}
-				/>
+{/* <StarBackground/> */}
+
+
+				<GlobalStyle/>
 				<Router>
 					<ToolBar
 						drawerClickHandler={this.drawerToggleClickHandler}
@@ -107,7 +106,9 @@ export default App;
 const GlobalStyle = createGlobalStyle`
 
 
-@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono|Rubik|Barlow|IBM+Plex+Sans|Major+Mono+Display|Nunito+Sans|Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono|Rubik|Barlow|IBM+Plex+Sans|Major+Mono+Display|Nunito+Sans|Source+Sans+Pro|Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Mr+Dafoe|Monoton');
+
 
 height: 100%;
 
@@ -126,59 +127,22 @@ body{
 	
 	/* margin-left: 2%;
 	margin-right: 2%; */
+	height: 100vh;
+	overflow: hidden;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
   text-align: left;
-  background-color: black;
+  /* radial-gradient(220% 105% at top center,black 30%,#151515 60%,#252629 100%) */
+  /* background: radial-gradient(220% 105% at top center, black 30%,${props => props.theme.modalOverlay} 60%,${props => props.theme.darker} 100%); */
 
-
-@keyframes move-twink-back {
-    from {background-position:0 0;}
-    to {background-position:-10000px 5000px;}
-}
-@-webkit-keyframes move-twink-back {
-    from {background-position:0 0;}
-    to {background-position:-10000px 5000px;}
-}
-@-moz-keyframes move-twink-back {
-    from {background-position:0 0;}
-    to {background-position:-10000px 5000px;}
-}
-@-ms-keyframes move-twink-back {
-    from {background-position:0 0;}
-    to {background-position:-10000px 5000px;}
-}
-
-.stars, .twinkling {
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
-  width:100%;
-  height:100%;
-  display:block;
-}
-.stars {
-  background:#000 url(${props => props.starBackground}) repeat top center;
-  margin-top: 7%;
-  z-index:-2;
-}
-
-.twinkling{
-	margin-top:7%;
-  background: transparent url(${props => props.starsTwinkle}) repeat top center;
-  z-index:-1;
-
-  -moz-animation:move-twink-back 350s linear infinite;
-  -ms-animation:move-twink-back 350s linear infinite;
-  -o-animation:move-twink-back 350s linear infinite;
-  -webkit-animation:move-twink-back 350s linear infinite;
-  animation:move-twink-back 350s linear infinite;
-
-}
-
+    background: -webkit-linear-gradient(70deg, #fff810  30%, rgba(0,0,0,0) 30%), -webkit-linear-gradient(30deg, #63e89e 60%, #ff7ee3 60%);
+    background: -o-linear-gradient(70deg, #fff810  30%, rgba(0,0,0,0) 30%), -o-linear-gradient(30deg, #63e89e 60%, #ff7ee3 60%);
+    background: -moz-linear-gradient(70deg, #fff810  30%, rgba(0,0,0,0) 30%), -moz-linear-gradient(30deg, #63e89e 60%, #ff7ee3 60%);
+    background: linear-gradient(70deg, #fff810  30%, rgba(0,0,0,0) 30%), linear-gradient(30deg, #63e89e 60%, #ff7ee3 60%);
+	background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover; /* Resize the background image to cover the entire container */
 
 	
   font-family: 'Barlow', sans-serif;

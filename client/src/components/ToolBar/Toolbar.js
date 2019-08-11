@@ -190,14 +190,16 @@ const ToolbarStyle = styled.header`
 	}
 
 	.toolbar__logo{
-		color: white;
+		
+		color: #d7ceb2;
 		font-size: 40px;
 		letter-spacing:0.2em;
 		display: block;
 		margin-top: 6px;
-		
 max-width: 100%;
 max-height:100%;
+
+
 :hover{
 
 		.logo_A {

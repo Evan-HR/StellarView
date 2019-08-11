@@ -324,6 +324,7 @@ const MainContentWrapper = styled.div`
 		background-color: azure;
 	}
 	.RightSideContainer {
+		z-index:0;
 		grid-area: rightSide;
 		overflow-y: scroll;
 		overflow-x: hidden;
