@@ -8,7 +8,7 @@ export const theme = {
     background2: '#E3CDD4',
     background3: '#f5f5f5',
     background4: '#f6f9fc',
-    gold: '#D19155',
+    gold: '#C2A55F',
     gold2: '#d99058',
     logoA: '#7c6e7e',
     logoTele: '#515b75',
@@ -16,7 +16,16 @@ export const theme = {
     pink: '#DE8382',
     green: '#556673',
     modalOverlay: '#151515',
-    darker: '#252629'
+    darker: '#252629',
+    darkBlue:'#252A36',
+    darkBlue2:"#1F2D4F",
+    darkBlue3:"#141323",
+    cream: "#fff3cd",
+    franNavy:"#2B3757",
+    franRed:"#9B4862",
+    franGreen:"#1C3343",
+    franPurple:"#4F3D53",
+    franPink:"#D35958"
 
 
 

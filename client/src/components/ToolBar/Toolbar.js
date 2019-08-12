@@ -108,8 +108,9 @@ export default withRouter(Toolbar);
 const ToolbarStyle = styled.header`
 	position: fixed;
 	width: 100%;
-	background: black;
-	height: 100px;
+	/* background: ${props => props.theme.darkBlue3}; */
+	
+	height: 120px;
 	top: 0;
 	left: 0;
 	z-index: 100;
@@ -135,13 +136,17 @@ const ToolbarStyle = styled.header`
 		display: flex;
 		align-items: center;
 		height: 100%;
-		border-bottom: 2px solid #7C6E7E;
+		/* border-bottom: 2px solid #7C6E7E; */
 
 		
 	}
 
+	.toolbar_navigation-items{
+		margin-top: 2%;
+	}
+
 	.toolbar_navigation-items a {
-		color: white;
+		color: whitesmoke;
 		
 		text-decoration: none;
 		letter-spacing:0.15em;
@@ -150,6 +155,7 @@ const ToolbarStyle = styled.header`
 	}
 
 	.toolbar_navigation-items ul {
+		text-transform: uppercase;
 		list-style: none;
 		margin: 0;
 		padding: 0;
@@ -158,6 +164,7 @@ const ToolbarStyle = styled.header`
 
 
 	.toolbar_navigation-items li {
+		
 		padding: 0 0.5rem;
 	}
 
@@ -185,17 +192,22 @@ const ToolbarStyle = styled.header`
 		/* padding-bottom: 2.05em;
 		border-bottom: 3px solid ${props => props.theme.gold}; */
 		transition: color 0.2s ease;
-  		color: ${props => props.theme.primaryLight};
+  		color: ${props => props.theme.franRed};
 		
 	}
 
 	.toolbar__logo{
+		font-family: 'Source Sans Pro', sans-serif;
 		
-		color: #d7ceb2;
-		font-size: 40px;
-		letter-spacing:0.2em;
+
+/* -webkit-transform: skewY(-25deg);
+  -moz-transform: skewY(-25deg);
+  transform: skewY(-5deg); */
+		
+		font-size: 60px;
+		letter-spacing:0.1em;
 		display: block;
-		margin-top: 6px;
+		margin-top: 1.5%;
 max-width: 100%;
 max-height:100%;
 
@@ -204,7 +216,7 @@ max-height:100%;
 
 		.logo_A {
 			transition: color 1.0s ease;
-  color: ${props => props.theme.gold};
+  color: ${props => props.theme.gold2};
 		}
 
 		.logo_tele{
@@ -217,7 +229,7 @@ max-height:100%;
 
 	.logo_A{
 		transition: color 1.0s ease;
-  color: ${props => props.theme.secondaryDark2};
+  color: ${props => props.theme.franRed};
 		
 	}
 
@@ -227,8 +239,8 @@ max-height:100%;
 			
 			transition: transform 1s;
 			position: absolute;
-    margin-left: -201px;
-    margin-top: -2px;
+			margin-left: -260px;
+  
 		
 	}
 
@@ -237,12 +249,12 @@ max-height:100%;
 
 	.Link{
 		text-decoration:none;
-		color: white;
+		color: whitesmoke;
 	}
 
 	.toolbar__logo a{
 		text-decoration: none;
-		color:white;
+		color: whitesmoke;
 	}
 
 

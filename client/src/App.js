@@ -15,6 +15,8 @@ import FAQ from "./components/FAQ";
 import starBackground from "./components/style/Media/starsBackground.png";
 import starsTwinkle from "./components/style/Media/twinkling.png";
 import StarBackground from "./components/StarBackground";
+import StarBackground2 from "./components/style/Media/starsBackground3.jpg";
+
 
 class App extends Component {
 	state = {
@@ -47,10 +49,10 @@ class App extends Component {
 		return (
 			<React.Fragment>
 
-{/* <StarBackground/> */}
+ {/* <StarBackground/>  */}
 
 
-				<GlobalStyle/>
+				<GlobalStyle BG={StarBackground2}/>
 				<Router>
 					<ToolBar
 						drawerClickHandler={this.drawerToggleClickHandler}
@@ -106,8 +108,9 @@ export default App;
 const GlobalStyle = createGlobalStyle`
 
 
-@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono|Rubik|Barlow|IBM+Plex+Sans|Major+Mono+Display|Nunito+Sans|Source+Sans+Pro|Open+Sans&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Mr+Dafoe|Monoton');
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono|Rubik|Barlow|IBM+Plex+Sans||Satisfy|Major+Mono+Display|Nunito+Sans|Source+Sans+Pro|Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Mr+Dafoe|Monoton|Josefin+Sans|Satisfy');
+@import url('https://fonts.googleapis.com/css?family=Oswald:400|Open+Sans:700');
 
 
 height: 100%;
@@ -127,7 +130,7 @@ body{
 	
 	/* margin-left: 2%;
 	margin-right: 2%; */
-	height: 100vh;
+	height: 100%;
 	overflow: hidden;
   font-size: 1rem;
   font-weight: 400;
@@ -135,17 +138,27 @@ body{
   text-align: left;
   /* radial-gradient(220% 105% at top center,black 30%,#151515 60%,#252629 100%) */
   /* background: radial-gradient(220% 105% at top center, black 30%,${props => props.theme.modalOverlay} 60%,${props => props.theme.darker} 100%); */
-
+/* 
     background: -webkit-linear-gradient(70deg, #fff810  30%, rgba(0,0,0,0) 30%), -webkit-linear-gradient(30deg, #63e89e 60%, #ff7ee3 60%);
     background: -o-linear-gradient(70deg, #fff810  30%, rgba(0,0,0,0) 30%), -o-linear-gradient(30deg, #63e89e 60%, #ff7ee3 60%);
     background: -moz-linear-gradient(70deg, #fff810  30%, rgba(0,0,0,0) 30%), -moz-linear-gradient(30deg, #63e89e 60%, #ff7ee3 60%);
-    background: linear-gradient(70deg, #fff810  30%, rgba(0,0,0,0) 30%), linear-gradient(30deg, #63e89e 60%, #ff7ee3 60%);
-	background-position: center; /* Center the image */
-  background-repeat: no-repeat; /* Do not repeat the image */
-  background-size: cover; /* Resize the background image to cover the entire container */
+    background: linear-gradient(70deg, ${props => props.theme.darkBlue} 30%, rgba(0,0,0,0) 30%), linear-gradient(30deg, ${props => props.theme.logoTele} 60%, ${props => props.theme.darkBlue2} 60%);
+	background-position: center; 
+  background-repeat: no-repeat; 
+  background-size: cover;  */
 
-	
-  font-family: 'Barlow', sans-serif;
+
+    color: #fff;
+    /* background: -webkit-linear-gradient(-70deg, #fa7c30 30%, rgba(0, 0, 0, 0) 30%), url('https://www.nasa.gov/sites/default/files/thumbnails/image/pia21421-cr.jpg');
+    background: -o-linear-gradient(-70deg, #fa7c30 30%, rgba(0, 0, 0, 0) 30%), url('https://www.nasa.gov/sites/default/files/thumbnails/image/pia21421-cr.jpg');
+    background: -moz-linear-gradient(-70deg, #fa7c30 30%, rgba(0, 0, 0, 0) 30%), url('https://www.nasa.gov/sites/default/files/thumbnails/image/pia21421-cr.jpg'); */
+	background-image: linear-gradient(150deg,${props=>props.theme.modalOverlay} 60%,${props=>props.theme.franNavy} calc(60% + 2px));
+  text-align: right;
+
+
+  font-family: 'Source Sans Pro', sans-serif;
+  /* font-family: 'Barlow', sans-serif; */
+  color: black;
 	text-align: center;
 	height: 100%;
 

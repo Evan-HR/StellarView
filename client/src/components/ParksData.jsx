@@ -6,6 +6,7 @@ import ParkMap from "./ParkMap";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
+import MoonComponent from "./Moon";
 import { Spring, animated } from "react-spring/renderprops";
 
 class BaseParksData extends Component {
@@ -259,7 +260,7 @@ class BaseParksData extends Component {
 					</button>
 					{this.renderParkForm()}
 
-					<div className="MoonStyle">MOON</div>
+					<div className="MoonStyle">this: <MoonComponent/></div>
 
 					<div className="ParkTableStyle">
 						<b>Sort by:</b>
@@ -334,10 +335,10 @@ const MainContentWrapper = styled.div`
 		grid-area: form;
 		${({ active }) => active && `display: none;`}
 	}
-	/* .MoonStyle {
-		grid-area: moon;
+	 .MoonStyle {
+	
 		background-color: orange;
-	} */
+	} 
 	.ParkTableStyle {
 		${({ active }) => {
 			if (active) return `max-height:600px;`;
