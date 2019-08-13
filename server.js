@@ -900,6 +900,8 @@ app.post("/api/getParkData", async (req, res) => {
 					console.log(clusterCentroids);
 
 					//Grab weather for each cluster
+					let weatherInstance = null;
+					let response = null;
 					for (
 						var clusterNum = 0;
 						clusterNum < clusters.length;
@@ -912,97 +914,163 @@ app.post("/api/getParkData", async (req, res) => {
 						);
 						var nightTime = new Date(times.night);
 
-						weatherURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${
-							clusterCentroids[clusterNum].latitude
-						}&lon=${
-							clusterCentroids[clusterNum].longitude
-						}&cnt=50&appid=${weatherKey1}&units=metric`;
+						//If current time is past night-time use current weather
+						if (utime > nightTime) {
+							weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${
+								clusterCentroids[clusterNum].latitude
+							}&lon=${
+								clusterCentroids[clusterNum].longitude
+							}&appid=${weatherKey1}&units=metric`;
 
-						console.log(weatherURL);
+							response = await axios
+								.get(weatherURL)
+								.then(response => response.data)
+								.catch(false);
 
-						let response = await axios
-							.get(weatherURL)
-							.then(response => response.data)
-							.catch(false);
+							weatherInstance = response;
 
-						let weatherInstance = response.list[0];
-
-						//Go through the forecasts and find the closest one to nightfall
-						for (var i = 0; i < response.cnt; i++) {
-							console.log(
-								new Date(response.list[i].dt_txt).getTime(),
-								nightTime.getTime(),
-								new Date(response.list[i].dt_txt).getTime() >
-									nightTime.getTime()
-							);
-							if (
-								new Date(response.list[i].dt_txt).getTime() >
-								nightTime.getTime()
+							for (
+								var i = 0;
+								i < clusters[clusterNum].length;
+								i++
 							) {
-								//If the date before nightfall is closer to nightfall than the one after, pick the closer one
-								let succInst = i;
+								parkDataJSON[
+									clusters[clusterNum][i]
+								].weather = {
+									time: utime.getTime(),
+									city: response.name,
+									clouds: weatherInstance.clouds.all,
+									cloudDesc:
+										weatherInstance.weather[0].description,
+									humidity: weatherInstance.main.humidity,
+									temp: weatherInstance.main.temp,
+									stationCoord: {
+										lat: response.coord.lat,
+										lng: response.coord.lon
+									},
+									stationDist:
+										geolib.getDistance(
+											{
+												lat:
+													parkDataJSON[
+														clusters[clusterNum][i]
+													].lat,
+												lng:
+													parkDataJSON[
+														clusters[clusterNum][i]
+													].lng
+											},
+											{
+												lat: response.coord.lat,
+												lng: response.coord.lon
+											}
+										) / 1000
+								};
+							}
+
+							//Otherwise use forecast weather
+						} else {
+							weatherURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${
+								clusterCentroids[clusterNum].latitude
+							}&lon=${
+								clusterCentroids[clusterNum].longitude
+							}&cnt=50&appid=${weatherKey1}&units=metric`;
+
+							console.log(weatherURL);
+
+							response = await axios
+								.get(weatherURL)
+								.then(response => response.data)
+								.catch(false);
+
+							//Go through the forecasts and find the closest one to nightfall
+							for (var i = 0; i < response.cnt; i++) {
+								console.log(
+									new Date(response.list[i].dt_txt).getTime(),
+									nightTime.getTime(),
+									new Date(
+										response.list[i].dt_txt
+									).getTime() > nightTime.getTime()
+								);
 								if (
-									i > 0 &&
-									Math.abs(
-										new Date(response.list[i - 1].dt_txt) -
-											nightTime.getTime()
-									) <
+									new Date(
+										response.list[i].dt_txt
+									).getTime() > nightTime.getTime()
+								) {
+									//If the date before nightfall is closer to nightfall than the one after, pick the closer one
+									let succInst = i;
+									if (
+										i > 0 &&
 										Math.abs(
 											new Date(
-												response.list[i].dt_txt
-											).getTime() - nightTime.getTime()
-										)
-								) {
-									succInst = i - 1;
+												response.list[i - 1].dt_txt
+											) - nightTime.getTime()
+										) <
+											Math.abs(
+												new Date(
+													response.list[i].dt_txt
+												).getTime() -
+													nightTime.getTime()
+											)
+									) {
+										succInst = i - 1;
+									}
+									console.log(
+										"Success! Looking at ",
+										succInst,
+										":",
+										response.list[succInst]
+									);
+									weatherInstance = response.list[succInst];
+									break;
 								}
-								console.log(
-									"Success! Looking at ",
-									succInst,
-									":",
-									response.list[succInst]
-								);
-								weatherInstance = response.list[succInst];
-								break;
+							}
+
+							//Create weather object
+							for (
+								var i = 0;
+								i < clusters[clusterNum].length;
+								i++
+							) {
+								parkDataJSON[
+									clusters[clusterNum][i]
+								].weather = {
+									time: new Date(
+										weatherInstance.dt_txt
+									).getTime(),
+									city: response.city.name,
+									clouds: weatherInstance.clouds.all,
+									cloudDesc:
+										weatherInstance.weather[0].description,
+									humidity: weatherInstance.main.humidity,
+									temp: weatherInstance.main.temp,
+									stationCoord: {
+										lat: response.city.coord.lat,
+										lng: response.city.coord.lon
+									},
+									stationDist:
+										geolib.getDistance(
+											{
+												lat:
+													parkDataJSON[
+														clusters[clusterNum][i]
+													].lat,
+												lng:
+													parkDataJSON[
+														clusters[clusterNum][i]
+													].lng
+											},
+											{
+												lat: response.city.coord.lat,
+												lng: response.city.coord.lon
+											}
+										) / 1000
+								};
 							}
 						}
-
-						console.log(weatherInstance);
-
-						for (var i = 0; i < clusters[clusterNum].length; i++) {
-							parkDataJSON[clusters[clusterNum][i]].weather = {
-								time: new Date(
-									weatherInstance.dt_txt
-								).getTime(),
-								city: response.city.name,
-								clouds: weatherInstance.clouds.all,
-								cloudDesc:
-									weatherInstance.weather[0].description,
-								humidity: weatherInstance.main.humidity,
-								temp: weatherInstance.main.temp,
-								stationCoord: {
-									lat: response.city.coord.lat,
-									lng: response.city.coord.lon
-								},
-								stationDist:
-									geolib.getDistance(
-										{
-											lat:
-												parkDataJSON[
-													clusters[clusterNum][i]
-												].lat,
-											lng:
-												parkDataJSON[
-													clusters[clusterNum][i]
-												].lng
-										},
-										{
-											lat: response.city.coord.lat,
-											lng: response.city.coord.lon
-										}
-									) / 1000
-							};
-						}
 					}
+
+					// console.log(weatherInstance);
 
 					//console.log(clusters);
 
