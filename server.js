@@ -355,11 +355,6 @@ app.post("/api/register", function(req, res) {
 	}
 });
 
-// passport.serializeUser(function(user, done){
-//     console.log('OK')//is show in console
-//     done(null, user.id);
-// });
-
 //----------------------BEGIN AUTHENTICATION-----------------
 passport.serializeUser(function(user_id, done) {
 	done(null, user_id);
@@ -815,33 +810,44 @@ app.post("/api/getParkData", async (req, res) => {
 					}
 
 					//STEP 5: GET WEATHER FOR PARKS
-					var dataset = [];
+
+					//Dataset is array of park coordinates
+					var parkCoordinates = [];
 					for (var i = 0; i < parkDataJSON.length; i++) {
-						dataset[i] = [parkDataJSON[i].lat, parkDataJSON[i].lng];
+						parkCoordinates[i] = [
+							parkDataJSON[i].lat,
+							parkDataJSON[i].lng
+						];
 					}
 
+					//Define custom distance function to use,
+					//since coordinate distances are not cartesian distances
 					function kmeansDistance(p, q) {
 						return geolib.getDistance(
 							{ lat: p[0], lng: p[1] },
 							{ lat: q[0], lat: q[1] }
 						);
 					}
+
+					//Clustering code
 					var kmeans = new clustering.KMEANS();
 					// parameters: 3 - number of clusters
-					var clusterCount = Math.round(parkDataJSON.length / 5); //TODO: FInd a better cluster
+					var clusterCount = Math.round(parkDataJSON.length / 5); //TODO: Find a better cluster number
 					if (clusterCount > 10) clusterCount = 10;
 					var clusters = kmeans.run(
-						dataset,
+						parkCoordinates,
 						clusterCount,
 						kmeansDistance
 					);
 
+					//Find coordinates at the center of each cluster
 					let clusterCentroids = [];
 					for (
 						var clusterNum = 0;
 						clusterNum < clusters.length;
 						clusterNum++
 					) {
+						//Add park coordinates to the cluster the park is in
 						let clusterCoordinates = [];
 						for (var i = 0; i < clusters[clusterNum].length; i++) {
 							clusterCoordinates.push({
@@ -855,6 +861,7 @@ app.post("/api/getParkData", async (req, res) => {
 						);
 						//console.log(clusterCentroid);
 
+						//Calculate each park's distance to cluster center
 						let clusterDist = [];
 						for (var i = 0; i < clusters[clusterNum].length; i++) {
 							parkDataJSON[
@@ -891,11 +898,20 @@ app.post("/api/getParkData", async (req, res) => {
 						clusterCentroids.push(clusterCentroid);
 					}
 					console.log(clusterCentroids);
+
+					//Grab weather for each cluster
 					for (
 						var clusterNum = 0;
 						clusterNum < clusters.length;
 						clusterNum++
 					) {
+						var times = suncalc.getTimes(
+							new Date(utime),
+							clusterCentroids[clusterNum].latitude,
+							clusterCentroids[clusterNum].longitude
+						);
+						var nightTime = new Date(times.night);
+
 						weatherURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${
 							clusterCentroids[clusterNum].latitude
 						}&lon=${
@@ -909,14 +925,9 @@ app.post("/api/getParkData", async (req, res) => {
 							.then(response => response.data)
 							.catch(false);
 
-						var times = suncalc.getTimes(
-							new Date(utime),
-							clusterCentroids[clusterNum].latitude,
-							clusterCentroids[clusterNum].longitude
-						);
-						var nightTime = new Date(times.night);
-						let weatherInstance = null;
+						let weatherInstance = response.list[0];
 
+						//Go through the forecasts and find the closest one to nightfall
 						for (var i = 0; i < response.cnt; i++) {
 							console.log(
 								new Date(response.list[i].dt_txt).getTime(),
@@ -928,13 +939,29 @@ app.post("/api/getParkData", async (req, res) => {
 								new Date(response.list[i].dt_txt).getTime() >
 								nightTime.getTime()
 							) {
+								//If the date before nightfall is closer to nightfall than the one after, pick the closer one
+								let succInst = i;
+								if (
+									i > 0 &&
+									Math.abs(
+										new Date(response.list[i - 1].dt_txt) -
+											nightTime.getTime()
+									) <
+										Math.abs(
+											new Date(
+												response.list[i].dt_txt
+											).getTime() - nightTime.getTime()
+										)
+								) {
+									succInst = i - 1;
+								}
 								console.log(
 									"Success! Looking at ",
-									i,
+									succInst,
 									":",
-									response.list[i]
+									response.list[succInst]
 								);
-								weatherInstance = response.list[i];
+								weatherInstance = response.list[succInst];
 								break;
 							}
 						}
@@ -1002,10 +1029,6 @@ app.post("/api/getParkData", async (req, res) => {
 						moonType = "Waning Cresent";
 					}
 
-					//moonType = phaseInfo.phase;
-
-					//reviewsJSON
-
 					//STEP 9: FORMAT RESPONSE JSON
 					let reply = {
 						parks: parkDataJSON,
@@ -1016,151 +1039,6 @@ app.post("/api/getParkData", async (req, res) => {
 
 					//STEP 10: SEND DATA TO FRONT-END
 					res.send(reply);
-					/*
-					var weatherArr = [];
-					weatherURL = `http://api.openweathermap.org/data/2.5/find?lat=${lat}&lon=${lng}&cnt=50&appid=${weatherKey1}&units=metric`;
-					axios
-						.get(weatherURL)
-						.then(function(response) {
-							for (
-								var i = 0;
-								i < response.data.list.length;
-								i++
-							) {
-								var elem = response.data.list[i];
-								//console.log("elem is: ", elem);
-								var city = {};
-								city.name = elem.name;
-								city.clouds = elem.clouds.all;
-								city.cloudDesc = elem.weather[0].description;
-								city.humidity = elem.main.humidity;
-								city.temp = elem.main.temp;
-								city.lat = elem.coord.lat;
-								city.lng = elem.coord.lon;
-
-								//console.log("city is:", city);
-
-								weatherArr.push(city);
-								//console.log("weather arr is : ", weatherArr);
-							}
-
-							// weather assigning:
-							for (var i = 0; i < parkDataJSON.length; i++) {
-								var minDist = 300000; // higher than any coord distance
-								var closestCity = -1; //variable represents index of closest city; initialized as -ve, will throw err if no closer city
-								for (var j = 0; j < weatherArr.length; j++) {
-									var cityLat = parseFloat(weatherArr[j].lat);
-									var cityLng = parseFloat(weatherArr[j].lng);
-									var parkLat = parseFloat(
-										parkDataJSON[i].lat
-									);
-									var parkLng = parseFloat(
-										parkDataJSON[i].lng
-									);
-
-									var theta = parkLng - cityLng;
-									var dist =
-										Math.sin((parkLat * Math.PI) / 180) *
-											Math.sin(
-												(cityLat * Math.PI) / 180
-											) +
-										Math.cos((parkLng * Math.PI) / 180) *
-											Math.cos(
-												(cityLng * Math.PI) / 180
-											) *
-											Math.cos((theta * Math.PI) / 180);
-									dist = Math.acos(dist);
-									dist = (dist * 20014.1238528) / Math.PI;
-									//console.log(dist);
-
-									var distance = Math.sqrt(
-										Math.pow(cityLat - parkLat, 2) +
-											Math.pow(cityLng - parkLng, 2)
-									);
-
-									if (distance < minDist) {
-										minDist = distance;
-										closestCity = j;
-									}
-									parkDataJSON[i].weather = {};
-									parkDataJSON[
-										i
-									].weather.time = new Date().getTime();
-									parkDataJSON[i].weather.clouds =
-										weatherArr[closestCity].clouds; // PARKS JSON FOR i GETS NEW COMPONENT 'weather' WITH DATA FROM CLOSEST CITY
-									parkDataJSON[i].weather.humidity =
-										weatherArr[closestCity].humidity;
-									parkDataJSON[i].weather.cloudDesc =
-										weatherArr[closestCity].cloudDesc;
-									parkDataJSON[i].weather.city =
-										weatherArr[closestCity].name;
-									parkDataJSON[i].weather.temp =
-										weatherArr[closestCity].temp;
-								}
-
-								for (var x = 0; x < reviewsJSON.length; x++) {
-									if (
-										reviewsJSON[x].p_id ==
-										parkDataJSON[i].id
-									) {
-										console.log(
-											"found matching ID! ",
-											reviewsJSON[x].p_id
-										);
-										parkDataJSON[i].avgScore =
-											reviewsJSON[x].avgScore;
-										parkDataJSON[i].numReviews =
-											reviewsJSON[x].numReviews;
-									}
-								}
-
-								// can u get the km distance between each park
-								//like what does 'closest' mean do we know that yet?
-								// lets look at some of the #s
-							}
-
-							//STEP 7: GET MOON DATA
-							console.log("User time is: ", utime);
-							var phaseInfo = getMoon(utime);
-
-							console.log("Moon status: ", phaseInfo);
-							let moonPercent = phaseInfo.fraction;
-							var moonType = phaseInfo.phase;
-
-							if (
-								inRange(phaseInfo.phase, 0, 0.125) ||
-								inRange(phaseInfo.phase, 0.875, 1)
-							) {
-								moonType = "New Moon";
-							} else if (inRange(phaseInfo.phase, 0.125, 0.375)) {
-								moonType = "First Quarter";
-							} else if (inRange(phaseInfo.phase, 0.375, 0.625)) {
-								moonType = "Full Moon";
-							} else if (inRange(phaseInfo.phase, 0.625, 0.875)) {
-								moonType = "Last Quarter";
-							}
-
-							//moonType = phaseInfo.phase;
-
-							//reviewsJSON
-
-							//STEP 9: FORMAT RESPONSE JSON
-							let reply = {
-								parks: parkDataJSON,
-								moonPercent: moonPercent,
-								moonType: moonType
-							};
-							//console.log("Response ", parkDataJSON);
-							//console.log("weather response: ", reply.parks.weather);
-							console.log("Response reply: ", reply)
-							//STEP 10: SEND DATA TO FRONT-END
-							res.send(reply);
-							//res.send(results);
-						})
-
-						.catch(function(response) {
-							console.log(response);
-						});*/
 				}
 			);
 		}
