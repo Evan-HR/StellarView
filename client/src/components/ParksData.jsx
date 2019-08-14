@@ -236,13 +236,6 @@ class BaseParksData extends Component {
 	render() {
 		console.log("ParksData - rendered");
 
-		//"copies" into temp array parks
-		// const parks = this.state.parks;
-
-		//let clearButtonClass = this.clearButtonClass();
-		//bind(this,reqData) passes reqData to getParkData
-		//bind seems to be needed for onClick buttons /w args
-
 		return (
 			<MainContentWrapper
 				active={this.state.hideForm}
@@ -260,9 +253,13 @@ class BaseParksData extends Component {
 					</button>
 					{this.renderParkForm()}
 
-					<div className="MoonStyle"><MoonComponent moon={this.state.moon}
-								parkList={this.state.parks} moonType={this.state.moonType}/></div>
-					
+					<div className="MoonStyle">
+						<MoonComponent
+							moon={this.state.moon}
+							parkList={this.state.parks}
+							moonType={this.state.moonType}
+						/>
+					</div>
 
 					<div className="ParkTableStyle">
 						<b>Sort by:</b>
@@ -310,7 +307,6 @@ export default ParksData;
 //////////////////////////////////////////
 
 const MainContentWrapper = styled.div`
-
 	display: grid;
 	margin: 0 auto 0 auto;
 	margin-top: 2rem;
@@ -333,7 +329,7 @@ const MainContentWrapper = styled.div`
 		background-color: azure;
 	}
 	.RightSideContainerFull {
-		z-index:0;
+		z-index: 0;
 		grid-area: rightSide;
 		/* overflow-y: scroll;
 		overflow-x: hidden; */
@@ -343,10 +339,11 @@ const MainContentWrapper = styled.div`
 		grid-area: form;
 		${({ active }) => active && `display: none;`}
 	}
-	 .MoonStyle {
-	
-		background-color: orange;
-	} 
+
+	.MoonStyle {
+		background: ${props => props.theme.moonCard};
+	}
+
 	.ParkTableStyle {
 		${({ active }) => {
 			if (active) return `max-height:600px;`;
@@ -356,7 +353,7 @@ const MainContentWrapper = styled.div`
 
 	@media screen and (max-width: 769px) {
 		margin-top: 4rem;
-		width: 95%;
+		width: 100%;
 		grid-template-columns: 1fr;
 		grid-template-rows: ${props =>
 			props.hideMap ? "0px auto" : "50% auto"};
@@ -390,9 +387,8 @@ const MainContentWrapper = styled.div`
 			background-color: azure;
 		}
 		.ParkFormStyle {
-		grid-area: form;
-		${({ active }) => active && `display: none;`}
-		
-	}
+			grid-area: form;
+			${({ active }) => active && `display: none;`}
+		}
 	}
 `;

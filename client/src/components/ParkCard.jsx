@@ -80,46 +80,56 @@ class ParkCard extends Component {
 	};
 	render() {
 		return (
-			<div className="card mb-3" style={{ textTransform: "capitalize" }}>
+			<div className="card">
 				<CardStyle>
-					<div className="ParkTitle">
-						<div className="card-header text-white bg-primary">
-							<button
-								className="btn btn-link text-white"
-								onMouseEnter={() => {
-									this.props.handleMouseOver(
-										this.props.park.id
-									);
-								}}
-								onMouseLeave={() => {
-									this.props.handleMouseLeave(
-										this.props.park.id
-									);
-								}}
-								onClick={() => {
-									this.props.handleMouseClick(
-										this.props.park.id
-									);
-								}}
-							>
-								{this.props.park.name_alt
-									? this.props.park.name_alt
-									: this.props.park.name}
-							</button>
-						</div>
-					</div>
+					<div
+						className="ParkTitle"
+						onMouseEnter={() => {
+							this.props.handleMouseOver(this.props.park.id);
+						}}
+						onMouseLeave={() => {
+							this.props.handleMouseLeave(this.props.park.id);
+						}}
+						onClick={() => {
+							this.props.handleMouseClick(this.props.park.id);
+						}}
+					>
+						<span className="Title" style={{ textTransform: "capitalize" }}>
+							{this.props.park.name_alt
+								? this.props.park.name_alt
+								: this.props.park.name}
+						</span>
 
-					<div className="ParkDist">
-						{this.props.park.distance < 9000 ? (
-							<React.Fragment>
-								{parseFloat(this.props.park.distance).toFixed(
-									2
+						<span className="Dist">
+							<span className="DistCharacteristic">
+								{this.props.park.distance < 9000 ? (
+									<React.Fragment>
+										{Math.trunc(
+											parseFloat(this.props.park.distance)
+										)}
+									</React.Fragment>
+								) : (
+									<React.Fragment>?</React.Fragment>
 								)}
-							</React.Fragment>
-						) : (
-							<b>?</b>
-						)}
-						<b> km</b>
+							</span>
+							<span className="DistMantissa">
+								{this.props.park.distance < 9000 ? (
+									<React.Fragment>
+										.
+										{Math.trunc(
+											(parseFloat(
+												this.props.park.distance
+											) *
+												100) %
+												100
+										)}
+									</React.Fragment>
+								) : (
+									<React.Fragment>??</React.Fragment>
+								)}{" "}
+								<b> km</b>
+							</span>
+						</span>
 					</div>
 
 					<div className="WeatherSVG">I'm an svg</div>
@@ -139,7 +149,9 @@ class ParkCard extends Component {
 						).toLocaleString()}
 					</div>
 
-					<div className="ParkScore">{this.renderLetterGrade(this.props.park.score)}</div>
+					<div className="ParkScore">
+						{this.renderLetterGrade(this.props.park.score)}
+					</div>
 
 					<div className="StarRev">
 						{this.renderReviewScore(this.props.park.avgScore)}
@@ -150,38 +162,6 @@ class ParkCard extends Component {
 					</div>
 
 					<div className="MoreInfo">More Info</div>
-
-					{/* <div className="card-body bg-light">
-						<p className="card-text">
-							{parseFloat(this.props.park.light_pol).toFixed(2)}
-							<br />
-							{this.props.park.distance < 9000 ? (
-								<React.Fragment>
-									{parseFloat(
-										this.props.park.distance
-									).toFixed(2)}
-									<b> km</b>
-								</React.Fragment>
-							) : (
-								<b className="text-muted">Location unknown</b>
-							)}
-							<br />
-							{this.props.park.weather.city} forecast for{" "}
-							{new Date(
-								this.props.park.weather.time
-							).toLocaleString()}
-							: <br />
-							{this.props.park.weather.cloudDesc} <br />
-							{this.props.park.weather.temp} °C
-							<br />
-							{this.props.park.weather.humidity}% Humidity <br />
-							{this.renderReviewScore(this.props.park.avgScore)}
-							<br />
-							{this.renderNumReviews(this.props.park.numReviews)}
-							<br />
-							Overall score: {this.renderLetterGrade()}
-						</p>
-					</div> */}
 				</CardStyle>
 			</div>
 		);
@@ -207,49 +187,93 @@ const CardStyle = styled.div`
 	grid-column-gap: 10px;
 	grid-row-gap: 10px;
 	grid-template-areas:
-		"ParkTitle   ParkTitle   ParkTitle   ParkDist"
-		"WeatherSVG  ParkTemp    WeatherDesc ParkScore"
+		"ParkTitle   ParkTitle   ParkTitle   ParkTitle"
 		"WeatherInfo WeatherInfo WeatherInfo ParkScore"
+		"WeatherSVG  ParkTemp    WeatherDesc ParkScore"
 		"StarRev     StarRev     NumRev      MoreInfo";
+
+	font-family: IBM Plex Sans;
+	font-style: normal;
+	font-weight: 600;
+	font-size: 18px;
+	line-height: 23px;
+	text-align: left;
+
+	color: #2f3334;
 
 	.ParkTitle {
 		grid-area: ParkTitle;
-		background-color: seashell;
+		border-bottom: 2px blueviolet solid;
+		position: relative;
+
+		span {
+			position: absolute;
+			bottom: 0;
+		}
+
+		.Title {
+			left: 0;
+		}
+
+		.Dist {
+			display: inline-block;
+			margin: 0;
+			font-weight: 300;
+			right: 0;
+			span {
+				left: 0;
+				position: relative;
+			}
+
+			.DistMantissa {
+				font-size: 13px;
+			}
+		}
 	}
 	.ParkDist {
 		grid-area: ParkDist;
-		background-color: peru;
+		border-bottom: 2px blueviolet solid;
+		/* border-style: solid;
+		border-color: peru; */
 	}
 	.WeatherSVG {
 		grid-area: WeatherSVG;
-		background-color: azure;
+		border-style: solid;
+		border-color: azure;
 	}
 	.ParkTemp {
 		grid-area: ParkTemp;
-		background-color: wheat;
+		border-style: solid;
+		border-color: wheat;
 	}
 	.ParkScore {
 		grid-area: ParkScore;
-		background-color: lightsalmon;
+		border-style: solid;
+		border-color: lightsalmon;
 	}
 	.StarRev {
 		grid-area: StarRev;
-		background-color: navajowhite;
+		border-style: solid;
+		border-color: navajowhite;
 	}
 	.NumRev {
 		grid-area: NumRev;
-		background-color: thistle;
+		border-style: solid;
+		border-color: thistle;
 	}
 	.MoreInfo {
 		grid-area: MoreInfo;
-		background-color: gainsboro;
+		border-style: solid;
+		border-color: gainsboro;
 	}
 	.WeatherInfo {
 		grid-area: WeatherInfo;
-		background-color: greenyellow;
+		border-style: solid;
+		border-color: greenyellow;
 	}
 	.WeatherDesc {
 		grid-area: WeatherDesc;
-		background-color: mintcream;
+		border-style: solid;
+		border-color: mintcream;
 	}
 `;

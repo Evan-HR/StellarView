@@ -35,31 +35,44 @@ class ParkTable extends Component {
 		this.isAnimating = {};
 	}
 
-
 	renderParkCardList = () => {
 		if (this.props.parkList.length > 0) {
 			return (
-				<Transition
-					native
-					items={this.props.parkList}
-					keys={item => item.id}
-					from={{ transform: "translate3d(-40px,0,0)", opacity: 0 }}
-					enter={{ transform: "translate3d(0,0px,0)", opacity: 1 }}
-					leave={{ transform: "translate3d(-40px,0,0)", opacity: 0 }}
-					//update={[{ opacity: 0.5 }, { opacity: 1 }]}
-				>
-					{item => props => (
-						<animated.div style={props}>
-							{this.renderParkCard(item)}
-						</animated.div>
-					)}
-				</Transition>
+				<ParkCardListStyle>
+					<Transition
+						native
+						items={this.props.parkList}
+						keys={item => item.id}
+						from={{
+							transform: "translate3d(-40px,0,0)",
+							opacity: 0
+						}}
+						enter={{
+							transform: "translate3d(0,0px,0)",
+							opacity: 1
+						}}
+						leave={{
+							transform: "translate3d(-40px,0,0)",
+							opacity: 0
+						}}
+						//update={[{ opacity: 0.5 }, { opacity: 1 }]}
+					>
+						{item => props => (
+							<animated.div
+								className="cardAnimationContainer"
+								style={props}
+							>
+								{this.renderParkCard(item)}
+							</animated.div>
+						)}
+					</Transition>
+				</ParkCardListStyle>
 			);
 			// return <div>{this.props.parkList.map(this.renderParkCard)}</div>;
 		} else {
 			return (
 				<div className="text-center">
-					<div className="card text-white bg-danger mb-3">
+					<div className="card text-white bg-danger">
 						<div className="card-header">No parks available.</div>
 					</div>
 				</div>
@@ -125,16 +138,13 @@ class ParkTable extends Component {
 	render() {
 		console.log("ParkTable - rendered");
 		return (
-			<div className="border border-primary">
+			<React.Fragment>
 				{this.props.isLoadingParks ? (
 					this.renderLoading()
 				) : (
-					<React.Fragment>
-					
-						{this.renderParkCardList()}
-					</React.Fragment>
+					<React.Fragment>{this.renderParkCardList()}</React.Fragment>
 				)}
-			</div>
+			</React.Fragment>
 		);
 	}
 }
@@ -143,7 +153,13 @@ export default ParkTable;
 
 ///////////////////////////////////////////////////////////////
 
-const MoonStyle = styled.img`
-	padding-top: 15px;
-	padding-bottom: 15px;
+//OOF
+const ParkCardListStyle = styled.div`
+	.cardAnimationContainer:nth-of-type(even) .card {
+		background-color: ${props => props.theme.cardDark};
+	}
+
+	.cardAnimationContainer:nth-of-type(odd) .card {
+		background-color: ${props => props.theme.cardLight};
+	}
 `;
