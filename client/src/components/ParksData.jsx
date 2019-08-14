@@ -250,7 +250,7 @@ class BaseParksData extends Component {
 			>
 				{this.renderParkMap()}
 				<div className="Placeholder1">I'm just a placeholder</div>
-				<div className="RightSideContainer">
+				<div className="RightSideContainerFull">
 					<button
 						onClick={() => {
 							this.setState({ hideForm: !this.state.hideForm });
@@ -260,7 +260,9 @@ class BaseParksData extends Component {
 					</button>
 					{this.renderParkForm()}
 
-					<div className="MoonStyle">this: <MoonComponent/></div>
+					<div className="MoonStyle"><MoonComponent moon={this.state.moon}
+								parkList={this.state.parks} moonType={this.state.moonType}/></div>
+					
 
 					<div className="ParkTableStyle">
 						<b>Sort by:</b>
@@ -308,7 +310,13 @@ export default ParksData;
 //////////////////////////////////////////
 
 const MainContentWrapper = styled.div`
+
 	display: grid;
+	margin: 0 auto 0 auto;
+	margin-top: 2rem;
+	overflow: none;
+	width: 85%;
+
 	grid-template-columns: 1fr 1fr;
 	grid-column-gap: 10px;
 	grid-row-gap: 10px;
@@ -324,11 +332,11 @@ const MainContentWrapper = styled.div`
 		grid-area: placeholder1;
 		background-color: azure;
 	}
-	.RightSideContainer {
+	.RightSideContainerFull {
 		z-index:0;
 		grid-area: rightSide;
-		overflow-y: scroll;
-		overflow-x: hidden;
+		/* overflow-y: scroll;
+		overflow-x: hidden; */
 		background-color: whitesmoke;
 	}
 	.ParkFormStyle {
@@ -346,11 +354,8 @@ const MainContentWrapper = styled.div`
 		}}
 	}
 
-	margin: 0 auto 0 auto;
-	margin-top: 8rem;
-	overflow: hidden;
-	width: 85%;
 	@media screen and (max-width: 769px) {
+		margin-top: 4rem;
 		width: 95%;
 		grid-template-columns: 1fr;
 		grid-template-rows: ${props =>
@@ -363,8 +368,8 @@ const MainContentWrapper = styled.div`
 			grid-area: placeholder1;
 			background-color: azure;
 		}
-		.RightSideContainer {
-			overflow-y: visible;
+		.RightSideContainerFull {
+			overflow: none;
 		}
 
 		.ParkMapStyle {
@@ -372,15 +377,22 @@ const MainContentWrapper = styled.div`
 		}
 	}
 	@media screen and (min-width: 769px) and (max-width: 1300px) {
+		width: 90%;
+		margin-top: 0rem;
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: auto auto;
 		grid-template-areas:
 			"map rightSide"
-			"placeholder1 rightSide";
+			"map rightSide";
 		.Placeholder1 {
 			display: block;
 			grid-area: placeholder1;
 			background-color: azure;
 		}
+		.ParkFormStyle {
+		grid-area: form;
+		${({ active }) => active && `display: none;`}
+		
+	}
 	}
 `;

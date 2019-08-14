@@ -20,7 +20,7 @@ export const theme = {
     darkBlue:'#252A36',
     darkBlue2:"#1F2D4F",
     darkBlue3:"#141323",
-    cream: "#fff3cd",
+    cream: "#e6e6d8",
     franNavy:"#2B3757",
     franRed:"#9B4862",
     franGreen:"#1C3343",

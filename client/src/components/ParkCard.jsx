@@ -139,7 +139,7 @@ class ParkCard extends Component {
 						).toLocaleString()}
 					</div>
 
-					<div className="ParkScore">this.props.park.score</div>
+					<div className="ParkScore">{this.renderLetterGrade(this.props.park.score)}</div>
 
 					<div className="StarRev">
 						{this.renderReviewScore(this.props.park.avgScore)}

@@ -106,7 +106,8 @@ export default withRouter(Toolbar);
 ////////////////////////////////////////////////
 
 const ToolbarStyle = styled.header`
-	position: fixed;
+
+
 	width: 100%;
 	/* background: ${props => props.theme.darkBlue3}; */
 	
@@ -136,30 +137,31 @@ const ToolbarStyle = styled.header`
 		display: flex;
 		align-items: center;
 		height: 100%;
+		bottom: 0;
 		/* border-bottom: 2px solid #7C6E7E; */
 
 		
 	}
 
 	.toolbar_navigation-items{
-		margin-top: 2%;
+		margin-top: 1%;
 	}
 
 	.toolbar_navigation-items a {
-		color: whitesmoke;
+		
 		
 		text-decoration: none;
 		letter-spacing:0.15em;
 		transition: color 0.2s ease;
-  		color: white;
+		color: black;
 	}
 
 	.toolbar_navigation-items ul {
 		text-transform: uppercase;
 		list-style: none;
-		margin: 0;
 		padding: 0;
 		display: flex;
+		
 	}
 
 
@@ -171,17 +173,35 @@ const ToolbarStyle = styled.header`
 	.toolbar_navigation-items li:last-child {padding: 0 0 0 0.5rem;}
 	/* On screens that are 768px or less*/
 
-	
 	@media screen and (max-width: 767.999px) {
 		.toolbar_navigation-items {
 			display: none;
-
-
+			height: 60px;
 			
+		}
+		
+		height: 60px;
+		.toolbar__logo{
+font-size: 60px;
+		}
+
+		.logo_tele{
+			
+			display:none;
 		}
 
 
+
 	}
+
+	@media screen and (min-width: 769px) and (max-width: 1300px) {
+		.toolbar__center{
+		width: 90%;
+		}
+		
+	}
+
+	
 
 	.spacer {
 		flex: 1;
@@ -197,19 +217,15 @@ const ToolbarStyle = styled.header`
 	}
 
 	.toolbar__logo{
-		font-family: 'Source Sans Pro', sans-serif;
-		
-
-/* -webkit-transform: skewY(-25deg);
-  -moz-transform: skewY(-25deg);
-  transform: skewY(-5deg); */
-		
-		font-size: 60px;
-		letter-spacing:0.1em;
-		display: block;
-		margin-top: 1.5%;
-max-width: 100%;
-max-height:100%;
+		font-family: "Oswald", Sans-serif;
+		font-weight: 400;
+		font-size: 40px;
+  /* text-transform: uppercase;
+  font-weight: 400;
+  font-size: 70px;
+  text-shadow: 4px 5px #e6e6d8, 6px 7px #c6a39a; */
+  /* transform: matrix(1, -0.05, 0, 1, 0, 0); */
+  
 
 
 :hover{
@@ -239,7 +255,8 @@ max-height:100%;
 			
 			transition: transform 1s;
 			position: absolute;
-			margin-left: -260px;
+			margin-left: -121px;
+    margin-top: -10px;
   
 		
 	}
@@ -254,8 +271,9 @@ max-height:100%;
 
 	.toolbar__logo a{
 		text-decoration: none;
-		color: whitesmoke;
+		color: black;;
 	}
+
 
 
 

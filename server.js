@@ -982,7 +982,7 @@ app.post("/api/getParkData", async (req, res) => {
 					var phaseInfo = getMoon(utime);
 
 					let moonPercent = phaseInfo.fraction;
-					var moonType = phaseInfo.phase;
+					var moonType;
 
 					if (inRange(phaseInfo.phase, 0, 0.125)) {
 						moonType = "New Moon";
@@ -1009,7 +1009,7 @@ app.post("/api/getParkData", async (req, res) => {
 					//STEP 9: FORMAT RESPONSE JSON
 					let reply = {
 						parks: parkDataJSON,
-						moonPercent: moonPercent,
+						moonPercent: phaseInfo.phase,
 						moonType: moonType
 					};
 					//console.log("Response ", reply);
