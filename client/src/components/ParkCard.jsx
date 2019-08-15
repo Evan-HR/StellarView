@@ -43,6 +43,7 @@ class ParkCard extends Component {
 
 	render() {
 		return (
+			<CardBootstrap>
 			<div className="card">
 				<CardStyle>
 					<div className="ParkTitle">
@@ -174,6 +175,7 @@ class ParkCard extends Component {
 					</div>
 				</CardStyle>
 			</div>
+			</CardBootstrap>
 		);
 	}
 }
@@ -214,6 +216,10 @@ const CardStyle = styled.div`
 	text-align: left;
 
 	color: ${props => props.theme.fontDark};
+
+	.card{
+		border: 1px solid rgba(0, 0, 0, 0);
+	}
 
 	.ParkTitle {
 		grid-area: ParkTitle;
@@ -330,4 +336,28 @@ const CardStyle = styled.div`
 			display: inline-block;
 		}
 	}
+`;
+
+const CardBootstrap = styled.div`
+.card {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.card > hr {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+
+
+
 `;

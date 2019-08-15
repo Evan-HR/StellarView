@@ -24,7 +24,7 @@ class Moon extends Component {
 			moonIllum = Math.round(moonIllum * 100) / 100;
 			var moonType = this.props.moonType;
 			var moonSVG;
-
+			console.log("MOON AVG NUMBER IS: "+moonIllum)
 			// moonDataString = `The moon is ${moonType}, meaning it is ${moonIllum}% illuminated.`;
 			// console.log("IN MOON.JSX:" ,moonDataString)
 			//8 phases, 0/1 is peak new moon and 0.5 is full moon, so:
