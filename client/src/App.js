@@ -112,6 +112,7 @@ html {
   height: 100%;
   overflow-x: hidden;
 }
+
 body{
 	height: 100%;
 	font-size: 1rem;

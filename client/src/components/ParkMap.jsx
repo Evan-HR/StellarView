@@ -7,6 +7,12 @@ import ParkMapModal from "./ParkMapModal";
 import Reviews from "./Reviews";
 import FavPark from "./FavPark";
 
+import letter_a from "./style/MapMarkers/letter_a.png";
+import letter_b from "./style/MapMarkers/letter_b.png";
+import letter_c from "./style/MapMarkers/letter_c.png";
+import letter_d from "./style/MapMarkers/letter_d.png";
+import letter_f from "./style/MapMarkers/letter_f.png";
+
 /* Notes:
 Couldn't figure out how to make google.etc work, 
 instead you have to use window.google.etc
@@ -100,13 +106,25 @@ class ParkMap extends Component {
 		if (this.props.markers[park.id]) {
 			console.log("Park marker already on map!");
 		} else {
+			let markerIcon = letter_f
+			if (park.score > 80) {
+				markerIcon = letter_a
+			} else if (park.score > 70) {
+				markerIcon = letter_b
+			} else if (park.score > 60) {
+				markerIcon = letter_c
+			} else if (park.score > 50) {
+				markerIcon = letter_d
+			} else {
+				markerIcon = letter_f
+			}
 			var marker = new window.google.maps.Marker({
 				position: location,
 				map: this.googleMap,
 				title: park.name,
 				icon: {
-					url: `http://maps.google.com/mapfiles/kml/paddle/${park.cluster +
-						1}-lv.png`
+					url: markerIcon,
+					anchor: new window.google.maps.Point(16, 35)
 				}
 				// icon: {
 				// 	url:

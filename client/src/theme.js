@@ -8,7 +8,6 @@ export const theme = {
 	background2: "#E3CDD4",
 	background3: "#f5f5f5",
 	background4: "#f6f9fc",
-	gold: "#C2A55F",
 	gold2: "#d99058",
 	logoA: "#7c6e7e",
 	logoTele: "#515b75",

@@ -126,8 +126,8 @@ class BaseReviews extends Component {
 					this.setState({
 						dbReviewList: [newReview, ...this.state.dbReviewList],
 						avgScore:
-							(this.state.avgScore +
-							newReview.score) / (this.state.numReviews + 1),
+							(this.state.avgScore + newReview.score) /
+							(this.state.numReviews + 1),
 						hasReviewed: true,
 						numReviews: this.state.numReviews + 1,
 						switchCase: "loggedInHasReviewed",
