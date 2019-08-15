@@ -44,30 +44,37 @@ class ParkCard extends Component {
 	render() {
 		return (
 			<CardBootstrap>
-			<div className="card">
-				<CardStyle>
-					<div className="ParkTitle">
-						<span
-							className="Title"
-							style={{ textTransform: "capitalize" }}
-							onMouseEnter={() => {
-								this.props.handleMouseOver(this.props.park.id);
-							}}
-							onMouseLeave={() => {
-								this.props.handleMouseLeave(this.props.park.id);
-							}}
-							onClick={() => {
-								this.props.handleMouseClick(this.props.park.id);
-							}}
-						>
-							<b>
-								{this.props.park.name_alt
-									? this.props.park.name_alt
-									: this.props.park.name}
-							</b>
-						</span>
+				<div className="card">
+					<CardStyle>
+						<div className="ParkTitle">
+							<span
+								className="Title"
+								style={{ textTransform: "capitalize" }}
+								onMouseEnter={() => {
+									this.props.handleMouseOver(
+										this.props.park.id
+									);
+								}}
+								onMouseLeave={() => {
+									this.props.handleMouseLeave(
+										this.props.park.id
+									);
+								}}
+								onClick={() => {
+									this.props.handleMouseClick(
+										this.props.park.id
+									);
+								}}
+							>
+								<b>
+									{this.props.park.name_alt
+										? this.props.park.name_alt
+										: this.props.park.name}
+								</b>
+							</span>
+						</div>
 
-						<span className="Dist">
+						<div className="Dist">
 							<span className="DistCharacteristic">
 								{this.props.park.distance < 9000 ? (
 									<React.Fragment>
@@ -96,85 +103,85 @@ class ParkCard extends Component {
 								)}{" "}
 								<b> km</b>
 							</span>
-						</span>
-					</div>
+						</div>
 
-					<div className="ParkHum">
-						<img src={humidityIcon} />
-						{this.props.park.weather.humidity < 40
-							? "Good"
-							: this.props.park.weather.humidity < 80
-							? "Okay"
-							: "Poor"}
-					</div>
+						<div className="ParkHum">
+							<img src={humidityIcon} />
+							{this.props.park.weather.humidity < 40
+								? "Good"
+								: this.props.park.weather.humidity < 80
+								? "Okay"
+								: "Poor"}
+						</div>
 
-					<div className="ParkCloud">
-						<img src={cloudIcon} />
-						{this.props.park.weather.clouds < 40
-							? "Good"
-							: this.props.park.weather.clouds < 80
-							? "Okay"
-							: "Poor"}
-					</div>
+						<div className="ParkCloud">
+							<img src={cloudIcon} />
+							{this.props.park.weather.clouds < 40
+								? "Good"
+								: this.props.park.weather.clouds < 80
+								? "Okay"
+								: "Poor"}
+						</div>
 
-					<div className="ParkLightPol">
-						<img src={lightPolIcon} />
-						{this.props.park.light_pol < 1
-							? "Good"
-							: this.props.park.light_pol < 3
-							? "Okay"
-							: "Poor"}
-					</div>
+						<div className="ParkLightPol">
+							<img src={lightPolIcon} />
+							{this.props.park.light_pol < 1
+								? "Good"
+								: this.props.park.light_pol < 3
+								? "Okay"
+								: "Poor"}
+						</div>
 
-					<div className="ParkTemp">
-						<span className="tempIcon">
-							<img src={tempIcon} />
-						</span>
-						<span className="tempNum">
-							{Math.round(this.props.park.weather.temp)} °C
-						</span>
-						<br />
-						{this.props.park.weather.temp < 15
-							? "Chilly"
-							: this.props.park.weather.temp < 25
-							? "Comfortable"
-							: "Inadequate"}
-					</div>
-
-					<div className="WeatherInfo">
-						<span>
-							<b>{this.props.park.weather.city}</b> forecast for{" "}
-							{new Date(
-								this.props.park.weather.time
-							).toLocaleString()}
-						</span>
-					</div>
-
-					<div className="ParkScore">
-						<span className="ScoreNumerator">
-							{Math.round(this.props.park.score * 10)}
-						</span>
-						<br />
-						<span className="ScoreDenominator">/10</span>
-					</div>
-
-					<div className="StarRev">
-						{this.renderReviewScore(this.props.park.avgScore)}
-						{this.renderNumReviews(this.props.park.numReviews)}
-					</div>
-
-					<div className="MoreInfo">
-						<span className="infoIcon">
-							<img src={infoIcon} />
-						</span>
-						<span className="infoText">
-							More
+						<div className="ParkTemp">
+							<span className="tempIcon">
+								<img src={tempIcon} />
+							</span>
+							<span className="tempNum">
+								{Math.round(this.props.park.weather.temp)} °C
+							</span>
 							<br />
-							Info
-						</span>
-					</div>
-				</CardStyle>
-			</div>
+							{this.props.park.weather.temp < 15
+								? "Chilly"
+								: this.props.park.weather.temp < 25
+								? "Comfortable"
+								: "Inadequate"}
+						</div>
+
+						<div className="WeatherInfo">
+							<span>
+								<b>{this.props.park.weather.city}</b> forecast
+								for{" "}
+								{new Date(
+									this.props.park.weather.time
+								).toLocaleString()}
+							</span>
+						</div>
+
+						<div className="ParkScore">
+							<span className="ScoreNumerator">
+								{Math.round(this.props.park.score * 10)}
+							</span>
+							<br />
+							<span className="ScoreDenominator">/10</span>
+						</div>
+
+						<div className="StarRev">
+							{this.renderReviewScore(this.props.park.avgScore)}
+							{this.renderNumReviews(this.props.park.numReviews)}
+						</div>
+
+						<div className="MoreInfo">
+							<span className="infoIcon">
+								<img src={infoIcon} />
+							</span>
+							<span className="infoText">
+								More
+								<br />
+								Info
+							</span>
+						</div>
+					</CardStyle>
+				</div>
 			</CardBootstrap>
 		);
 	}
@@ -203,7 +210,7 @@ const CardStyle = styled.div`
 	grid-column-gap: 10px;
 	grid-row-gap: 10px;
 	grid-template-areas:
-		"ParkTitle   ParkTitle   ParkTitle    ParkTitle"
+		"ParkTitle   ParkTitle   ParkTitle    Dist"
 		"WeatherInfo WeatherInfo WeatherInfo  ParkScore"
 		"ParkHum     ParkCloud   ParkLightPol ParkScore"
 		"ParkTemp    StarRev     StarRev      MoreInfo";
@@ -217,7 +224,7 @@ const CardStyle = styled.div`
 
 	color: ${props => props.theme.fontDark};
 
-	.card{
+	.card {
 		border: 1px solid rgba(0, 0, 0, 0);
 	}
 
@@ -235,26 +242,26 @@ const CardStyle = styled.div`
 			font-size: 36px;
 			left: 0;
 		}
+	}
 
-		.Dist {
-			bottom: 0;
-			display: inline-block;
-			margin: 0;
-			font-weight: 300;
-			right: 0;
-			span {
-				left: 0;
-				position: relative;
-			}
+	.Dist {
+		display: inline-block;
+		margin: auto;
+		font-weight: 300;
 
-			.DistMantissa {
-				font-size: 13px;
-			}
+		span {
+			left: 0;
+			position: relative;
+		}
+
+		.DistMantissa {
+			font-size: 13px;
 		}
 	}
+
 	.WeatherInfo {
 		grid-area: WeatherInfo;
-		border-bottom: 2px ${props => props.theme.fontDark} solid;
+		/* border-bottom: 2px ${props => props.theme.fontDark} solid; */
 
 		font-family: IBM Plex Mono;
 		font-size: 14px;
@@ -339,25 +346,21 @@ const CardStyle = styled.div`
 `;
 
 const CardBootstrap = styled.div`
-.card {
-  position: relative;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  min-width: 0;
-  word-wrap: break-word;
-  background-color: #fff;
-  background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.125);
-}
+	.card {
+		position: relative;
+		display: -ms-flexbox;
+		display: flex;
+		-ms-flex-direction: column;
+		flex-direction: column;
+		min-width: 0;
+		word-wrap: break-word;
+		background-color: #fff;
+		background-clip: border-box;
+		border: 1px solid rgba(0, 0, 0, 0.125);
+	}
 
-.card > hr {
-  margin-right: 0;
-  margin-left: 0;
-}
-
-
-
-
+	.card > hr {
+		margin-right: 0;
+		margin-left: 0;
+	}
 `;

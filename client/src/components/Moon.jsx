@@ -10,7 +10,7 @@ import fullMoon from "./style/Media/Moon/moon-phase-full.svg";
 import waningGibbous from "./style/Media/Moon/moon-phase-waninggibbous.svg";
 import lastQuarter from "./style/Media/Moon/moon-phase-lastquarter.svg";
 import waningCrescent from "./style/Media/Moon/moon-phase-waningcrescent.svg";
-
+import testMoon from "./style/Media/Moon/untitled.svg";
 class Moon extends Component {
 	state = {};
 	renderMoonData() {
@@ -24,7 +24,7 @@ class Moon extends Component {
 			moonIllum = Math.round(moonIllum * 100) / 100;
 			var moonType = this.props.moonType;
 			var moonSVG;
-			console.log("MOON AVG NUMBER IS: "+moonIllum)
+			console.log("MOON AVG NUMBER IS: " + moonIllum);
 			// moonDataString = `The moon is ${moonType}, meaning it is ${moonIllum}% illuminated.`;
 			// console.log("IN MOON.JSX:" ,moonDataString)
 			//8 phases, 0/1 is peak new moon and 0.5 is full moon, so:
@@ -56,7 +56,7 @@ class Moon extends Component {
 				moonSVG = newMoon;
 			}
 
-			return <MoonStyle src={moonSVG} alt="Moon phase" />;
+			return <MoonStyle src={testMoon} alt="Moon phase" />;
 		}
 	}
 
@@ -77,4 +77,9 @@ export default Moon;
 const MoonStyle = styled.img`
 	padding-top: 15px;
 	padding-bottom: 15px;
+	box-shadow: 10px -10px rgba(0, 0, 0, 0.6);
+	-moz-box-shadow: 10px -10px rgba(0, 0, 0, 0.6);
+	-webkit-box-shadow: 10px -10px rgba(0, 0, 0, 0.6);
+	-o-box-shadow: 10px -10px rgba(0, 0, 0, 0.6);
+	border-radius: 100px;
 `;
