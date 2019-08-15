@@ -558,19 +558,6 @@ function getMoon(userTime) {
 	return phaseInfo;
 }
 
-//format "2014-02-17T00:00-0500", ISO 8601
-// function getMoon() {
-// 	var now = new Date();
-// 	var isoDate = now.toISOString();
-// 	isoDate = new Date(isoDate);
-// 	//console.log("date is:"+isoDate);
-// 	//use phase_hunt to get next dates,
-
-// 	//var phaseDates = lune.phase_hunt(isoDate);
-// 	var phaseInfo = lune.phase(isoDate);
-// 	return phaseInfo;
-// }
-
 function toRadians(angle) {
 	console.log("RADIANS FUNC RAN!!?!?!?!?");
 	return angle * (Math.PI / 180);

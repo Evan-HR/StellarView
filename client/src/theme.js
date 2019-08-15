@@ -33,5 +33,6 @@ export const theme = {
 	cardLight: "#BDC2C6",
 	cardDark: "#92A8C1",
 	starLight: "#FAE6BF",
-	starDark: "#2F3334"
+	starDark: "#2F3334",
+	bodyBackground: "#2F3334"
 };

@@ -41,7 +41,7 @@ class ParkMap extends Component {
 			this.googleMap = this.createGoogleMap();
 			this.googleMapBounds = new window.google.maps.LatLngBounds();
 			// this.googleMapInfowindow = null;
-			this.googleMap.setOptions({ styles: styleSelector.retro });
+			this.googleMap.setOptions({ styles: styleSelector.lunar });
 			this.setState({ mapLoaded: true });
 			this.props.onMapLoaded(this.googleMap);
 		});
@@ -249,10 +249,10 @@ class ParkMap extends Component {
 			<React.Fragment>
 				<div
 					ref={this.googleMapRef}
-					className="border border-primary"
+					// className="border border-primary"
 					style={{ width: "100%", height: "100%" }}
 				/>
-				
+
 				<ParkMapModal ref={this.parkModalChild} />
 			</React.Fragment>
 		);
@@ -261,6 +261,36 @@ class ParkMap extends Component {
 
 //TODO: Move the style to a different place
 const styleSelector = {
+	lunar: [
+		{
+			stylers: [
+				{
+					hue: "#ff1a00"
+				},
+				{
+					invert_lightness: true
+				},
+				{
+					saturation: -100
+				},
+				{
+					lightness: 33
+				},
+				{
+					gamma: 0.5
+				}
+			]
+		},
+		{
+			featureType: "water",
+			elementType: "geometry",
+			stylers: [
+				{
+					color: "#2D333C"
+				}
+			]
+		}
+	],
 	retro: [
 		{ elementType: "geometry", stylers: [{ color: "#ebe3cd" }] },
 		{ elementType: "labels.text.fill", stylers: [{ color: "#523735" }] },

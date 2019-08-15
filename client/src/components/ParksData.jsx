@@ -242,7 +242,6 @@ class BaseParksData extends Component {
 				hideMap={this.state.hideMap}
 			>
 				{this.renderParkMap()}
-				<div className="Placeholder1">I'm just a placeholder</div>
 				<div className="RightSideContainerFull">
 					<button
 						onClick={() => {
@@ -316,11 +315,16 @@ const MainContentWrapper = styled.div`
 	grid-template-columns: 1fr 1fr;
 	grid-column-gap: 10px;
 	grid-row-gap: 10px;
-	grid-template-areas: "map rightSide";
+	grid-template-areas: "xxx rightSide";
 
 	.ParkMapStyle {
-		grid-area: map;
-		max-height: 100%;
+		/* grid-area: map; */
+
+		position: -webkit-sticky;
+		position: sticky;
+		height: 80vh;
+		width: 42.5vw;
+		top: 10vh;
 		background-color: maroon;
 	}
 	.Placeholder1 {
@@ -345,10 +349,10 @@ const MainContentWrapper = styled.div`
 	}
 
 	.ParkTableStyle {
-		${({ active }) => {
+		/* ${({ active }) => {
 			if (active) return `max-height:600px;`;
 			else return `max-height:300px`;
-		}}
+		}} */
 	}
 
 	@media screen and (max-width: 769px) {
@@ -360,11 +364,6 @@ const MainContentWrapper = styled.div`
 		grid-template-areas:
 			"map"
 			"rightSide";
-		.Placeholder1 {
-			display: none;
-			grid-area: placeholder1;
-			background-color: azure;
-		}
 		.RightSideContainerFull {
 			overflow: none;
 		}
@@ -381,11 +380,6 @@ const MainContentWrapper = styled.div`
 		grid-template-areas:
 			"map rightSide"
 			"map rightSide";
-		.Placeholder1 {
-			display: block;
-			grid-area: placeholder1;
-			background-color: azure;
-		}
 		.ParkFormStyle {
 			grid-area: form;
 			${({ active }) => active && `display: none;`}
