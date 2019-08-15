@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Modal from "react-modal";
 import "./modal.css";
 
-//TODO: Move the whole MODAL to its own component
+
 const modalStyle = {
 	overlay: {
 		position: "fixed",

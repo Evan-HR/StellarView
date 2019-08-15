@@ -106,10 +106,12 @@ export default withRouter(Toolbar);
 ////////////////////////////////////////////////
 
 const ToolbarStyle = styled.header`
-	position: fixed;
+
+
 	width: 100%;
-	background: black;
-	height: 100px;
+	/* background: ${props => props.theme.darkBlue3}; */
+	
+	height: 120px;
 	top: 0;
 	left: 0;
 	z-index: 100;
@@ -135,46 +137,71 @@ const ToolbarStyle = styled.header`
 		display: flex;
 		align-items: center;
 		height: 100%;
-		border-bottom: 2px solid #7C6E7E;
+		bottom: 0;
+		/* border-bottom: 2px solid #7C6E7E; */
 
 		
 	}
 
+	.toolbar_navigation-items{
+		margin-top: 1%;
+	}
+
 	.toolbar_navigation-items a {
-		color: white;
+		
 		
 		text-decoration: none;
 		letter-spacing:0.15em;
 		transition: color 0.2s ease;
-  		color: white;
+		color: black;
 	}
 
 	.toolbar_navigation-items ul {
+		text-transform: uppercase;
 		list-style: none;
-		margin: 0;
 		padding: 0;
 		display: flex;
+		
 	}
 
 
 	.toolbar_navigation-items li {
+		
 		padding: 0 0.5rem;
 	}
 
 	.toolbar_navigation-items li:last-child {padding: 0 0 0 0.5rem;}
 	/* On screens that are 768px or less*/
 
-	
 	@media screen and (max-width: 767.999px) {
 		.toolbar_navigation-items {
 			display: none;
-
-
+			height: 60px;
 			
+		}
+		
+		height: 60px;
+		.toolbar__logo{
+font-size: 60px;
+		}
+
+		.logo_tele{
+			
+			display:none;
 		}
 
 
+
 	}
+
+	@media screen and (min-width: 769px) and (max-width: 1300px) {
+		.toolbar__center{
+		width: 90%;
+		}
+		
+	}
+
+	
 
 	.spacer {
 		flex: 1;
@@ -185,24 +212,27 @@ const ToolbarStyle = styled.header`
 		/* padding-bottom: 2.05em;
 		border-bottom: 3px solid ${props => props.theme.gold}; */
 		transition: color 0.2s ease;
-  		color: ${props => props.theme.primaryLight};
+  		color: ${props => props.theme.franRed};
 		
 	}
 
 	.toolbar__logo{
-		color: white;
+		font-family: "Oswald", Sans-serif;
+		font-weight: 400;
 		font-size: 40px;
-		letter-spacing:0.2em;
-		display: block;
-		margin-top: 6px;
-		
-max-width: 100%;
-max-height:100%;
+  /* text-transform: uppercase;
+  font-weight: 400;
+  font-size: 70px;
+  text-shadow: 4px 5px #e6e6d8, 6px 7px #c6a39a; */
+  /* transform: matrix(1, -0.05, 0, 1, 0, 0); */
+  
+
+
 :hover{
 
 		.logo_A {
 			transition: color 1.0s ease;
-  color: ${props => props.theme.gold};
+  color: ${props => props.theme.gold2};
 		}
 
 		.logo_tele{
@@ -215,7 +245,7 @@ max-height:100%;
 
 	.logo_A{
 		transition: color 1.0s ease;
-  color: ${props => props.theme.secondaryDark2};
+  color: ${props => props.theme.franRed};
 		
 	}
 
@@ -225,8 +255,9 @@ max-height:100%;
 			
 			transition: transform 1s;
 			position: absolute;
-    margin-left: -201px;
-    margin-top: -2px;
+			margin-left: -121px;
+    margin-top: -10px;
+  
 		
 	}
 
@@ -235,13 +266,14 @@ max-height:100%;
 
 	.Link{
 		text-decoration:none;
-		color: white;
+		color: whitesmoke;
 	}
 
 	.toolbar__logo a{
 		text-decoration: none;
-		color:white;
+		color: black;;
 	}
+
 
 
 

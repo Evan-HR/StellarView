@@ -553,19 +553,6 @@ function getMoon(userTime) {
 	return phaseInfo;
 }
 
-//format "2014-02-17T00:00-0500", ISO 8601
-// function getMoon() {
-// 	var now = new Date();
-// 	var isoDate = now.toISOString();
-// 	isoDate = new Date(isoDate);
-// 	//console.log("date is:"+isoDate);
-// 	//use phase_hunt to get next dates,
-
-// 	//var phaseDates = lune.phase_hunt(isoDate);
-// 	var phaseInfo = lune.phase(isoDate);
-// 	return phaseInfo;
-// }
-
 function toRadians(angle) {
 	console.log("RADIANS FUNC RAN!!?!?!?!?");
 	return angle * (Math.PI / 180);
@@ -1077,7 +1064,7 @@ app.post("/api/getParkData", async (req, res) => {
 					var phaseInfo = getMoon(utime);
 
 					let moonPercent = phaseInfo.fraction;
-					var moonType = phaseInfo.phase;
+					var moonType;
 
 					if (inRange(phaseInfo.phase, 0, 0.125)) {
 						moonType = "New Moon";
@@ -1100,7 +1087,7 @@ app.post("/api/getParkData", async (req, res) => {
 					//STEP 9: FORMAT RESPONSE JSON
 					let reply = {
 						parks: parkDataJSON,
-						moonPercent: moonPercent,
+						moonPercent: phaseInfo.phase,
 						moonType: moonType
 					};
 					//console.log("Response ", reply);

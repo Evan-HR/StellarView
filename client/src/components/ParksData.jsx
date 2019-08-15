@@ -6,6 +6,7 @@ import ParkMap from "./ParkMap";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
+import MoonComponent from "./Moon";
 import { Spring, animated } from "react-spring/renderprops";
 
 class BaseParksData extends Component {
@@ -235,21 +236,13 @@ class BaseParksData extends Component {
 	render() {
 		console.log("ParksData - rendered");
 
-		//"copies" into temp array parks
-		// const parks = this.state.parks;
-
-		//let clearButtonClass = this.clearButtonClass();
-		//bind(this,reqData) passes reqData to getParkData
-		//bind seems to be needed for onClick buttons /w args
-
 		return (
 			<MainContentWrapper
 				active={this.state.hideForm}
 				hideMap={this.state.hideMap}
 			>
 				{this.renderParkMap()}
-				<div className="Placeholder1">I'm just a placeholder</div>
-				<div className="RightSideContainer">
+				<div className="RightSideContainerFull">
 					<button
 						onClick={() => {
 							this.setState({ hideForm: !this.state.hideForm });
@@ -259,7 +252,13 @@ class BaseParksData extends Component {
 					</button>
 					{this.renderParkForm()}
 
-					<div className="MoonStyle">MOON</div>
+					<div className="MoonStyle">
+						<MoonComponent
+							moon={this.state.moon}
+							parkList={this.state.parks}
+							moonType={this.state.moonType}
+						/>
+					</div>
 
 					<div className="ParkTableStyle">
 						<b>Sort by:</b>
@@ -308,14 +307,24 @@ export default ParksData;
 
 const MainContentWrapper = styled.div`
 	display: grid;
+	margin: 0 auto 0 auto;
+	margin-top: 2rem;
+	overflow: none;
+	width: 85%;
+
 	grid-template-columns: 1fr 1fr;
 	grid-column-gap: 10px;
 	grid-row-gap: 10px;
-	grid-template-areas: "map rightSide";
+	grid-template-areas: "xxx rightSide";
 
 	.ParkMapStyle {
-		grid-area: map;
-		max-height: 100%;
+		/* grid-area: map; */
+
+		position: -webkit-sticky;
+		position: sticky;
+		height: 80vh;
+		width: 42.5vw;
+		top: 10vh;
 		background-color: maroon;
 	}
 	.Placeholder1 {
@@ -323,46 +332,40 @@ const MainContentWrapper = styled.div`
 		grid-area: placeholder1;
 		background-color: azure;
 	}
-	.RightSideContainer {
+	.RightSideContainerFull {
+		z-index: 0;
 		grid-area: rightSide;
-		overflow-y: scroll;
-		overflow-x: hidden;
-		background-color: blue;
+		/* overflow-y: scroll;
+		overflow-x: hidden; */
+		background-color: whitesmoke;
 	}
 	.ParkFormStyle {
 		grid-area: form;
 		${({ active }) => active && `display: none;`}
 	}
-	/* .MoonStyle {
-		grid-area: moon;
-		background-color: orange;
-	} */
-	.ParkTableStyle {
-		${({ active }) => {
-			if (active) return `max-height:600px;`;
-			else return `max-height:300px`;
-		}}
+
+	.MoonStyle {
+		background: ${props => props.theme.moonCard};
 	}
 
-	margin: 0 auto 0 auto;
-	margin-top: 8rem;
-	overflow: hidden;
-	width: 85%;
+	.ParkTableStyle {
+		/* ${({ active }) => {
+			if (active) return `max-height:600px;`;
+			else return `max-height:300px`;
+		}} */
+	}
+
 	@media screen and (max-width: 769px) {
-		width: 95%;
+		margin-top: 4rem;
+		width: 100%;
 		grid-template-columns: 1fr;
 		grid-template-rows: ${props =>
 			props.hideMap ? "0px auto" : "50% auto"};
 		grid-template-areas:
 			"map"
 			"rightSide";
-		.Placeholder1 {
-			display: none;
-			grid-area: placeholder1;
-			background-color: azure;
-		}
-		.RightSideContainer {
-			overflow-y: visible;
+		.RightSideContainerFull {
+			overflow: none;
 		}
 
 		.ParkMapStyle {
@@ -370,15 +373,16 @@ const MainContentWrapper = styled.div`
 		}
 	}
 	@media screen and (min-width: 769px) and (max-width: 1300px) {
+		width: 90%;
+		margin-top: 0rem;
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: auto auto;
 		grid-template-areas:
 			"map rightSide"
-			"placeholder1 rightSide";
-		.Placeholder1 {
-			display: block;
-			grid-area: placeholder1;
-			background-color: azure;
+			"map rightSide";
+		.ParkFormStyle {
+			grid-area: form;
+			${({ active }) => active && `display: none;`}
 		}
 	}
 `;

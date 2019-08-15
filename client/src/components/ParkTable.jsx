@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import ParkCard from "./ParkCard";
 import styled from "styled-components";
-//moon images, in proper order
+import { Transition, animated } from "react-spring/renderprops";
 import newMoon from "./style/Media/Moon/moon-phase-new.svg";
 import waxingCrescent from "./style/Media/Moon/moon-phase-waxingcrescent.svg";
 import firstQuarter from "./style/Media/Moon/moon-phase-firstquarter.svg";
@@ -11,7 +11,6 @@ import fullMoon from "./style/Media/Moon/moon-phase-full.svg";
 import waningGibbous from "./style/Media/Moon/moon-phase-waninggibbous.svg";
 import lastQuarter from "./style/Media/Moon/moon-phase-lastquarter.svg";
 import waningCrescent from "./style/Media/Moon/moon-phase-waningcrescent.svg";
-import { Transition, animated } from "react-spring/renderprops";
 
 class ParkTable extends Component {
 	state = {};
@@ -36,75 +35,44 @@ class ParkTable extends Component {
 		this.isAnimating = {};
 	}
 
-	renderMoonData() {
-		function inRange(x, min, max) {
-			return (x - min) * (x - max) <= 0;
-		}
-		if (this.props.parkList.length > 0) {
-			var moonDataString = "";
-			var moonIllum = this.props.moon;
-			moonIllum = Math.round(moonIllum * 100) / 100;
-			var moonType = this.props.moonType;
-			var moonSVG;
-
-			moonDataString = `The moon is ${moonType}, meaning it is ${moonIllum}% illuminated.`;
-			//8 phases, 0/1 is peak new moon and 0.5 is full moon, so:
-			//Length of phase => 1/8= 0.125
-			//New moon start => 0-(0.125/2)=-0.0625 >> 0.9375
-			//New moon end => 0+0.0625 >> 0.0625
-			//etc...
-			if (
-				inRange(moonIllum, 0.9375, 1) ||
-				inRange(moonIllum, 0, 0.0625)
-			) {
-				moonSVG = newMoon;
-			} else if (inRange(moonIllum, 0.0625, 0.1875)) {
-				moonSVG = waxingCrescent;
-			} else if (inRange(moonIllum, 0.1875, 0.3125)) {
-				moonSVG = firstQuarter;
-			} else if (inRange(moonIllum, 0.3125, 0.4375)) {
-				moonSVG = waxingGibbous;
-			} else if (inRange(moonIllum, 0.4375, 0.5625)) {
-				moonSVG = fullMoon;
-			} else if (inRange(moonIllum, 0.5625, 0.6875)) {
-				moonSVG = waningGibbous;
-			} else if (inRange(moonIllum, 0.6875, 0.8125)) {
-				moonSVG = lastQuarter;
-			} else if (inRange(moonIllum, 0.8125, 0.9375)) {
-				moonSVG = waningCrescent;
-			} else {
-				console.console.warn("Moon value error");
-				moonSVG = newMoon;
-			}
-
-			return <MoonStyle src={moonSVG} alt="Moon phase" />;
-		}
-	}
-
 	renderParkCardList = () => {
 		if (this.props.parkList.length > 0) {
 			return (
-				<Transition
-					native
-					items={this.props.parkList}
-					keys={item => item.id}
-					from={{ transform: "translate3d(-40px,0,0)", opacity: 0 }}
-					enter={{ transform: "translate3d(0,0px,0)", opacity: 1 }}
-					leave={{ transform: "translate3d(-40px,0,0)", opacity: 0 }}
-					//update={[{ opacity: 0.5 }, { opacity: 1 }]}
-				>
-					{item => props => (
-						<animated.div style={props}>
-							{this.renderParkCard(item)}
-						</animated.div>
-					)}
-				</Transition>
+				<ParkCardListStyle>
+					<Transition
+						native
+						items={this.props.parkList}
+						keys={item => item.id}
+						from={{
+							transform: "translate3d(-40px,0,0)",
+							opacity: 0
+						}}
+						enter={{
+							transform: "translate3d(0,0px,0)",
+							opacity: 1
+						}}
+						leave={{
+							transform: "translate3d(-40px,0,0)",
+							opacity: 0
+						}}
+						//update={[{ opacity: 0.5 }, { opacity: 1 }]}
+					>
+						{item => props => (
+							<animated.div
+								className="cardAnimationContainer"
+								style={props}
+							>
+								{this.renderParkCard(item)}
+							</animated.div>
+						)}
+					</Transition>
+				</ParkCardListStyle>
 			);
 			// return <div>{this.props.parkList.map(this.renderParkCard)}</div>;
 		} else {
 			return (
 				<div className="text-center">
-					<div className="card text-white bg-danger mb-3">
+					<div className="card text-white bg-danger">
 						<div className="card-header">No parks available.</div>
 					</div>
 				</div>
@@ -170,16 +138,13 @@ class ParkTable extends Component {
 	render() {
 		console.log("ParkTable - rendered");
 		return (
-			<div className="border border-primary">
+			<React.Fragment>
 				{this.props.isLoadingParks ? (
 					this.renderLoading()
 				) : (
-					<React.Fragment>
-						{this.renderMoonData()}
-						{this.renderParkCardList()}
-					</React.Fragment>
+					<React.Fragment>{this.renderParkCardList()}</React.Fragment>
 				)}
-			</div>
+			</React.Fragment>
 		);
 	}
 }
@@ -188,7 +153,13 @@ export default ParkTable;
 
 ///////////////////////////////////////////////////////////////
 
-const MoonStyle = styled.img`
-	padding-top: 15px;
-	padding-bottom: 15px;
+//OOF
+const ParkCardListStyle = styled.div`
+	.cardAnimationContainer:nth-of-type(even) .card {
+		background-color: ${props => props.theme.cardDark};
+	}
+
+	.cardAnimationContainer:nth-of-type(odd) .card {
+		background-color: ${props => props.theme.cardLight};
+	}
 `;
