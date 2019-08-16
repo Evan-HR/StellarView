@@ -34,5 +34,8 @@ export const theme = {
 	starLight: "#FAE6BF",
 	starDark: "#2F3334",
 	bodyBackground: "#2F3334",
-	clickable: "#FAE6BF"
+	clickable: "#FAE6BF",
+	colorGood: "#99C192",
+	colorBad: "#BB6F6F",
+	colorMedium: "#DAA979"
 };

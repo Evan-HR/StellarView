@@ -15,7 +15,7 @@ class BaseParkForm extends Component {
 		reqData: {
 			lat: "",
 			lng: "",
-			dist: 75,
+			dist: 25,
 			lightpol: 1.75,
 			error: "",
 			placeName: ""

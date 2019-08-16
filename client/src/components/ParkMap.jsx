@@ -106,17 +106,17 @@ class ParkMap extends Component {
 		if (this.props.markers[park.id]) {
 			console.log("Park marker already on map!");
 		} else {
-			let markerIcon = letter_f
+			let markerIcon = letter_f;
 			if (park.score > 80) {
-				markerIcon = letter_a
+				markerIcon = letter_a;
 			} else if (park.score > 70) {
-				markerIcon = letter_b
+				markerIcon = letter_b;
 			} else if (park.score > 60) {
-				markerIcon = letter_c
+				markerIcon = letter_c;
 			} else if (park.score > 50) {
-				markerIcon = letter_d
+				markerIcon = letter_d;
 			} else {
-				markerIcon = letter_f
+				markerIcon = letter_f;
 			}
 			var marker = new window.google.maps.Marker({
 				position: location,
@@ -138,44 +138,8 @@ class ParkMap extends Component {
 
 			marker.addListener("click", () => {
 				console.log("Clicked marker at", marker.title);
-				let lighPolStatus = () => {
-					if (park.light_pol > 2) {
-						return <b className="bg-danger text-white">bad</b>;
-					} else if (park.light_pol > 1) {
-						return <b className="bg-warning text-dark">okay</b>;
-					} else {
-						return <b className="bg-success text-white">perfect</b>;
-					}
-				};
-				let newModalContent = (
-					<React.Fragment>
-						<div className="modal-header">
-							<h1>
-								{park.name === "Unknown" && park.name_alt
-									? park.name_alt
-									: park.name}
-							</h1>
-						</div>
-						<FavPark parkID={park.id} />
-						<div className="modal-body">
-							<img
-								src={
-									"https://placeimg.com/400/400/nature?" +
-									Math.random()
-								}
-								className="img-responsive"
-							/>
-							<p>
-								{" "}
-								This park is located at {location.lat},{" "}
-								{location.lng}. The light pollution level here
-								is {park.light_pol}, which is {lighPolStatus()}.{" "}
-							</p>
-							<Reviews parkID={park.id} />
-						</div>
-					</React.Fragment>
-				);
-				this.openModal(newModalContent);
+				let modalContent = { park: park };
+				this.openModal(modalContent);
 			});
 			this.props.markers[park.id] = marker; //Maybe this can be moved out of the function
 		}
