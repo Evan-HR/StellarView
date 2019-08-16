@@ -111,6 +111,7 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   height: 100%;
   overflow-x: hidden;
+  
 }
 
 body{

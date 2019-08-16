@@ -32,12 +32,7 @@ class Toolbar extends Component {
 
 						<div className="toolbar__logo">
 							<Link to="/">
-								STELL<span className="logo_A">A</span>RGAZE
-								<img
-									className="logo_tele"
-									src={logo2}
-									alt="Home"
-								/>
+								<span className="Stellar">STELLAR</span><span className="Gaze">GAZE</span>
 							</Link>
 						</div>
 						<div className="spacer" />
@@ -138,6 +133,7 @@ const ToolbarStyle = styled.header`
 		align-items: center;
 		height: 100%;
 		bottom: 0;
+
 		/* border-bottom: 2px solid #7C6E7E; */
 
 		
@@ -148,12 +144,13 @@ const ToolbarStyle = styled.header`
 	}
 
 	.toolbar_navigation-items a {
-		
-		
+		font-family: IBM Plex Sans;
+		font-weight:300;
 		text-decoration: none;
 		letter-spacing:0.15em;
 		transition: color 0.2s ease;
-		color: black;
+		color: whitesmoke;
+		
 	}
 
 	.toolbar_navigation-items ul {
@@ -178,17 +175,19 @@ const ToolbarStyle = styled.header`
 			display: none;
 			height: 60px;
 			
+			
 		}
 		
 		height: 60px;
 		.toolbar__logo{
-font-size: 60px;
+			padding-top: 10px;
+			a{
+				font-size: 50px;
+			}
+			
+
 		}
 
-		.logo_tele{
-			
-			display:none;
-		}
 
 
 
@@ -198,6 +197,8 @@ font-size: 60px;
 		.toolbar__center{
 		width: 90%;
 		}
+
+
 		
 	}
 
@@ -217,9 +218,16 @@ font-size: 60px;
 	}
 
 	.toolbar__logo{
-		font-family: "Oswald", Sans-serif;
+	
 		font-weight: 400;
-		font-size: 40px;
+		font-size: 60px;
+font-family: IBM Plex Sans;
+.Stellar{
+	font-weight: 600;
+}
+.Gaze{
+	font-weight: 300;
+}
   /* text-transform: uppercase;
   font-weight: 400;
   font-size: 70px;
@@ -266,12 +274,12 @@ font-size: 60px;
 
 	.Link{
 		text-decoration:none;
-		color: whitesmoke;
+	
 	}
 
 	.toolbar__logo a{
 		text-decoration: none;
-		color: black;;
+		color: whitesmoke;
 	}
 
 

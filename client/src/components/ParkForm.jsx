@@ -8,6 +8,7 @@ import Slider from "@material-ui/core/Slider";
 import { sizing } from "@material-ui/system";
 import { AuthConsumer } from "./AuthContext";
 import styled from "styled-components";
+import nearMeButton from "./style/Media/round-my_location-24px.svg";
 
 class BaseParkForm extends Component {
 	state = {
@@ -428,24 +429,28 @@ class BaseParkForm extends Component {
 		//console.log("Fetching parks?", this.props.isFetchingParks);
 		return (
 			<FormStyle advancedSearch={this.state.advancedSearch}>
-				<div className="border border-primary">
+				<SearchStyle>
+				
+				<div className="search">
 					<form
 						onSubmit={e => {
 							e.preventDefault();
 						}}
 					>
 						<input
+							className="searchTerm"
 							type="text"
 							name="placeName"
+							placeholder="Enter your city e.g. London, ON"
 							value={this.state.reqData.placeName || ""}
 							onChange={this.handlePlaceChange}
 						/>
 						<button
 							className={
-								"btn m-1" +
-								(this.state.isInvalidLocation
-									? " btn-danger"
-									: " btn-primary")
+								"searchButton"
+								// (this.state.isInvalidLocation
+								// 	? " btn-danger"
+								// 	: " btn-primary")
 							}
 							disabled={
 								this.state.reqData.placeName === "" ||
@@ -455,18 +460,19 @@ class BaseParkForm extends Component {
 								this.getPlaceCoordinates(e);
 							}}
 						>
-							🔎
+							<i className="fa fa-search" />
 						</button>
 
-						<button
+						<SearchButtonStyle
 							// onClick={this.getParkData.bind(this, this.state.formInput)}
-							className="btn btn-primary m-1"
+							className="nearMe"
 							type="button"
 							disabled={this.state.isLoadingLocation}
 							onClick={this.getMyLocation}
 						>
-							<strong>{this.renderLocationSpinner()}</strong>
-						</button>
+							<img src={nearMeButton} />
+							{/* <strong>{this.renderLocationSpinner()}</strong> */}
+						</SearchButtonStyle>
 
 						{/* CLEAR BUTTON!!!! */}
 
@@ -479,7 +485,7 @@ class BaseParkForm extends Component {
 						<strong>Clear</strong>
 					</button> */}
 					</form>
-					<button
+					<AdvancedSearchStyle
 						className="ToggleAdvancedSearch"
 						onClick={() =>
 							this.setState({
@@ -488,8 +494,9 @@ class BaseParkForm extends Component {
 						}
 					>
 						Advanced Search
-					</button>
-					<form className="mx-5">
+					</AdvancedSearchStyle>
+					<i class="fas fa-caret-down"></i>
+					<form >
 						<div className="AdvancedSearch">
 							<b>Distance:</b>
 							<br />
@@ -524,6 +531,7 @@ class BaseParkForm extends Component {
 								// }
 							/>
 						</div>
+						
 
 						{this.renderFormErrors()}
 
@@ -535,6 +543,7 @@ class BaseParkForm extends Component {
 						</button> */}
 					</form>
 				</div>
+				</SearchStyle>
 			</FormStyle>
 		);
 	}
@@ -603,3 +612,46 @@ const FormStyle = styled.div`
 		${props => (props.advancedSearch ? `` : `display: none`)}
 	}
 `;
+
+const SearchButtonStyle = styled.button`
+	all: unset;
+`;
+
+const SearchStyle = styled.div`
+	.searchButton {
+		width: 40px;
+		height: 36px;
+		border: 1px solid #00b4cc;
+		background: #00b4cc;
+		text-align: center;
+		color: #fff;
+		border-radius: 0 5px 5px 0;
+		cursor: pointer;
+		font-size: 20px;
+	}
+
+	.searchTerm:focus{
+  color: #00B4CC;
+}
+.search {
+  width: 100%;
+  position: relative;
+  display: flex;
+}
+
+.searchTerm {
+  /* width: 100%; */
+  border: 3px solid #00B4CC;
+  border-right: none;
+  padding: 5px;
+ height: 36px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+  color: #9DBFAF;
+}
+`;
+
+const AdvancedSearchStyle = styled.button`
+all: unset;
+`
+;

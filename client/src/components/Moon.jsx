@@ -54,7 +54,7 @@ class Moon extends Component {
 							cy="100"
 							r="99"
 							stroke="whitesmoke"
-							fill="white"
+							fill="whitesmoke"
 							class="bg"
 						/>
 						<circle
@@ -62,7 +62,7 @@ class Moon extends Component {
 							cy="100"
 							r="99"
 							stroke="whitesmoke"
-							fill="black"
+							fill="#121414"
 							class="fg"
 						/>
 					</svg>
@@ -72,7 +72,7 @@ class Moon extends Component {
 							cy="100"
 							r="99"
 							stroke="whitesmoke"
-							fill="white"
+							fill="whitesmoke"
 							class="bg"
 						/>
 						<circle
@@ -80,7 +80,7 @@ class Moon extends Component {
 							cy="100"
 							r="99"
 							stroke="whitesmoke"
-							fill="black"
+							fill="#121414"
 							class="fg"
 						/>
 					</svg>
@@ -185,10 +185,10 @@ const MoonSVGStyle = styled.div`
 		transform: scaleX(${props => props.phaseRight});
 	}
 	.moon-left .bg {
-		fill: black;
+		fill: #121414;
 	}
 	.moon-left .fg {
-		fill: white;
+		fill: whitesmoke;
 		transform-origin: 0% 0%;
 		transform: translate(${props => props.phaseTrans}px, 0)
 			scaleX(${props => 1 - props.phaseScale});
