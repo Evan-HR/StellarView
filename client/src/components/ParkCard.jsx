@@ -150,7 +150,7 @@ class ParkCard extends Component {
 						<div className="WeatherInfo">
 							<span>
 								<b>{this.props.park.weather.city}</b> forecast
-								for{" "}
+								for <br />
 								{new Date(
 									this.props.park.weather.time
 								).toLocaleString()}
@@ -203,7 +203,7 @@ const CardStyle = styled.div`
 	/* margin-bottom: 10px;
 	margin-left: 13px;
 	margin-right: 13px; */
-	max-height: 250px;
+	max-height: 300px;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	grid-template-rows: 1fr 1fr 1fr 1fr;
@@ -217,7 +217,7 @@ const CardStyle = styled.div`
 
 	font-family: IBM Plex Sans;
 	font-style: normal;
-	font-weight: 600;
+	font-weight: 400;
 	font-size: 18px;
 	line-height: 23px;
 	text-align: left;
@@ -264,8 +264,10 @@ const CardStyle = styled.div`
 		/* border-bottom: 2px ${props => props.theme.fontDark} solid; */
 
 		font-family: IBM Plex Mono;
+		font-weight:400;
 		font-size: 14px;
 		line-height: 18px;
+		align-content: center;
 		position: relative;
 		span {
 			position: absolute;

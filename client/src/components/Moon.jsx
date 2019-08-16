@@ -40,7 +40,7 @@ class Moon extends Component {
 			phaseTrans = 100 * phaseScale;
 		}
 
-		let moonCode = (
+		return (
 			<MoonSVGStyle
 				phaseScale={phaseScale}
 				phaseTrans={phaseTrans}
@@ -48,12 +48,12 @@ class Moon extends Component {
 				phaseFlip={phaseFlip}
 			>
 				<div class="moon">
-					<svg height="200" width="100" class="moon-left">
+					<svg class="moon-left" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
 						<circle
 							cx="100"
 							cy="100"
 							r="99"
-							stroke="white"
+							stroke="whitesmoke"
 							fill="white"
 							class="bg"
 						/>
@@ -61,17 +61,17 @@ class Moon extends Component {
 							cx="100"
 							cy="100"
 							r="99"
-							stroke="white"
+							stroke="whitesmoke"
 							fill="black"
 							class="fg"
 						/>
 					</svg>
-					<svg height="200" width="100" class="moon-right">
+					<svg class="moon-right" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
 						<circle
 							cx="0"
 							cy="100"
 							r="99"
-							stroke="white"
+							stroke="whitesmoke"
 							fill="white"
 							class="bg"
 						/>
@@ -79,7 +79,7 @@ class Moon extends Component {
 							cx="0"
 							cy="100"
 							r="99"
-							stroke="white"
+							stroke="whitesmoke"
 							fill="black"
 							class="fg"
 						/>
@@ -87,8 +87,6 @@ class Moon extends Component {
 				</div>
 			</MoonSVGStyle>
 		);
-
-		return moonCode;
 
 		// if (this.props.parkList.length > 0) {
 		// 	var moonDataString = "";
@@ -134,38 +132,47 @@ class Moon extends Component {
 
 	render() {
 		return (
-			<div>
-				{this.renderMoonData()}
-
-				{this.props.moonType}
-			</div>
+			<MoonStyle>
+				<div className="moonDisplay">
+					<span>{this.props.moonType.split(" ")[0]}</span>
+					<span>{this.renderMoonData()}</span>
+					<span>{this.props.moonType.split(" ")[1]}</span>
+				</div>
+			</MoonStyle>
 		);
 	}
 }
 
 export default Moon;
 ///////////////////////////////////////////////////////////////
+const MoonStyle = styled.div`
+	color: whitesmoke;
+	font-family: Barlow;
+	font-weight: 300;
+	font-style: normal;
+	font-size: 30px;
+	text-align: center;
+	text-transform: uppercase;
 
-const MoonStyle = styled.img`
-	padding-top: 15px;
-	padding-bottom: 15px;
-	box-shadow: 10px -10px rgba(0, 0, 0, 0.6);
-	-moz-box-shadow: 10px -10px rgba(0, 0, 0, 0.6);
-	-webkit-box-shadow: 10px -10px rgba(0, 0, 0, 0.6);
-	-o-box-shadow: 10px -10px rgba(0, 0, 0, 0.6);
-	border-radius: 100px;
+	.moonDisplay {
+		height: 120px;
+		display: flex;
+		align-items: center;
+		justify-content: space-evenly;
+		align-content: space-between;
+	}
 `;
 
 const MoonSVGStyle = styled.div`
 	.moon {
-		width: 200px;
-		margin: 2rem auto;
+		width: 90px;
+		/* margin: 2rem auto; */
 		transform: scaleX(${props => props.phaseFlip});
 	}
 	.moon-left,
 	.moon-right {
 		display: inline-block;
-		width: 100px;
+		width: 50%;
 		position: relative;
 		margin: 0;
 	}

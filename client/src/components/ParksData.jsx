@@ -243,13 +243,13 @@ class BaseParksData extends Component {
 			>
 				{this.renderParkMap()}
 				<div className="RightSideContainerFull">
-					<button
+					{/* <button
 						onClick={() => {
 							this.setState({ hideForm: !this.state.hideForm });
 						}}
 					>
 						Toggle form
-					</button>
+					</button> */}
 					{this.renderParkForm()}
 
 					<div className="MoonStyle">
@@ -337,7 +337,7 @@ const MainContentWrapper = styled.div`
 		grid-area: rightSide;
 		/* overflow-y: scroll;
 		overflow-x: hidden; */
-		background-color: whitesmoke;
+		/* background-color: whitesmoke; */
 	}
 	.ParkFormStyle {
 		grid-area: form;

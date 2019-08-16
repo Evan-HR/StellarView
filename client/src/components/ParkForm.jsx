@@ -14,15 +14,16 @@ class BaseParkForm extends Component {
 		reqData: {
 			lat: "",
 			lng: "",
-			dist: 25,
-			lightpol: 1.5,
+			dist: 75,
+			lightpol: 1.75,
 			error: "",
 			placeName: ""
 		},
 		isLoadingLocation: false,
 		isGeocodingLocation: false,
 		isInvalidLocation: false,
-		formErrors: {}
+		formErrors: {},
+		advancedSearch: false
 	};
 
 	constructor(props) {
@@ -125,19 +126,23 @@ class BaseParkForm extends Component {
 			)
 			.then(({ data }) => {
 				console.log(data);
-				this.setState({
-					isGeocodingLocation: false,
-					reqData: {
-						...this.state.reqData,
-						lat: parseFloat(data[0].lat),
-						lng: parseFloat(data[0].lon)
-					}
-				});
+
 				var latLng = new window.google.maps.LatLng(
 					parseFloat(data[0].lat),
 					parseFloat(data[0].lon)
 				); //Makes a latlng
 				this.props.googleMap.panTo(latLng); //Make map global
+				this.setState(
+					{
+						isGeocodingLocation: false,
+						reqData: {
+							...this.state.reqData,
+							lat: parseFloat(data[0].lat),
+							lng: parseFloat(data[0].lon)
+						}
+					},
+					() => this.onSubmit()
+				);
 			})
 			.catch(error => {
 				console.log(error);
@@ -162,17 +167,33 @@ class BaseParkForm extends Component {
 		) {
 			console.log("Getting new location");
 			navigator.geolocation.getCurrentPosition(
-				position => {
-					this.setState({
-						...this.state,
-						reqData: {
-							...this.state.reqData,
-							lat: position.coords.latitude,
-							lng: position.coords.longitude,
-							error: null
+				async position => {
+					console.log(
+						`https://nominatim.openstreetmap.org/reverse?format=json&lat=${
+							position.coords.latitude
+						}&lon=${position.coords.longitude}`
+					);
+					let address = await axios.get(
+						`https://nominatim.openstreetmap.org/reverse?format=json&lat=${
+							position.coords.latitude
+						}&lon=${position.coords.longitude}`
+					);
+					address = address["data"]["address"]["city"];
+					console.log(address);
+					this.setState(
+						{
+							...this.state,
+							reqData: {
+								...this.state.reqData,
+								lat: position.coords.latitude,
+								lng: position.coords.longitude,
+								placeName: address,
+								error: null
+							},
+							isLoadingLocation: false
 						},
-						isLoadingLocation: false
-					});
+						() => this.onSubmit()
+					);
 					if (window.google) {
 						this.props.googleMap.panTo(
 							new window.google.maps.LatLng(
@@ -208,14 +229,26 @@ class BaseParkForm extends Component {
 					)
 				);
 			}
-			this.setState({
-				reqData: {
-					...this.state.reqData,
-					lat: this.props.authState.userLocation.lat,
-					lng: this.props.authState.userLocation.lng
+			let address = null;
+			// let address = await axios.get(
+			// 	`https://nominatim.openstreetmap.org/reverse?format=json&lat=${
+
+			// 		this.props.authState.userLocation.lat
+			// 	}&lon=${this.props.authState.userLocation.lng}`
+			// );
+			// address = address["data"]["address"]["city"];
+			this.setState(
+				{
+					reqData: {
+						...this.state.reqData,
+						lat: this.props.authState.userLocation.lat,
+						lng: this.props.authState.userLocation.lng,
+						placeName: address
+					},
+					isLoadingLocation: false
 				},
-				isLoadingLocation: false
-			});
+				() => this.onSubmit()
+			);
 		}
 	};
 
@@ -386,7 +419,6 @@ class BaseParkForm extends Component {
 					<b class="text-danger">
 						{this.state.formErrors.join(", ")}
 					</b>
-					<br />
 				</React.Fragment>
 			);
 		}
@@ -395,133 +427,115 @@ class BaseParkForm extends Component {
 	render() {
 		//console.log("Fetching parks?", this.props.isFetchingParks);
 		return (
-			<div className="border border-primary">
-				{/* <br />
-				lat: {this.state.reqData.lat}, lng: {this.state.reqData.lng}
-				<br />
-				dist: {this.state.reqData.dist}, lightpol:{" "}
-				{this.state.reqData.lightpol}
-				<br /> */}
-				<h3>Input Form</h3>
-				<form
-					onSubmit={e => {
-						e.preventDefault();
-					}}
-				>
-					<input
-						type="text"
-						name="placeName"
-						value={this.state.reqData.placeName || ""}
-						onChange={this.handlePlaceChange}
-					/>
-					<button
-						className={
-							"btn m-1" +
-							(this.state.isInvalidLocation
-								? " btn-danger"
-								: " btn-primary")
-						}
-						disabled={
-							this.state.reqData.placeName === "" ||
-							this.state.isGeocodingLocation
-						}
-						onClick={e => {
-							this.getPlaceCoordinates(e);
+			<FormStyle advancedSearch={this.state.advancedSearch}>
+				<div className="border border-primary">
+					<form
+						onSubmit={e => {
+							e.preventDefault();
 						}}
 					>
-						🔎
-					</button>
+						<input
+							type="text"
+							name="placeName"
+							value={this.state.reqData.placeName || ""}
+							onChange={this.handlePlaceChange}
+						/>
+						<button
+							className={
+								"btn m-1" +
+								(this.state.isInvalidLocation
+									? " btn-danger"
+									: " btn-primary")
+							}
+							disabled={
+								this.state.reqData.placeName === "" ||
+								this.state.isGeocodingLocation
+							}
+							onClick={e => {
+								this.getPlaceCoordinates(e);
+							}}
+						>
+							🔎
+						</button>
 
-					<button
-						// onClick={this.getParkData.bind(this, this.state.formInput)}
-						className="btn btn-primary m-1"
-						type="button"
-						disabled={this.state.isLoadingLocation}
-						onClick={this.getMyLocation}
-					>
-						<strong>{this.renderLocationSpinner()}</strong>
-					</button>
-					<button
+						<button
+							// onClick={this.getParkData.bind(this, this.state.formInput)}
+							className="btn btn-primary m-1"
+							type="button"
+							disabled={this.state.isLoadingLocation}
+							onClick={this.getMyLocation}
+						>
+							<strong>{this.renderLocationSpinner()}</strong>
+						</button>
+
+						{/* CLEAR BUTTON!!!! */}
+
+						{/* <button
 						className="btn btn-danger m-2"
 						onClick={this.props.clearParks}
 						// className={this.clearButtonClass()}
 						type="button"
 					>
 						<strong>Clear</strong>
-					</button>
-				</form>
-				<form className="mx-5">
-					<br />
-					<input
-						placeholder="Latitude"
-						type="number"
-						min="-90"
-						max="90"
-						step="any"
-						value={this.state.reqData.lat || ""}
-						id="Lat"
-						name="lat"
-						required
-						//does this character by character, each char is a new 'event'
-						onChange={this.handleLatChange}
-					/>
-					<input
-						placeholder="Longitude"
-						type="number"
-						min="-180"
-						max="180"
-						step="any"
-						value={this.state.reqData.lng || ""}
-						id="Long"
-						name="lng"
-						required
-						onChange={this.handleLngChange}
-					/>
-					<br />
-					<br />
-					<b>Distance:</b>
-					<br />
-					<Slider
-						//defaultValue={this.state.reqData.dist}
-						// getAriaValueText={valuetext}
-						aria-labelledby="discrete-slider-custom"
-						min={5}
-						max={200}
-						step={1}
-						valueLabelDisplay="auto"
-						marks={marksDist}
-						value={parseFloat(this.state.reqData.dist)}
-						onChange={this.handleDistanceChange}
-					/>
-					<br />
-					<b>Light Pollution:</b>
-					<br />
-					<Slider
-						//defaultValue={this.state.reqData.lightpol}
-						// getAriaValueText={valuetext}
-						aria-labelledby="discrete-slider-custom"
-						min={0}
-						max={6}
-						step={0.05}
-						valueLabelDisplay="auto"
-						marks={marksLight}
-						value={parseFloat(this.state.reqData.lightpol)}
-						onChange={this.handleLightPolChange}
-						// onChangeCommitted={() =>
-						// 	this.handleLightPolChange(this.sliderLight)
-						// }
-					/>
-					<br />
-					{this.renderFormErrors()}
-
-					<MainButton
-						onClick={e => this.onSubmit(e)}
-						disabled={this.props.isFetchingParks}
+					</button> */}
+					</form>
+					<button
+						className="ToggleAdvancedSearch"
+						onClick={() =>
+							this.setState({
+								advancedSearch: !this.state.advancedSearch
+							})
+						}
 					>
-						Stargaze
-					</MainButton>
-				</form>
-			</div>
+						Advanced Search
+					</button>
+					<form className="mx-5">
+						<div className="AdvancedSearch">
+							<b>Distance:</b>
+							<br />
+							<Slider
+								//defaultValue={this.state.reqData.dist}
+								// getAriaValueText={valuetext}
+								aria-labelledby="discrete-slider-custom"
+								min={5}
+								max={200}
+								step={1}
+								valueLabelDisplay="auto"
+								marks={marksDist}
+								value={parseFloat(this.state.reqData.dist)}
+								onChange={this.handleDistanceChange}
+							/>
+							<br />
+							<b>Light Pollution:</b>
+							<br />
+							<Slider
+								//defaultValue={this.state.reqData.lightpol}
+								// getAriaValueText={valuetext}
+								aria-labelledby="discrete-slider-custom"
+								min={0}
+								max={6}
+								step={0.05}
+								valueLabelDisplay="auto"
+								marks={marksLight}
+								value={parseFloat(this.state.reqData.lightpol)}
+								onChange={this.handleLightPolChange}
+								// onChangeCommitted={() =>
+								// 	this.handleLightPolChange(this.sliderLight)
+								// }
+							/>
+						</div>
+
+						{this.renderFormErrors()}
+
+						{/* <button
+							onClick={e => this.onSubmit(e)}
+							disabled={this.props.isFetchingParks}
+						>
+							Stargaze
+						</button> */}
+					</form>
+				</div>
+			</FormStyle>
 		);
 	}
 }
@@ -583,7 +597,9 @@ const ParkForm = parkFormProps => (
 export default withRouter(ParkForm);
 
 ////////////////////////////////////////////
-const MainButton = styled.button`
-
-
+const FormStyle = styled.div`
+	background-color: ${props => props.theme.bodyBackground};
+	.AdvancedSearch {
+		${props => (props.advancedSearch ? `` : `display: none`)}
+	}
 `;

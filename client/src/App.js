@@ -103,7 +103,7 @@ export default App;
 //font-family: 'Barlow', sans-serif;
 
 const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono|Rubik|Barlow|IBM+Plex+Sans|Oswald:400|Source+Sans+Pro|Montserrat|Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono:300,400,600|Barlow:300,400,600|IBM+Plex+Sans:300,400,600|&display=swap');
 
 html {
   line-height: 1.15;
@@ -116,7 +116,7 @@ html {
 body{
 	height: 100%;
 	font-size: 1rem;
-	font-weight: 400;
+	font-weight: 300;
 	line-height: 1.5;
 	/* background-image: linear-gradient(150deg,${props =>
 		props.theme.cream} 60%,${props =>
