@@ -159,8 +159,17 @@ class ParkCard extends Component {
 
 						<div className="ParkScore">
 							<span className="ScoreNumerator">
-								{Math.round(this.props.park.score * 10)}
+								{(this.props.park.score * 10).toFixed(1)}
+								{/* <span className="ScoreNumeratorMantissa">
+									.
+									{Math.trunc(
+										(parseFloat(this.props.park.score) *
+											100) %
+											10
+									)}
+								</span> */}
 							</span>
+
 							<br />
 							<span className="ScoreDenominator">/10</span>
 						</div>
@@ -316,7 +325,11 @@ const CardStyle = styled.div`
 
 		.ScoreNumerator {
 			font-size: 64px;
+			.ScoreNumeratorMantissa {
+				font-size: 24px;
+			}
 		}
+		
 
 		.ScoreDenominator {
 			font-size: 24px;

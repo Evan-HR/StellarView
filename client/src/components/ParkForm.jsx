@@ -428,10 +428,8 @@ class BaseParkForm extends Component {
 	render() {
 		//console.log("Fetching parks?", this.props.isFetchingParks);
 		return (
-			<FormStyle advancedSearch={this.state.advancedSearch}>
-				<SearchStyle>
-				
-				<div className="search">
+			<SearchFormStyle advancedSearch={this.state.advancedSearch}>
+				<div className="citySearch">
 					<form
 						onSubmit={e => {
 							e.preventDefault();
@@ -445,6 +443,7 @@ class BaseParkForm extends Component {
 							value={this.state.reqData.placeName || ""}
 							onChange={this.handlePlaceChange}
 						/>
+
 						<button
 							className={
 								"searchButton"
@@ -462,21 +461,25 @@ class BaseParkForm extends Component {
 						>
 							<i className="fa fa-search" />
 						</button>
+					</form>
+				</div>
+				<div className="myLocation">
+					<MyLocationStyle
+						// onClick={this.getParkData.bind(this, this.state.formInput)}
+						className="nearMe"
+						type="button"
+						disabled={this.state.isLoadingLocation}
+						onClick={this.getMyLocation}
+					>
+						<img src={nearMeButton} />
+						NEAR ME
+						{/* <strong>{this.renderLocationSpinner()}</strong> */}
+					</MyLocationStyle>
+				</div>
 
-						<SearchButtonStyle
-							// onClick={this.getParkData.bind(this, this.state.formInput)}
-							className="nearMe"
-							type="button"
-							disabled={this.state.isLoadingLocation}
-							onClick={this.getMyLocation}
-						>
-							<img src={nearMeButton} />
-							{/* <strong>{this.renderLocationSpinner()}</strong> */}
-						</SearchButtonStyle>
+				{/* CLEAR BUTTON!!!! */}
 
-						{/* CLEAR BUTTON!!!! */}
-
-						{/* <button
+				{/* <button
 						className="btn btn-danger m-2"
 						onClick={this.props.clearParks}
 						// className={this.clearButtonClass()}
@@ -484,7 +487,8 @@ class BaseParkForm extends Component {
 					>
 						<strong>Clear</strong>
 					</button> */}
-					</form>
+
+				<div className="advancedSearchToggle">
 					<AdvancedSearchStyle
 						className="ToggleAdvancedSearch"
 						onClick={() =>
@@ -495,56 +499,55 @@ class BaseParkForm extends Component {
 					>
 						Advanced Search
 					</AdvancedSearchStyle>
-					<i class="fas fa-caret-down"></i>
-					<form >
-						<div className="AdvancedSearch">
-							<b>Distance:</b>
-							<br />
-							<Slider
-								//defaultValue={this.state.reqData.dist}
-								// getAriaValueText={valuetext}
-								aria-labelledby="discrete-slider-custom"
-								min={5}
-								max={200}
-								step={1}
-								valueLabelDisplay="auto"
-								marks={marksDist}
-								value={parseFloat(this.state.reqData.dist)}
-								onChange={this.handleDistanceChange}
-							/>
-							<br />
-							<b>Light Pollution:</b>
-							<br />
-							<Slider
-								//defaultValue={this.state.reqData.lightpol}
-								// getAriaValueText={valuetext}
-								aria-labelledby="discrete-slider-custom"
-								min={0}
-								max={6}
-								step={0.05}
-								valueLabelDisplay="auto"
-								marks={marksLight}
-								value={parseFloat(this.state.reqData.lightpol)}
-								onChange={this.handleLightPolChange}
-								// onChangeCommitted={() =>
-								// 	this.handleLightPolChange(this.sliderLight)
-								// }
-							/>
-						</div>
-						
+					<i class="fas fa-caret-down" />
+				</div>
 
-						{this.renderFormErrors()}
+				<div className="AdvancedSearch">
+					<form>
+						<b>Distance:</b>
+						<br />
+						<Slider
+							//defaultValue={this.state.reqData.dist}
+							// getAriaValueText={valuetext}
+							aria-labelledby="discrete-slider-custom"
+							min={5}
+							max={200}
+							step={1}
+							valueLabelDisplay="auto"
+							marks={marksDist}
+							value={parseFloat(this.state.reqData.dist)}
+							onChange={this.handleDistanceChange}
+						/>
+						<br />
+						<b>Light Pollution:</b>
+						<br />
+						<Slider
+							//defaultValue={this.state.reqData.lightpol}
+							// getAriaValueText={valuetext}
+							aria-labelledby="discrete-slider-custom"
+							min={0}
+							max={6}
+							step={0.05}
+							valueLabelDisplay="auto"
+							marks={marksLight}
+							value={parseFloat(this.state.reqData.lightpol)}
+							onChange={this.handleLightPolChange}
+							// onChangeCommitted={() =>
+							// 	this.handleLightPolChange(this.sliderLight)
+							// }
+						/>
+					</form>
+				</div>
 
-						{/* <button
+				{this.renderFormErrors()}
+
+				{/* <button
 							onClick={e => this.onSubmit(e)}
 							disabled={this.props.isFetchingParks}
 						>
 							Stargaze
 						</button> */}
-					</form>
-				</div>
-				</SearchStyle>
-			</FormStyle>
+			</SearchFormStyle>
 		);
 	}
 }
@@ -606,18 +609,38 @@ const ParkForm = parkFormProps => (
 export default withRouter(ParkForm);
 
 ////////////////////////////////////////////
-const FormStyle = styled.div`
-	background-color: ${props => props.theme.bodyBackground};
-	.AdvancedSearch {
-		${props => (props.advancedSearch ? `` : `display: none`)}
-	}
-`;
 
-const SearchButtonStyle = styled.button`
+const MyLocationStyle = styled.button`
 	all: unset;
 `;
 
-const SearchStyle = styled.div`
+const SearchFormStyle = styled.div`
+	background-color: ${props => props.theme.cardDark};
+	font-family: IBM Plex Sans;
+
+	.AdvancedSearch {
+		${props => (props.advancedSearch ? `` : `display: none`)}
+		grid-area:advancedSearch;
+	}
+	.myLocation {
+		grid-area: myLocation;
+	}
+	.advancedSearchToggle {
+		grid-area: advancedSearchToggle;
+	}
+
+	.citySearch {
+		grid-area: searchBar;
+	}
+
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: auto auto auto; /* Three rows, two with explicit widths */
+	grid-template-areas:
+		"searchBar searchBar myLocation"
+		"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
+		"advancedSearch advancedSearch advancedSearch";
+
 	.searchButton {
 		width: 40px;
 		height: 36px;
@@ -630,28 +653,29 @@ const SearchStyle = styled.div`
 		font-size: 20px;
 	}
 
-	.searchTerm:focus{
-  color: #00B4CC;
-}
-.search {
-  width: 100%;
-  position: relative;
-  display: flex;
-}
+	.searchTerm:focus {
+		color: #00b4cc;
+	}
+	/* .search {
+		width: 100%;
+		position: relative;
+		display: flex;
+		grid-area: searchBar;
+	} */
 
-.searchTerm {
-  /* width: 100%; */
-  border: 3px solid #00B4CC;
-  border-right: none;
-  padding: 5px;
- height: 36px;
-  border-radius: 5px 0 0 5px;
-  outline: none;
-  color: #9DBFAF;
-}
+	.searchTerm {
+		/* width: 100%; */
+		border: 3px solid #00b4cc;
+		border-right: none;
+		padding: 5px;
+		height: 36px;
+		border-radius: 5px 0 0 5px;
+		outline: none;
+		color: #9dbfaf;
+	}
 `;
 
 const AdvancedSearchStyle = styled.button`
-all: unset;
-`
-;
+	/* grid-area: advancedSearch; */
+	all: unset;
+`;
