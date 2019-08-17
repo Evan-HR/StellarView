@@ -335,6 +335,7 @@ const MainContentWrapper = styled.div`
 	.RightSideContainerFull {
 		z-index: 0;
 		grid-area: rightSide;
+		margin-bottom: 20px;
 		/* overflow-y: scroll;
 		overflow-x: hidden; */
 		/* background-color: whitesmoke; */
