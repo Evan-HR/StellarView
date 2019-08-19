@@ -7,8 +7,8 @@ import Login from "../Login";
 import axios from "axios";
 import Register from "../Register";
 import FAQ from "../FAQ";
-import logo from "../style/Media/LogoBlueGrey.svg";
-import logo2 from "../style/Media/telescopeLogo2.svg";
+// import logo from "../style/Media/LogoBlueGrey.svg";
+// import logo2 from "../style/Media/telescopeLogo2.svg";
 
 class Toolbar extends Component {
 	state = {};
@@ -147,7 +147,7 @@ const ToolbarStyle = styled.header`
 		font-family: IBM Plex Sans;
 		font-weight:300;
 		text-decoration: none;
-		letter-spacing:0.15em;
+		letter-spacing:0.08em;
 		transition: color 0.2s ease;
 		color: whitesmoke;
 		
@@ -213,7 +213,7 @@ const ToolbarStyle = styled.header`
 		/* padding-bottom: 2.05em;
 		border-bottom: 3px solid ${props => props.theme.gold}; */
 		transition: color 0.2s ease;
-  		color: ${props => props.theme.franRed};
+  		color: ${props => props.theme.colorBad};
 		
 	}
 

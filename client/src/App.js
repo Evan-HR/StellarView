@@ -12,10 +12,8 @@ import { createGlobalStyle } from "styled-components";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
 import FAQ from "./components/FAQ";
-import starBackground from "./components/style/Media/starsBackground.png";
-import starsTwinkle from "./components/style/Media/twinkling.png";
-import StarBackground from "./components/StarBackground";
-import StarBackground2 from "./components/style/Media/starsBackground3.jpg";
+import backgroundImage from"./components/style/Media/backgroundTest.png";
+
 
 class App extends Component {
 	state = {
@@ -49,7 +47,7 @@ class App extends Component {
 			<React.Fragment>
 				{/* <StarBackground/>  */}
 
-				<GlobalStyle />
+				<GlobalStyle bg={backgroundImage}/>
 				<Router>
 					<ToolBar
 						drawerClickHandler={this.drawerToggleClickHandler}
@@ -122,8 +120,9 @@ body{
 	/* background-image: linear-gradient(150deg,${props =>
 		props.theme.cream} 60%,${props =>
 	props.theme.franNavy} calc(60% + 2px)); */
-	/* background-image: linear-gradient(to right, cyan, pink); */
-	background-color: ${props => props.theme.bodyBackground} !important;
+	background-image: url(${props => props.bg});
+	background-size: cover;
+	/* background-color: ${props => props.theme.bodyBackground} !important; */
 	text-align: center;
 }
 `;

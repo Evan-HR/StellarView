@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Modal from "react-modal";
-import backgroundImage from "./style/Media/formModalBackground.jpg";
+import backgroundImage from "./style/Media/loginModalPlain.svg";
 
 import { withRouter, Link } from "react-router-dom";
 import styled from "styled-components";
@@ -89,11 +89,20 @@ class Login extends Component {
 		return (
 			<LoginStyle background={backgroundImage}>
 				<div className="login">
-					<div className="banner" />
+					<div className="banner">
+						<button
+							type="button"
+							onClick={this.closeModal}
+							className="close"
+							aria-label="Close"
+						>
+							<i class="fas fa-window-close" />
+						</button>
+					</div>
 					<div className="form">
 						<div className="wrapper">
 							<div className="row">
-								<div className="label">Username</div>
+								<div className="label">E-Mail</div>
 								<input type="text" />
 							</div>
 							<div className="row">
@@ -105,7 +114,7 @@ class Login extends Component {
 							</div>
 						</div>
 						<div className="signup">
-							Don't have an account? <a href="#">Signup</a>
+							Don't have an account? <a href="#">Sign-up</a>
 						</div>
 					</div>
 				</div>
@@ -171,20 +180,6 @@ class Login extends Component {
 					style={customStyles}
 				>
 					<div className="modal-content">
-						{/* <div className="modal-header">
-							<HeaderStyle>
-								<h1>LOGIN</h1>
-							</HeaderStyle>
-
-							<button
-								type="button"
-								onClick={this.closeModal}
-								className="close"
-								aria-label="Close"
-							>
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div> */}
 						{this.renderLoginModal()};
 						{/* {this.renderModalContent()} */}
 						{this.errorMsg()}
@@ -218,16 +213,45 @@ const customStyles = {
 };
 
 const LoginStyle = styled.div`
+	font-family: IBM Plex Sans;
+	padding-right: 30px;
+
+
+		.close {
+  float: right;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+  outline:none;
+  /* text-shadow: 0 1px 0 #7C6E7E; */
+  opacity: .5;
+}
+
+
+
+.close:hover {
+  color: ${props => props.theme.cardDark};
+  text-decoration: none;
+}
+
+.close:active {
+ color: ${props => props.theme.colorBad};
+}
+
+.close:not(:disabled):not(.disabled):hover, .close:not(:disabled):not(.disabled):focus {
+  opacity: .75;
+}
+
+
 	.login {
 		position: absolute;
-		top: 50%;
-		left: 50%;
+
 		transform: translate(-50%, -50%);
-		width: 300px;
-		height: 450px;
-		background: #f6f6f6;
+		width: 350px;
+		height: 600px;
+		background: whitesmoke;
 		overflow: hidden;
-		box-shadow: 0px 0px 50px 2px #aaa;
 
 		.banner {
 			position: absolute;
@@ -236,8 +260,8 @@ const LoginStyle = styled.div`
 			width: 100%;
 			height: 210px;
 			background: url(${props => props.background}) center no-repeat;
-			background-size: cover;
-			transform: skew(0deg, -8deg) translateY(-25px);
+			background-size: 600px;
+			/* transform: skew(0deg, -8deg) translateY(-25px); */
 			z-index: 2;
 		}
 		.banner:before {
@@ -248,13 +272,13 @@ const LoginStyle = styled.div`
 			background: ${props => props.theme.colorBad};
 			color: #fff;
 			bottom: -35px;
-			left: 50%;
+			left: 38%;
 			line-height: 80px;
 			font-size: 17px;
 			text-transform: uppercase;
 			border-radius: 50%;
 			text-align: center;
-			transform: skew(0deg, 8deg) translateX(-50%);
+			/* transform: skew(0deg, 8deg) translateX(-50%); */
 		}
 
 		.form {
@@ -265,6 +289,7 @@ const LoginStyle = styled.div`
 			height: calc(100% - 180px);
 
 			.wrapper {
+				padding-top: 30px;
 				position: absolute;
 				left: 50%;
 				transform: translateX(-50%);
