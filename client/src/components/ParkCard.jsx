@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import StarReviewsStatic from "./StarReviewsStatic";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import humidityIcon from "./style/Media/Humidity.svg";
-import cloudIcon from "./style/Media/Humidity.svg";
-import lightPolIcon from "./style/Media/Humidity.svg";
-import tempIcon from "./style/Media/Humidity.svg";
-import infoIcon from "./style/Media/Humidity.svg";
+import humidityIcon from "./style/Media/cardIcons/humidity.svg";
+import cloudIcon from "./style/Media/cardIcons/cloud.svg";
+import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
+import tempIcon from "./style/Media/cardIcons/temperature.svg";
+import infoIcon from "./style/Media/cardIcons/moreInfo.svg";
 
 class ParkCard extends Component {
 	state = {};
