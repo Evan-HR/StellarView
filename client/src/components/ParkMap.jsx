@@ -138,7 +138,7 @@ class ParkMap extends Component {
 
 			marker.addListener("click", () => {
 				console.log("Clicked marker at", marker.title);
-				let modalContent = { park: park };
+				let modalContent = { park: park, moon: this.props.moon  };
 				this.openModal(modalContent);
 			});
 			this.props.markers[park.id] = marker; //Maybe this can be moved out of the function

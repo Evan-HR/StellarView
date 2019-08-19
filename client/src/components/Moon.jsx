@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import MoonDisplay from "./MoonDisplay";
 
 //moon images, in proper order
 import newMoon from "./style/Media/Moon/moon-phase-new.svg";
@@ -48,7 +49,11 @@ class Moon extends Component {
 				phaseFlip={phaseFlip}
 			>
 				<div class="moon">
-					<svg class="moon-left" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+					<svg
+						class="moon-left"
+						viewBox="0 0 100 200"
+						xmlns="http://www.w3.org/2000/svg"
+					>
 						<circle
 							cx="100"
 							cy="100"
@@ -66,7 +71,11 @@ class Moon extends Component {
 							class="fg"
 						/>
 					</svg>
-					<svg class="moon-right" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+					<svg
+						class="moon-right"
+						viewBox="0 0 100 200"
+						xmlns="http://www.w3.org/2000/svg"
+					>
 						<circle
 							cx="0"
 							cy="100"
@@ -135,7 +144,9 @@ class Moon extends Component {
 			<MoonStyle>
 				<div className="moonDisplay">
 					<span>{this.props.moonType.split(" ")[0]}</span>
-					<span>{this.renderMoonData()}</span>
+					<span>
+						<MoonDisplay phase={this.props.moon} />
+					</span>
 					<span>{this.props.moonType.split(" ")[1]}</span>
 				</div>
 			</MoonStyle>

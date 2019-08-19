@@ -1,9 +1,11 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import Modal from "react-modal";
 import Reviews from "./Reviews";
 import FavPark from "./FavPark";
 import styled from "styled-components";
 import "./modal.css";
+import MoonDisplay from "./MoonDisplay";
+import { useSpring, animated as a } from "react-spring";
 
 const modalStyle = {
 	overlay: {
@@ -43,6 +45,7 @@ class ParkMapModal extends Component {
 		}
 		this.modalContent = content;
 		this.park = content.park;
+		this.moon = content.moon;
 		console.log(this.park);
 		this.setState({ ...this.state, modalIsOpen: true });
 	};
@@ -111,20 +114,72 @@ class ParkMapModal extends Component {
 
 							<div className="weatherContainer">
 								<div className="cloudContainer">
-									<i className="cloudIcon fas fa-cloud" />
-									<br />
-									{this.park.weather.clouds}
+									<Card
+										cardName="cloudCard"
+										front={
+											<React.Fragment>
+												<i className="cloudIcon fas fa-cloud" />
+												<br />
+												{this.park.weather.clouds}
+											</React.Fragment>
+										}
+										back={
+											<React.Fragment>
+												More info!
+											</React.Fragment>
+										}
+									/>
 								</div>
 								<div className="lightPolContainer">
-									<i className="lightPolIcon fas fa-meteor" />
-									<br />
-									{this.park.light_pol}
+									<Card
+										cardName="lightPolCard"
+										front={
+											<React.Fragment>
+												<i className="lightPolIcon fas fa-meteor" />
+												<br />
+												{this.park.light_pol}
+											</React.Fragment>
+										}
+										back={
+											<React.Fragment>
+												More info!
+											</React.Fragment>
+										}
+									/>
 								</div>
-								<div className="moonContainer"> blah </div>
+								<div className="moonContainer">
+									<Card
+										cardName="moonCard"
+										front={
+											<React.Fragment>
+												<MoonDisplay
+													phase={this.moon}
+												/>
+											</React.Fragment>
+										}
+										back={
+											<React.Fragment>
+												More info!
+											</React.Fragment>
+										}
+									/>
+								</div>
 								<div className="humidityContainer">
-									<i className="humidityIcon fas fa-tint" />
-									<br />
-									{this.park.weather.humidity}
+									<Card
+										cardName="humidityCard"
+										front={
+											<React.Fragment>
+												<i className="humidityIcon fas fa-tint" />
+												<br />
+												{this.park.weather.humidity}
+											</React.Fragment>
+										}
+										back={
+											<React.Fragment>
+												More info!
+											</React.Fragment>
+										}
+									/>
 								</div>
 							</div>
 
@@ -137,6 +192,39 @@ class ParkMapModal extends Component {
 			</Modal>
 		);
 	}
+}
+
+function Card(props) {
+	const [flipped, set] = useState(false);
+	const { transform, opacity } = useSpring({
+		opacity: flipped ? 1 : 0,
+		transform: `perspective(600px) rotateY(${flipped ? 180 : 0}deg)`,
+		config: { mass: 5, tension: 500, friction: 80 }
+	});
+	return (
+		<div onClick={() => set(state => !state)}>
+			<a.div
+				className={props.cardName}
+				style={{
+					opacity: opacity.interpolate(o => 1 - o),
+					transform
+				}}
+			>
+				{props.front}
+			</a.div>
+			<a.div
+				className={props.cardName}
+				style={{
+					opacity,
+					transform: transform.interpolate(
+						t => `${t} rotateY(180deg)`
+					)
+				}}
+			>
+				{props.back}
+			</a.div>
+		</div>
+	);
 }
 
 export default ParkMapModal;
@@ -219,7 +307,7 @@ const ModalBodyStyle = styled.div`
 		grid-column-gap: 20px;
 		grid-template-areas:
 			"cloudContainer    lightPolContainer"
-			"moonContainer    	   humidityContainer";
+			"moonContainer     humidityContainer";
 
 		div {
 			/* width: 181px; */
@@ -228,19 +316,43 @@ const ModalBodyStyle = styled.div`
 
 		.cloudContainer {
 			grid-area: cloudContainer;
-			background-color: ${props => props.theme.colorBad};
+			position: relative;
+
+			.cloudCard {
+				position: absolute;
+				width: 100%;
+				background-color: ${props => props.theme.colorBad};
+			}
 		}
 		.lightPolContainer {
 			grid-area: lightPolContainer;
-			background-color: ${props => props.theme.colorBad};
+			position: relative;
+
+			.lightPolCard {
+				position: absolute;
+				width: 100%;
+				background-color: ${props => props.theme.colorBad};
+			}
 		}
 		.moonContainer {
 			grid-area: moonContainer;
-			background-color: ${props => props.theme.colorBad};
+			position: relative;
+
+			.moonCard {
+				position: absolute;
+				width: 100%;
+				background-color: ${props => props.theme.colorBad};
+			}
 		}
 		.humidityContainer {
 			grid-area: humidityContainer;
-			background-color: ${props => props.theme.colorBad};
+			position: relative;
+
+			.humidityCard {
+				position: absolute;
+				width: 100%;
+				background-color: ${props => props.theme.colorBad};
+			}
 		}
 	}
 

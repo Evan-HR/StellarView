@@ -193,6 +193,7 @@ class BaseParksData extends Component {
 							markers={this.markers}
 							location={this.state.fetchReq}
 							onMapLoaded={this.handleMapLoaded}
+							moon={this.state.moon}
 						/>
 					</animated.div>
 				)}
@@ -360,8 +361,7 @@ const MainContentWrapper = styled.div`
 		margin-top: 4rem;
 		width: 100%;
 		grid-template-columns: 1fr;
-		grid-template-rows: ${props =>
-			props.hideMap ? "0px auto" : "50% auto"};
+		grid-template-rows: ${props => (props.hideMap ? "0px auto" : "50% auto")};
 		grid-template-areas:
 			"map"
 			"rightSide";
