@@ -180,9 +180,9 @@ class ParkCard extends Component {
 						</div>
 
 						<div className="MoreInfo">
-							<span className="infoIcon">
-								<img src={infoIcon} />
-							</span>
+							{/* <span className="infoIcon"> */}
+							<img src={infoIcon} />
+							{/* </span> */}
 							<span className="infoText">
 								More
 								<br />
