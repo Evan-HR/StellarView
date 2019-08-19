@@ -33,5 +33,9 @@ export const theme = {
 	cardDark: "#92A8C1",
 	starLight: "#FAE6BF",
 	starDark: "#2F3334",
-	bodyBackground: "#2F3334"
+	bodyBackground: "#2F3334",
+	clickable: "#FAE6BF",
+	colorGood: "#99C192",
+	colorBad: "#BB6F6F",
+	colorMedium: "#DAA979"
 };

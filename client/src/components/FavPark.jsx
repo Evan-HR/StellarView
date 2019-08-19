@@ -66,20 +66,18 @@ class BaseFavPark extends Component {
 				this.state.hasFaved === false
 			) {
 				return (
-					<button
-						className="btn btn-primary m-2"
-						onClick={() => this.handleFavSpot()}
-					>
-						Add to Favorites
+					<button onClick={() => this.handleFavSpot()}>
+						<i className="fas fa-heart" />
 					</button>
 				);
 			} else {
 				return (
 					<button
-						className="btn btn-success"
-						//onClick={() => this.handleFavSpot()}
+					//TODO: Green color on success
+					// className=""
+					//onClick={() => this.handleFavSpot()}
 					>
-						Added to Favorites!
+						<i className="fas fa-heart" />
 					</button>
 				);
 			}
@@ -87,11 +85,8 @@ class BaseFavPark extends Component {
 			console.log("NOT LOGGED IN FAVPARK GOT HERE!");
 
 			return (
-				<button
-					className="btn btn-primary m-2"
-					onClick={() => this.handleFavSpotNoAuth()}
-				>
-					Add to Favorites
+				<button onClick={() => this.handleFavSpotNoAuth()}>
+					<i className="fas fa-heart" />
 				</button>
 			);
 		}
@@ -104,9 +99,9 @@ class BaseFavPark extends Component {
 			<div>
 				{this.favSpotButton()}
 
-				{this.handleWarningMsg()}
+				{/* {this.handleWarningMsg()} */}
 
-				<p>hello {this.props.context.firstName}</p>
+				{/* <p>hello {this.props.context.firstName}</p> */}
 			</div>
 		);
 	}

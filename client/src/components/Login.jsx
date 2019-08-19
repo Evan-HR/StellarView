@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Modal from "react-modal";
-import backgroundImage from "../components/style/Media/darkerFormModal.png";
+import backgroundImage from "./style/Media/loginModalPlain.svg";
 
 import { withRouter, Link } from "react-router-dom";
 import styled from "styled-components";
@@ -85,6 +85,43 @@ class Login extends Component {
 			});
 	};
 
+	renderLoginModal = () => {
+		return (
+			<LoginStyle background={backgroundImage}>
+				<div className="login">
+					<div className="banner">
+						<button
+							type="button"
+							onClick={this.closeModal}
+							className="close"
+							aria-label="Close"
+						>
+							<i class="fas fa-window-close" />
+						</button>
+					</div>
+					<div className="form">
+						<div className="wrapper">
+							<div className="row">
+								<div className="label">E-Mail</div>
+								<input type="text" />
+							</div>
+							<div className="row">
+								<div className="label">Password</div>
+								<input type="password" />
+							</div>
+							<div className="row">
+								<button>Submit</button>
+							</div>
+						</div>
+						<div className="signup">
+							Don't have an account? <a href="#">Sign-up</a>
+						</div>
+					</div>
+				</div>
+			</LoginStyle>
+		);
+	};
+
 	renderModalContent = () => {
 		if (!this.state.loginSuccess) {
 			return (
@@ -143,23 +180,8 @@ class Login extends Component {
 					style={customStyles}
 				>
 					<div className="modal-content">
-						<div className="modal-header">
-							<HeaderStyle>
-								<h1>LOGIN</h1>
-							</HeaderStyle>
-
-							<button
-								type="button"
-								onClick={this.closeModal}
-								className="close"
-								aria-label="Close"
-							>
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-
-						{this.renderModalContent()}
-
+						{this.renderLoginModal()};
+						{/* {this.renderModalContent()} */}
 						{this.errorMsg()}
 					</div>
 				</Modal>
@@ -189,6 +211,140 @@ const customStyles = {
 	// backgroundColor:"green"
 	// 	}
 };
+
+const LoginStyle = styled.div`
+	font-family: IBM Plex Sans;
+	padding-right: 30px;
+
+
+		.close {
+  float: right;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+  outline:none;
+  /* text-shadow: 0 1px 0 #7C6E7E; */
+  opacity: .5;
+}
+
+
+
+.close:hover {
+  color: ${props => props.theme.cardDark};
+  text-decoration: none;
+}
+
+.close:active {
+ color: ${props => props.theme.colorBad};
+}
+
+.close:not(:disabled):not(.disabled):hover, .close:not(:disabled):not(.disabled):focus {
+  opacity: .75;
+}
+
+
+	.login {
+		position: absolute;
+
+		transform: translate(-50%, -50%);
+		width: 350px;
+		height: 600px;
+		background: whitesmoke;
+		overflow: hidden;
+
+		.banner {
+			position: absolute;
+			top: 0px;
+			height: 0px;
+			width: 100%;
+			height: 210px;
+			background: url(${props => props.background}) center no-repeat;
+			background-size: 600px;
+			/* transform: skew(0deg, -8deg) translateY(-25px); */
+			z-index: 2;
+		}
+		.banner:before {
+			content: "Login";
+			position: absolute;
+			width: 80px;
+			height: 80px;
+			background: ${props => props.theme.colorBad};
+			color: #fff;
+			bottom: -35px;
+			left: 38%;
+			line-height: 80px;
+			font-size: 17px;
+			text-transform: uppercase;
+			border-radius: 50%;
+			text-align: center;
+			/* transform: skew(0deg, 8deg) translateX(-50%); */
+		}
+
+		.form {
+			position: absolute;
+			top: 210px;
+			background: #f6f6f6;
+			width: 100%;
+			height: calc(100% - 180px);
+
+			.wrapper {
+				padding-top: 30px;
+				position: absolute;
+				left: 50%;
+				transform: translateX(-50%);
+				width: 85%;
+			}
+			.row {
+				margin: 20px 0px;
+				.label {
+					font-size: 12px;
+					font-weight: 600;
+					color: rgb(100, 100, 100);
+				}
+
+				input {
+					margin-top: 2px;
+					font-size: 13px;
+					color: rgb(70, 70, 70);
+					border: none;
+					border-bottom: 1px solid rgba(100, 100, 100, 0.6);
+					outline: none;
+					height: 25px;
+					background: transparent;
+					width: 100%;
+				}
+				button {
+					margin-top: 0px;
+					font-size: 13px;
+					color: rgb(100, 100, 100);
+					border: none;
+					outline: none;
+					height: 40px;
+					text-transform: uppercase;
+					background: ${props => props.theme.starDark};
+					width: 100%;
+					color: #fff;
+					cursor: pointer;
+				}
+			}
+
+			.signup {
+				position: absolute;
+				text-align: center;
+				width: 100%;
+				font-size: 13px;
+				bottom: 50px;
+				color: #333;
+				a {
+					color: ${props => props.theme.colorBad};
+					text-decoration: none;
+					font-weight: 600;
+				}
+			}
+		}
+	}
+`;
 
 const LoginFormStyle = styled.form`
 	width: 498px;
@@ -235,14 +391,15 @@ const Input = styled.input`
 	border: 0;
 	background: none;
 	display: block;
+	line-height: normal;
 	margin: 20px auto;
 	text-align: center;
-	border: 2px solid ${props => props.theme.logoA};
-	padding: 14px 10px;
+	border-bottom: 2px solid ${props => props.theme.clickable};
+	/* padding: 14px 10px; */
 	width: 200px;
 	outline: none;
 	color: white;
-	border-radius: 24px;
+	/* border-radius: 24px; */
 	transition: 0.25s;
 
 	&:focus {

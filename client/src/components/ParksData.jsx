@@ -193,6 +193,7 @@ class BaseParksData extends Component {
 							markers={this.markers}
 							location={this.state.fetchReq}
 							onMapLoaded={this.handleMapLoaded}
+							moon={this.state.moon}
 						/>
 					</animated.div>
 				)}
@@ -243,13 +244,13 @@ class BaseParksData extends Component {
 			>
 				{this.renderParkMap()}
 				<div className="RightSideContainerFull">
-					<button
+					{/* <button
 						onClick={() => {
 							this.setState({ hideForm: !this.state.hideForm });
 						}}
 					>
 						Toggle form
-					</button>
+					</button> */}
 					{this.renderParkForm()}
 
 					<div className="MoonStyle">
@@ -335,9 +336,10 @@ const MainContentWrapper = styled.div`
 	.RightSideContainerFull {
 		z-index: 0;
 		grid-area: rightSide;
+		margin-bottom: 20px;
 		/* overflow-y: scroll;
 		overflow-x: hidden; */
-		background-color: whitesmoke;
+		/* background-color: whitesmoke; */
 	}
 	.ParkFormStyle {
 		grid-area: form;
@@ -359,8 +361,7 @@ const MainContentWrapper = styled.div`
 		margin-top: 4rem;
 		width: 100%;
 		grid-template-columns: 1fr;
-		grid-template-rows: ${props =>
-			props.hideMap ? "0px auto" : "50% auto"};
+		grid-template-rows: ${props => (props.hideMap ? "0px auto" : "50% auto")};
 		grid-template-areas:
 			"map"
 			"rightSide";
