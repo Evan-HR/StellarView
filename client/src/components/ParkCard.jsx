@@ -160,14 +160,6 @@ class ParkCard extends Component {
 						<div className="ParkScore">
 							<span className="ScoreNumerator">
 								{(this.props.park.score * 10).toFixed(1)}
-								{/* <span className="ScoreNumeratorMantissa">
-									.
-									{Math.trunc(
-										(parseFloat(this.props.park.score) *
-											100) %
-											10
-									)}
-								</span> */}
 							</span>
 
 							<br />
@@ -249,7 +241,12 @@ const CardStyle = styled.div`
 		.Title {
 			bottom: 8px;
 			font-size: 36px;
-			left: 0;
+			left: 0;    
+			/* text-shadow:
+				-0.5px -0.5px 0 #000,
+				0.5px -0.5px 0 #000,
+				-0.5px 0.5px 0 #000,
+				0.5px 0.5px 0 #000;   */
 		}
 	}
 
