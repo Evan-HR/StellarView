@@ -251,6 +251,7 @@ class BaseParksData extends Component {
 					>
 						Toggle form
 					</button> */}
+					{/* <div className="FormMoonWrapper"> */}
 					{this.renderParkForm()}
 
 					<div className="MoonStyle">
@@ -260,6 +261,7 @@ class BaseParksData extends Component {
 							moonType={this.state.moonType}
 						/>
 					</div>
+					{/* </div> */}
 
 					<div className="ParkTableStyle">
 						<b>Sort by:</b>
@@ -342,11 +344,17 @@ const MainContentWrapper = styled.div`
 		/* background-color: whitesmoke; */
 	}
 	.ParkFormStyle {
+		/* height: 11vh; */
+		/* height: 50%; */
 		grid-area: form;
 		${({ active }) => active && `display: none;`}
 	}
+	/* .FormMoonWrapper{
+		min-height: 33.33vh;
+	} */
 
 	.MoonStyle {
+		/* height: 50%; */
 		background: ${props => props.theme.moonCard};
 	}
 

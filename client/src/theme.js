@@ -37,5 +37,7 @@ export const theme = {
 	clickable: "#FAE6BF",
 	colorGood: "#99C192",
 	colorBad: "#BB6F6F",
-	colorMedium: "#DAA979"
+	colorMedium: "#DAA979",
+	lightDark: "#5A5A5A",
+	prettyDark: "#111414"
 };

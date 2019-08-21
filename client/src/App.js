@@ -12,8 +12,7 @@ import { createGlobalStyle } from "styled-components";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
 import FAQ from "./components/FAQ";
-import backgroundImage from"./components/style/Media/backgroundTest.png";
-
+import backgroundImage from "./components/style/Media/starrynight_loop.svg";
 
 class App extends Component {
 	state = {
@@ -47,7 +46,7 @@ class App extends Component {
 			<React.Fragment>
 				{/* <StarBackground/>  */}
 
-				<GlobalStyle bg={backgroundImage}/>
+				<GlobalStyle bg={backgroundImage} />
 				<Router>
 					<ToolBar
 						drawerClickHandler={this.drawerToggleClickHandler}
@@ -120,9 +119,9 @@ body{
 	/* background-image: linear-gradient(150deg,${props =>
 		props.theme.cream} 60%,${props =>
 	props.theme.franNavy} calc(60% + 2px)); */
-	background-image: url(${props => props.bg});
-	background-size: cover;
-	/* background-color: ${props => props.theme.bodyBackground} !important; */
+	/* background-image: url(${props => props.bg});
+	background-size: cover; */
+	background-color: ${props => props.theme.prettyDark} !important;
 	text-align: center;
 }
 `;

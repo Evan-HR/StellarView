@@ -615,7 +615,7 @@ const MyLocationStyle = styled.button`
 `;
 
 const SearchFormStyle = styled.div`
-	background-color: ${props => props.theme.cardDark};
+	background-color: ${props => props.theme.bodyBackground};
 	font-family: IBM Plex Sans;
 
 	.AdvancedSearch {
@@ -644,13 +644,15 @@ const SearchFormStyle = styled.div`
 	.searchButton {
 		width: 40px;
 		height: 36px;
-		border: 1px solid #00b4cc;
-		background: #00b4cc;
+		/* border: 1px solid #00b4cc; */
+		background: ${props => props.theme.prettyDark};
 		text-align: center;
+
 		color: #fff;
-		border-radius: 0 5px 5px 0;
+		/* border-radius: 0 5px 5px 0; */
 		cursor: pointer;
 		font-size: 20px;
+		border: none;
 	}
 
 	.searchTerm:focus {
@@ -665,13 +667,15 @@ const SearchFormStyle = styled.div`
 
 	.searchTerm {
 		/* width: 100%; */
-		border: 3px solid #00b4cc;
-		border-right: none;
+		background: ${props => props.theme.lightDark};
+		/* border: 3px solid #00b4cc; */
+		/* border-right: none; */
 		padding: 5px;
 		height: 36px;
-		border-radius: 5px 0 0 5px;
+		/* border-radius: 5px 0 0 5px; */
 		outline: none;
 		color: #9dbfaf;
+		border: none;
 	}
 `;
 
