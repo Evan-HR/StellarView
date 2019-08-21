@@ -117,16 +117,16 @@ class ParkMapModal extends Component {
 									<Card
 										cardName="cloudCard"
 										front={
-											<React.Fragment>
+											<div className="front">
 												<i className="cloudIcon fas fa-cloud" />
 												<br />
 												{this.park.weather.clouds}
-											</React.Fragment>
+											</div>
 										}
 										back={
-											<React.Fragment>
+											<div className="back">
 												More info!
-											</React.Fragment>
+											</div>
 										}
 									/>
 								</div>
@@ -134,16 +134,16 @@ class ParkMapModal extends Component {
 									<Card
 										cardName="lightPolCard"
 										front={
-											<React.Fragment>
+											<div className="front">
 												<i className="lightPolIcon fas fa-meteor" />
 												<br />
 												{this.park.light_pol}
-											</React.Fragment>
+											</div>
 										}
 										back={
-											<React.Fragment>
+											<div className="back">
 												More info!
-											</React.Fragment>
+											</div>
 										}
 									/>
 								</div>
@@ -151,16 +151,16 @@ class ParkMapModal extends Component {
 									<Card
 										cardName="moonCard"
 										front={
-											<React.Fragment>
+											<div className="front">
 												<MoonDisplay
 													phase={this.moon}
 												/>
-											</React.Fragment>
+											</div>
 										}
 										back={
-											<React.Fragment>
+											<div className="back">
 												More info!
-											</React.Fragment>
+											</div>
 										}
 									/>
 								</div>
@@ -168,16 +168,16 @@ class ParkMapModal extends Component {
 									<Card
 										cardName="humidityCard"
 										front={
-											<React.Fragment>
+											<div className="front">
 												<i className="humidityIcon fas fa-tint" />
 												<br />
 												{this.park.weather.humidity}
-											</React.Fragment>
+											</div>
 										}
 										back={
-											<React.Fragment>
+											<div className="back">
 												More info!
-											</React.Fragment>
+											</div>
 										}
 									/>
 								</div>
@@ -321,7 +321,12 @@ const ModalBodyStyle = styled.div`
 			.cloudCard {
 				position: absolute;
 				width: 100%;
-				background-color: ${props => props.theme.colorBad};
+				.front {
+					background-color: ${props => props.theme.colorBad};
+				}
+				.back {
+					background-color: gray;
+				}
 			}
 		}
 		.lightPolContainer {
@@ -331,7 +336,12 @@ const ModalBodyStyle = styled.div`
 			.lightPolCard {
 				position: absolute;
 				width: 100%;
-				background-color: ${props => props.theme.colorBad};
+				.front {
+					background-color: ${props => props.theme.colorBad};
+				}
+				.back {
+					background-color: gray;
+				}
 			}
 		}
 		.moonContainer {
@@ -341,7 +351,12 @@ const ModalBodyStyle = styled.div`
 			.moonCard {
 				position: absolute;
 				width: 100%;
-				background-color: ${props => props.theme.colorBad};
+				.front {
+					background-color: ${props => props.theme.colorBad};
+				}
+				.back {
+					background-color: gray;
+				}
 			}
 		}
 		.humidityContainer {
@@ -351,7 +366,12 @@ const ModalBodyStyle = styled.div`
 			.humidityCard {
 				position: absolute;
 				width: 100%;
-				background-color: ${props => props.theme.colorBad};
+				.front {
+					background-color: ${props => props.theme.colorBad};
+				}
+				.back {
+					background-color: gray;
+				}
 			}
 		}
 	}
