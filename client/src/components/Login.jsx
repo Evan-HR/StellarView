@@ -241,7 +241,7 @@ const LoginStyle = styled.div`
 		font-size: 1.5rem;
 		font-weight: 700;
 		line-height: 1;
-		color: white;
+		color: gray;
 		outline: none;
 		/* text-shadow: 0 1px 0 #7C6E7E; */
 		opacity: 0.5;
