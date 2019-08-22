@@ -464,17 +464,17 @@ class BaseParkForm extends Component {
 					</form>
 				</div>
 				<div className="myLocation">
-					<MyLocationStyle
+					<button
 						// onClick={this.getParkData.bind(this, this.state.formInput)}
 						className="nearMe"
 						type="button"
 						disabled={this.state.isLoadingLocation}
 						onClick={this.getMyLocation}
 					>
-						<img src={nearMeButton} />
 						NEAR ME
+						<img src={nearMeButton} />
 						{/* <strong>{this.renderLocationSpinner()}</strong> */}
-					</MyLocationStyle>
+					</button>
 				</div>
 
 				{/* CLEAR BUTTON!!!! */}
@@ -489,7 +489,7 @@ class BaseParkForm extends Component {
 					</button> */}
 
 				<div className="advancedSearchToggle">
-					<AdvancedSearchStyle
+					<button
 						className="ToggleAdvancedSearch"
 						onClick={() =>
 							this.setState({
@@ -498,8 +498,8 @@ class BaseParkForm extends Component {
 						}
 					>
 						Advanced Search
-					</AdvancedSearchStyle>
-					<i class="fas fa-caret-down" />
+						<i class="fas fa-caret-down" />
+					</button>
 				</div>
 
 				<div className="AdvancedSearch">
@@ -610,36 +610,61 @@ export default withRouter(ParkForm);
 
 ////////////////////////////////////////////
 
-const MyLocationStyle = styled.button`
-	all: unset;
-`;
-
 const SearchFormStyle = styled.div`
 	background-color: ${props => props.theme.bodyBackground};
 	font-family: IBM Plex Sans;
-
+	padding: 13px;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: ${props =>
+		props.advancedSearch
+			? `auto auto auto`
+			: `auto auto`}; /* Three rows, two with explicit widths */
+	grid-gap: 10px;
+	grid-template-areas:
+		"searchBar searchBar myLocation"
+		"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
+		${props =>
+			props.advancedSearch
+				? `"advancedSearch advancedSearch advancedSearch"`
+				: ``};
 	.AdvancedSearch {
 		${props => (props.advancedSearch ? `` : `display: none`)}
 		grid-area:advancedSearch;
 	}
+
 	.myLocation {
+		color: whitesmoke;
+		.nearMe {
+			all: unset;
+			cursor: pointer;
+			background-color: ${props => props.theme.prettyDark};
+			height: 36px;
+			width: 100%;
+			img {
+				width: 28px;
+				margin-left: 5px;
+			}
+		}
 		grid-area: myLocation;
 	}
+
 	.advancedSearchToggle {
 		grid-area: advancedSearchToggle;
+
+		button {
+			float: left;
+			i {
+				transform: rotate(
+					${props => (props.advancedSearch ? `0deg` : `-90deg`)}
+				);
+			}
+		}
 	}
 
 	.citySearch {
 		grid-area: searchBar;
 	}
-
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	grid-template-rows: auto auto auto; /* Three rows, two with explicit widths */
-	grid-template-areas:
-		"searchBar searchBar myLocation"
-		"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
-		"advancedSearch advancedSearch advancedSearch";
 
 	.searchButton {
 		width: 40px;
@@ -653,6 +678,7 @@ const SearchFormStyle = styled.div`
 		cursor: pointer;
 		font-size: 20px;
 		border: none;
+		float: left;
 	}
 
 	.searchTerm:focus {
@@ -666,7 +692,7 @@ const SearchFormStyle = styled.div`
 	} */
 
 	.searchTerm {
-		/* width: 100%; */
+		width: calc(100% - 40px);
 		background: ${props => props.theme.lightDark};
 		/* border: 3px solid #00b4cc; */
 		/* border-right: none; */
@@ -676,10 +702,12 @@ const SearchFormStyle = styled.div`
 		outline: none;
 		color: #9dbfaf;
 		border: none;
+		float: left;
 	}
-`;
 
-const AdvancedSearchStyle = styled.button`
-	/* grid-area: advancedSearch; */
-	all: unset;
+	.ToggleAdvancedSearch {
+		all: unset;
+		color: whitesmoke;
+		/* margin-top: 5px; */
+	}
 `;

@@ -72,85 +72,92 @@ class ParkCard extends Component {
 										: this.props.park.name}
 								</b>
 							</span>
+
+							<div className="Dist">
+								<span className="DistCharacteristic">
+									{this.props.park.distance < 9000 ? (
+										<React.Fragment>
+											{Math.trunc(
+												parseFloat(
+													this.props.park.distance
+												)
+											)}
+										</React.Fragment>
+									) : (
+										<React.Fragment>?</React.Fragment>
+									)}
+								</span>
+								<span className="DistMantissa">
+									{this.props.park.distance < 9000 ? (
+										<React.Fragment>
+											.
+											{Math.trunc(
+												(parseFloat(
+													this.props.park.distance
+												) *
+													100) %
+													100
+											)}
+										</React.Fragment>
+									) : (
+										<React.Fragment>??</React.Fragment>
+									)}{" "}
+									<b> km</b>
+								</span>
+							</div>
 						</div>
 
-						<div className="Dist">
-							<span className="DistCharacteristic">
-								{this.props.park.distance < 9000 ? (
-									<React.Fragment>
-										{Math.trunc(
-											parseFloat(this.props.park.distance)
-										)}
-									</React.Fragment>
-								) : (
-									<React.Fragment>?</React.Fragment>
-								)}
-							</span>
-							<span className="DistMantissa">
-								{this.props.park.distance < 9000 ? (
-									<React.Fragment>
-										.
-										{Math.trunc(
-											(parseFloat(
-												this.props.park.distance
-											) *
-												100) %
-												100
-										)}
-									</React.Fragment>
-								) : (
-									<React.Fragment>??</React.Fragment>
-								)}{" "}
-								<b> km</b>
-							</span>
-						</div>
+						<div className="WeatherIcons">
+							<div className="ParkHum">
+								<img src={humidityIcon} />
+								<br />
+								{this.props.park.weather.humidity < 40
+									? "Good"
+									: this.props.park.weather.humidity < 80
+									? "Okay"
+									: "Poor"}
+							</div>
 
-						<div className="ParkHum">
-							<img src={humidityIcon} />
-							{this.props.park.weather.humidity < 40
-								? "Good"
-								: this.props.park.weather.humidity < 80
-								? "Okay"
-								: "Poor"}
-						</div>
+							<div className="ParkCloud">
+								<img src={cloudIcon} />
+								<br />
+								{this.props.park.weather.clouds < 40
+									? "Good"
+									: this.props.park.weather.clouds < 80
+									? "Okay"
+									: "Poor"}
+							</div>
 
-						<div className="ParkCloud">
-							<img src={cloudIcon} />
-							{this.props.park.weather.clouds < 40
-								? "Good"
-								: this.props.park.weather.clouds < 80
-								? "Okay"
-								: "Poor"}
-						</div>
-
-						<div className="ParkLightPol">
-							<img src={lightPolIcon} />
-							{this.props.park.light_pol < 1
-								? "Good"
-								: this.props.park.light_pol < 3
-								? "Okay"
-								: "Poor"}
-						</div>
-
-						<div className="ParkTemp">
-							<span className="tempIcon">
-								<img src={tempIcon} />
-							</span>
-							<span className="tempNum">
-								{Math.round(this.props.park.weather.temp)} °C
-							</span>
-							<br />
-							{this.props.park.weather.temp < 15
-								? "Chilly"
-								: this.props.park.weather.temp < 25
-								? "Comfortable"
-								: "Inadequate"}
+							<div className="ParkLightPol">
+								<img src={lightPolIcon} />
+								<br />
+								{this.props.park.light_pol < 1
+									? "Good"
+									: this.props.park.light_pol < 3
+									? "Okay"
+									: "Poor"}
+							</div>
+							<div className="ParkTemp">
+								<span className="tempIcon">
+									<img src={tempIcon} />
+								</span>
+								<span className="tempNum">
+									{Math.round(this.props.park.weather.temp)}{" "}
+									°C
+								</span>
+								<br />
+								{this.props.park.weather.temp < 15
+									? "Chilly"
+									: this.props.park.weather.temp < 25
+									? "Comfortable"
+									: "Inadequate"}
+							</div>
 						</div>
 
 						<div className="WeatherInfo">
 							<span>
 								<b>{this.props.park.weather.city}</b> forecast
-								for <br />
+								for{" "}
 								{new Date(
 									this.props.park.weather.time
 								).toLocaleString()}
@@ -159,11 +166,16 @@ class ParkCard extends Component {
 
 						<div className="ParkScore">
 							<span className="ScoreNumerator">
-								{(this.props.park.score * 10).toFixed(1)}
+								{Math.round(this.props.park.score * 100)}
+								<span className="Percentage">%</span>
 							</span>
-
-							<br />
-							<span className="ScoreDenominator">/10</span>
+							<span className="ScoreDenominator">
+								{this.props.park.score < 0.5
+									? "Bad"
+									: this.props.park.weather.temp < 0.75
+									? "Okay"
+									: "Good"}
+							</span>
 						</div>
 
 						<div className="StarRev">
@@ -197,8 +209,6 @@ ParkCard.defaultProps = {
 
 export default ParkCard;
 
-/////////////////////////////////////////////////////////////////////////////////////////
-
 const CardStyle = styled.div`
 	margin: 13px;
 	/* margin-bottom: 10px;
@@ -211,10 +221,11 @@ const CardStyle = styled.div`
 	grid-column-gap: 10px;
 	grid-row-gap: 10px;
 	grid-template-areas:
-		"ParkTitle   ParkTitle   ParkTitle    Dist"
+		"ParkTitle   ParkTitle   ParkTitle    ParkTitle"
 		"WeatherInfo WeatherInfo WeatherInfo  ParkScore"
-		"ParkHum     ParkCloud   ParkLightPol ParkScore"
-		"ParkTemp    StarRev     StarRev      MoreInfo";
+		"WeatherIcons WeatherIcons WeatherIcons ParkScore"
+		/* "ParkHum     ParkCloud   ParkLightPol ParkScore" */
+		"StarRev    StarRev     StarRev      ParkScore";
 
 	font-family: IBM Plex Sans;
 	font-style: normal;
@@ -231,39 +242,43 @@ const CardStyle = styled.div`
 
 	.ParkTitle {
 		grid-area: ParkTitle;
-		border-bottom: 2px ${props => props.theme.fontDark} solid;
+		border-bottom: 1px ${props => props.theme.fontDark} solid;
 		position: relative;
-
-		span {
-			position: absolute;
-		}
+		display: flex;
+		justify-content: space-between;
+		align-items: end;
+		/* padding-bottom: 8px; */
 
 		.Title {
-			bottom: 8px;
+			/* bottom: 8px; */
 			font-size: 36px;
-			left: 0;    
+			left: 0;
+			margin-bottom: 7px;    
+			line-height: 34px;
 			/* text-shadow:
 				-0.5px -0.5px 0 #000,
 				0.5px -0.5px 0 #000,
 				-0.5px 0.5px 0 #000,
 				0.5px 0.5px 0 #000;   */
 		}
+		
+		.Dist {
+			display: inline-block;
+			/* margin: auto; */
+			font-weight: 300;
+			min-width: 52px;
+
+			span {
+				left: 0;
+				position: relative;
+			}
+
+			.DistMantissa {
+				font-size: 13px;
+			}
+		}
 	}
 
-	.Dist {
-		display: inline-block;
-		margin: auto;
-		font-weight: 300;
-
-		span {
-			left: 0;
-			position: relative;
-		}
-
-		.DistMantissa {
-			font-size: 13px;
-		}
-	}
 
 	.WeatherInfo {
 		grid-area: WeatherInfo;
@@ -275,29 +290,39 @@ const CardStyle = styled.div`
 		line-height: 18px;
 		align-content: center;
 		position: relative;
+		display: flex;
+		align-items: end;
+		justify-content: center;
 		span {
-			position: absolute;
-			text-align: center;
-			bottom: 0;
+			border-bottom: 2px ${props => props.theme.fontDark} solid;
+			/* position: absolute;
+			text-align: center; 
+			bottom: 0; */
 		}
 	}
-	.ParkHum {
-		grid-area: ParkHum;
-		text-align: center;
-		margin: auto auto;
-	}
-	.ParkCloud {
-		grid-area: ParkCloud;
-		text-align: center;
-		margin: auto auto;
-	}
-	.ParkLightPol {
-		grid-area: ParkLightPol;
-		text-align: center;
-		margin: auto auto;
-	}
-	.ParkTemp {
-		grid-area: ParkTemp;
+
+	.WeatherIcons {
+		grid-area: WeatherIcons;
+		display: flex;
+		justify-content: space-between;
+		.ParkHum {
+			/* grid-area: ParkHum; */
+			text-align: center;
+			margin: auto auto;
+		}
+		.ParkCloud {
+			/* grid-area: ParkCloud; */
+			text-align: center;
+			margin: auto auto;
+		}
+		.ParkLightPol {
+			/* grid-area: ParkLightPol; */
+			text-align: center;
+			margin: auto auto;
+		}
+
+		.ParkTemp {
+		/* grid-area: ParkTemp; */
 		text-align: center;
 		margin: auto auto;
 
@@ -310,6 +335,8 @@ const CardStyle = styled.div`
 			display: inline-block;
 		}
 	}
+	}
+	
 	.ParkScore {
 		grid-area: ParkScore;
 		font-family: Barlow;
@@ -319,16 +346,19 @@ const CardStyle = styled.div`
 		vertical-align: middle;
 		text-align: center;
 		margin: auto auto;
+		display: flex;
+		flex-direction: column;
 
 		.ScoreNumerator {
 			font-size: 64px;
-			.ScoreNumeratorMantissa {
+			.Percentage {
 				font-size: 24px;
 			}
 		}
 		
-
 		.ScoreDenominator {
+			margin: 13px;
+			
 			font-size: 24px;
 		}
 	}
@@ -341,6 +371,8 @@ const CardStyle = styled.div`
 		grid-area: MoreInfo;
 		text-align: center;
 		margin: auto auto;
+		display: flex;
+		display: none;
 
 		.infoIcon {
 			height: 2em;
@@ -349,6 +381,8 @@ const CardStyle = styled.div`
 
 		.infoText {
 			vertical-align: center;
+			margin-left: 7px;
+			text-align: left;
 		}
 
 		span {

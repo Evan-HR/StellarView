@@ -263,20 +263,25 @@ class BaseParksData extends Component {
 					</div>
 					{/* </div> */}
 
+					<div className="SortByContainer">
+						<div className="SortBy">
+							<b>Sort by:</b>
+							<button
+								onClick={this.sortParksDist}
+								disabled={this.state.sortedBy === "dist"}
+							>
+								Dist
+							</button>
+							<button
+								onClick={this.sortParksScore}
+								disabled={this.state.sortedBy === "score"}
+							>
+								Score
+							</button>
+						</div>
+					</div>
+
 					<div className="ParkTableStyle">
-						<b>Sort by:</b>
-						<button
-							onClick={this.sortParksDist}
-							disabled={this.state.sortedBy === "dist"}
-						>
-							Dist
-						</button>
-						<button
-							onClick={this.sortParksScore}
-							disabled={this.state.sortedBy === "score"}
-						>
-							Score
-						</button>
 						<ParkTable
 							parkList={this.state.parks}
 							moon={this.state.moon}
@@ -318,7 +323,7 @@ const MainContentWrapper = styled.div`
 	grid-template-columns: 1fr 1fr;
 	grid-column-gap: 10px;
 	grid-row-gap: 10px;
-	grid-template-areas: "xxx rightSide";
+	grid-template-areas: ". rightSide";
 
 	.ParkMapStyle {
 		/* grid-area: map; */
@@ -356,6 +361,21 @@ const MainContentWrapper = styled.div`
 	.MoonStyle {
 		/* height: 50%; */
 		background: ${props => props.theme.moonCard};
+	}
+
+	.SortByContainer {
+		padding: 13px 0px 13px 0px;
+		width: 100%;
+
+		.SortBy {
+			button{
+			all: unset;
+			color: whitesmoke;
+			cursor: pointer;
+		}
+			display: flex;
+			justify-content: flex-end;
+		}
 	}
 
 	.ParkTableStyle {
