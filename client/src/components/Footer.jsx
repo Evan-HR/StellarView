@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 class Footer extends Component {
 	render() {
-		return <FooterStyle>© Vlad Falach, Dustin Jurkaleonis 2019</FooterStyle>;
+		return <FooterStyle>© Vlad Falach, Dustin Jurkaulionis 2019</FooterStyle>;
 	}
 }
 

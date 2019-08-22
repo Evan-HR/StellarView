@@ -5,6 +5,7 @@ import backgroundImage from "./style/Media/loginModalPlain.svg";
 
 import { withRouter, Link } from "react-router-dom";
 import styled from "styled-components";
+import Register from "./Register";
 
 Modal.setAppElement("#root");
 class Login extends Component {
@@ -48,10 +49,17 @@ class Login extends Component {
 	};
 
 	errorMsg() {
-		if (this.state.errorDB === true) {
+		if (this.state.errorDB) {
 			return (
-				<div class="alert alert-danger" role="alert">
+				<div class="InvalidLogin alert alert-danger" role="alert">
 					Invalid login credentials! Please try again
+				</div>
+			);
+		}
+		if (this.state.loginSuccess) {
+			return (
+				<div class="InvalidLogin success alert-success" role="alert">
+					Login Successful!
 				</div>
 			);
 		}
@@ -103,63 +111,76 @@ class Login extends Component {
 						<div className="wrapper">
 							<div className="row">
 								<div className="label">E-Mail</div>
-								<input type="text" />
+								<input
+									type="text"
+									className="email"
+									name="email"
+									// value={this.state.userEmail || ""}
+									onChange={this.handleEmailChange}
+									required
+								/>
 							</div>
 							<div className="row">
 								<div className="label">Password</div>
-								<input type="password" />
+								<input
+									type="password"
+									name="password"
+									onChange={this.handlePasswordChange}
+									required
+								/>
 							</div>
 							<div className="row">
-								<button>Submit</button>
+								<button onClick={this.onSubmit}>Submit</button>
 							</div>
 						</div>
 						<div className="signup">
-							Don't have an account? <a href="#">Sign-up</a>
+							Don't have an account? <Register />
 						</div>
+						{this.errorMsg()}
 					</div>
 				</div>
 			</LoginStyle>
 		);
 	};
 
-	renderModalContent = () => {
-		if (!this.state.loginSuccess) {
-			return (
-				<LoginFormStyle>
-					<Input
-						type="email"
-						placeholder="email"
-						name="email"
-						onChange={this.handleEmailChange}
-						required
-					/>
+	// renderModalContent = () => {
+	// 	if (!this.state.loginSuccess) {
+	// 		return (
+	// 			<LoginFormStyle>
+	// 				<Input
+	// 					type="email"
+	// 					placeholder="email"
+	// 					name="email"
+	// 					onChange={this.handleEmailChange}
+	// 					required
+	// 				/>
 
-					<Input
-						type="password"
-						placeholder="password"
-						name="password"
-						onChange={this.handlePasswordChange}
-						required
-					/>
+	// 				<Input
+	// 					type="password"
+	// 					placeholder="password"
+	// 					name="password"
+	// 					onChange={this.handlePasswordChange}
+	// 					required
+	// 				/>
 
-					<button
-						className="SubmitButton"
-						onClick={e => this.onSubmit(e)}
-					>
-						SUBMIT
-					</button>
-				</LoginFormStyle>
-			);
-		} else {
-			return (
-				<div className="text-success text-center m-3">
-					<h1>
-						<b>Login Successful!</b>
-					</h1>
-				</div>
-			);
-		}
-	};
+	// 				<button
+	// 					className="SubmitButton"
+	// 					onClick={e => this.onSubmit(e)}
+	// 				>
+	// 					SUBMIT
+	// 				</button>
+	// 			</LoginFormStyle>
+	// 		);
+	// 	} else {
+	// 		return (
+	// 			<div className="text-success text-center m-3">
+	// 				<h1>
+	// 					<b>Login Successful!</b>
+	// 				</h1>
+	// 			</div>
+	// 		);
+	// 	}
+	// };
 
 	//className changes model content, style gives you anything you specify to override defaults
 
@@ -180,9 +201,8 @@ class Login extends Component {
 					style={customStyles}
 				>
 					<div className="modal-content">
-						{this.renderLoginModal()};
+						{this.renderLoginModal()}
 						{/* {this.renderModalContent()} */}
-						{this.errorMsg()}
 					</div>
 				</Modal>
 			</React.Fragment>
@@ -216,33 +236,30 @@ const LoginStyle = styled.div`
 	font-family: IBM Plex Sans;
 	padding-right: 30px;
 
+	.close {
+		float: right;
+		font-size: 1.5rem;
+		font-weight: 700;
+		line-height: 1;
+		color: white;
+		outline: none;
+		/* text-shadow: 0 1px 0 #7C6E7E; */
+		opacity: 0.5;
+	}
 
-		.close {
-  float: right;
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1;
-  color: white;
-  outline:none;
-  /* text-shadow: 0 1px 0 #7C6E7E; */
-  opacity: .5;
-}
+	.close:hover {
+		color: ${props => props.theme.cardDark};
+		text-decoration: none;
+	}
 
+	.close:active {
+		color: ${props => props.theme.colorBad};
+	}
 
-
-.close:hover {
-  color: ${props => props.theme.cardDark};
-  text-decoration: none;
-}
-
-.close:active {
- color: ${props => props.theme.colorBad};
-}
-
-.close:not(:disabled):not(.disabled):hover, .close:not(:disabled):not(.disabled):focus {
-  opacity: .75;
-}
-
+	.close:not(:disabled):not(.disabled):hover,
+	.close:not(:disabled):not(.disabled):focus {
+		opacity: 0.75;
+	}
 
 	.login {
 		position: absolute;
@@ -250,6 +267,8 @@ const LoginStyle = styled.div`
 		transform: translate(-50%, -50%);
 		width: 350px;
 		height: 600px;
+		max-width: 100vw;
+		max-height: 100vh;
 		background: whitesmoke;
 		overflow: hidden;
 
@@ -287,46 +306,53 @@ const LoginStyle = styled.div`
 			background: #f6f6f6;
 			width: 100%;
 			height: calc(100% - 180px);
+			display: flex;
+			flex-direction: column;
 
 			.wrapper {
 				padding-top: 30px;
-				position: absolute;
+				/* position: absolute;
 				left: 50%;
-				transform: translateX(-50%);
+				transform: translateX(-50%); */
 				width: 85%;
-			}
-			.row {
-				margin: 20px 0px;
-				.label {
-					font-size: 12px;
-					font-weight: 600;
-					color: rgb(100, 100, 100);
-				}
+				margin: 0 auto;
+				.row {
+					margin: 20px 0px;
+					.label {
+						font-size: 12px;
+						font-weight: 600;
+						color: rgb(100, 100, 100);
+					}
 
-				input {
-					margin-top: 2px;
-					font-size: 13px;
-					color: rgb(70, 70, 70);
-					border: none;
-					border-bottom: 1px solid rgba(100, 100, 100, 0.6);
-					outline: none;
-					height: 25px;
-					background: transparent;
-					width: 100%;
+					input {
+						margin-top: 2px;
+						font-size: 13px;
+						color: rgb(70, 70, 70);
+						border: none;
+						border-bottom: 1px solid rgba(100, 100, 100, 0.6);
+						outline: none;
+						height: 25px;
+						background: transparent;
+						width: 100%;
+					}
+					button {
+						margin-top: 0px;
+						font-size: 13px;
+						color: rgb(100, 100, 100);
+						border: none;
+						outline: none;
+						height: 40px;
+						text-transform: uppercase;
+						background: ${props => props.theme.starDark};
+						width: 100%;
+						color: #fff;
+						cursor: pointer;
+					}
 				}
-				button {
-					margin-top: 0px;
-					font-size: 13px;
-					color: rgb(100, 100, 100);
-					border: none;
-					outline: none;
-					height: 40px;
-					text-transform: uppercase;
-					background: ${props => props.theme.starDark};
-					width: 100%;
-					color: #fff;
-					cursor: pointer;
-				}
+			}
+
+			.InvalidLogin {
+				width: 100%;
 			}
 
 			.signup {

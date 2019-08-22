@@ -47,7 +47,7 @@ class ParkMapModal extends Component {
 		this.park = content.park;
 		this.moon = content.moon;
 		console.log(this.park);
-		this.setState({ ...this.state, modalIsOpen: true });
+		this.setState({ modalIsOpen: true });
 	};
 
 	afterOpenModal = () => {
@@ -56,7 +56,7 @@ class ParkMapModal extends Component {
 
 	closeModal = () => {
 		document.body.style.overflow = "visible";
-		this.setState({ ...this.state, modalIsOpen: false });
+		this.setState({ modalIsOpen: false });
 	};
 
 	render() {
@@ -71,123 +71,124 @@ class ParkMapModal extends Component {
 				contentLabel="Example Modal"
 			>
 				<div className="modal-content">
-					<div className="modal-header">
-						<HeaderStyle>
-							{this.park.name === "Unknown" && this.park.name_alt
-								? this.park.name_alt
-								: this.park.name}
-						</HeaderStyle>
+					<ModalStyle>
+						<div className="modal-header">
+							<HeaderStyle>
+								{this.park.name === "Unknown" &&
+								this.park.name_alt
+									? this.park.name_alt
+									: this.park.name}
+							</HeaderStyle>
 
-						<button
-							type="button"
-							onClick={this.closeModal}
-							className="close"
-							aria-label="Close"
-						>
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div className="modal-body">
-						<ModalBodyStyle>
-							{/* This park is located at {this.park.lat},{" "}
-							{this.park.lng}. The light pollution level here is{" "}
-							{this.park.light_pol}.{" "} */}
-
-							<div className="interactIconsContainer">
-								<div className="interactIcons">
-									<i className="shareIcon fas fa-share-alt" />
-									<i className="faqIcon fas fa-question-circle" />
-									<FavPark className="favIcon" />
-									<i className="reportIcon fas fa-exclamation-triangle" />
-								</div>
-								{/* <br />
+							<button
+								type="button"
+								onClick={this.closeModal}
+								className="close"
+								aria-label="Close"
+							>
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div className="modal-body">
+							<ModalBodyStyle>
+								<div className="interactIconsContainer">
+									<div className="interactIcons">
+										<i className="shareIcon fas fa-share-alt" />
+										<i className="faqIcon fas fa-question-circle" />
+										<FavPark className="favIcon" />
+										<i className="reportIcon fas fa-exclamation-triangle" />
+									</div>
+									{/* <br />
 								Click each square for more info! */}
-							</div>
+								</div>
 
-							<div className="parkScore">
-								<span className="ScoreNumerator">
-									{(this.park.score * 10).toFixed(1)}
-								</span>
-								<br />
-								<span className="ScoreDenominator">/10</span>
-							</div>
+								<div className="parkScore">
+									<span className="ScoreNumerator">
+										{(this.park.score * 10).toFixed(1)}
+									</span>
+									<br />
+									<span className="ScoreDenominator">
+										/10
+									</span>
+								</div>
 
-							<div className="weatherContainer">
-								<div className="cloudContainer">
-									<Card
-										cardName="cloudCard"
-										front={
-											<React.Fragment>
-												<i className="cloudIcon fas fa-cloud" />
-												<br />
-												{this.park.weather.clouds}
-											</React.Fragment>
-										}
-										back={
-											<React.Fragment>
-												More info!
-											</React.Fragment>
-										}
-									/>
+								<div className="weatherContainer">
+									<div className="cloudContainer">
+										<Card
+											cardName="cloudCard"
+											front={
+												<React.Fragment>
+													<i className="cloudIcon fas fa-cloud" />
+													<br />
+													{this.park.weather.clouds}
+												</React.Fragment>
+											}
+											back={
+												<React.Fragment>
+													More info!
+												</React.Fragment>
+											}
+										/>
+									</div>
+									<div className="lightPolContainer">
+										<Card
+											cardName="lightPolCard"
+											front={
+												<React.Fragment>
+													<i className="lightPolIcon fas fa-meteor" />
+													<br />
+													{this.park.light_pol}
+												</React.Fragment>
+											}
+											back={
+												<React.Fragment>
+													More info!
+												</React.Fragment>
+											}
+										/>
+									</div>
+									<div className="moonContainer">
+										<Card
+											cardName="moonCard"
+											front={
+												<React.Fragment>
+													<MoonDisplay
+														phase={this.moon}
+													/>
+												</React.Fragment>
+											}
+											back={
+												<React.Fragment>
+													More info!
+												</React.Fragment>
+											}
+										/>
+									</div>
+									<div className="humidityContainer">
+										<Card
+											cardName="humidityCard"
+											front={
+												<React.Fragment>
+													<i className="humidityIcon fas fa-tint" />
+													<br />
+													{this.park.weather.humidity}
+												</React.Fragment>
+											}
+											back={
+												<React.Fragment>
+													More info!
+												</React.Fragment>
+											}
+										/>
+									</div>
 								</div>
-								<div className="lightPolContainer">
-									<Card
-										cardName="lightPolCard"
-										front={
-											<React.Fragment>
-												<i className="lightPolIcon fas fa-meteor" />
-												<br />
-												{this.park.light_pol}
-											</React.Fragment>
-										}
-										back={
-											<React.Fragment>
-												More info!
-											</React.Fragment>
-										}
-									/>
-								</div>
-								<div className="moonContainer">
-									<Card
-										cardName="moonCard"
-										front={
-											<React.Fragment>
-												<MoonDisplay
-													phase={this.moon}
-												/>
-											</React.Fragment>
-										}
-										back={
-											<React.Fragment>
-												More info!
-											</React.Fragment>
-										}
-									/>
-								</div>
-								<div className="humidityContainer">
-									<Card
-										cardName="humidityCard"
-										front={
-											<React.Fragment>
-												<i className="humidityIcon fas fa-tint" />
-												<br />
-												{this.park.weather.humidity}
-											</React.Fragment>
-										}
-										back={
-											<React.Fragment>
-												More info!
-											</React.Fragment>
-										}
-									/>
-								</div>
-							</div>
 
-							<div className="reviewsContainer">
-								<Reviews parkID={this.park.id} />
-							</div>
-						</ModalBodyStyle>
-					</div>
+								<div className="reviewsContainer">
+									<Reviews parkID={this.park.id} />
+								</div>
+							</ModalBodyStyle>
+						</div>
+					</ModalStyle>
 				</div>
 			</Modal>
 		);
@@ -229,6 +230,11 @@ function Card(props) {
 
 export default ParkMapModal;
 
+const ModalStyle = styled.div`
+	max-height: 100vh;
+	max-width: 100vw;
+`;
+
 const ModalBodyStyle = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -237,7 +243,6 @@ const ModalBodyStyle = styled.div`
 		"interactIconsContainer    parkScore"
 		"weatherContainer    	   weatherContainer"
 		"reviewsContainer          reviewsContainer";
-
 	grid-row-gap: 20px;
 	grid-column-gap: 20px;
 

@@ -110,7 +110,7 @@ class Register extends Component {
 					</div>
 					<div className="form">
 						<div className="wrapper">
-						<div className="row">
+							<div className="row">
 								<div className="label">Preferred Name</div>
 								<input type="text" />
 							</div>
@@ -130,7 +130,6 @@ class Register extends Component {
 								<button>Submit</button>
 							</div>
 						</div>
-		
 					</div>
 				</div>
 			</LoginStyle>
@@ -138,46 +137,45 @@ class Register extends Component {
 	};
 
 	renderRegisterForm = () => {
-		return(
-<RegisterFormStyle>
-							<Input
-								type="text"
-								placeholder="preferred name"
-								name="name"
-								onChange={this.handleNameChange}
-								required
-							/>
-							<Input
-								type="email"
-								placeholder="email"
-								name="email"
-								onChange={this.handleEmailChange}
-								required
-							/>
-							<Input
-								type="password"
-								placeholder="password"
-								name="password1"
-								onChange={this.handlePasswordChange1}
-								required
-							/>
-							<Input
-								type="password"
-								placeholder="re-enter password"
-								name="password2"
-								onChange={this.handlePasswordChange2}
-								required
-							/>
-							<button
-								className="SubmitButton"
-								onClick={e => this.onSubmit(e)}
-							>
-								SUBMIT
-							</button>
-						</RegisterFormStyle>
-		)
-		
-	}
+		return (
+			<RegisterFormStyle>
+				<Input
+					type="text"
+					placeholder="preferred name"
+					name="name"
+					onChange={this.handleNameChange}
+					required
+				/>
+				<Input
+					type="email"
+					placeholder="email"
+					name="email"
+					onChange={this.handleEmailChange}
+					required
+				/>
+				<Input
+					type="password"
+					placeholder="password"
+					name="password1"
+					onChange={this.handlePasswordChange1}
+					required
+				/>
+				<Input
+					type="password"
+					placeholder="re-enter password"
+					name="password2"
+					onChange={this.handlePasswordChange2}
+					required
+				/>
+				<button
+					className="SubmitButton"
+					onClick={e => this.onSubmit(e)}
+				>
+					SUBMIT
+				</button>
+			</RegisterFormStyle>
+		);
+	};
 
 	registerSuccess = () => {
 		console.log("get here for some reason?");
@@ -216,7 +214,7 @@ class Register extends Component {
 		return (
 			<React.Fragment>
 				<a onClick={() => this.openModal()}>
-					<Link>register</Link>
+					<Link>Register</Link>
 				</a>
 				<Modal
 					closeTimeoutMS={800}
@@ -229,8 +227,6 @@ class Register extends Component {
 					style={customStyles}
 				>
 					<div className="modal-content">
-					
-
 						{this.renderRegisterFormStyle()}
 
 						{this.errorMsg()}
@@ -332,31 +328,30 @@ const LoginStyle = styled.div`
 	font-family: IBM Plex Sans;
 	padding-right: 30px;
 
+	.close {
+		float: right;
+		font-size: 1.5rem;
+		font-weight: 700;
+		line-height: 1;
+		color: white;
+		outline: none;
+		/* text-shadow: 0 1px 0 #7C6E7E; */
+		opacity: 0.5;
+	}
 
-		.close {
-  float: right;
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1;
-  color: white;
-  outline:none;
-  /* text-shadow: 0 1px 0 #7C6E7E; */
-  opacity: .5;
-}
+	.close:hover {
+		color: ${props => props.theme.cardDark};
+		text-decoration: none;
+	}
 
-.close:hover {
-  color: ${props => props.theme.cardDark};
-  text-decoration: none;
-}
+	.close:active {
+		color: ${props => props.theme.colorBad};
+	}
 
-.close:active {
- color: ${props => props.theme.colorBad};
-}
-
-.close:not(:disabled):not(.disabled):hover, .close:not(:disabled):not(.disabled):focus {
-  opacity: .75;
-}
-
+	.close:not(:disabled):not(.disabled):hover,
+	.close:not(:disabled):not(.disabled):focus {
+		opacity: 0.75;
+	}
 
 	.login {
 		position: absolute;
