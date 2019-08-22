@@ -32,7 +32,8 @@ class Toolbar extends Component {
 
 						<div className="toolbar__logo">
 							<Link to="/">
-								<span className="Stellar">STELLAR</span><span className="Gaze">GAZE</span>
+								<span className="Stellar">STELLAR</span>
+								<span className="Gaze">GAZE</span>
 							</Link>
 						</div>
 						<div className="spacer" />
