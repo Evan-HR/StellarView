@@ -210,7 +210,7 @@ ParkCard.defaultProps = {
 export default ParkCard;
 
 const CardStyle = styled.div`
-	margin: 13px;
+	/* margin: 13px; */
 	/* margin-bottom: 10px;
 	margin-left: 13px;
 	margin-right: 13px; */
@@ -237,36 +237,35 @@ const CardStyle = styled.div`
 	color: ${props => props.theme.fontDark};
 
 	.card {
-		border: 1px solid rgba(0, 0, 0, 0);
+		/* border: 1px solid rgba(0, 0, 0, 0); */
 	}
 
 	.ParkTitle {
+		background: ${props => props.theme.bodyBackground};
 		grid-area: ParkTitle;
-		border-bottom: 1px ${props => props.theme.fontDark} solid;
+		/* border-bottom: 1px ${props => props.theme.fontDark} solid; */
 		position: relative;
 		display: flex;
 		justify-content: space-between;
-		align-items: end;
+		align-items: center;
 		/* padding-bottom: 8px; */
+		color: whitesmoke;
 
 		.Title {
-			/* bottom: 8px; */
-			font-size: 36px;
-			left: 0;
-			margin-bottom: 7px;    
+			
+
+			font-size: 25px;
+			 
 			line-height: 34px;
-			/* text-shadow:
-				-0.5px -0.5px 0 #000,
-				0.5px -0.5px 0 #000,
-				-0.5px 0.5px 0 #000,
-				0.5px 0.5px 0 #000;   */
+	
 		}
 		
 		.Dist {
+
 			display: inline-block;
 			/* margin: auto; */
 			font-weight: 300;
-			min-width: 52px;
+			min-width: 66px;
 
 			span {
 				left: 0;
@@ -402,7 +401,7 @@ const CardBootstrap = styled.div`
 		word-wrap: break-word;
 		background-color: #fff;
 		background-clip: border-box;
-		border: 1px solid rgba(0, 0, 0, 0.125);
+		/* border: 1px solid rgba(0, 0, 0, 0.125); */
 	}
 
 	.card > hr {

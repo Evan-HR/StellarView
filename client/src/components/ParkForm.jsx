@@ -682,7 +682,7 @@ const SearchFormStyle = styled.div`
 	}
 
 	.searchTerm:focus {
-		color: #00b4cc;
+		color: whitesmoke;
 	}
 	/* .search {
 		width: 100%;
@@ -700,7 +700,7 @@ const SearchFormStyle = styled.div`
 		height: 36px;
 		/* border-radius: 5px 0 0 5px; */
 		outline: none;
-		color: #9dbfaf;
+		color: whitesmoke;
 		border: none;
 		float: left;
 	}
