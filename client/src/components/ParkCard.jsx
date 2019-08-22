@@ -210,6 +210,7 @@ ParkCard.defaultProps = {
 export default ParkCard;
 
 const CardStyle = styled.div`
+
 	/* margin: 13px; */
 	/* margin-bottom: 10px;
 	margin-left: 13px;
@@ -237,6 +238,7 @@ const CardStyle = styled.div`
 	color: ${props => props.theme.fontDark};
 
 	.card {
+		
 		/* border: 1px solid rgba(0, 0, 0, 0); */
 	}
 
@@ -392,6 +394,7 @@ const CardStyle = styled.div`
 
 const CardBootstrap = styled.div`
 	.card {
+		margin-bottom: 13px;
 		position: relative;
 		display: -ms-flexbox;
 		display: flex;
