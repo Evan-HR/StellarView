@@ -39,5 +39,6 @@ export const theme = {
 	colorBad: "#BB6F6F",
 	colorMedium: "#DAA979",
 	lightDark: "#5A5A5A",
-	prettyDark: "#111414"
+	prettyDark: "#111414",
+	moreInfoBackground: "#E4E4E4"
 };

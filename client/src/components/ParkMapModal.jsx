@@ -6,6 +6,9 @@ import styled from "styled-components";
 import "./modal.css";
 import MoonDisplay from "./MoonDisplay";
 import { useSpring, animated as a } from "react-spring";
+import humidityIcon from "./style/Media/cardIcons/humidity.svg";
+import cloudIcon from "./style/Media/cardIcons/cloud.svg";
+import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 
 const modalStyle = {
 	overlay: {
@@ -14,7 +17,8 @@ const modalStyle = {
 		left: 0,
 		right: 0,
 		bottom: 0,
-		background: "linear-gradient(rgba(0,0,255,0.25), rgba(255,0,0,0.75))"
+		backgroundColor: "rgba(0,0,0,0.9)",
+		transition: "opacity 400ms ease-in-out"
 	},
 	content: {
 		top: "50%",
@@ -73,117 +77,169 @@ class ParkMapModal extends Component {
 				contentLabel="Example Modal"
 			>
 				{/* <div className="modal-content"> */}
-					<ModalStyle>
-						<div className="modal-header">
-							{this.park.name === "Unknown" && this.park.name_alt
-								? this.park.name_alt
-								: this.park.name}
+				<ModalStyle>
+					<div className="modal-header">
+						{this.park.name === "Unknown" && this.park.name_alt
+							? this.park.name_alt
+							: this.park.name}
 
-							<button
-								type="button"
-								onClick={this.closeModal}
-								className="close"
-								aria-label="Close"
-							>
-								<i class="fas fa-window-close" />
-							</button>
-						</div>
-						<div className="ContentGrid">
-							<div className="interactIconsContainer">
-								<div className="interactIcons">
-									<i className="shareIcon fas fa-share-alt" />
-									<i className="faqIcon fas fa-question-circle" />
-									<FavPark className="favIcon" parkID={this.park.id}/>
-									<i className="reportIcon fas fa-exclamation-triangle" />
-								</div>
-								{/* <br />
+						<button
+							type="button"
+							onClick={this.closeModal}
+							className="close"
+							aria-label="Close"
+						>
+							<i class="fas fa-window-close" />
+						</button>
+					</div>
+					<div className="ContentGrid">
+						<div className="interactIconsContainer">
+							<div className="interactIcons">
+								<i className="shareIcon fas fa-share-alt fa-2x" />
+								<i className="faqIcon fas fa-question-circle fa-2x" />
+								<i>
+									<FavPark
+										className="favIcon"
+										parkID={this.park.id}
+									/>
+								</i>
+								<i className="reportIcon fas fa-exclamation-triangle fa-2x" />
+							</div>
+							{/* <br />
 								Click each square for more info! */}
-							</div>
+						</div>
 
-							<div className="parkScore">
+						<ScoreWrapper>
+							<div className="ParkScore">
+								<div className="Heading">
+									<span>Overall Score</span>
+								</div>
 								<span className="ScoreNumerator">
-									{(this.park.score * 10).toFixed(1)}
+									{Math.round(this.park.score * 100)}
+									<span className="Percentage">%</span>
 								</span>
-								<br />
-								<span className="ScoreDenominator">/10</span>
-							</div>
 
-							<div className="weatherContainer">
-								<div className="cloudContainer">
-									<Card
-										cardName="cloudCard"
-										front={
-											<React.Fragment>
-												<i className="cloudIcon fas fa-cloud" />
-												<br />
-												{this.park.weather.clouds}
-											</React.Fragment>
-										}
-										back={
-											<React.Fragment>
-												More info!
-											</React.Fragment>
-										}
-									/>
-								</div>
-								<div className="lightPolContainer">
-									<Card
-										cardName="lightPolCard"
-										front={
-											<React.Fragment>
-												<i className="lightPolIcon fas fa-meteor" />
-												<br />
-												{this.park.light_pol}
-											</React.Fragment>
-										}
-										back={
-											<React.Fragment>
-												More info!
-											</React.Fragment>
-										}
-									/>
-								</div>
-								<div className="moonContainer">
-									<Card
-										cardName="moonCard"
-										front={
-											<React.Fragment>
-												<MoonDisplay
-													phase={this.moon}
-												/>
-											</React.Fragment>
-										}
-										back={
-											<React.Fragment>
-												More info!
-											</React.Fragment>
-										}
-									/>
-								</div>
-								<div className="humidityContainer">
-									<Card
-										cardName="humidityCard"
-										front={
-											<React.Fragment>
-												<i className="humidityIcon fas fa-tint" />
-												<br />
-												{this.park.weather.humidity}
-											</React.Fragment>
-										}
-										back={
-											<React.Fragment>
-												More info!
-											</React.Fragment>
-										}
-									/>
-								</div>
+								<span className="Value">
+									{this.park.score < 0.5
+										? "Not Recommended."
+										: this.park.weather.temp < 0.75
+										? "Not Recommended."
+										: "Recommended."}
+								</span>
 							</div>
+						</ScoreWrapper>
 
-							<div className="reviewsContainer">
-								<Reviews parkID={this.park.id} />
+						<div className="weatherContainer">
+							<div className="cloudContainer">
+								<Card
+									cardName="cloudCard"
+									front={
+										<React.Fragment>
+											<WeatherWrapper>
+												<div className="Heading">
+													<span>Cloud Coverage</span>
+												</div>
+												<img src={cloudIcon} />
+												<div className="Value">
+													<span>
+														{
+															this.park.weather
+																.clouds
+														}
+													</span>
+												</div>
+											</WeatherWrapper>
+										</React.Fragment>
+									}
+									back={
+										<React.Fragment>
+											More info!
+										</React.Fragment>
+									}
+								/>
+							</div>
+							<div className="lightPolContainer">
+								<Card
+									cardName="lightPolCard"
+									front={
+										<React.Fragment>
+											<WeatherWrapper>
+												<div className="Heading">
+													<span>Light Pollution</span>
+												</div>
+												<img src={lightPolIcon} />
+												<div className="Value">
+													<span>
+														{this.park.light_pol}
+													</span>
+												</div>
+											</WeatherWrapper>
+										</React.Fragment>
+									}
+									back={
+										<React.Fragment>
+											More info!
+										</React.Fragment>
+									}
+								/>
+							</div>
+							<div className="moonContainer">
+								<Card
+									cardName="moonCard"
+									front={
+										<React.Fragment>
+												<WeatherWrapper>
+											<div className="Heading">
+													<span>Moon Phase</span>
+												</div>
+											<MoonDisplay phase={this.moon} />
+											<div className="Value">WANING GIBBOUS</div>
+											</WeatherWrapper>
+
+										</React.Fragment>
+									}
+									back={
+										<React.Fragment>
+											More info!
+										</React.Fragment>
+									}
+								/>
+							</div>
+							<div className="humidityContainer">
+								<Card
+									cardName="humidityCard"
+									front={
+										<React.Fragment>
+											<WeatherWrapper>
+												<div className="Heading">
+													<span>Humidity</span>
+												</div>
+												<img src={humidityIcon} />
+												<div className="Value">
+													<span>
+														{
+															this.park.weather
+																.humidity
+														}
+													</span>
+												</div>
+											</WeatherWrapper>
+										</React.Fragment>
+									}
+									back={
+										<React.Fragment>
+											More info!
+										</React.Fragment>
+									}
+								/>
 							</div>
 						</div>
-					</ModalStyle>
+
+						<div className="reviewsContainer">
+							<Reviews parkID={this.park.id} />
+						</div>
+					</div>
+				</ModalStyle>
 				{/* </div> */}
 			</Modal>
 		);
@@ -232,9 +288,21 @@ const ModalStyle = styled.div`
 	flex-direction: column;
 	width: 452px;
 	height: 95vh;
+	font-family: IBM Plex Sans;
+	color: ${props => props.theme.fontDark};
+	background: ${props => props.theme.moreInfoBackground};
 
 	.modal-header {
+	
+		font-family: IBM Plex Sans;
+font-style: normal;
+font-weight: normal;
+font-size: 30px;
+border-bottom: 2px solid ${props => props.theme.fontDark};
 		.close {
+			i{
+				color: ${props => props.theme.prettyDark};
+			}
 			float: right;
 			font-size: 1.5rem;
 			font-weight: 700;
@@ -246,12 +314,12 @@ const ModalStyle = styled.div`
 		}
 
 		.close:hover {
-			color: ${props => props.theme.cardDark};
+			color: ${props => props.theme.colorBad};
 			text-decoration: none;
 		}
 
 		.close:active {
-			color: ${props => props.theme.colorBad};
+			color: ${props => props.theme.prettyDark};
 		}
 
 		.close:not(:disabled):not(.disabled):hover,
@@ -270,13 +338,22 @@ const ModalStyle = styled.div`
 			"reviewsContainer          reviewsContainer";
 		grid-row-gap: 20px;
 		grid-column-gap: 20px;
-		padding: 0 20px 0 20px;
+		padding: 20px 20px 0 20px;
 		height: 100%;
 		overflow-y: auto;
 
+		/* img{
+	position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+} */
+
 		.interactIconsContainer {
 			grid-area: interactIconsContainer;
-			background-color: navy;
+			
 
 			.interactIcons {
 				height: 157px;
@@ -287,51 +364,84 @@ const ModalStyle = styled.div`
 				grid-template-areas:
 					"shareIcon    faqIcon"
 					"favIcon      reportIcon";
-				background-color: azure;
+		
 				i {
+					width: 80%;
+					button {
+						all: unset;
+					}
+					color: ${props => props.theme.colorBad};
+
 					margin: auto auto;
 				}
 				.shareIcon {
+					color: ${props => props.theme.fontDark};
 					grid-area: shareIcon;
 				}
 				.faqIcon {
+					color: ${props => props.theme.fontDark};
 					grid-area: faqIcon;
 				}
 				.favIcon {
+				
 					grid-area: favIcon;
 				}
 				.reportIcon {
+					color: ${props => props.theme.colorMedium};
 					grid-area: reportIcon;
 				}
 			}
 		}
 
-		.parkScore {
-			height: 157px;
-			width: 100%;
-			background-color: ${props => props.theme.cardLight};
+		.Heading,
+			.Value {
+				font-style: normal;
+				font-weight: 600;
+				font-size: 18px;
+				display: flex;
+				justify-content: center; /* align horizontal */
+				align-items: center; /* align vertical */
+
+				span {
+					display: inline-block;
+					vertical-align: middle;
+					line-height: normal;
+				}
+			}
+
+		.ParkScore {
 			grid-area: parkScore;
-			font-family: Barlow;
-			font-style: normal;
-			font-weight: 300;
 			display: inline-block;
 			vertical-align: middle;
 			text-align: center;
 			margin: auto auto;
+			display: flex;
+			flex-direction: column;
 
 			.ScoreNumerator {
+				font-family: Barlow;
+				font-weight: 600;
 				font-size: 64px;
-				.ScoreNumeratorMantissa {
+				.Percentage {
 					font-size: 24px;
 				}
 			}
 
 			.ScoreDenominator {
+				font-family: Barlow;
+				font-weight: 500;
+
 				font-size: 24px;
 			}
 		}
 
 		.weatherContainer {
+			img {
+				width: 100%;
+			
+				
+			}
+
 			grid-area: weatherContainer;
 			display: grid;
 			grid-template-columns: 1fr 1fr;
@@ -354,7 +464,7 @@ const ModalStyle = styled.div`
 				.cloudCard {
 					position: absolute;
 					width: 100%;
-					background-color: ${props => props.theme.colorBad};
+					background-color: ${props => props.theme.cardLight};
 				}
 			}
 			.lightPolContainer {
@@ -364,7 +474,7 @@ const ModalStyle = styled.div`
 				.lightPolCard {
 					position: absolute;
 					width: 100%;
-					background-color: ${props => props.theme.colorBad};
+					background-color: ${props => props.theme.cardDark};
 				}
 			}
 			.moonContainer {
@@ -374,7 +484,20 @@ const ModalStyle = styled.div`
 				.moonCard {
 					position: absolute;
 					width: 100%;
-					background-color: ${props => props.theme.colorBad};
+					background-color: ${props => props.theme.cardDark};
+				}
+
+				.moon {
+				    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 30%;
+    transform: translatey(-34%);
 				}
 			}
 			.humidityContainer {
@@ -384,7 +507,7 @@ const ModalStyle = styled.div`
 				.humidityCard {
 					position: absolute;
 					width: 100%;
-					background-color: ${props => props.theme.colorBad};
+					background-color: ${props => props.theme.cardLight};
 				}
 			}
 		}
@@ -400,6 +523,16 @@ const HeaderStyle = styled.div`
 	color: ${props => props.theme.fontDark};
 	font-family: IBM Plex Sans;
 	font-style: normal;
-	font-weight: normal;
+
 	font-size: 36px;
+`;
+
+const WeatherWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+`;
+
+const ScoreWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
 `;

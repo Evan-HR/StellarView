@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { AuthConsumer } from "./AuthContext";
+
 class BaseFavPark extends Component {
 	state = {
 		buttonPressed: false,
@@ -66,19 +67,24 @@ class BaseFavPark extends Component {
 				this.state.hasFaved === false
 			) {
 				return (
+				
 					<button onClick={() => this.handleFavSpot()}>
 						<i className="fas fa-heart" />
 					</button>
+					
 				);
 			} else {
 				return (
+		
 					<button
 					//TODO: Green color on success
 					// className=""
 					//onClick={() => this.handleFavSpot()}
 					>
-						<i className="fas fa-heart" />
+						<i className="fas fa-heart fa-2x" />
 					</button>
+			
+					
 				);
 			}
 		} else {
@@ -86,7 +92,7 @@ class BaseFavPark extends Component {
 
 			return (
 				<button onClick={() => this.handleFavSpotNoAuth()}>
-					<i className="fas fa-heart" />
+					<i className="fas fa-heart fa-2x" />
 				</button>
 			);
 		}
@@ -116,3 +122,5 @@ const FavPark = props => (
 );
 
 export default FavPark;
+
+
