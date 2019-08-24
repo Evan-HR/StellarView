@@ -3,19 +3,24 @@ import React, { Component } from "react";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import qs from "qs";
-import { makeStyles } from "@material-ui/core/styles";
-import Slider from "@material-ui/core/Slider";
+// import { makeStyles } from "@material-ui/core/styles";
+import MuiSlider from "@material-ui/core/Slider";
 import { sizing } from "@material-ui/system";
 import { AuthConsumer } from "./AuthContext";
 import styled from "styled-components";
 import nearMeButton from "./style/Media/round-my_location-24px.svg";
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/styles';
+// import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
-const theme1 = createMuiTheme({
-	slider: {
-	  selectionColor: "red"
-	}
-  });
+// const theme1 = createMuiTheme({
+// 	overrides: {
+// 		MuiSlider: {
+		 
+// 			root: {
+// 				color:'#BDC2C6',
+// 			},
+// 		},
+// 	},
+//   });
 
 
 class BaseParkForm extends Component {
@@ -517,8 +522,8 @@ class BaseParkForm extends Component {
 					<form>
 						<b>Max Distance (km)</b>
 						<br />
-						<MuiThemeProvider muiTheme={theme1}>
-						<Slider
+						<SliderStyle>
+						<MuiSlider
 							//defaultValue={this.state.reqData.dist}
 							// getAriaValueText={valuetext}
 							aria-labelledby="discrete-slider-custom"
@@ -530,11 +535,12 @@ class BaseParkForm extends Component {
 							value={parseFloat(this.state.reqData.dist)}
 							onChange={this.handleDistanceChange}
 						/>
-						</MuiThemeProvider>
+						</SliderStyle>
 						<br />
 						<b>Light Pollution (Bortle #)</b>
 						<br />
-						<Slider
+						<SliderStyle>
+						<MuiSlider
 							//defaultValue={this.state.reqData.lightpol}
 							// getAriaValueText={valuetext}
 							aria-labelledby="discrete-slider-custom"
@@ -549,6 +555,7 @@ class BaseParkForm extends Component {
 							// 	this.handleLightPolChange(this.sliderLight)
 							// }
 						/>
+						</SliderStyle>
 						{/* </MuiThemeProvider> */}
 					</form>
 				</div>
@@ -741,3 +748,9 @@ const SearchFormStyle = styled.div`
 // 	  selectionColor: 'green'
 // 	},
 //   });
+
+const SliderStyle = styled.div`
+.MuiSlider-root{
+	color: #BDC2C6;
+}
+`;
