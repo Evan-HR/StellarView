@@ -13,6 +13,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"@material-ui/core": "^4.3.3",
 		"axios": "^0.19.0",
 		"bcrypt": "^3.0.6",
 		"body-parser": "^1.19.0",
@@ -27,6 +28,7 @@
 		"express-validator": "^5.3.1",
 		"geolib": "^3.0.4",
 		"lune": "^0.4.0",
+		"material-ui": "^1.0.0-beta.47",
 		"morgan": "^1.9.1",
 		"mysql": "^2.17.1",
 		"nodemon": "^1.19.1",

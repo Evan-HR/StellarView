@@ -264,13 +264,14 @@ class BaseParksData extends Component {
 					{/* </div> */}
 
 					<div className="SortByContainer">
+						
 						<div className="SortBy">
-							<b>Sort by:</b>
+							Sort by:{"  "}
 							<button
 								onClick={this.sortParksDist}
 								disabled={this.state.sortedBy === "dist"}
 							>
-								Dist
+								Distance
 							</button>
 							<button
 								onClick={this.sortParksScore}
@@ -364,14 +365,31 @@ const MainContentWrapper = styled.div`
 	}
 
 	.SortByContainer {
+		font-family: IBM Plex Sans;
+	
 		padding: 13px 0px 13px 0px;
 		width: 100%;
+		
 
 		.SortBy {
+			
+			color: whitesmoke;
+			transition: color 0.2s ease;
 			button{
+				
 			all: unset;
 			color: whitesmoke;
+			font-weight: 600;
 			cursor: pointer;
+			margin: 0 0px 0 15px;
+			:hover,
+	:active {
+		color: ${props => props.theme.colorBad};
+		transition: color 0.2s ease;
+
+	}
+
+
 		}
 			display: flex;
 			justify-content: flex-end;

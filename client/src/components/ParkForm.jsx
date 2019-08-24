@@ -9,6 +9,14 @@ import { sizing } from "@material-ui/system";
 import { AuthConsumer } from "./AuthContext";
 import styled from "styled-components";
 import nearMeButton from "./style/Media/round-my_location-24px.svg";
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/styles';
+
+const theme1 = createMuiTheme({
+	slider: {
+	  selectionColor: "red"
+	}
+  });
+
 
 class BaseParkForm extends Component {
 	state = {
@@ -46,6 +54,7 @@ class BaseParkForm extends Component {
 		console.log("Form mounted, searching...");
 		this.loadQuery();
 	}
+	
 
 	componentDidUpdate() {
 		//On back button load previous results
@@ -400,6 +409,8 @@ class BaseParkForm extends Component {
 	// 	});
 	// };
 
+	
+
 	renderLocationSpinner = () => {
 		if (this.state.isLoadingLocation) {
 			return (
@@ -504,22 +515,24 @@ class BaseParkForm extends Component {
 
 				<div className="AdvancedSearch">
 					<form>
-						<b>Distance:</b>
+						<b>Max Distance (km)</b>
 						<br />
+						<MuiThemeProvider muiTheme={theme1}>
 						<Slider
 							//defaultValue={this.state.reqData.dist}
 							// getAriaValueText={valuetext}
 							aria-labelledby="discrete-slider-custom"
 							min={5}
-							max={200}
+							max={300}
 							step={1}
 							valueLabelDisplay="auto"
 							marks={marksDist}
 							value={parseFloat(this.state.reqData.dist)}
 							onChange={this.handleDistanceChange}
 						/>
+						</MuiThemeProvider>
 						<br />
-						<b>Light Pollution:</b>
+						<b>Light Pollution (Bortle #)</b>
 						<br />
 						<Slider
 							//defaultValue={this.state.reqData.lightpol}
@@ -536,6 +549,7 @@ class BaseParkForm extends Component {
 							// 	this.handleLightPolChange(this.sliderLight)
 							// }
 						/>
+						{/* </MuiThemeProvider> */}
 					</form>
 				</div>
 
@@ -631,10 +645,12 @@ const SearchFormStyle = styled.div`
 	.AdvancedSearch {
 		${props => (props.advancedSearch ? `` : `display: none`)}
 		grid-area:advancedSearch;
+		color: whitesmoke;
 	}
 
 	.myLocation {
 		color: whitesmoke;
+		font-size: 13px;
 		.nearMe {
 			all: unset;
 			cursor: pointer;
@@ -708,6 +724,20 @@ const SearchFormStyle = styled.div`
 	.ToggleAdvancedSearch {
 		all: unset;
 		color: whitesmoke;
+		:hover,
+	:active {
+		color: ${props => props.theme.colorBad};
+		transition: color 0.2s ease;
+	}
+		
 		/* margin-top: 5px; */
 	}
 `;
+
+
+// const muiTheme = getMuiTheme({
+// 	slider: {
+// 	  trackColor: 'yellow',
+// 	  selectionColor: 'green'
+// 	},
+//   });

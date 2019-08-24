@@ -342,7 +342,7 @@ const CardStyle = styled.div`
 		grid-area: ParkScore;
 		font-family: Barlow;
 		font-style: normal;
-		font-weight: 300;
+		font-weight: 600;
 		display: inline-block;
 		vertical-align: middle;
 		text-align: center;
