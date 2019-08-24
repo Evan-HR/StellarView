@@ -360,7 +360,7 @@ const LoginStyle = styled.div`
 				text-align: center;
 				width: 100%;
 				font-size: 13px;
-				bottom: 50px;
+				bottom: 70px;
 				color: #333;
 				a {
 					color: ${props => props.theme.colorBad};
