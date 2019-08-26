@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 class Footer extends Component {
 	render() {
-		return <FooterStyle><span>MADE WITH ❤ <br></br> © Vlad Falach and Dustin Jurkaulionis</span></FooterStyle>;
+		return <FooterStyle><span>MADE WITH ❤ <br></br> <span className="Names">© Vlad Falach x Dustin Jurkaulionis x Evan Reaume</span></span></FooterStyle>;
 	}
 }
 
@@ -22,4 +22,7 @@ const FooterStyle = styled.div`
     font-size: 25px;
     background-color: black;
     color: whitesmoke;
+    .Names{
+        font-size: 12px;
+    }
 `;

@@ -164,35 +164,50 @@ class ParkCard extends Component {
 							</span>
 						</div>
 
+<div className="ScoreLabel">
+	Score:
+</div>
 						<div className="ParkScore">
-							<span className="ScoreNumerator">
-								{Math.round(this.props.park.score * 100)}
+
+							<div className="ScoreWrapper">
+								<span className="ScoreNumerator">
+									
+									{Math.round(this.props.park.score * 100)}
+								</span>
 								<span className="Percentage">%</span>
-							</span>
-							<span className="ScoreDenominator">
-								{this.props.park.score < 0.5
-									? "Bad"
-									: this.props.park.weather.temp < 0.75
-									? "Okay"
-									: "Good"}
-							</span>
+							</div>
+						</div>
+						<div className="ParkScoreIcon">
+							{this.props.park.score < 0.5 ? (
+								<i class="fas fa-ban fa-2x scoreBad"></i>
+							) : (
+								<i class="fas fa-check-circle fa-2x scoreGood"></i>
+							)}
 						</div>
 
 						<div className="StarRev">
-							{this.renderReviewScore(this.props.park.avgScore)}
-							{this.renderNumReviews(this.props.park.numReviews)}
+							<div className="StarScore">
+								{this.renderReviewScore(
+									this.props.park.avgScore
+								)}
+							</div>
+							<div className="StarNumRev">
+								{this.renderNumReviews(
+									this.props.park.numReviews
+								)}
+							</div>
 						</div>
 
-						<div className="MoreInfo">
-							{/* <span className="infoIcon"> */}
+						{/* <div className="MoreInfo">
+						
 							<img src={infoIcon} />
-							{/* </span> */}
+						
 							<span className="infoText">
 								More
 								<br />
 								Info
 							</span>
-						</div>
+						</div> */}
 					</CardStyle>
 				</div>
 			</CardBootstrap>
@@ -223,10 +238,10 @@ const CardStyle = styled.div`
 	grid-row-gap: 10px;
 	grid-template-areas:
 		"ParkTitle   ParkTitle   ParkTitle    ParkTitle"
-		"WeatherInfo WeatherInfo WeatherInfo  ParkScore"
+		"WeatherInfo WeatherInfo WeatherInfo  ScoreLabel"
 		"WeatherIcons WeatherIcons WeatherIcons ParkScore"
 		/* "ParkHum     ParkCloud   ParkLightPol ParkScore" */
-		"StarRev    StarRev     StarRev      ParkScore";
+		"StarRev    StarRev     StarRev      ParkScoreIcon";
 
 	font-family: IBM Plex Sans;
 	font-style: normal;
@@ -252,6 +267,7 @@ const CardStyle = styled.div`
 		align-items: center;
 		/* padding-bottom: 8px; */
 		color: whitesmoke;
+		padding: 0 13px 0 13px;
 
 		.Title {
 			
@@ -294,7 +310,12 @@ const CardStyle = styled.div`
 		display: flex;
 		align-items: end;
 		justify-content: center;
+		padding: 0 15px 0 15px;
 		span {
+			margin: auto 0 0;
+			padding-bottom: 5px;
+    /* padding: 0 15px 0 15px; */
+    text-align: center;
 			border-bottom: 2px ${props => props.theme.fontDark} solid;
 			/* position: absolute;
 			text-align: center; 
@@ -343,30 +364,79 @@ const CardStyle = styled.div`
 		font-family: Barlow;
 		font-style: normal;
 		font-weight: 600;
-		display: inline-block;
-		vertical-align: middle;
-		text-align: center;
-		margin: auto auto;
-		display: flex;
-		flex-direction: column;
+		display: block;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+
+  .ScoreLabel{
+	grid-area: ParkScore;
+		font-family: Barlow;
+		font-style: normal;
+		font-weight: 600;
+		display: block;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+
+  }
+
+  
+
+.ScoreWrapper{
+	position: absolute;
 
 		.ScoreNumerator {
-			font-size: 64px;
-			.Percentage {
-				font-size: 24px;
-			}
-		}
+			display:inline;
+			font-size: 54px;
 		
-		.ScoreDenominator {
-			margin: 13px;
+		}
+		.Percentage {
+			display:inline;
+				font-size: 30px;
+			}
+		
+		
+	}
+	}
+
+	
+	.ParkScoreIcon {
+		grid-area: ParkScoreIcon;
+		display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+			/* position: absolute;
+			bottom: 0; */
 			
 			font-size: 24px;
+			.scoreBad{
+					color: ${props => props.theme.colorBad};
+				}
+				.scoreGood{
+					color: ${props => props.theme.colorGood};
+				}
+			
 		}
-	}
+
 	.StarRev {
 		grid-area: StarRev;
 		text-align: center;
-		margin: auto auto;
+		
+		display: flex;
+    float: left;
+	align-items: center;
+	margin-left: 15px;
+		.StarScore{
+display: inline-block;
+		}
+		.StarNumRev{
+			display: inline-block;
+		
+			font-size: 14px;
+			margin: 10px 0 0 15px;
+		}
 	}
 	.MoreInfo {
 		grid-area: MoreInfo;
