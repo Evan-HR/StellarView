@@ -86,7 +86,7 @@ export default function MoonDisplay({phase}) {
 
 const MoonSVGStyle = styled.div`
 	.moon {
-		width: 90px;
+		/* width: 90px; */
 		/* margin: 2rem auto; */
 		transform: scaleX(${props => props.phaseFlip});
 	}

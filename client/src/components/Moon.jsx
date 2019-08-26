@@ -20,7 +20,7 @@ class Moon extends Component {
 			<MoonStyle>
 				<div className="moonDisplay">
 					<span>{this.props.moonType.split(" ")[0]}</span>
-					<span>
+					<span className="MoonDisplayContainer">
 						<MoonDisplay phase={this.props.moon} />
 					</span>
 					<span>{this.props.moonType.split(" ")[1]}</span>
@@ -47,5 +47,9 @@ const MoonStyle = styled.div`
 		align-items: center;
 		justify-content: space-evenly;
 		align-content: space-between;
+
+		.MoonDisplayContainer {
+			width: 90px;
+		}
 	}
 `;

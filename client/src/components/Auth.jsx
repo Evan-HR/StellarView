@@ -5,7 +5,6 @@ import App from "../App";
 import axios from "axios";
 //import { Cookies } from "react-cookie";
 
-
 // {"cookie":{"originalMaxAge":null,"expires":null,
 // "httpOnly":true,"path":"/"},"passport":{"user":{"user_id":81}}}
 export class Auth extends React.Component {
@@ -21,7 +20,8 @@ export class Auth extends React.Component {
 			hasNoSpots: false,
 			userFavorites: [],
 			userReviews: [],
-			setUserLocation: this.setUserLocation
+			setUserLocation: this.setUserLocation,
+			handleLogin: this.handleLogin
 		};
 		console.log("AFTER REG, PRE-GETUSERAUTH, should be SECOND");
 		//this.getWeatherInfo();
@@ -107,7 +107,6 @@ export class Auth extends React.Component {
 
 			.then(({ data }) => {
 				this.setState({
-					
 					firstName: data.firstName,
 					isAuth: data.isAuth,
 					userID: data.userID
@@ -154,12 +153,11 @@ export class Auth extends React.Component {
 			.get("/api/getUserReviews")
 
 			.then(reviews => {
-
-					if (!reviews.status === 204) {
-				this.setState({
-					userReviews: reviews.data
-				});
-			}
+				if (!reviews.status === 204) {
+					this.setState({
+						userReviews: reviews.data
+					});
+				}
 			})
 			.catch(error => {
 				console.log(error);
@@ -169,7 +167,6 @@ export class Auth extends React.Component {
 	render() {
 		return (
 			<AuthProvider value={this.state}>
-				
 				<App
 					handleLogoutState={this.handleLogoutState}
 					handleLogin={this.handleLogin}

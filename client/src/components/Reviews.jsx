@@ -251,7 +251,7 @@ class BaseReviews extends Component {
 	renderUserNotLoggedIn() {
 		return (
 			<div class="alert alert-warning" role="alert">
-				You must be <Login>logged in</Login> to submit a review!
+				You must be <Login><b>logged in</b></Login> to submit a review!
 			</div>
 		);
 	}

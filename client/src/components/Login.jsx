@@ -3,12 +3,13 @@ import axios from "axios";
 import Modal from "react-modal";
 import backgroundImage from "./style/Media/loginModalPlain.svg";
 
+import { AuthConsumer } from "./AuthContext";
 import { withRouter, Link } from "react-router-dom";
 import styled from "styled-components";
 import Register from "./Register";
 
 Modal.setAppElement("#root");
-class Login extends Component {
+class BaseLogin extends Component {
 	state = {
 		userEmail: "",
 		userPassword: "",
@@ -72,7 +73,7 @@ class Login extends Component {
 			this.setState({
 				modalIsOpen: false
 			});
-			this.props.handleLogin();
+			this.props.context.handleLogin();
 		}, 1250);
 	};
 
@@ -148,7 +149,11 @@ class Login extends Component {
 		return (
 			<React.Fragment>
 				<a onClick={() => this.openModal()}>
-					{this.props.children ? <React.Fragment>{this.props.children}</React.Fragment> : <Link>login</Link>}
+					{this.props.children ? (
+						<React.Fragment>{this.props.children}</React.Fragment>
+					) : (
+						<Link>login</Link>
+					)}
 					{/* <Link>login</Link> */}
 				</a>
 
@@ -170,6 +175,10 @@ class Login extends Component {
 		);
 	}
 }
+
+const Login = props => (
+	<AuthConsumer>{x => <BaseLogin {...props} context={x} />}</AuthConsumer>
+);
 
 export default Login;
 

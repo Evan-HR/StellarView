@@ -192,9 +192,11 @@ class ParkMapModal extends Component {
 												<div className="Heading">
 													<span>Moon Phase</span>
 												</div>
-												<MoonDisplay
-													phase={this.moon}
-												/>
+												<span className="MoonDisplayContainer">
+													<MoonDisplay
+														phase={this.moon}
+													/>
+												</span>
 												<div className="Value">
 													WANING GIBBOUS
 												</div>
@@ -450,59 +452,59 @@ const ModalStyle = styled.div`
 				"cloudContainer    lightPolContainer"
 				"moonContainer     humidityContainer";
 
-			div {
-				/* width: 181px; */
+			/* div {
 				height: 157px;
-			}
+			} */
 
 			.cloudContainer {
+				height: 157px;
 				grid-area: cloudContainer;
 				position: relative;
 
 				.cloudCard {
+					height: 157px;
 					position: absolute;
 					width: 100%;
 					background-color: ${props => props.theme.cardLight};
 				}
 			}
 			.lightPolContainer {
+				height: 157px;
 				grid-area: lightPolContainer;
 				position: relative;
 
 				.lightPolCard {
+					height: 157px;
 					position: absolute;
 					width: 100%;
 					background-color: ${props => props.theme.cardDark};
 				}
 			}
 			.moonContainer {
+				height: 157px;
 				grid-area: moonContainer;
 				position: relative;
 
 				.moonCard {
+					height: 157px;
 					position: absolute;
 					width: 100%;
 					background-color: ${props => props.theme.cardDark};
 				}
 
-				.moon {
-					display: -webkit-box;
-					display: -webkit-flex;
-					display: -ms-flexbox;
-					display: flex;
-					position: absolute;
-					left: 0;
-					right: 0;
+				.MoonDisplayContainer {
+					width: 59px;
 					margin: auto;
-					width: 30%;
-					transform: translatey(-34%);
 				}
+				
 			}
 			.humidityContainer {
+				height: 157px;
 				grid-area: humidityContainer;
 				position: relative;
 
 				.humidityCard {
+					height: 157px;
 					position: absolute;
 					width: 100%;
 					background-color: ${props => props.theme.cardLight};
@@ -528,6 +530,8 @@ const HeaderStyle = styled.div`
 const WeatherWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
+	height: 100%;
+	justify-content: space-between;
 `;
 
 const ScoreWrapper = styled.div`
