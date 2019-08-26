@@ -52,6 +52,7 @@ class ParkMapModal extends Component {
 		this.modalContent = content;
 		this.park = content.park;
 		this.moon = content.moon;
+		this.moonType = content.moonType;
 		console.log(this.park);
 		this.setState({ modalIsOpen: true });
 	};
@@ -198,7 +199,7 @@ class ParkMapModal extends Component {
 													/>
 												</span>
 												<div className="Value">
-													WANING GIBBOUS
+													{this.moonType}
 												</div>
 											</WeatherWrapper>
 										</React.Fragment>

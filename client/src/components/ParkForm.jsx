@@ -522,8 +522,6 @@ class BaseParkForm extends Component {
 						<br />
 						<SliderStyle>
 							<MuiSlider
-								//defaultValue={this.state.reqData.dist}
-								// getAriaValueText={valuetext}
 								aria-labelledby="discrete-slider-custom"
 								min={5}
 								max={300}
@@ -539,22 +537,16 @@ class BaseParkForm extends Component {
 						<br />
 						<SliderStyle>
 							<MuiSlider
-								//defaultValue={this.state.reqData.lightpol}
-								// getAriaValueText={valuetext}
 								aria-labelledby="discrete-slider-custom"
 								min={0}
-								max={6}
+								max={6.5}
 								step={null}
 								valueLabelDisplay="auto"
 								marks={marksLight}
 								value={parseFloat(this.state.reqData.lightpol)}
 								onChange={this.handleLightPolChange}
-								// onChangeCommitted={() =>
-								// 	this.handleLightPolChange(this.sliderLight)
-								// }
 							/>
 						</SliderStyle>
-						{/* </MuiThemeProvider> */}
 					</form>
 				</div>
 
@@ -596,20 +588,20 @@ const marksDist = [
 
 const marksLight = [
 	{
-		value: 1,
-		label: "Pure Dark Sky"
+		value: 0.4,
+		label: "Dark"
 	},
 	{
-		value: 2,
-		label: "Dark Sky"
+		value: 1.0,
+		label: "Rural"
 	},
 	{
-		value: 3,
-		label: "Rural Sky"
-	},
-	{
-		value: 4,
+		value: 3.0,
 		label: "Suburban"
+	},
+	{
+		value: 6.0,
+		label: "City"
 	}
 	// {
 	// 	value: 6,

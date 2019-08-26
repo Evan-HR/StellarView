@@ -7,16 +7,9 @@ import ParkMapModal from "./ParkMapModal";
 import Reviews from "./Reviews";
 import FavPark from "./FavPark";
 
-import letter_a from "./style/MapMarkers/letter_a.png";
-import letter_b from "./style/MapMarkers/letter_b.png";
-import letter_c from "./style/MapMarkers/letter_c.png";
-import letter_d from "./style/MapMarkers/letter_d.png";
-import letter_f from "./style/MapMarkers/letter_f.png";
-
-/* Notes:
-Couldn't figure out how to make google.etc work, 
-instead you have to use window.google.etc
-*/
+import markerGood from "./style/MapMarkers/markerGood.png";
+import markerAverage from "./style/MapMarkers/markerAverage.png";
+import markerBad from "./style/MapMarkers/markerBad.png";
 
 // const google = window.google;
 
@@ -106,17 +99,15 @@ class ParkMap extends Component {
 		if (this.props.markers[park.id]) {
 			console.log("Park marker already on map!");
 		} else {
-			let markerIcon = letter_f;
+			let markerIcon = markerBad;
 			if (park.score > 80) {
-				markerIcon = letter_a;
-			} else if (park.score > 70) {
-				markerIcon = letter_b;
+				markerIcon = markerGood;
 			} else if (park.score > 60) {
-				markerIcon = letter_c;
+				markerIcon = markerAverage;
 			} else if (park.score > 50) {
-				markerIcon = letter_d;
+				markerIcon = markerBad;
 			} else {
-				markerIcon = letter_f;
+				markerIcon = markerBad;
 			}
 			var marker = new window.google.maps.Marker({
 				position: location,
@@ -138,7 +129,11 @@ class ParkMap extends Component {
 
 			marker.addListener("click", () => {
 				console.log("Clicked marker at", marker.title);
-				let modalContent = { park: park, moon: this.props.moon };
+				let modalContent = {
+					park: park,
+					moon: this.props.moon,
+					moonType: this.props.moonType
+				};
 				this.openModal(modalContent);
 			});
 			this.props.markers[park.id] = marker; //Maybe this can be moved out of the function
