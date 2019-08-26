@@ -188,14 +188,17 @@ class ParkMapModal extends Component {
 									cardName="moonCard"
 									front={
 										<React.Fragment>
-												<WeatherWrapper>
-											<div className="Heading">
+											<WeatherWrapper>
+												<div className="Heading">
 													<span>Moon Phase</span>
 												</div>
-											<MoonDisplay phase={this.moon} />
-											<div className="Value">WANING GIBBOUS</div>
+												<MoonDisplay
+													phase={this.moon}
+												/>
+												<div className="Value">
+													WANING GIBBOUS
+												</div>
 											</WeatherWrapper>
-
 										</React.Fragment>
 									}
 									back={
@@ -293,14 +296,13 @@ const ModalStyle = styled.div`
 	background: ${props => props.theme.moreInfoBackground};
 
 	.modal-header {
-	
 		font-family: IBM Plex Sans;
-font-style: normal;
-font-weight: normal;
-font-size: 30px;
-border-bottom: 2px solid ${props => props.theme.fontDark};
+		font-style: normal;
+		font-weight: normal;
+		font-size: 30px;
+		border-bottom: 2px solid ${props => props.theme.fontDark};
 		.close {
-			i{
+			i {
 				color: ${props => props.theme.prettyDark};
 			}
 			float: right;
@@ -353,7 +355,6 @@ border-bottom: 2px solid ${props => props.theme.fontDark};
 
 		.interactIconsContainer {
 			grid-area: interactIconsContainer;
-			
 
 			.interactIcons {
 				height: 157px;
@@ -364,7 +365,7 @@ border-bottom: 2px solid ${props => props.theme.fontDark};
 				grid-template-areas:
 					"shareIcon    faqIcon"
 					"favIcon      reportIcon";
-		
+
 				i {
 					width: 80%;
 					button {
@@ -383,7 +384,6 @@ border-bottom: 2px solid ${props => props.theme.fontDark};
 					grid-area: faqIcon;
 				}
 				.favIcon {
-				
 					grid-area: favIcon;
 				}
 				.reportIcon {
@@ -394,20 +394,20 @@ border-bottom: 2px solid ${props => props.theme.fontDark};
 		}
 
 		.Heading,
-			.Value {
-				font-style: normal;
-				font-weight: 600;
-				font-size: 18px;
-				display: flex;
-				justify-content: center; /* align horizontal */
-				align-items: center; /* align vertical */
+		.Value {
+			font-style: normal;
+			font-weight: 600;
+			font-size: 18px;
+			display: flex;
+			justify-content: center; /* align horizontal */
+			align-items: center; /* align vertical */
 
-				span {
-					display: inline-block;
-					vertical-align: middle;
-					line-height: normal;
-				}
+			span {
+				display: inline-block;
+				vertical-align: middle;
+				line-height: normal;
 			}
+		}
 
 		.ParkScore {
 			grid-area: parkScore;
@@ -438,8 +438,6 @@ border-bottom: 2px solid ${props => props.theme.fontDark};
 		.weatherContainer {
 			img {
 				width: 100%;
-			
-				
 			}
 
 			grid-area: weatherContainer;
@@ -488,16 +486,16 @@ border-bottom: 2px solid ${props => props.theme.fontDark};
 				}
 
 				.moon {
-				    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    position: absolute;
-    left: 0;
-    right: 0;
-    margin: auto;
-    width: 30%;
-    transform: translatey(-34%);
+					display: -webkit-box;
+					display: -webkit-flex;
+					display: -ms-flexbox;
+					display: flex;
+					position: absolute;
+					left: 0;
+					right: 0;
+					margin: auto;
+					width: 30%;
+					transform: translatey(-34%);
 				}
 			}
 			.humidityContainer {

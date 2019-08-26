@@ -143,52 +143,13 @@ class Login extends Component {
 		);
 	};
 
-	// renderModalContent = () => {
-	// 	if (!this.state.loginSuccess) {
-	// 		return (
-	// 			<LoginFormStyle>
-	// 				<Input
-	// 					type="email"
-	// 					placeholder="email"
-	// 					name="email"
-	// 					onChange={this.handleEmailChange}
-	// 					required
-	// 				/>
-
-	// 				<Input
-	// 					type="password"
-	// 					placeholder="password"
-	// 					name="password"
-	// 					onChange={this.handlePasswordChange}
-	// 					required
-	// 				/>
-
-	// 				<button
-	// 					className="SubmitButton"
-	// 					onClick={e => this.onSubmit(e)}
-	// 				>
-	// 					SUBMIT
-	// 				</button>
-	// 			</LoginFormStyle>
-	// 		);
-	// 	} else {
-	// 		return (
-	// 			<div className="text-success text-center m-3">
-	// 				<h1>
-	// 					<b>Login Successful!</b>
-	// 				</h1>
-	// 			</div>
-	// 		);
-	// 	}
-	// };
-
 	//className changes model content, style gives you anything you specify to override defaults
-
 	render() {
 		return (
 			<React.Fragment>
 				<a onClick={() => this.openModal()}>
-					<Link>login</Link>
+					{this.props.children ? <React.Fragment>{this.props.children}</React.Fragment> : <Link>login</Link>}
+					{/* <Link>login</Link> */}
 				</a>
 
 				<Modal

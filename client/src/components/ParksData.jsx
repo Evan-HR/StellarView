@@ -264,7 +264,6 @@ class BaseParksData extends Component {
 					{/* </div> */}
 
 					<div className="SortByContainer">
-						
 						<div className="SortBy">
 							Sort by:{"  "}
 							<button
@@ -344,7 +343,7 @@ const MainContentWrapper = styled.div`
 	.RightSideContainerFull {
 		z-index: 0;
 		grid-area: rightSide;
-		margin-bottom: 20px;
+		margin-bottom: -13px;
 		/* overflow-y: scroll;
 		overflow-x: hidden; */
 		/* background-color: whitesmoke; */

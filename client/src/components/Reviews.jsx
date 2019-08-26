@@ -3,6 +3,8 @@ import axios from "axios";
 import StarReviews from "./StarReviews";
 import { AuthConsumer } from "./AuthContext";
 import StarReviewsStatic from "./StarReviewsStatic";
+import Login from "./Login";
+
 class BaseReviews extends Component {
 	constructor(props) {
 		super(props);
@@ -249,7 +251,7 @@ class BaseReviews extends Component {
 	renderUserNotLoggedIn() {
 		return (
 			<div class="alert alert-warning" role="alert">
-				You must be logged in to submit a review!
+				You must be <Login>logged in</Login> to submit a review!
 			</div>
 		);
 	}

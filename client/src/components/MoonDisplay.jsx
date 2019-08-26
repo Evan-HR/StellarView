@@ -43,16 +43,16 @@ export default function MoonDisplay({phase}) {
 					<circle
 						cx="100"
 						cy="100"
-						r="99"
-						stroke="whitesmoke"
+						r="100"
+						// stroke="whitesmoke"
 						fill="whitesmoke"
 						class="bg"
 					/>
 					<circle
 						cx="100"
 						cy="100"
-						r="99"
-						stroke="whitesmoke"
+						r="100"
+						// stroke="whitesmoke"
 						fill="#121414"
 						class="fg"
 					/>
@@ -66,15 +66,15 @@ export default function MoonDisplay({phase}) {
 						cx="0"
 						cy="100"
 						r="99"
-						stroke="whitesmoke"
+						// stroke="whitesmoke"
 						fill="whitesmoke"
 						class="bg"
 					/>
 					<circle
 						cx="0"
 						cy="100"
-						r="99"
-						stroke="whitesmoke"
+						r="100"
+						// stroke="whitesmoke"
 						fill="#121414"
 						class="fg"
 					/>
@@ -99,10 +99,10 @@ const MoonSVGStyle = styled.div`
 	}
 	.moon-left .bg,
 	.moon-right .bg {
-		stroke-width: 2px;
+		/* stroke-width: 2px; */
 	}
 	.moon-right .fg {
-		stroke-width: 2px;
+		/* stroke-width: 2px; */
 		transform: scaleX(${props => props.phaseRight});
 	}
 	.moon-left .bg {
