@@ -194,6 +194,7 @@ class BaseParksData extends Component {
 							location={this.state.fetchReq}
 							onMapLoaded={this.handleMapLoaded}
 							moon={this.state.moon}
+							moonType={this.state.moonType}
 						/>
 					</animated.div>
 				)}
@@ -343,7 +344,7 @@ const MainContentWrapper = styled.div`
 	.RightSideContainerFull {
 		z-index: 0;
 		grid-area: rightSide;
-		margin-bottom: -13px;
+		margin-bottom: 20px;
 		/* overflow-y: scroll;
 		overflow-x: hidden; */
 		/* background-color: whitesmoke; */
