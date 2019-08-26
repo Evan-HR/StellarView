@@ -419,7 +419,7 @@ const ModalStyle = styled.div`
 			flex-direction: column;
 
 			.ScoreNumerator {
-				font-family: Barlow;
+				/* font-family: Barlow; */
 				font-weight: 600;
 				font-size: 64px;
 				.Percentage {
@@ -428,7 +428,7 @@ const ModalStyle = styled.div`
 			}
 
 			.ScoreDenominator {
-				font-family: Barlow;
+				/* font-family: Barlow; */
 				font-weight: 500;
 
 				font-size: 24px;
