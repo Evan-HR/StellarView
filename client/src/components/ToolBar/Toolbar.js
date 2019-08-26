@@ -146,7 +146,7 @@ const ToolbarStyle = styled.header`
 
 	.toolbar_navigation-items a {
 		font-family: IBM Plex Sans;
-		font-weight:300;
+		font-weight:600;
 		text-decoration: none;
 		letter-spacing:0.08em;
 		transition: color 0.2s ease;

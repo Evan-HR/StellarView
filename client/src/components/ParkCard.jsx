@@ -141,16 +141,17 @@ class ParkCard extends Component {
 								<span className="tempIcon">
 									<img src={tempIcon} />
 								</span>
+								<br/>
 								<span className="tempNum">
 									{Math.round(this.props.park.weather.temp)}{" "}
 									°C
 								</span>
-								<br />
-								{this.props.park.weather.temp < 15
+							
+								{/* {this.props.park.weather.temp < 15
 									? "Chilly"
 									: this.props.park.weather.temp < 25
 									? "Comfortable"
-									: "Inadequate"}
+									: "Inadequate"} */}
 							</div>
 						</div>
 
@@ -165,9 +166,9 @@ class ParkCard extends Component {
 						</div>
 
 <div className="ScoreLabel">
-	Score:
+	<span>Score:</span>{" "}{Math.round(this.props.park.score * 10)}/10
 </div>
-						<div className="ParkScore">
+						{/* <div className="ParkScore">
 
 							<div className="ScoreWrapper">
 								<span className="ScoreNumerator">
@@ -176,12 +177,12 @@ class ParkCard extends Component {
 								</span>
 								<span className="Percentage">%</span>
 							</div>
-						</div>
+						</div> */}
 						<div className="ParkScoreIcon">
 							{this.props.park.score < 0.5 ? (
 								<i class="fas fa-ban fa-2x scoreBad"></i>
 							) : (
-								<i class="fas fa-check-circle fa-2x scoreGood"></i>
+								<i class="fas fa-check-circle fa-3x scoreGood"></i>
 							)}
 						</div>
 
@@ -208,6 +209,10 @@ class ParkCard extends Component {
 								Info
 							</span>
 						</div> */}
+
+						<div className="moreInfo">
+						<i className="faqIcon fas fa-question-circle fa-2x" />
+						</div>
 					</CardStyle>
 				</div>
 			</CardBootstrap>
@@ -234,14 +239,14 @@ const CardStyle = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	grid-template-rows: 1fr 1fr 1fr 1fr;
-	grid-column-gap: 10px;
-	grid-row-gap: 10px;
+	/* grid-column-gap: 10px;
+	grid-row-gap: 10px; */
 	grid-template-areas:
 		"ParkTitle   ParkTitle   ParkTitle    ParkTitle"
 		"WeatherInfo WeatherInfo WeatherInfo  ScoreLabel"
-		"WeatherIcons WeatherIcons WeatherIcons ParkScore"
+		"WeatherIcons WeatherIcons WeatherIcons ParkScoreIcon"
 		/* "ParkHum     ParkCloud   ParkLightPol ParkScore" */
-		"StarRev    StarRev     StarRev      ParkScoreIcon";
+		"StarRev    StarRev     StarRev      MoreInfo";
 
 	font-family: IBM Plex Sans;
 	font-style: normal;
@@ -256,6 +261,27 @@ const CardStyle = styled.div`
 		
 		/* border: 1px solid rgba(0, 0, 0, 0); */
 	}
+
+	.moreInfo{
+		grid-area: MoreInfo;
+		margin-left: auto;
+    margin-right: auto;
+	margin-top: 10px;
+	}
+
+
+	.ScoreLabel{
+		grid-area: ScoreLabel;
+		text-align: center;
+        margin: auto 5px 15px 0;
+	font-size: 20px;
+    font-weight: 600;
+	span{
+		font-size: 15px;
+		font-weight: 300;
+	}
+	}
+
 
 	.ParkTitle {
 		background: ${props => props.theme.bodyBackground};
@@ -283,6 +309,7 @@ const CardStyle = styled.div`
 			display: inline-block;
 			/* margin: auto; */
 			font-weight: 300;
+			font-size: 25px;
 			min-width: 66px;
 
 			span {
@@ -299,28 +326,14 @@ const CardStyle = styled.div`
 
 	.WeatherInfo {
 		grid-area: WeatherInfo;
-		/* border-bottom: 2px ${props => props.theme.fontDark} solid; */
-
-		font-family: IBM Plex Mono;
-		font-weight:400;
-		font-size: 14px;
-		line-height: 18px;
-		align-content: center;
-		position: relative;
-		display: flex;
-		align-items: end;
-		justify-content: center;
-		padding: 0 15px 0 15px;
-		span {
-			margin: auto 0 0;
-			padding-bottom: 5px;
-    /* padding: 0 15px 0 15px; */
-    text-align: center;
-			border-bottom: 2px ${props => props.theme.fontDark} solid;
-			/* position: absolute;
-			text-align: center; 
-			bottom: 0; */
-		}
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    align-content: center;
+	padding-left: 15px;
+    text-align: left;
+   
+    margin: auto 0px 8px 0px;
 	}
 
 	.WeatherIcons {
@@ -329,8 +342,12 @@ const CardStyle = styled.div`
 		justify-content: space-between;
 		.ParkHum {
 			/* grid-area: ParkHum; */
+			/* text-align: center;
+			margin: auto auto; */
 			text-align: center;
-			margin: auto auto;
+    margin-left: 15px;
+    margin: auto auto auto 0;
+    padding-left: 15px;
 		}
 		.ParkCloud {
 			/* grid-area: ParkCloud; */
@@ -361,7 +378,7 @@ const CardStyle = styled.div`
 	
 	.ParkScore {
 		grid-area: ParkScore;
-		font-family: Barlow;
+		
 		font-style: normal;
 		font-weight: 600;
 		display: block;
@@ -369,17 +386,19 @@ const CardStyle = styled.div`
   margin-right: auto;
   position: relative;
 
-  .ScoreLabel{
+  /* .ScoreLabel{
 	grid-area: ParkScore;
 		font-family: Barlow;
 		font-style: normal;
 		font-weight: 600;
+		font-size: 20px;
+    font-weight: 600;
 		display: block;
   margin-left: auto;
   margin-right: auto;
   position: relative;
 
-  }
+  } */
 
   
 
@@ -410,7 +429,7 @@ const CardStyle = styled.div`
 			/* position: absolute;
 			bottom: 0; */
 			
-			font-size: 24px;
+			font-size: 22px;
 			.scoreBad{
 					color: ${props => props.theme.colorBad};
 				}
@@ -438,28 +457,7 @@ display: inline-block;
 			margin: 10px 0 0 15px;
 		}
 	}
-	.MoreInfo {
-		grid-area: MoreInfo;
-		text-align: center;
-		margin: auto auto;
-		display: flex;
-		display: none;
 
-		.infoIcon {
-			height: 2em;
-			width: 2em;
-		}
-
-		.infoText {
-			vertical-align: center;
-			margin-left: 7px;
-			text-align: left;
-		}
-
-		span {
-			display: inline-block;
-		}
-	}
 `;
 
 const CardBootstrap = styled.div`

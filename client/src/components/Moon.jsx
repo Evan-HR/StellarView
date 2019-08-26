@@ -158,7 +158,7 @@ export default Moon;
 ///////////////////////////////////////////////////////////////
 const MoonStyle = styled.div`
 	color: whitesmoke;
-	font-family: Barlow;
+	font-family: IBM Plex Sans;
 	font-weight: 300;
 	font-style: normal;
 	font-size: 30px;

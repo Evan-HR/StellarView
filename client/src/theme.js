@@ -30,7 +30,7 @@ export const theme = {
 	fontLight: "#EBE630",
 	fontDark: "#2F3334",
 	cardLight: "#BDC2C6",
-	cardDark: "#92A8C1",
+	cardDark: "#9ea6ad",
 	starLight: "#FAE6BF",
 	starDark: "#2F3334",
 	bodyBackground: "#2F3334",
