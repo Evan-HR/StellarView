@@ -7,9 +7,9 @@ import ParkMapModal from "./ParkMapModal";
 import Reviews from "./Reviews";
 import FavPark from "./FavPark";
 
-import markerGood from "./style/MapMarkers/markerGood.png";
-import markerAverage from "./style/MapMarkers/markerAverage.png";
-import markerBad from "./style/MapMarkers/markerBad.png";
+import markerGood from "./style/MapMarkers/resultsGood.svg";
+import markerAverage from "./style/MapMarkers/resultsMedium.svg";
+import markerBad from "./style/MapMarkers/resultsBad.svg";
 
 // const google = window.google;
 

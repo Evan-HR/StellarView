@@ -440,7 +440,10 @@ const ModalStyle = styled.div`
 
 		.weatherContainer {
 			img {
-				width: 100%;
+				/* width: 100%; */
+				width: 70px;
+    margin-left: auto;
+    margin-right: auto;
 			}
 
 			grid-area: weatherContainer;
@@ -532,6 +535,7 @@ const WeatherWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	height: 100%;
+	padding: 10px 0px 10px 0px;
 	justify-content: space-between;
 `;
 
