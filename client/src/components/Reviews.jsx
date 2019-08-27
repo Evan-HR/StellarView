@@ -4,6 +4,7 @@ import StarReviews from "./StarReviews";
 import { AuthConsumer } from "./AuthContext";
 import StarReviewsStatic from "./StarReviewsStatic";
 import Login from "./Login";
+import styled from "styled-components";
 
 class BaseReviews extends Component {
 	constructor(props) {
@@ -251,7 +252,11 @@ class BaseReviews extends Component {
 	renderUserNotLoggedIn() {
 		return (
 			<div class="alert alert-warning" role="alert">
-				You must be <Login><b>logged in</b></Login> to submit a review!
+				You must be{" "}
+				<Login>
+					<b>logged in</b>
+				</Login>{" "}
+				to submit a review!
 			</div>
 		);
 	}
@@ -296,8 +301,13 @@ class BaseReviews extends Component {
 	render() {
 		return (
 			<div>
-				{this.renderReviewsSwitch(this.state.switchCase)}
-				{this.renderReviewsDiv()}
+				<ReviewsStyle>
+					{this.renderStarAvg()}
+					<hr />
+					<div className="NumReviews">{this.renderNumReviews()}</div>
+					{this.renderReviewsSwitch(this.state.switchCase)}
+					{this.renderReviewsDiv()}
+				</ReviewsStyle>
 			</div>
 		);
 	}
@@ -310,3 +320,9 @@ const Reviews = props => (
 );
 
 export default Reviews;
+
+const ReviewsStyle = styled.div`
+	.NumReviews {
+		font-size: 18px;
+	}
+`;

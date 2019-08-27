@@ -518,7 +518,7 @@ const ModalStyle = styled.div`
 
 		.reviewsContainer {
 			grid-area: reviewsContainer;
-			background-color: purple;
+			/* background-color: purple; */
 		}
 	}
 `;

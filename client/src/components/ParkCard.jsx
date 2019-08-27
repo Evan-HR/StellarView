@@ -27,13 +27,16 @@ class ParkCard extends Component {
 		if (reviewScore) {
 			return (
 				<div>
-					<StarReviewsStatic avgScore={reviewScore} />
+					<StarReviewsStatic
+						starSize={"20px"}
+						avgScore={reviewScore}
+					/>
 				</div>
 			);
 		} else {
 			return (
 				<div>
-					<StarReviewsStatic avgScore={0} />
+					<StarReviewsStatic starSize={"20px"} avgScore={0} />
 				</div>
 			);
 		}
@@ -143,12 +146,12 @@ class ParkCard extends Component {
 								<span className="tempIcon">
 									<img src={tempIcon} />
 								</span>
-								<br/>
+								<br />
 								<span className="tempNum">
 									{Math.round(this.props.park.weather.temp)}{" "}
 									°C
 								</span>
-							
+
 								{/* {this.props.park.weather.temp < 15
 									? "Chilly"
 									: this.props.park.weather.temp < 25
@@ -167,9 +170,10 @@ class ParkCard extends Component {
 							</span>
 						</div>
 
-<div className="ScoreLabel">
-	<span>Score:</span>{" "}{Math.round(this.props.park.score * 10)}/10
-</div>
+						<div className="ScoreLabel">
+							<span>Score:</span>{" "}
+							{Math.round(this.props.park.score * 10)}/10
+						</div>
 						{/* <div className="ParkScore">
 
 							<div className="ScoreWrapper">
@@ -184,7 +188,10 @@ class ParkCard extends Component {
 							{this.props.park.score < 0.5 ? (
 								<img class="resultsBad" src={resultsBad}></img>
 							) : (
-								<img class="resultsGood" src={resultsGood}></img>
+								<img
+									class="resultsGood"
+									src={resultsGood}
+								></img>
 							)}
 						</div>
 
@@ -213,7 +220,7 @@ class ParkCard extends Component {
 						</div> */}
 
 						<div className="moreInfo">
-						<i className="faqIcon fas fa-question-circle moreInfoIcon" />
+							<i className="faqIcon fas fa-question-circle moreInfoIcon" />
 						</div>
 					</CardStyle>
 				</div>

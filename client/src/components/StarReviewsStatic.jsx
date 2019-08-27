@@ -7,10 +7,10 @@ class StarReviewsStatic extends Component {
 		return (
 			<Ratings
 				rating={this.props.avgScore}
-				widgetDimensions="20px"
+				widgetDimensions={this.props.starSize}
 				// widgetSpacings="15px"
-				widgetRatedColors="#FAE6BF"
-				widgetEmptyColors="#2F3334"
+				widgetRatedColors="#2B3757"
+				widgetEmptyColors="#989898"
 			>
 				<Ratings.Widget />
 				<Ratings.Widget />
