@@ -103,14 +103,14 @@ export default withRouter(Toolbar);
 
 const ToolbarStyle = styled.header`
 	width: 100%;
-	/* background: ${props => props.theme.darkBlue3}; */
+	background: ${props => props.theme.darkBlue3};
 	height: 120px;
 	top: 0;
 	left: 0;
 	/* z-index: 100; */
 	
 	@media screen and (max-width: 767.999px) {
-		position: absolute;
+		/* position: absolute; */
 	}
 
 	.toolbar__center{

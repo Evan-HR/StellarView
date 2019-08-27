@@ -8,6 +8,9 @@ import axios from "axios";
 import styled from "styled-components";
 import MoonComponent from "./Moon";
 import { Spring, animated } from "react-spring/renderprops";
+import LandingBackground from "./LandingBackground";
+import qs from "qs";
+import spaceBackground from "./style/Media/milky-way-and-starry-night-sky.jpg";
 
 class BaseParksData extends Component {
 	state = {
@@ -164,7 +167,8 @@ class BaseParksData extends Component {
 
 	//Clear button handler
 	clearParks = () => {
-		this.setState({ parks: [], fetchReq: [] });
+		console.log("Clearing parks...");
+		this.setState({ parks: [], fetchReq: false });
 	};
 
 	renderParkMap = () => {
@@ -296,10 +300,14 @@ class BaseParksData extends Component {
 
 	renderLanding = () => {
 		return (
-			<React.Fragment>
-				{this.renderParkForm()}
-				{this.renderParkMap()}
-			</React.Fragment>
+			<LandingStyle bg={spaceBackground}>
+				<div className="landingContent">
+					{this.renderParkForm()}
+					{/* Park map needs to be rendered but invisible */}
+					{this.renderParkMap()}
+				</div>
+				<div className="landingBackground" />
+			</LandingStyle>
 		);
 	};
 
@@ -307,13 +315,16 @@ class BaseParksData extends Component {
 	render() {
 		console.log("ParksData - rendered");
 
+		let query = qs.parse(this.props.history.location.search, {
+			ignoreQueryPrefix: true
+		});
+		console.log(query);
+
 		return (
 			<React.Fragment>
-				{this.state.fetchReq ? (
-					<React.Fragment>{this.renderResults()}</React.Fragment>
-				) : (
-					<React.Fragment>{this.renderLanding()}</React.Fragment>
-				)}
+				{Object.keys(query).length !== 0
+					? this.renderResults()
+					: this.renderLanding()}
 			</React.Fragment>
 		);
 	}
@@ -355,7 +366,7 @@ const MainContentWrapper = styled.div`
 		height: 80vh;
 		width: 42.5vw;
 		top: 10vh;
-		background-color: maroon;
+		background-color: grey;
 	}
 	.Placeholder1 {
 		display: none;
@@ -365,7 +376,7 @@ const MainContentWrapper = styled.div`
 	.RightSideContainerFull {
 		z-index: 0;
 		grid-area: rightSide;
-		margin-bottom: 20px;
+		margin-bottom: -13px;
 		/* overflow-y: scroll;
 		overflow-x: hidden; */
 		/* background-color: whitesmoke; */
@@ -387,33 +398,25 @@ const MainContentWrapper = styled.div`
 
 	.SortByContainer {
 		font-family: IBM Plex Sans;
-	
 		padding: 13px 0px 13px 0px;
 		width: 100%;
-		
-
 		.SortBy {
-			
 			color: whitesmoke;
 			transition: color 0.2s ease;
-			button{
-				
-			all: unset;
-			color: whitesmoke;
-			font-weight: 600;
-			cursor: pointer;
-			margin: 0 0px 0 15px;
-			:hover,
-	:active {
-		color: ${props => props.theme.colorBad};
-		transition: color 0.2s ease;
-
-	}
-
-
-		}
 			display: flex;
 			justify-content: flex-end;
+			button{
+				all: unset;
+				color: whitesmoke;
+				font-weight: 600;
+				cursor: pointer;
+				margin: 0 0px 0 15px;
+				:hover,
+				:active {
+					color: ${props => props.theme.colorBad};
+					transition: color 0.2s ease;
+				}
+			}
 		}
 	}
 
@@ -442,7 +445,7 @@ const MainContentWrapper = styled.div`
 	}
 	@media screen and (min-width: 769px) and (max-width: 1300px) {
 		width: 90%;
-		margin-top: 0rem;
+		margin-top: 2rem;
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: auto auto;
 		grid-template-areas:
@@ -452,5 +455,26 @@ const MainContentWrapper = styled.div`
 			grid-area: form;
 			${({ active }) => active && `display: none;`}
 		}
+	}
+`;
+
+const LandingStyle = styled.div`
+	.landingContent {
+		margin: 2rem auto;
+		overflow: none;
+		width: 85%;
+	}
+	.landingBackground {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: -100;
+		background-image: linear-gradient(
+			150deg,
+			${props => props.theme.cream} 60%,
+			${props => props.theme.franNavy} calc(60% + 2px)
+		);
+		background-image: url(${props => props.bg});
+		background-size: cover;
 	}
 `;

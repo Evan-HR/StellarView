@@ -8,7 +8,7 @@ class Footer extends Component {
 				<span>
 					MADE WITH 🌌 <br></br>{" "}
 					<span className="Names">
-						© Vlad Falach x Dustin Jurkaulionis x Evan Reaume
+						© Vlad Falach x Dustin Jurkaulionis x <s>Evan Reaume</s>
 					</span>
 				</span>
 			</FooterStyle>

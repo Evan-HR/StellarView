@@ -101,6 +101,8 @@ class BaseParkForm extends Component {
 				);
 			}
 			//THe quick and dirty way to load map results would be.......
+		} else {
+			this.props.clearParks();
 		}
 	};
 
