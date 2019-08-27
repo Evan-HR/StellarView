@@ -12,7 +12,7 @@ import { Spring, animated } from "react-spring/renderprops";
 class BaseParksData extends Component {
 	state = {
 		parks: [],
-		fetchReq: [],
+		fetchReq: false,
 		moon: "",
 		moonType: "",
 		isMapLoaded: false,
@@ -234,10 +234,7 @@ class BaseParksData extends Component {
 		this.setState({ parks: parksArray, sortedBy: "score" });
 	};
 
-	//recursively calls render on it's children
-	render() {
-		console.log("ParksData - rendered");
-
+	renderResults = () => {
 		return (
 			<MainContentWrapper
 				active={this.state.hideForm}
@@ -294,6 +291,30 @@ class BaseParksData extends Component {
 					</div>
 				</div>
 			</MainContentWrapper>
+		);
+	};
+
+	renderLanding = () => {
+		return (
+			<React.Fragment>
+				{this.renderParkForm()}
+				{this.renderParkMap()}
+			</React.Fragment>
+		);
+	};
+
+	//recursively calls render on it's children
+	render() {
+		console.log("ParksData - rendered");
+
+		return (
+			<React.Fragment>
+				{this.state.fetchReq ? (
+					<React.Fragment>{this.renderResults()}</React.Fragment>
+				) : (
+					<React.Fragment>{this.renderLanding()}</React.Fragment>
+				)}
+			</React.Fragment>
 		);
 	}
 }
