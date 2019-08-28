@@ -303,7 +303,7 @@ const ModalStyle = styled.div`
 		font-style: normal;
 		font-weight: normal;
 		font-size: 30px;
-		border-bottom: 2px solid ${props => props.theme.fontDark};
+		border-bottom: 2px solid #9ea6ad;
 		.close {
 			i {
 				color: ${props => props.theme.prettyDark};
