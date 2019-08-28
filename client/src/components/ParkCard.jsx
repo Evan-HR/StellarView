@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import humidityIcon from "./style/Media/cardIcons/humidity.svg";
 import cloudIcon from "./style/Media/cardIcons/cloud.svg";
+import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
+import cloudGoodIcon from "./style/Media/cardIcons/cloudGood.svg";
 import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import tempIcon from "./style/Media/cardIcons/temperature.svg";
 import infoIcon from "./style/Media/cardIcons/moreInfo.svg";
@@ -117,19 +119,24 @@ class ParkCard extends Component {
 								<img src={humidityIcon} />
 								<br />
 								{this.props.park.weather.humidity < 40
-									? "Good"
+									? "Great"
 									: this.props.park.weather.humidity < 80
-									? "Okay"
+									? "Good"
 									: "Poor"}
 							</div>
 
 							<div className="ParkCloud">
-								<img src={cloudIcon} />
+								{this.props.park.weather.clouds < 40 ? (
+									<img src={cloudGoodIcon} />
+								) : (
+									<img src={cloudBadIcon} />
+								)}
+								{/* <img src={cloudIcon} /> */}
 								<br />
 								{this.props.park.weather.clouds < 40
-									? "Good"
+									? "Great"
 									: this.props.park.weather.clouds < 80
-									? "Okay"
+									? "Good"
 									: "Poor"}
 							</div>
 
@@ -137,9 +144,9 @@ class ParkCard extends Component {
 								<img src={lightPolIcon} />
 								<br />
 								{this.props.park.light_pol < 1
-									? "Good"
+									? "Great"
 									: this.props.park.light_pol < 3
-									? "Okay"
+									? "Good"
 									: "Poor"}
 							</div>
 							<div className="ParkTemp">
@@ -172,7 +179,7 @@ class ParkCard extends Component {
 
 						<div className="ScoreLabel">
 							<span>Score:</span>{" "}
-							{Math.round(this.props.park.score * 10)}/10
+							{Math.round(this.props.park.score * 100)}%
 						</div>
 						{/* <div className="ParkScore">
 
@@ -186,13 +193,19 @@ class ParkCard extends Component {
 						</div> */}
 						<div className="ParkScoreIcon">
 							{this.props.park.score < 0.5 ? (
-								<img class="resultsBad" src={resultsBad}></img>
+								// <img class="resultsBad" src={resultsBad}></img>
+								<i class="fas fa-eye-slash invisibleIcon"></i>
 							) : (
-								<img
-									class="resultsGood"
-									src={resultsGood}
-								></img>
+								<i class="far fa-eye visibleIcon"></i>
+								// <img
+								// 	class="resultsGood"
+								// 	src={resultsGood}
+								// ></img>
 							)}
+							<br />
+							{this.props.park.score < 0.5
+								? "Not Visible"
+								: "Visible"}
 						</div>
 
 						<div className="StarRev">
@@ -320,11 +333,9 @@ const CardStyle = styled.div`
 		
 		.Dist {
 
-			display: inline-block;
-			/* margin: auto; */
-			/* font-weight: 300;
-			font-size: 25px; */
-			min-width: 66px;
+			padding-left: 10px;
+    display: inline-block;
+    min-width: 73px;
 
 			span {
 				left: 0;
@@ -436,10 +447,18 @@ const CardStyle = styled.div`
 	.ParkScoreIcon {
 		grid-area: ParkScoreIcon;
 		display: block;
-		margin: 0px auto auto auto;
+		align-content: center;
+    text-align: center;
+    margin: auto 0px auto 0px;
+		/* margin: 0px auto auto auto; */
   /* width: 50px; */
-  img{
-	  width:50px;
+  .visibleIcon{
+	  font-size:32px;
+	  color: ${props => props.theme.parkMapGreen};
+  }
+  .invisibleIcon{
+	font-size:32px;
+	  color: ${props => props.theme.colorBad};
   }
 
 			

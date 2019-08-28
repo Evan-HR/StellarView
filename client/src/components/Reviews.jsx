@@ -368,21 +368,24 @@ const ReviewStyle = styled.div`
 	grid-template-areas:
 		"ReviewReview    ReviewReview"
 		"ReviewName    	 ReviewScore";
-		
-		border-bottom: 1px solid ${props => props.theme.cardDark};
-		
+
+	border-bottom: 1px solid ${props => props.theme.cardDark};
 
 	.ReviewName {
 		grid-area: ReviewName;
-		padding-bottom: 20px;
+		/* padding-bottom: 20px; */
+		padding-top: 20px;
+		padding-bottom: 10px;
 		/* text-align: end;
 		padding-right: 25px; */
 	}
 	.ReviewScore {
-		padding-bottom: 20px;
+		/* padding-bottom: 20px; */
 		/* text-align: start;
 		padding-left: 25px; */
 		grid-area: ReviewScore;
+		padding-top: 20px;
+		padding-bottom: 10px;
 	}
 
 	.ReviewReview {
@@ -393,6 +396,7 @@ const ReviewStyle = styled.div`
 		border-radius: 14px;
 		grid-area: ReviewReview;
 		text-align: center;
+		box-shadow: 4px 9px #888888;
 	}
 `;
 

@@ -657,9 +657,7 @@ app.post("/api/getProfileParksWeather", async (req, res) => {
 });
 
 function getParkWeatherAxios(park, userTime) {
-	weatherURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${
-		park.lat
-	}&lon=${park.lng}&appid=${weatherKey1}`;
+	weatherURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${park.lat}&lon=${park.lng}&appid=${weatherKey1}`;
 	console.log(weatherURL);
 
 	var times = suncalc.getTimes(new Date(userTime), park.lat, park.lng);
@@ -903,11 +901,7 @@ app.post("/api/getParkData", async (req, res) => {
 
 						//If current time is past night-time use current weather
 						if (utime > nightTime) {
-							weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${
-								clusterCentroids[clusterNum].latitude
-							}&lon=${
-								clusterCentroids[clusterNum].longitude
-							}&appid=${weatherKey1}&units=metric`;
+							weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${clusterCentroids[clusterNum].latitude}&lon=${clusterCentroids[clusterNum].longitude}&appid=${weatherKey1}&units=metric`;
 
 							response = await axios
 								.get(weatherURL)
@@ -957,11 +951,7 @@ app.post("/api/getParkData", async (req, res) => {
 
 							//Otherwise use forecast weather
 						} else {
-							weatherURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${
-								clusterCentroids[clusterNum].latitude
-							}&lon=${
-								clusterCentroids[clusterNum].longitude
-							}&cnt=50&appid=${weatherKey1}&units=metric`;
+							weatherURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${clusterCentroids[clusterNum].latitude}&lon=${clusterCentroids[clusterNum].longitude}&cnt=50&appid=${weatherKey1}&units=metric`;
 
 							console.log(weatherURL);
 
@@ -1091,6 +1081,7 @@ app.post("/api/getParkData", async (req, res) => {
 					//STEP 9: FORMAT RESPONSE JSON
 					let reply = {
 						parks: parkDataJSON,
+						moonFraction: phaseInfo.fraction,
 						moonPercent: phaseInfo.phase,
 						moonType: moonType
 					};

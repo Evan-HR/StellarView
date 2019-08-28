@@ -14,6 +14,7 @@ class BaseParksData extends Component {
 		parks: [],
 		fetchReq: [],
 		moon: "",
+		moonFraction: "",
 		moonType: "",
 		isMapLoaded: false,
 		isFetchingParks: false,
@@ -82,6 +83,7 @@ class BaseParksData extends Component {
 			this.setState({
 				parks: JSON.parse(localData).parks,
 				moon: JSON.parse(localData).moonPercent,
+				moonFraction: JSON.parse(localData).moonFraction,
 				moonType: JSON.parse(localData).moonType,
 
 				fetchReq: reqData,
@@ -97,7 +99,7 @@ class BaseParksData extends Component {
 					console.log(response.data);
 					for (var i = 0; i < response.data.parks.length; i++) {
 						response.data.parks[i].score = this.parkScore(
-							response.data.moonPercent,
+							response.data.moonFraction,
 							response.data.parks[i].weather.humidity / 100,
 							response.data.parks[i].weather.clouds / 100,
 							response.data.parks[i].light_pol / 100
@@ -106,6 +108,7 @@ class BaseParksData extends Component {
 					this.setState({
 						parks: response.data.parks,
 						moon: response.data.moonPercent,
+						moonFraction: response.data.moonfraction,
 						moonType: response.data.moonType,
 						fetchReq: reqData,
 						isFetchingParks: false
@@ -125,12 +128,12 @@ class BaseParksData extends Component {
 		}
 	};
 
-	parkScore = (moon, humidity, cloudCov, lightPol) => {
-		// console.log("MOON IS !!!!!!!!!!!!!!",moon)
-		// console.log("CLOUD COV IS !!!!!!!!!!!!!!",cloudCov)
-		// console.log("LIGHT POL IS !!!!!!!!!!!!!!",lightPol)
-		// console.log("humidity COV IS !!!!!!!!!!!!!!",humidity)
-		var moonScore = 0.45 * (-1 * (2 * moon - 1));
+	parkScore = (moonFraction, humidity, cloudCov, lightPol) => {
+		console.log("MOON FRACTION % IS !!!!!!!!!!!!!!", moonFraction);
+		console.log("CLOUD COV IS !!!!!!!!!!!!!!", cloudCov);
+		console.log("LIGHT POL IS !!!!!!!!!!!!!!", lightPol);
+		console.log("humidity COV IS !!!!!!!!!!!!!!", humidity);
+		var moonScore = 0.45 * (-1 * (2 * moonFraction - 1));
 		var lightPolScore = 0.25 * (((-1 * 1) / 3) * (lightPol - 3));
 		var humidityScore = 0;
 		if (humidity < 0.4) {

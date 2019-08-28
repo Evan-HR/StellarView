@@ -8,6 +8,8 @@ import MoonDisplay from "./MoonDisplay";
 import { useSpring, animated as a } from "react-spring";
 import humidityIcon from "./style/Media/cardIcons/humidity.svg";
 import cloudIcon from "./style/Media/cardIcons/cloud.svg";
+import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
+import cloudGoodIcon from "./style/Media/cardIcons/cloudGood.svg";
 import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 
 const modalStyle = {
@@ -140,7 +142,12 @@ class ParkMapModal extends Component {
 												<div className="Heading">
 													<span>Cloud Coverage</span>
 												</div>
-												<img src={cloudIcon} />
+												{this.park.weather.clouds <
+												40 ? (
+													<img src={cloudGoodIcon} />
+												) : (
+													<img src={cloudBadIcon} />
+												)}
 												<div className="Value">
 													<span>
 														{
@@ -442,8 +449,8 @@ const ModalStyle = styled.div`
 			img {
 				/* width: 100%; */
 				width: 70px;
-    margin-left: auto;
-    margin-right: auto;
+				margin-left: auto;
+				margin-right: auto;
 			}
 
 			grid-area: weatherContainer;
@@ -500,7 +507,6 @@ const ModalStyle = styled.div`
 					width: 59px;
 					margin: auto;
 				}
-				
 			}
 			.humidityContainer {
 				height: 157px;
