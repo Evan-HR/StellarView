@@ -30,20 +30,8 @@ const MoonStyle = styled.div`
 	font-size: 30px;
 	text-align: center;
 	text-transform: uppercase;
-	/* animation: colorchange 2s infinite alternate; 
 
-      -webkit-animation: colorchange 3s infinite alternate; 
-	  @keyframes colorchange
-    {
-      0%   {color: whitesmoke;}
-      100% {color: ${props=>props.theme.lightBlue};}
-    }
 
-    @-webkit-keyframes colorchange 
-    {
-		0%   {color: whitesmoke;}
-      100% {color: ${props=>props.theme.lightBlue};}
-    } */
 
 	.moonDisplay {
 		height: 140px;
@@ -54,6 +42,7 @@ const MoonStyle = styled.div`
 
 		.MoonDisplayContainer {
 			width: 90px;
+			
 		}
 	}
 `;

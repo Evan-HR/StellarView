@@ -145,6 +145,7 @@ body{
 	/* background-image: url(${props => props.bg});
 	background-size: cover; */
 	background-color: ${props => props.theme.prettyDark} !important;
+
 	text-align: center !important;
 }
 `;

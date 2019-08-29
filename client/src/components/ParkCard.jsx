@@ -324,7 +324,7 @@ const CardStyle = styled.div`
 
 
 	.ParkTitle {
-		background: ${props => props.theme.bodyBackground};
+		background: ${props => props.theme.mapBlue};
 		-webkit-transition: background-color 0.1s linear;
     -ms-transition: background-color 0.1s linear;
     transition: background-color 0.1s linear;
@@ -341,7 +341,7 @@ const CardStyle = styled.div`
 		cursor: pointer;
 		:hover{
 			
-			background: ${props => props.theme.lightDark};
+			background: ${props => props.theme.lightBlue};
 		
     -webkit-transition: background-color 0.1s linear;
     -ms-transition: background-color 0.1s linear;

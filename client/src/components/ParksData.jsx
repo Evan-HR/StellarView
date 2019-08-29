@@ -382,7 +382,14 @@ const MainContentWrapper = styled.div`
 
 	.MoonStyle {
 		/* height: 50%; */
-		background: ${props => props.theme.moonCard};
+		/* background: ${props => props.theme.moonCard}; */
+		background: -moz-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* ff3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(35,37,38,1)), color-stop(100%, rgba(55,57,59,1))); /* safari4+,chrome */
+background: -webkit-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* safari5.1+,chrome10+ */
+background: -o-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* opera 11.10+ */
+background: -ms-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* ie10+ */
+background: linear-gradient(108deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* w3c */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#232526', endColorstr='#37393B',GradientType=1 ); /* ie6-9 */
 	}
 
 	.helpCard{
@@ -397,9 +404,18 @@ const MainContentWrapper = styled.div`
 	"descA descB descC descD descE";
 	padding: 0px 10px 10px 15px;
 	font-size: 14px;
-	box-shadow: inset 0px 0px 0px 7px #485261;
+	/* box-shadow: inset 0px 0px 0px 4px #485261;
 
-	background: ${props=>props.theme.cardLight};
+	background: ${props=>props.theme.cardLight}; */
+
+	background: -moz-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ff3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(189,194,198,0.95)), color-stop(100%, rgba(172,177,181,1))); /* safari4+,chrome */
+background: -webkit-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* safari5.1+,chrome10+ */
+background: -o-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* opera 11.10+ */
+background: -ms-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ie10+ */
+background: linear-gradient(90deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* w3c */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', endColorstr='#ACB1B5',GradientType=1 ); /* ie6-9 */
+
 	img,i{
 		margin: auto auto auto auto;
 	}

@@ -65,9 +65,9 @@ export default function MoonDisplay({phase}) {
 					<circle
 						cx="0"
 						cy="100"
-						r="99"
+						r="100"
 						// stroke="whitesmoke"
-						fill="whitesmoke"
+						fill="#121414"
 						class="bg"
 					/>
 					<circle
@@ -89,6 +89,17 @@ const MoonSVGStyle = styled.div`
 		/* width: 90px; */
 		/* margin: 2rem auto; */
 		transform: scaleX(${props => props.phaseFlip});
+
+  border-radius:100px;
+  box-shadow: 0 0 20px #485261;
+		/* @keyframes glowing {
+  0% { box-shadow: -10 -10px #485261; }
+  40% { box-shadow: 0 0 20px #485261; }
+  60% { box-shadow: 0 0 20px #485261; }
+  100% { box-shadow: -10 -10px #485261; }
+}
+  animation: glowing 6000ms infinite; */
+
 	}
 	.moon-left,
 	.moon-right {

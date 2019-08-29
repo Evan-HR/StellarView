@@ -30,7 +30,7 @@ export const theme = {
 	fontLight: "#EBE630",
 	fontDark: "#2F3334",
 	cardLight: "#BDC2C6",
-	cardDark: "#9ea6ad",
+	cardDark: "#bbc4cc",
 	starLight: "#FAE6BF",
 	starDark: "#2F3334",
 	bodyBackground: "#2F3334",
@@ -42,5 +42,6 @@ export const theme = {
 	prettyDark: "#111414",
 	moreInfoBackground: "#E4E4E4",
 	parkMapGreen: "#174030",
-	lightBlue: "#485261"
+	lightBlue: "#485261",
+	mapBlue: "#2d333c"
 };

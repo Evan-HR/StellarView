@@ -496,6 +496,8 @@ const ModalStyle = styled.div`
 				grid-area: moonContainer;
 				position: relative;
 
+
+
 				.moonCard {
 					height: 157px;
 					position: absolute;

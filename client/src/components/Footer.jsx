@@ -20,7 +20,7 @@ const FooterStyle = styled.div`
     font-family: monospace;
     font-weight: 300;
     font-size: 25px;
-    background-color: black;
+    background-color: ${props=>props.theme.prettyDark};
     color: whitesmoke;
     .Names{
         font-size: 12px;

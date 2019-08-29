@@ -242,7 +242,7 @@ const LoginStyle = styled.div`
 
 		transform: translate(-50%, -51%);
 		width: 350px;
-		height: 100vh;
+		height: 80vh;
 		max-width: 100vw;
 		max-height: 100vh;
 		/* background: whitesmoke; */

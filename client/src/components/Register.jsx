@@ -365,7 +365,7 @@ const LoginStyle = styled.div`
 		.banner {
 			position: absolute;
 			top: 0px;
-			height: 0px;
+	
 			width: 100%;
 			height: 190px;
 			background: url(${props => props.background}) center no-repeat;
