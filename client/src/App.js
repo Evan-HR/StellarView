@@ -14,6 +14,7 @@ import { theme } from "./theme";
 import FAQ from "./components/FAQ";
 import backgroundImage from "./components/style/Media/starrynight_loop.svg";
 import Footer from "./components/Footer";
+import ScrollUpButton from "react-scroll-up-button";
 
 class App extends Component {
 	state = {
@@ -45,6 +46,7 @@ class App extends Component {
 		console.log("App - rendered");
 		return (
 			<React.Fragment>
+				<ScrollUpButton />
 				<GlobalStyle bg={backgroundImage} />
 				<SiteStyle>
 					<div className="SiteContent">

@@ -7,6 +7,8 @@ import { AuthConsumer } from "./AuthContext";
 import { withRouter, Link } from "react-router-dom";
 import styled from "styled-components";
 import Register from "./Register";
+import formError from "./style/Media/formError.svg";
+import formSuccess from "./style/Media/formSuccess.svg";
 
 Modal.setAppElement("#root");
 class BaseLogin extends Component {
@@ -52,16 +54,20 @@ class BaseLogin extends Component {
 	errorMsg() {
 		if (this.state.errorDB) {
 			return (
-				<div class="InvalidLogin alert alert-danger" role="alert">
-					Invalid login credentials! Please try again
-				</div>
+				<AlertStyle success={false}>
+					<img src={formError} />
+					<div className="AlertText">
+						Invalid login credentials! Please try again
+					</div>
+				</AlertStyle>
 			);
 		}
 		if (this.state.loginSuccess) {
 			return (
-				<div class="InvalidLogin success alert-success" role="alert">
-					Login Successful!
-				</div>
+				<AlertStyle success={true}>
+					<img src={formSuccess} />
+					<div className="AlertText">Login successful</div>
+				</AlertStyle>
 			);
 		}
 	}
@@ -130,7 +136,7 @@ class BaseLogin extends Component {
 									required
 								/>
 							</div>
-							<div className="row">
+							<div className="rowSubmit">
 								<button onClick={this.onSubmit}>Submit</button>
 							</div>
 						</div>
@@ -234,12 +240,12 @@ const LoginStyle = styled.div`
 	.login {
 		position: absolute;
 
-		transform: translate(-50%, -50%);
+		transform: translate(-50%, -51%);
 		width: 350px;
-		height: 600px;
+		height: 100vh;
 		max-width: 100vw;
 		max-height: 100vh;
-		background: whitesmoke;
+		/* background: whitesmoke; */
 		overflow: hidden;
 
 		.banner {
@@ -286,6 +292,40 @@ const LoginStyle = styled.div`
 				transform: translateX(-50%); */
 				width: 85%;
 				margin: 0 auto;
+
+				.rowSubmit {
+					margin: 20px 0 10px 0;
+					.label {
+						font-size: 12px;
+						font-weight: 600;
+						color: rgb(100, 100, 100);
+					}
+
+					input {
+						margin-top: 2px;
+						font-size: 13px;
+						color: rgb(70, 70, 70);
+						border: none;
+						border-bottom: 1px solid rgba(100, 100, 100, 0.6);
+						outline: none;
+						height: 25px;
+						background: transparent;
+						width: 100%;
+					}
+					button {
+						margin-top: 0px;
+						font-size: 13px;
+						color: rgb(100, 100, 100);
+						border: none;
+						outline: none;
+						height: 40px;
+						text-transform: uppercase;
+						background: ${props => props.theme.starDark};
+						width: 100%;
+						color: #fff;
+						cursor: pointer;
+					}
+				}
 				.row {
 					margin: 20px 0px;
 					.label {
@@ -334,8 +374,18 @@ const LoginStyle = styled.div`
 				color: #333;
 				a {
 					color: ${props => props.theme.colorBad};
+					transition: 0.25s;
 					text-decoration: none;
 					font-weight: 600;
+				}
+				:hover,
+				:active {
+					color: ${props => props.theme.franNavy};
+					transition: 0.25s;
+					a {
+						color: ${props => props.theme.franNavy};
+						transition: 0.25s;
+					}
 				}
 			}
 		}
@@ -407,4 +457,21 @@ const Input = styled.input`
 const HeaderStyle = styled.div`
 	margin-left: 38%;
 	color: whitesmoke;
+`;
+
+const AlertStyle = styled.div`
+	position: relative;
+
+	.AlertText {
+		padding: 10px;
+		background-color: ${props =>
+			props.success ? "#67e8956b" : "#daa97961"};
+
+		font-weight: 500;
+	}
+
+	img {
+		padding-bottom: 10px;
+		width: 42px;
+	}
 `;

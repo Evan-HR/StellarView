@@ -16,6 +16,7 @@
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
+    "react-scroll-up-button": "^1.6.4",
     "react-spring": "^8.0.27",
     "styled-components": "^4.3.2",
     "suncalc": "^1.8.0"
