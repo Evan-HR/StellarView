@@ -8,6 +8,10 @@ import axios from "axios";
 import styled from "styled-components";
 import MoonComponent from "./Moon";
 import { Spring, animated } from "react-spring/renderprops";
+import humidityIcon from "./style/Media/cardIcons/humidity.svg";
+import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
+import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
+import tempIcon from "./style/Media/cardIcons/temperature.svg";
 
 class BaseParksData extends Component {
 	state = {
@@ -265,6 +269,20 @@ class BaseParksData extends Component {
 							moonType={this.state.moonType}
 						/>
 					</div>
+					<div className="helpCard">
+					<span className="help">Icon Info</span>
+					<img className="iconA" src={humidityIcon} />
+					<img className="iconB" src={lightPolIcon} />
+					<img className="iconE" src={tempIcon} />
+					<img className="iconD" src={cloudBadIcon} />
+					<i class="far fa-eye iconC"></i>
+					<span className="descA">Humidity</span>
+					<span className="descB">Light Pollution</span>
+					<span className="descE">Temperature</span>
+					<span className="descD">Cloud Coverage</span>
+					<span className="descC">Overall Visibility</span>
+			
+					</div>
 					{/* </div> */}
 
 					<div className="SortByContainer">
@@ -365,6 +383,73 @@ const MainContentWrapper = styled.div`
 	.MoonStyle {
 		/* height: 50%; */
 		background: ${props => props.theme.moonCard};
+	}
+
+	.helpCard{
+	font-family: IBM Plex Sans;
+	height: 140px;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr 1fr;
+	grid-template-areas: 
+	"help help help help help"
+	"iconA iconB iconC iconD iconE"
+	"descA descB descC descD descE";
+	padding: 0px 10px 10px 15px;
+	font-size: 14px;
+	box-shadow: inset 0px 0px 0px 7px #485261;
+
+	background: ${props=>props.theme.cardLight};
+	img,i{
+		margin: auto auto auto auto;
+	}
+	span{
+		margin: 0px auto auto auto;
+
+	}
+	.help{
+		color: ${props=>props.theme.fontDark};
+		font-size: 20px;
+		
+		font-weight: 500;
+		margin: auto auto 0px auto;
+		grid-area: help;
+	}
+
+	.iconA{
+		grid-area: iconA
+	}
+	.iconB{
+		grid-area: iconD
+	}
+	.iconC{
+		font-size: 52px;
+		grid-area: iconC
+	}
+	.iconD{
+		grid-area: iconB
+	}
+	.iconE{
+		
+		grid-area: iconE
+	}
+
+	.descA{
+		grid-area: descA
+	}
+	.descB{
+		grid-area: descD
+	}
+	.descC{
+		grid-area: descC
+	}
+	.descD{
+		grid-area: descB
+	}
+	.descE{
+		grid-area: descE
+	}
+
 	}
 
 	.SortByContainer {

@@ -675,6 +675,7 @@ const SearchFormStyle = styled.div`
 
 	.advancedSearchToggle {
 		grid-area: advancedSearchToggle;
+	
 
 		button {
 			float: left;
@@ -703,6 +704,12 @@ const SearchFormStyle = styled.div`
 		font-size: 20px;
 		border: none;
 		float: left;
+		:hover,
+		:active {
+			color: ${props => props.theme.colorBad};
+			transition: color 0.2s ease;
+		}
+
 	}
 
 	.searchTerm:focus {
@@ -731,6 +738,7 @@ const SearchFormStyle = styled.div`
 
 	.ToggleAdvancedSearch {
 		all: unset;
+		cursor: pointer;
 		color: #bdbdbd;
 		:hover,
 		:active {

@@ -98,13 +98,16 @@ class ParkMap extends Component {
 
 		if (this.props.markers[park.id]) {
 			console.log("Park marker already on map!");
+			console.log("PARK SCORE IS: ",park.score)
+			
 		} else {
 			let markerIcon = markerBad;
-			if (park.score > 80) {
+			let tempScore = park.score*100;
+			if (tempScore > 80) {
 				markerIcon = markerGood;
-			} else if (park.score > 60) {
+			} else if (tempScore > 60) {
 				markerIcon = markerAverage;
-			} else if (park.score > 50) {
+			} else if (tempScore > 50) {
 				markerIcon = markerBad;
 			} else {
 				markerIcon = markerBad;

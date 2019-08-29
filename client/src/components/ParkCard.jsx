@@ -53,31 +53,23 @@ class ParkCard extends Component {
 			<CardBootstrap>
 				<div className="card">
 					<CardStyle>
-						<div className="ParkTitle">
-							<span
-								className="Title"
-								style={{ textTransform: "capitalize" }}
-								onMouseEnter={() => {
-									this.props.handleMouseOver(
-										this.props.park.id
-									);
-								}}
-								onMouseLeave={() => {
-									this.props.handleMouseLeave(
-										this.props.park.id
-									);
-								}}
-								onClick={() => {
-									this.props.handleMouseClick(
-										this.props.park.id
-									);
-								}}
-							>
-								<b>
-									{this.props.park.name_alt
-										? this.props.park.name_alt
-										: this.props.park.name}
-								</b>
+						<div
+							className="ParkTitle"
+							style={{ textTransform: "capitalize" }}
+							onMouseEnter={() => {
+								this.props.handleMouseOver(this.props.park.id);
+							}}
+							onMouseLeave={() => {
+								this.props.handleMouseLeave(this.props.park.id);
+							}}
+							onClick={() => {
+								this.props.handleMouseClick(this.props.park.id);
+							}}
+						>
+							<span className="Title">
+								{this.props.park.name_alt
+									? this.props.park.name_alt
+									: this.props.park.name}
 							</span>
 
 							<div className="Dist">
@@ -116,7 +108,11 @@ class ParkCard extends Component {
 
 						<div className="WeatherIcons">
 							<div className="ParkHum">
-								<img src={humidityIcon} />
+								<img
+									src={humidityIcon}
+									alt="Humidity"
+									title="Humidity Level"
+								/>
 								<br />
 								{this.props.park.weather.humidity < 40
 									? "Great"
@@ -127,9 +123,17 @@ class ParkCard extends Component {
 
 							<div className="ParkCloud">
 								{this.props.park.weather.clouds < 40 ? (
-									<img src={cloudGoodIcon} />
+									<img
+										src={cloudGoodIcon}
+										alt="Cloud Coverage"
+										title="Low Cloud Coverage"
+									/>
 								) : (
-									<img src={cloudBadIcon} />
+									<img
+										src={cloudBadIcon}
+										alt="Cloud Coverage"
+										title="High Cloud Coverage"
+									/>
 								)}
 								{/* <img src={cloudIcon} /> */}
 								<br />
@@ -141,7 +145,11 @@ class ParkCard extends Component {
 							</div>
 
 							<div className="ParkLightPol">
-								<img src={lightPolIcon} />
+								<img
+									src={lightPolIcon}
+									alt="Light Pollution"
+									title="Light Pollution"
+								/>
 								<br />
 								{this.props.park.light_pol < 1
 									? "Great"
@@ -151,7 +159,11 @@ class ParkCard extends Component {
 							</div>
 							<div className="ParkTemp">
 								<span className="tempIcon">
-									<img src={tempIcon} />
+									<img
+										src={tempIcon}
+										alt="Temperature"
+										title="Temperature"
+									/>
 								</span>
 								<br />
 								<span className="tempNum">
@@ -192,23 +204,27 @@ class ParkCard extends Component {
 							</div>
 						</div> */}
 						<div className="ParkScoreIcon">
-							{this.props.park.score < 0.5 ? (
-								// <img class="resultsBad" src={resultsBad}></img>
-								<i class="fas fa-eye-slash invisibleIcon"></i>
+							{this.props.park.score > 0.8 ? (
+								<i class="far fa-eye visibleGoodIcon"></i>
+							) : this.props.park.score > 0.6 ? (
+								<i class="far fa-eye visiblePartlyIcon"></i>
 							) : (
-								<i class="far fa-eye visibleIcon"></i>
-								// <img
-								// 	class="resultsGood"
-								// 	src={resultsGood}
-								// ></img>
+								<i class="fas fa-eye-slash invisibleIcon"></i>
 							)}
 							<br />
-							{this.props.park.score < 0.5
-								? "Not Visible"
-								: "Visible"}
+							{this.props.park.score > 0.8
+								? "Visible"
+								: this.props.park.score > 0.6
+								? "Partly Visible"
+								: "Not Visible"}
 						</div>
 
-						<div className="StarRev">
+						<div
+							className="StarRev"
+							onClick={() => {
+								this.props.handleMouseClick(this.props.park.id);
+							}}
+						>
 							<div className="StarScore">
 								{this.renderReviewScore(
 									this.props.park.avgScore
@@ -221,18 +237,12 @@ class ParkCard extends Component {
 							</div>
 						</div>
 
-						{/* <div className="MoreInfo">
-						
-							<img src={infoIcon} />
-						
-							<span className="infoText">
-								More
-								<br />
-								Info
-							</span>
-						</div> */}
-
-						<div className="moreInfo">
+						<div
+							className="moreInfo"
+							onClick={() => {
+								this.props.handleMouseClick(this.props.park.id);
+							}}
+						>
 							<i className="faqIcon fas fa-question-circle moreInfoIcon" />
 						</div>
 					</CardStyle>
@@ -279,19 +289,22 @@ const CardStyle = styled.div`
 
 	color: ${props => props.theme.fontDark};
 
-	.card {
-		
-		/* border: 1px solid rgba(0, 0, 0, 0); */
-	}
-
 	.moreInfo{
 		grid-area: moreInfo;
-		margin-left: auto;
-    margin-right: auto;
-    margin-top: auto;
-    margin-bottom: 12px;
+		margin: auto 0px 0px auto;
+    padding: 0px 10px 10px 0;
+	cursor: pointer;
 	.moreInfoIcon{
-		font-size: 1.5em;
+
+		font-size: 1.2em;
+		:hover,
+	:active {
+		color: ${props => props.theme.colorBad};
+		transition: color 0.1s ease;
+	
+
+	}
+
 	}
 
 	}
@@ -312,6 +325,10 @@ const CardStyle = styled.div`
 
 	.ParkTitle {
 		background: ${props => props.theme.bodyBackground};
+		-webkit-transition: background-color 0.1s linear;
+    -ms-transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear;
+	
 		grid-area: ParkTitle;
 		/* border-bottom: 1px ${props => props.theme.fontDark} solid; */
 		position: relative;
@@ -321,6 +338,15 @@ const CardStyle = styled.div`
 		/* padding-bottom: 8px; */
 		color: whitesmoke;
 		padding: 0 13px 0 13px;
+		cursor: pointer;
+		:hover{
+			
+			background: ${props => props.theme.lightDark};
+		
+    -webkit-transition: background-color 0.1s linear;
+    -ms-transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear;
+		}
 
 		.Title {
 			
@@ -332,7 +358,7 @@ const CardStyle = styled.div`
 		}
 		
 		.Dist {
-
+/* cursor: crosshair; */
 			padding-left: 10px;
     display: inline-block;
     min-width: 73px;
@@ -452,21 +478,27 @@ const CardStyle = styled.div`
     margin: auto 0px auto 0px;
 		/* margin: 0px auto auto auto; */
   /* width: 50px; */
-  .visibleIcon{
+  .visibleGoodIcon{
 	  font-size:32px;
 	  color: ${props => props.theme.parkMapGreen};
   }
+
+  .visiblePartlyIcon{
+	font-size:32px;
+	  color: #92704f;
+  }
   .invisibleIcon{
 	font-size:32px;
-	  color: ${props => props.theme.colorBad};
+	  /* color: ${props => props.theme.colorBad}; */
   }
+  
 
 			
 		}
 
 	.StarRev {
 		grid-area: StarRev;
-	
+	cursor: pointer;
 		
 		display: flex;
     float: left;
@@ -480,6 +512,12 @@ display: inline-block;
 		
 			font-size: 14px;
 			margin: 4px 0 0 14px;
+			:hover,
+	:active {
+		color: ${props => props.theme.colorBad};
+		transition: color 0.2s ease;
+
+	}
 		}
 	}
 
