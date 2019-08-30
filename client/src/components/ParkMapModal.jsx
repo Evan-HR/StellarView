@@ -47,6 +47,46 @@ class ParkMapModal extends Component {
 		this.park = { weather: {} };
 	}
 
+	//means..
+	renderLightMsg(lightPol) {
+		if (lightPol < 0.25) {
+			return "many constellations are barely noticed among the large number of stars";
+		} else if (lightPol < 0.4) {
+			return "the M33 is visible to the naked-eye";
+		} else if (lightPol < 1) {
+			return "the M15, M4, M5, and M22 are naked-eye objects";
+		} else if (lightPol < 3) {
+			return "the Milky Way lacks detail, and the M33 is only visible when high in sky.";
+		} else if (lightPol < 6) {
+			return "the Milky Way is very weak and looks washed out.";
+		}
+	}
+
+	getLightPolSky(lightPol) {
+		if (lightPol < 0.25) {
+			return "Pure Dark Sky";
+		} else if (lightPol < 0.4) {
+			return "Dark Sky";
+		} else if (lightPol < 1) {
+			return "Rural";
+		} else if (lightPol < 3) {
+			return "Rural/Suburban";
+		} else if (lightPol < 6) {
+			return "Suburban";
+		}
+	}
+
+	// {this.props.park.light_pol < 0.25
+	// 	? "Pure Dark Sky"
+	// 	: this.props.park.light_pol < 0.4
+	// 	? "Dark Sky"
+	// 	: this.props.park.light_pol < 1
+	// 	? "Rural"
+	// : this.props.park.light_pol < 3
+	// ? "Rural/Suburban"
+	// : this.props.park.light_pol < 6
+	// ? "Suburban"
+
 	openModal = content => {
 		if (content === "") {
 			content = "No content.";
@@ -125,8 +165,8 @@ class ParkMapModal extends Component {
 								<span className="Value">
 									{this.park.score < 0.5
 										? "Not Recommended."
-										: this.park.weather.temp < 0.75
-										? "Not Recommended."
+										: this.park.score < 0.75
+										? "Passable."
 										: "Recommended."}
 								</span>
 							</div>
@@ -154,6 +194,7 @@ class ParkMapModal extends Component {
 															this.park.weather
 																.clouds
 														}
+														%
 													</span>
 												</div>
 											</WeatherWrapper>
@@ -161,7 +202,11 @@ class ParkMapModal extends Component {
 									}
 									back={
 										<React.Fragment>
-											More info!
+											<span className="MoreInfoDesc">
+												Cloud Coverage is the % of the
+												sky that is covered by clouds.
+												Under 25% is considered good.
+											</span>
 										</React.Fragment>
 									}
 								/>
@@ -178,7 +223,9 @@ class ParkMapModal extends Component {
 												<img src={lightPolIcon} />
 												<div className="Value">
 													<span>
-														{this.park.light_pol}
+														{this.getLightPolSky(
+															this.park.light_pol
+														)}
 													</span>
 												</div>
 											</WeatherWrapper>
@@ -186,7 +233,16 @@ class ParkMapModal extends Component {
 									}
 									back={
 										<React.Fragment>
-											More info!
+											<span className="MoreInfoDesc">
+												The Bortle class of{" "}
+												{this.getLightPolSky(
+													this.park.light_pol
+												)}{" "}
+												means{" "}
+												{this.renderLightMsg(
+													this.park.light_pol
+												)}
+											</span>
 										</React.Fragment>
 									}
 								/>
@@ -202,6 +258,8 @@ class ParkMapModal extends Component {
 												</div>
 												<span className="MoonDisplayContainer">
 													<MoonDisplay
+													
+													
 														phase={this.moon}
 													/>
 												</span>
@@ -213,7 +271,12 @@ class ParkMapModal extends Component {
 									}
 									back={
 										<React.Fragment>
-											More info!
+											<span className="MoreInfoDesc">
+												Moon phase is the most important
+												factor when viewing the stars.
+												First Quarter and under is
+												considered good.
+											</span>
 										</React.Fragment>
 									}
 								/>
@@ -241,7 +304,11 @@ class ParkMapModal extends Component {
 									}
 									back={
 										<React.Fragment>
-											More info!
+											<span className="MoreInfoDesc">
+												Humidity levels above 70% is
+												considered poor for star
+												visibility.
+											</span>
 										</React.Fragment>
 									}
 								/>
@@ -419,6 +486,14 @@ const ModalStyle = styled.div`
 			}
 		}
 
+		.MoreInfoDesc{
+			text-align: left;
+			display: block;
+			padding: 6px;
+    font-weight: 500;
+
+		}
+
 		.ParkScore {
 			grid-area: parkScore;
 			display: inline-block;
@@ -496,8 +571,6 @@ const ModalStyle = styled.div`
 				grid-area: moonContainer;
 				position: relative;
 
-
-
 				.moonCard {
 					height: 157px;
 					position: absolute;
@@ -506,6 +579,7 @@ const ModalStyle = styled.div`
 				}
 
 				.MoonDisplayContainer {
+				
 					width: 59px;
 					margin: auto;
 				}

@@ -316,14 +316,22 @@ const LoginStyle = styled.div`
 						margin-top: 0px;
 						font-size: 13px;
 						color: rgb(100, 100, 100);
+						
 						border: none;
 						outline: none;
 						height: 40px;
 						text-transform: uppercase;
 						background: ${props => props.theme.starDark};
+						transition: 0.25s;
 						width: 100%;
-						color: #fff;
+						color: whitesmoke;
 						cursor: pointer;
+						
+						:hover,:active{
+							
+								color: ${props => props.theme.colorBad};
+								transition: 0.25s;
+						}
 					}
 				}
 				.row {
@@ -407,30 +415,6 @@ transform: translate(-50%,-50%); */
 	-moz-box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 1);
 	box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 1);
 
-	.SubmitButton {
-		border: 0;
-		background: none;
-		display: block;
-		margin: 20px auto;
-		text-align: center;
-		border: 2px solid ${props => props.theme.green};
-		padding: 14px 25px;
-		outline: none;
-		color: white;
-		border-radius: 24px;
-		transition: 0.25s;
-		cursor: pointer;
-
-		&:hover {
-			background: ${props => props.theme.green};
-		}
-
-		&:active {
-			background: ${props => props.theme.gold2};
-			border: 2px solid ${props => props.theme.gold2};
-			/* padding: 17px 28px; */
-		}
-	}
 `;
 
 const Input = styled.input`

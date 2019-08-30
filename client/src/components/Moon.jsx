@@ -41,6 +41,8 @@ const MoonStyle = styled.div`
 		align-content: space-between;
 
 		.MoonDisplayContainer {
+			  border-radius:100px;
+  box-shadow: 0 0 20px #485261;
 			width: 90px;
 			
 		}

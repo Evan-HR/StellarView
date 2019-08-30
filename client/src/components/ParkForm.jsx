@@ -597,11 +597,11 @@ const marksLight = [
 	},
 	{
 		value: 3.0,
-		label: "Suburban"
+		label: "Brighter Rural"
 	},
 	{
 		value: 6.0,
-		label: "City"
+		label: "Suburban"
 	}
 	// {
 	// 	value: 6,

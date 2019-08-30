@@ -90,8 +90,9 @@ const MoonSVGStyle = styled.div`
 		/* margin: 2rem auto; */
 		transform: scaleX(${props => props.phaseFlip});
 
-  border-radius:100px;
-  box-shadow: 0 0 20px #485261;
+		/* ${({isHomeMoon}) => isHomeMoon && 'box-shadow: 0 0 20px #485261; border-radius:100px;'}; */
+  /* border-radius:100px;
+  box-shadow: 0 0 20px #485261; */
 		/* @keyframes glowing {
   0% { box-shadow: -10 -10px #485261; }
   40% { box-shadow: 0 0 20px #485261; }

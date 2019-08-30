@@ -427,7 +427,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', end
 		color: ${props=>props.theme.fontDark};
 		font-size: 20px;
 		
-		font-weight: 500;
+		font-weight: 600;
 		margin: auto auto 0px auto;
 		grid-area: help;
 	}

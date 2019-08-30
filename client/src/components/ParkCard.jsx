@@ -116,8 +116,8 @@ class ParkCard extends Component {
 								<br />
 								{this.props.park.weather.humidity < 40
 									? "Great"
-									: this.props.park.weather.humidity < 80
-									? "Good"
+									: this.props.park.weather.humidity < 70
+									? "Okay"
 									: "Poor"}
 							</div>
 
@@ -137,10 +137,10 @@ class ParkCard extends Component {
 								)}
 								{/* <img src={cloudIcon} /> */}
 								<br />
-								{this.props.park.weather.clouds < 40
+								{this.props.park.weather.clouds < 20
 									? "Great"
-									: this.props.park.weather.clouds < 80
-									? "Good"
+									: this.props.park.weather.clouds < 35
+									? "Okay"
 									: "Poor"}
 							</div>
 
@@ -154,7 +154,7 @@ class ParkCard extends Component {
 								{this.props.park.light_pol < 1
 									? "Great"
 									: this.props.park.light_pol < 3
-									? "Good"
+									? "Okay"
 									: "Poor"}
 							</div>
 							<div className="ParkTemp">
