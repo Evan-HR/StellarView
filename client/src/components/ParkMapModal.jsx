@@ -161,7 +161,6 @@ class ParkMapModal extends Component {
 									{Math.round(this.park.score * 100)}
 									<span className="Percentage">%</span>
 								</span>
-
 								<span className="Value">
 									{this.park.score < 0.5
 										? "Not Recommended."
