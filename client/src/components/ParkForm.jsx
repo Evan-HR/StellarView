@@ -3,12 +3,24 @@ import React, { Component } from "react";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import qs from "qs";
-import { makeStyles } from "@material-ui/core/styles";
-import Slider from "@material-ui/core/Slider";
+// import { makeStyles } from "@material-ui/core/styles";
+import MuiSlider from "@material-ui/core/Slider";
 import { sizing } from "@material-ui/system";
 import { AuthConsumer } from "./AuthContext";
 import styled from "styled-components";
 import nearMeButton from "./style/Media/round-my_location-24px.svg";
+// import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
+// const theme1 = createMuiTheme({
+// 	overrides: {
+// 		MuiSlider: {
+
+// 			root: {
+// 				color:'#BDC2C6',
+// 			},
+// 		},
+// 	},
+//   });
 
 class BaseParkForm extends Component {
 	state = {
@@ -464,17 +476,18 @@ class BaseParkForm extends Component {
 					</form>
 				</div>
 				<div className="myLocation">
-					<MyLocationStyle
+					<button
 						// onClick={this.getParkData.bind(this, this.state.formInput)}
 						className="nearMe"
 						type="button"
 						disabled={this.state.isLoadingLocation}
 						onClick={this.getMyLocation}
 					>
+						<span>NEAR ME</span>
+
 						<img src={nearMeButton} />
-						NEAR ME
 						{/* <strong>{this.renderLocationSpinner()}</strong> */}
-					</MyLocationStyle>
+					</button>
 				</div>
 
 				{/* CLEAR BUTTON!!!! */}
@@ -489,7 +502,7 @@ class BaseParkForm extends Component {
 					</button> */}
 
 				<div className="advancedSearchToggle">
-					<AdvancedSearchStyle
+					<button
 						className="ToggleAdvancedSearch"
 						onClick={() =>
 							this.setState({
@@ -498,44 +511,42 @@ class BaseParkForm extends Component {
 						}
 					>
 						Advanced Search
-					</AdvancedSearchStyle>
-					<i class="fas fa-caret-down" />
+						<i class="fas fa-caret-down" />
+					</button>
 				</div>
 
 				<div className="AdvancedSearch">
 					<form>
-						<b>Distance:</b>
+						<span className="FormTitle">Max Distance (km)</span>
+
 						<br />
-						<Slider
-							//defaultValue={this.state.reqData.dist}
-							// getAriaValueText={valuetext}
-							aria-labelledby="discrete-slider-custom"
-							min={5}
-							max={200}
-							step={1}
-							valueLabelDisplay="auto"
-							marks={marksDist}
-							value={parseFloat(this.state.reqData.dist)}
-							onChange={this.handleDistanceChange}
-						/>
+						<SliderStyle>
+							<MuiSlider
+								aria-labelledby="discrete-slider-custom"
+								min={5}
+								max={300}
+								step={5}
+								valueLabelDisplay="auto"
+								marks={marksDist}
+								value={parseFloat(this.state.reqData.dist)}
+								onChange={this.handleDistanceChange}
+							/>
+						</SliderStyle>
 						<br />
-						<b>Light Pollution:</b>
+						<span className="FormTitle">Light Pollution</span>
 						<br />
-						<Slider
-							//defaultValue={this.state.reqData.lightpol}
-							// getAriaValueText={valuetext}
-							aria-labelledby="discrete-slider-custom"
-							min={0}
-							max={6}
-							step={0.05}
-							valueLabelDisplay="auto"
-							marks={marksLight}
-							value={parseFloat(this.state.reqData.lightpol)}
-							onChange={this.handleLightPolChange}
-							// onChangeCommitted={() =>
-							// 	this.handleLightPolChange(this.sliderLight)
-							// }
-						/>
+						<SliderStyle>
+							<MuiSlider
+								aria-labelledby="discrete-slider-custom"
+								min={0}
+								max={6.5}
+								step={null}
+								valueLabelDisplay="auto"
+								marks={marksLight}
+								value={parseFloat(this.state.reqData.lightpol)}
+								onChange={this.handleLightPolChange}
+							/>
+						</SliderStyle>
 					</form>
 				</div>
 
@@ -577,25 +588,25 @@ const marksDist = [
 
 const marksLight = [
 	{
-		value: 0,
-		label: "0"
-	},
-	{
 		value: 0.4,
-		label: "0.4"
+		label: "Dark"
 	},
 	{
-		value: 1,
-		label: "1"
+		value: 1.0,
+		label: "Rural"
 	},
 	{
-		value: 3,
-		label: "3"
+		value: 3.0,
+		label: "Brighter Rural"
 	},
 	{
-		value: 6,
-		label: "6"
+		value: 6.0,
+		label: "Suburban"
 	}
+	// {
+	// 	value: 6,
+	// 	label: "6"
+	// }
 ];
 
 const ParkForm = parkFormProps => (
@@ -610,51 +621,99 @@ export default withRouter(ParkForm);
 
 ////////////////////////////////////////////
 
-const MyLocationStyle = styled.button`
-	all: unset;
-`;
-
 const SearchFormStyle = styled.div`
-	background-color: ${props => props.theme.cardDark};
+	background-color: ${props => props.theme.bodyBackground};
 	font-family: IBM Plex Sans;
-
+	padding: 13px;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: ${props =>
+		props.advancedSearch
+			? `auto auto auto`
+			: `auto auto`}; /* Three rows, two with explicit widths */
+	grid-gap: 10px;
+	grid-template-areas:
+		"searchBar searchBar myLocation"
+		"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
+		${props =>
+			props.advancedSearch
+				? `"advancedSearch advancedSearch advancedSearch"`
+				: ``};
 	.AdvancedSearch {
 		${props => (props.advancedSearch ? `` : `display: none`)}
 		grid-area:advancedSearch;
+
+		.FormTitle {
+			color: whitesmoke;
+			font-weight: 600;
+		}
 	}
+
 	.myLocation {
+		color: whitesmoke;
+		font-size: 13px;
+		.nearMe {
+			all: unset;
+			cursor: pointer;
+			background-color: ${props => props.theme.prettyDark};
+			height: 36px;
+			width: 100%;
+			color: ${props => props.theme.whitesmoke};
+			transition: color 0.2s ease;
+			img {
+				width: 28px;
+				margin-left: 5px;
+			}
+			:hover,
+			:active {
+				color: ${props => props.theme.colorBad};
+				transition: color 0.2s ease;
+			}
+		}
 		grid-area: myLocation;
 	}
+
 	.advancedSearchToggle {
 		grid-area: advancedSearchToggle;
+	
+
+		button {
+			float: left;
+			i {
+				transform: rotate(
+					${props => (props.advancedSearch ? `0deg` : `-90deg`)}
+				);
+			}
+		}
 	}
 
 	.citySearch {
 		grid-area: searchBar;
 	}
 
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	grid-template-rows: auto auto auto; /* Three rows, two with explicit widths */
-	grid-template-areas:
-		"searchBar searchBar myLocation"
-		"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
-		"advancedSearch advancedSearch advancedSearch";
-
 	.searchButton {
 		width: 40px;
 		height: 36px;
-		border: 1px solid #00b4cc;
-		background: #00b4cc;
+		/* border: 1px solid #00b4cc; */
+		background: ${props => props.theme.prettyDark};
 		text-align: center;
+
 		color: #fff;
-		border-radius: 0 5px 5px 0;
+		/* border-radius: 0 5px 5px 0; */
 		cursor: pointer;
 		font-size: 20px;
+		border: none;
+		float: left;
+		:hover,
+		:active {
+			color: ${props => props.theme.colorBad};
+			transition: color 0.2s ease;
+		}
+
 	}
 
 	.searchTerm:focus {
-		color: #00b4cc;
+		color: whitesmoke;
 	}
 	/* .search {
 		width: 100%;
@@ -664,18 +723,49 @@ const SearchFormStyle = styled.div`
 	} */
 
 	.searchTerm {
-		/* width: 100%; */
-		border: 3px solid #00b4cc;
-		border-right: none;
+		width: calc(100% - 40px);
+		background: ${props => props.theme.lightDark};
+		/* border: 3px solid #00b4cc; */
+		/* border-right: none; */
 		padding: 5px;
 		height: 36px;
-		border-radius: 5px 0 0 5px;
+		/* border-radius: 5px 0 0 5px; */
 		outline: none;
-		color: #9dbfaf;
+		color: whitesmoke;
+		border: none;
+		float: left;
+	}
+
+	.ToggleAdvancedSearch {
+		all: unset;
+		cursor: pointer;
+		color: #bdbdbd;
+		:hover,
+		:active {
+			color: ${props => props.theme.colorBad};
+			transition: color 0.2s ease;
+		}
+
+		/* margin-top: 5px; */
 	}
 `;
 
-const AdvancedSearchStyle = styled.button`
-	/* grid-area: advancedSearch; */
-	all: unset;
+// const muiTheme = getMuiTheme({
+// 	slider: {
+// 	  trackColor: 'yellow',
+// 	  selectionColor: 'green'
+// 	},
+//   });
+
+const SliderStyle = styled.div`
+	.MuiSlider-root {
+		color: ${props => props.theme.cardLight};
+	}
+	.MuiSlider-markLabel {
+		color: #bdbdbd;
+		font-family: IBM Plex Sans;
+	}
+	.MuiSlider-markLabelActive {
+		color: ${props => props.theme.colorBad};
+	}
 `;

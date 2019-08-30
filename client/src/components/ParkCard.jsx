@@ -4,9 +4,13 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import humidityIcon from "./style/Media/cardIcons/humidity.svg";
 import cloudIcon from "./style/Media/cardIcons/cloud.svg";
+import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
+import cloudGoodIcon from "./style/Media/cardIcons/cloudGood.svg";
 import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import tempIcon from "./style/Media/cardIcons/temperature.svg";
 import infoIcon from "./style/Media/cardIcons/moreInfo.svg";
+import resultsGood from "./style/Media/resultsGood.svg";
+import resultsBad from "./style/Media/resultsBad.svg";
 
 class ParkCard extends Component {
 	state = {};
@@ -25,13 +29,16 @@ class ParkCard extends Component {
 		if (reviewScore) {
 			return (
 				<div>
-					<StarReviewsStatic avgScore={reviewScore} />
+					<StarReviewsStatic
+						starSize={"20px"}
+						avgScore={reviewScore}
+					/>
 				</div>
 			);
 		} else {
 			return (
 				<div>
-					<StarReviewsStatic avgScore={0} />
+					<StarReviewsStatic starSize={"20px"} avgScore={0} />
 				</div>
 			);
 		}
@@ -46,140 +53,197 @@ class ParkCard extends Component {
 			<CardBootstrap>
 				<div className="card">
 					<CardStyle>
-						<div className="ParkTitle">
-							<span
-								className="Title"
-								style={{ textTransform: "capitalize" }}
-								onMouseEnter={() => {
-									this.props.handleMouseOver(
-										this.props.park.id
-									);
-								}}
-								onMouseLeave={() => {
-									this.props.handleMouseLeave(
-										this.props.park.id
-									);
-								}}
-								onClick={() => {
-									this.props.handleMouseClick(
-										this.props.park.id
-									);
-								}}
-							>
-								<b>
-									{this.props.park.name_alt
-										? this.props.park.name_alt
-										: this.props.park.name}
-								</b>
+						<div
+							className="ParkTitle"
+							style={{ textTransform: "capitalize" }}
+							onMouseEnter={() => {
+								this.props.handleMouseOver(this.props.park.id);
+							}}
+							onMouseLeave={() => {
+								this.props.handleMouseLeave(this.props.park.id);
+							}}
+							onClick={() => {
+								this.props.handleMouseClick(this.props.park.id);
+							}}
+						>
+							<span className="Title">
+								{this.props.park.name_alt
+									? this.props.park.name_alt
+									: this.props.park.name}
 							</span>
+
+							<div className="Dist">
+								<span className="DistCharacteristic">
+									{this.props.park.distance < 9000 ? (
+										<React.Fragment>
+											{Math.trunc(
+												parseFloat(
+													this.props.park.distance
+												)
+											)}
+										</React.Fragment>
+									) : (
+										<React.Fragment>?</React.Fragment>
+									)}
+								</span>
+								<span className="DistMantissa">
+									{this.props.park.distance < 9000 ? (
+										<React.Fragment>
+											.
+											{Math.trunc(
+												(parseFloat(
+													this.props.park.distance
+												) *
+													100) %
+													100
+											)}
+										</React.Fragment>
+									) : (
+										<React.Fragment>??</React.Fragment>
+									)}{" "}
+									<b> km</b>
+								</span>
+							</div>
 						</div>
 
-						<div className="Dist">
-							<span className="DistCharacteristic">
-								{this.props.park.distance < 9000 ? (
-									<React.Fragment>
-										{Math.trunc(
-											parseFloat(this.props.park.distance)
-										)}
-									</React.Fragment>
+						<div className="WeatherIcons">
+							<div className="ParkHum">
+								<img
+									src={humidityIcon}
+									alt="Humidity"
+									title="Humidity Level"
+								/>
+								<br />
+								{this.props.park.weather.humidity < 40
+									? "Great"
+									: this.props.park.weather.humidity < 70
+									? "Okay"
+									: "Poor"}
+							</div>
+
+							<div className="ParkCloud">
+								{this.props.park.weather.clouds < 40 ? (
+									<img
+										src={cloudGoodIcon}
+										alt="Cloud Coverage"
+										title="Low Cloud Coverage"
+									/>
 								) : (
-									<React.Fragment>?</React.Fragment>
+									<img
+										src={cloudBadIcon}
+										alt="Cloud Coverage"
+										title="High Cloud Coverage"
+									/>
 								)}
-							</span>
-							<span className="DistMantissa">
-								{this.props.park.distance < 9000 ? (
-									<React.Fragment>
-										.
-										{Math.trunc(
-											(parseFloat(
-												this.props.park.distance
-											) *
-												100) %
-												100
-										)}
-									</React.Fragment>
-								) : (
-									<React.Fragment>??</React.Fragment>
-								)}{" "}
-								<b> km</b>
-							</span>
-						</div>
+								{/* <img src={cloudIcon} /> */}
+								<br />
+								{this.props.park.weather.clouds < 20
+									? "Great"
+									: this.props.park.weather.clouds < 35
+									? "Okay"
+									: "Poor"}
+							</div>
 
-						<div className="ParkHum">
-							<img src={humidityIcon} />
-							{this.props.park.weather.humidity < 40
-								? "Good"
-								: this.props.park.weather.humidity < 80
-								? "Okay"
-								: "Poor"}
-						</div>
+							<div className="ParkLightPol">
+								<img
+									src={lightPolIcon}
+									alt="Light Pollution"
+									title="Light Pollution"
+								/>
+								<br />
+								{this.props.park.light_pol < 1
+									? "Great"
+									: this.props.park.light_pol < 3
+									? "Okay"
+									: "Poor"}
+							</div>
+							<div className="ParkTemp">
+								<span className="tempIcon">
+									<img
+										src={tempIcon}
+										alt="Temperature"
+										title="Temperature"
+									/>
+								</span>
+								<br />
+								<span className="tempNum">
+									{Math.round(this.props.park.weather.temp)}{" "}
+									°C
+								</span>
 
-						<div className="ParkCloud">
-							<img src={cloudIcon} />
-							{this.props.park.weather.clouds < 40
-								? "Good"
-								: this.props.park.weather.clouds < 80
-								? "Okay"
-								: "Poor"}
-						</div>
-
-						<div className="ParkLightPol">
-							<img src={lightPolIcon} />
-							{this.props.park.light_pol < 1
-								? "Good"
-								: this.props.park.light_pol < 3
-								? "Okay"
-								: "Poor"}
-						</div>
-
-						<div className="ParkTemp">
-							<span className="tempIcon">
-								<img src={tempIcon} />
-							</span>
-							<span className="tempNum">
-								{Math.round(this.props.park.weather.temp)} °C
-							</span>
-							<br />
-							{this.props.park.weather.temp < 15
-								? "Chilly"
-								: this.props.park.weather.temp < 25
-								? "Comfortable"
-								: "Inadequate"}
+								{/* {this.props.park.weather.temp < 15
+									? "Chilly"
+									: this.props.park.weather.temp < 25
+									? "Comfortable"
+									: "Inadequate"} */}
+							</div>
 						</div>
 
 						<div className="WeatherInfo">
 							<span>
 								<b>{this.props.park.weather.city}</b> forecast
-								for <br />
+								for{" "}
 								{new Date(
 									this.props.park.weather.time
 								).toLocaleString()}
 							</span>
 						</div>
 
-						<div className="ParkScore">
-							<span className="ScoreNumerator">
-								{(this.props.park.score * 10).toFixed(1)}
-							</span>
+						<div className="ScoreLabel">
+							<span>Score:</span>{" "}
+							{Math.round(this.props.park.score * 100)}%
+						</div>
+						{/* <div className="ParkScore">
 
+							<div className="ScoreWrapper">
+								<span className="ScoreNumerator">
+									
+									{Math.round(this.props.park.score * 100)}
+								</span>
+								<span className="Percentage">%</span>
+							</div>
+						</div> */}
+						<div className="ParkScoreIcon">
+							{this.props.park.score > 0.8 ? (
+								<i class="far fa-eye visibleGoodIcon"></i>
+							) : this.props.park.score > 0.6 ? (
+								<i class="far fa-eye visiblePartlyIcon"></i>
+							) : (
+								<i class="fas fa-eye-slash invisibleIcon"></i>
+							)}
 							<br />
-							<span className="ScoreDenominator">/10</span>
+							{this.props.park.score > 0.8
+								? "Visible"
+								: this.props.park.score > 0.6
+								? "Partly Visible"
+								: "Not Visible"}
 						</div>
 
-						<div className="StarRev">
-							{this.renderReviewScore(this.props.park.avgScore)}
-							{this.renderNumReviews(this.props.park.numReviews)}
+						<div
+							className="StarRev"
+							onClick={() => {
+								this.props.handleMouseClick(this.props.park.id);
+							}}
+						>
+							<div className="StarScore">
+								{this.renderReviewScore(
+									this.props.park.avgScore
+								)}
+							</div>
+							<div className="StarNumRev">
+								{this.renderNumReviews(
+									this.props.park.numReviews
+								)}
+							</div>
 						</div>
 
-						<div className="MoreInfo">
-							{/* <span className="infoIcon"> */}
-							<img src={infoIcon} />
-							{/* </span> */}
-							<span className="infoText">
-								More
-								<br />
-								Info
-							</span>
+						<div
+							className="moreInfo"
+							onClick={() => {
+								this.props.handleMouseClick(this.props.park.id);
+							}}
+						>
+							<i className="faqIcon fas fa-question-circle moreInfoIcon" />
 						</div>
 					</CardStyle>
 				</div>
@@ -197,10 +261,9 @@ ParkCard.defaultProps = {
 
 export default ParkCard;
 
-/////////////////////////////////////////////////////////////////////////////////////////
-
 const CardStyle = styled.div`
-	margin: 13px;
+
+	/* margin: 13px; */
 	/* margin-bottom: 10px;
 	margin-left: 13px;
 	margin-right: 13px; */
@@ -208,13 +271,14 @@ const CardStyle = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	grid-template-rows: 1fr 1fr 1fr 1fr;
-	grid-column-gap: 10px;
-	grid-row-gap: 10px;
+	/* grid-column-gap: 10px;
+	grid-row-gap: 10px; */
 	grid-template-areas:
-		"ParkTitle   ParkTitle   ParkTitle    Dist"
-		"WeatherInfo WeatherInfo WeatherInfo  ParkScore"
-		"ParkHum     ParkCloud   ParkLightPol ParkScore"
-		"ParkTemp    StarRev     StarRev      MoreInfo";
+		"ParkTitle   ParkTitle   ParkTitle    ParkTitle"
+		"WeatherInfo WeatherInfo WeatherInfo  ScoreLabel"
+		"WeatherIcons WeatherIcons WeatherIcons ParkScoreIcon"
+		/* "ParkHum     ParkCloud   ParkLightPol ParkScore" */
+		"StarRev    StarRev     StarRev      moreInfo";
 
 	font-family: IBM Plex Sans;
 	font-style: normal;
@@ -225,140 +289,243 @@ const CardStyle = styled.div`
 
 	color: ${props => props.theme.fontDark};
 
-	.card {
-		border: 1px solid rgba(0, 0, 0, 0);
+	.moreInfo{
+		grid-area: moreInfo;
+		margin: auto 0px 0px auto;
+    padding: 0px 10px 10px 0;
+	cursor: pointer;
+	.moreInfoIcon{
+
+		font-size: 1.2em;
+		:hover,
+	:active {
+		color: ${props => props.theme.colorBad};
+		transition: color 0.1s ease;
+	
+
 	}
 
-	.ParkTitle {
-		grid-area: ParkTitle;
-		border-bottom: 2px ${props => props.theme.fontDark} solid;
-		position: relative;
+	}
 
-		span {
-			position: absolute;
+	}
+
+
+	.ScoreLabel{
+		grid-area: ScoreLabel;
+		text-align: center;
+        margin: auto 5px 15px 0;
+	font-size: 20px;
+    font-weight: 600;
+	span{
+		font-size: 15px;
+		font-weight: 300;
+	}
+	}
+
+
+	.ParkTitle {
+		background: ${props => props.theme.mapBlue};
+		-webkit-transition: background-color 0.1s linear;
+    -ms-transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear;
+	
+		grid-area: ParkTitle;
+		/* border-bottom: 1px ${props => props.theme.fontDark} solid; */
+		position: relative;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		/* padding-bottom: 8px; */
+		color: whitesmoke;
+		padding: 0 13px 0 13px;
+		cursor: pointer;
+		:hover{
+			
+			background: ${props => props.theme.lightBlue};
+		
+    -webkit-transition: background-color 0.1s linear;
+    -ms-transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear;
 		}
 
 		.Title {
-			bottom: 8px;
-			font-size: 36px;
-			left: 0;    
-			/* text-shadow:
-				-0.5px -0.5px 0 #000,
-				0.5px -0.5px 0 #000,
-				-0.5px 0.5px 0 #000,
-				0.5px 0.5px 0 #000;   */
+			
+
+			font-size: 25px;
+			 
+			line-height: 34px;
+	
+		}
+		
+		.Dist {
+/* cursor: crosshair; */
+			padding-left: 10px;
+    display: inline-block;
+    min-width: 73px;
+
+			span {
+				left: 0;
+				position: relative;
+			}
+
+			.DistMantissa {
+				font-size: 13px;
+			}
 		}
 	}
 
-	.Dist {
-		display: inline-block;
-		margin: auto;
-		font-weight: 300;
-
-		span {
-			left: 0;
-			position: relative;
-		}
-
-		.DistMantissa {
-			font-size: 13px;
-		}
-	}
 
 	.WeatherInfo {
 		grid-area: WeatherInfo;
-		/* border-bottom: 2px ${props => props.theme.fontDark} solid; */
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    align-content: center;
+	/* padding-left: 15px; */
+    text-align: center;
+   
+    margin: auto 0px auto 0px;
+	}
 
-		font-family: IBM Plex Mono;
-		font-weight:400;
-		font-size: 14px;
-		line-height: 18px;
-		align-content: center;
-		position: relative;
-		span {
-			position: absolute;
+	.WeatherIcons {
+		grid-area: WeatherIcons;
+		display: flex;
+		justify-content: space-between;
+		.ParkHum {
+			/* grid-area: ParkHum; */
+			/* text-align: center;
+			margin: auto auto; */
 			text-align: center;
-			bottom: 0;
+			margin: auto auto;
+
 		}
-	}
-	.ParkHum {
-		grid-area: ParkHum;
-		text-align: center;
-		margin: auto auto;
-	}
-	.ParkCloud {
-		grid-area: ParkCloud;
-		text-align: center;
-		margin: auto auto;
-	}
-	.ParkLightPol {
-		grid-area: ParkLightPol;
-		text-align: center;
-		margin: auto auto;
-	}
-	.ParkTemp {
-		grid-area: ParkTemp;
+		.ParkCloud {
+			/* grid-area: ParkCloud; */
+			text-align: center;
+			margin: auto auto;
+		}
+		.ParkLightPol {
+			/* grid-area: ParkLightPol; */
+			text-align: center;
+			margin: auto auto;
+		}
+
+		.ParkTemp {
+		/* grid-area: ParkTemp; */
 		text-align: center;
 		margin: auto auto;
 
-		.tempIcon {
+		/* .tempIcon {
 			height: 2em;
 			width: 2em;
-		}
+		} */
 
 		span {
 			display: inline-block;
 		}
 	}
+	}
+	
 	.ParkScore {
 		grid-area: ParkScore;
+		
+		font-style: normal;
+		font-weight: 600;
+		display: block;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+
+  /* .ScoreLabel{
+	grid-area: ParkScore;
 		font-family: Barlow;
 		font-style: normal;
-		font-weight: 300;
-		display: inline-block;
-		vertical-align: middle;
-		text-align: center;
-		margin: auto auto;
+		font-weight: 600;
+		font-size: 20px;
+    font-weight: 600;
+		display: block;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+
+  } */
+
+  
+
+.ScoreWrapper{
+	position: absolute;
 
 		.ScoreNumerator {
-			font-size: 64px;
-			.ScoreNumeratorMantissa {
-				font-size: 24px;
-			}
-		}
+			display:inline;
+			font-size: 54px;
 		
-
-		.ScoreDenominator {
-			font-size: 24px;
 		}
+		.Percentage {
+			display:inline;
+				font-size: 30px;
+			}
+		
+		
 	}
+	}
+
+	
+	.ParkScoreIcon {
+		grid-area: ParkScoreIcon;
+		display: block;
+		align-content: center;
+    text-align: center;
+    margin: auto 0px auto 0px;
+		/* margin: 0px auto auto auto; */
+  /* width: 50px; */
+  .visibleGoodIcon{
+	  font-size:32px;
+	  color: ${props => props.theme.parkMapGreen};
+  }
+
+  .visiblePartlyIcon{
+	font-size:32px;
+	  color: #92704f;
+  }
+  .invisibleIcon{
+	font-size:32px;
+	  /* color: ${props => props.theme.colorBad}; */
+  }
+  
+
+			
+		}
+
 	.StarRev {
 		grid-area: StarRev;
-		text-align: center;
-		margin: auto auto;
-	}
-	.MoreInfo {
-		grid-area: MoreInfo;
-		text-align: center;
-		margin: auto auto;
+	cursor: pointer;
+		
+		display: flex;
+    float: left;
 
-		.infoIcon {
-			height: 2em;
-			width: 2em;
+	margin: auto auto;
+		.StarScore{
+display: inline-block;
 		}
-
-		.infoText {
-			vertical-align: center;
-		}
-
-		span {
+		.StarNumRev{
 			display: inline-block;
+		
+			font-size: 14px;
+			margin: 4px 0 0 14px;
+			:hover,
+	:active {
+		color: ${props => props.theme.colorBad};
+		transition: color 0.2s ease;
+
+	}
 		}
 	}
+
 `;
 
 const CardBootstrap = styled.div`
 	.card {
+		margin-bottom: 13px;
 		position: relative;
 		display: -ms-flexbox;
 		display: flex;
@@ -368,7 +535,7 @@ const CardBootstrap = styled.div`
 		word-wrap: break-word;
 		background-color: #fff;
 		background-clip: border-box;
-		border: 1px solid rgba(0, 0, 0, 0.125);
+		/* border: 1px solid rgba(0, 0, 0, 0.125); */
 	}
 
 	.card > hr {

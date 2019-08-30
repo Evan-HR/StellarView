@@ -7,16 +7,9 @@ import ParkMapModal from "./ParkMapModal";
 import Reviews from "./Reviews";
 import FavPark from "./FavPark";
 
-import letter_a from "./style/MapMarkers/letter_a.png";
-import letter_b from "./style/MapMarkers/letter_b.png";
-import letter_c from "./style/MapMarkers/letter_c.png";
-import letter_d from "./style/MapMarkers/letter_d.png";
-import letter_f from "./style/MapMarkers/letter_f.png";
-
-/* Notes:
-Couldn't figure out how to make google.etc work, 
-instead you have to use window.google.etc
-*/
+import markerGood from "./style/MapMarkers/resultsGood.svg";
+import markerAverage from "./style/MapMarkers/resultsMedium.svg";
+import markerBad from "./style/MapMarkers/resultsBad.svg";
 
 // const google = window.google;
 
@@ -47,7 +40,7 @@ class ParkMap extends Component {
 			this.googleMap = this.createGoogleMap();
 			this.googleMapBounds = new window.google.maps.LatLngBounds();
 			// this.googleMapInfowindow = null;
-			this.googleMap.setOptions({ styles: styleSelector.lunar });
+			this.googleMap.setOptions({ styles: styleSelector.goodCopy });
 			this.setState({ mapLoaded: true });
 			this.props.onMapLoaded(this.googleMap);
 		});
@@ -105,18 +98,19 @@ class ParkMap extends Component {
 
 		if (this.props.markers[park.id]) {
 			console.log("Park marker already on map!");
+			console.log("PARK SCORE IS: ",park.score)
+			
 		} else {
-			let markerIcon = letter_f;
-			if (park.score > 80) {
-				markerIcon = letter_a;
-			} else if (park.score > 70) {
-				markerIcon = letter_b;
-			} else if (park.score > 60) {
-				markerIcon = letter_c;
-			} else if (park.score > 50) {
-				markerIcon = letter_d;
+			let markerIcon = markerBad;
+			let tempScore = park.score*100;
+			if (tempScore > 80) {
+				markerIcon = markerGood;
+			} else if (tempScore > 60) {
+				markerIcon = markerAverage;
+			} else if (tempScore > 50) {
+				markerIcon = markerBad;
 			} else {
-				markerIcon = letter_f;
+				markerIcon = markerBad;
 			}
 			var marker = new window.google.maps.Marker({
 				position: location,
@@ -138,7 +132,11 @@ class ParkMap extends Component {
 
 			marker.addListener("click", () => {
 				console.log("Clicked marker at", marker.title);
-				let modalContent = { park: park, moon: this.props.moon  };
+				let modalContent = {
+					park: park,
+					moon: this.props.moon,
+					moonType: this.props.moonType
+				};
 				this.openModal(modalContent);
 			});
 			this.props.markers[park.id] = marker; //Maybe this can be moved out of the function
@@ -269,6 +267,338 @@ const styleSelector = {
 			stylers: [
 				{
 					color: "#2D333C"
+				}
+			]
+		}
+	],
+	goodCopy: [
+		{
+			elementType: "geometry",
+			stylers: [
+				{
+					color: "#212121"
+				}
+			]
+		},
+		{
+			elementType: "labels.icon",
+			stylers: [
+				{
+					visibility: "off"
+				}
+			]
+		},
+		{
+			elementType: "labels.text.fill",
+			stylers: [
+				{
+					color: "#757575"
+				}
+			]
+		},
+		{
+			elementType: "labels.text.stroke",
+			stylers: [
+				{
+					color: "#212121"
+				}
+			]
+		},
+		{
+			featureType: "administrative",
+			elementType: "geometry",
+			stylers: [
+				{
+					color: "#373737"
+				}
+			]
+		},
+		{
+			featureType: "administrative.country",
+			elementType: "labels.text.fill",
+			stylers: [
+				{
+					color: "#9e9e9e"
+				}
+			]
+		},
+		{
+			featureType: "administrative.land_parcel",
+			stylers: [
+				{
+					visibility: "off"
+				}
+			]
+		},
+		{
+			featureType: "administrative.locality",
+			stylers: [
+				{
+					visibility: "simplified"
+				}
+			]
+		},
+		{
+			featureType: "administrative.locality",
+			elementType: "labels.text.fill",
+			stylers: [
+				{
+					color: "#bdbdbd"
+				}
+			]
+		},
+		{
+			featureType: "landscape",
+			stylers: [
+				{
+					color: "#222222"
+				},
+				{
+					visibility: "on"
+				}
+			]
+		},
+		{
+			featureType: "landscape.man_made",
+			elementType: "geometry",
+			stylers: [
+				{
+					color: "#222222"
+				},
+				{
+					visibility: "off"
+				}
+			]
+		},
+		{
+			featureType: "landscape.man_made",
+			elementType: "geometry.fill",
+			stylers: [
+				{
+					color: "#222222"
+				},
+				{
+					visibility: "simplified"
+				}
+			]
+		},
+		{
+			featureType: "landscape.man_made",
+			elementType: "geometry.stroke",
+			stylers: [
+				{
+					color: "#222222"
+				},
+				{
+					visibility: "simplified"
+				}
+			]
+		},
+		{
+			featureType: "landscape.natural.terrain",
+			elementType: "geometry",
+			stylers: [
+				{
+					color: "#3a877d"
+				},
+				{
+					visibility: "off"
+				}
+			]
+		},
+		{
+			featureType: "poi",
+			stylers: [
+				{
+					visibility: "off"
+				}
+			]
+		},
+		{
+			featureType: "poi",
+			elementType: "labels.text.fill",
+			stylers: [
+				{
+					color: "#757575"
+				}
+			]
+		},
+		{
+			featureType: "poi.park",
+			stylers: [
+				{
+					visibility: "on"
+				}
+			]
+		},
+		{
+			featureType: "poi.park",
+			elementType: "geometry",
+			stylers: [
+				{
+					color: "#174030"
+				},
+				{
+					visibility: "on"
+				}
+			]
+		},
+		{
+			featureType: "poi.park",
+			elementType: "labels",
+			stylers: [
+				{
+					visibility: "off"
+				}
+			]
+		},
+		{
+			featureType: "poi.park",
+			elementType: "labels.text",
+			stylers: [
+				{
+					visibility: "off"
+				}
+			]
+		},
+		{
+			featureType: "poi.park",
+			elementType: "labels.text.fill",
+			stylers: [
+				{
+					color: "#1b1b1b"
+				},
+				{
+					visibility: "off"
+				}
+			]
+		},
+		{
+			featureType: "poi.park",
+			elementType: "labels.text.stroke",
+			stylers: [
+				{
+					color: "#1b1b1b"
+				},
+				{
+					visibility: "off"
+				}
+			]
+		},
+		{
+			featureType: "road",
+			elementType: "geometry.fill",
+			stylers: [
+				{
+					color: "#2c2c2c"
+				}
+			]
+		},
+		{
+			featureType: "road",
+			elementType: "labels.text.fill",
+			stylers: [
+				{
+					color: "#8a8a8a"
+				}
+			]
+		},
+		{
+			featureType: "road.arterial",
+			stylers: [
+				{
+					visibility: "off"
+				}
+			]
+		},
+		{
+			featureType: "road.arterial",
+			elementType: "geometry",
+			stylers: [
+				{
+					color: "#373737"
+				}
+			]
+		},
+		{
+			featureType: "road.highway",
+			elementType: "geometry",
+			stylers: [
+				{
+					color: "#3c3c3c"
+				}
+			]
+		},
+		{
+			featureType: "road.highway.controlled_access",
+			elementType: "geometry",
+			stylers: [
+				{
+					color: "#4e4e4e"
+				}
+			]
+		},
+		{
+			featureType: "road.local",
+			stylers: [
+				{
+					visibility: "simplified"
+				}
+			]
+		},
+		{
+			featureType: "road.local",
+			elementType: "labels",
+			stylers: [
+				{
+					visibility: "off"
+				}
+			]
+		},
+		{
+			featureType: "road.local",
+			elementType: "labels.text.fill",
+			stylers: [
+				{
+					color: "#616161"
+				}
+			]
+		},
+		{
+			featureType: "transit",
+			stylers: [
+				{
+					visibility: "off"
+				}
+			]
+		},
+		{
+			featureType: "transit",
+			elementType: "labels.text.fill",
+			stylers: [
+				{
+					color: "#757575"
+				},
+				{
+					visibility: "off"
+				}
+			]
+		},
+		{
+			featureType: "water",
+			elementType: "geometry",
+			stylers: [
+				{
+					color: "#2d333c"
+				}
+			]
+		},
+		{
+			featureType: "water",
+			elementType: "labels.text.fill",
+			stylers: [
+				{
+					color: "#3d3d3d"
 				}
 			]
 		}

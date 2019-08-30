@@ -43,16 +43,16 @@ export default function MoonDisplay({phase}) {
 					<circle
 						cx="100"
 						cy="100"
-						r="99"
-						stroke="whitesmoke"
+						r="100"
+						// stroke="whitesmoke"
 						fill="whitesmoke"
 						class="bg"
 					/>
 					<circle
 						cx="100"
 						cy="100"
-						r="99"
-						stroke="whitesmoke"
+						r="100"
+						// stroke="whitesmoke"
 						fill="#121414"
 						class="fg"
 					/>
@@ -65,16 +65,16 @@ export default function MoonDisplay({phase}) {
 					<circle
 						cx="0"
 						cy="100"
-						r="99"
-						stroke="whitesmoke"
-						fill="whitesmoke"
+						r="100"
+						// stroke="whitesmoke"
+						fill="#121414"
 						class="bg"
 					/>
 					<circle
 						cx="0"
 						cy="100"
-						r="99"
-						stroke="whitesmoke"
+						r="100"
+						// stroke="whitesmoke"
 						fill="#121414"
 						class="fg"
 					/>
@@ -86,9 +86,21 @@ export default function MoonDisplay({phase}) {
 
 const MoonSVGStyle = styled.div`
 	.moon {
-		width: 90px;
+		/* width: 90px; */
 		/* margin: 2rem auto; */
 		transform: scaleX(${props => props.phaseFlip});
+
+		/* ${({isHomeMoon}) => isHomeMoon && 'box-shadow: 0 0 20px #485261; border-radius:100px;'}; */
+  /* border-radius:100px;
+  box-shadow: 0 0 20px #485261; */
+		/* @keyframes glowing {
+  0% { box-shadow: -10 -10px #485261; }
+  40% { box-shadow: 0 0 20px #485261; }
+  60% { box-shadow: 0 0 20px #485261; }
+  100% { box-shadow: -10 -10px #485261; }
+}
+  animation: glowing 6000ms infinite; */
+
 	}
 	.moon-left,
 	.moon-right {
@@ -99,10 +111,10 @@ const MoonSVGStyle = styled.div`
 	}
 	.moon-left .bg,
 	.moon-right .bg {
-		stroke-width: 2px;
+		/* stroke-width: 2px; */
 	}
 	.moon-right .fg {
-		stroke-width: 2px;
+		/* stroke-width: 2px; */
 		transform: scaleX(${props => props.phaseRight});
 	}
 	.moon-left .bg {

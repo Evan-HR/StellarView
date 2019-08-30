@@ -3,11 +3,15 @@ import axios from "axios";
 import Modal from "react-modal";
 import backgroundImage from "./style/Media/loginModalPlain.svg";
 
+import { AuthConsumer } from "./AuthContext";
 import { withRouter, Link } from "react-router-dom";
 import styled from "styled-components";
+import Register from "./Register";
+import formError from "./style/Media/formError.svg";
+import formSuccess from "./style/Media/formSuccess.svg";
 
 Modal.setAppElement("#root");
-class Login extends Component {
+class BaseLogin extends Component {
 	state = {
 		userEmail: "",
 		userPassword: "",
@@ -48,11 +52,22 @@ class Login extends Component {
 	};
 
 	errorMsg() {
-		if (this.state.errorDB === true) {
+		if (this.state.errorDB) {
 			return (
-				<div class="alert alert-danger" role="alert">
-					Invalid login credentials! Please try again
-				</div>
+				<AlertStyle success={false}>
+					<img src={formError} />
+					<div className="AlertText">
+						Invalid login credentials! Please try again
+					</div>
+				</AlertStyle>
+			);
+		}
+		if (this.state.loginSuccess) {
+			return (
+				<AlertStyle success={true}>
+					<img src={formSuccess} />
+					<div className="AlertText">Login successful</div>
+				</AlertStyle>
 			);
 		}
 	}
@@ -64,7 +79,7 @@ class Login extends Component {
 			this.setState({
 				modalIsOpen: false
 			});
-			this.props.handleLogin();
+			this.props.context.handleLogin();
 		}, 1250);
 	};
 
@@ -103,71 +118,49 @@ class Login extends Component {
 						<div className="wrapper">
 							<div className="row">
 								<div className="label">E-Mail</div>
-								<input type="text" />
+								<input
+									type="text"
+									className="email"
+									name="email"
+									// value={this.state.userEmail || ""}
+									onChange={this.handleEmailChange}
+									required
+								/>
 							</div>
 							<div className="row">
 								<div className="label">Password</div>
-								<input type="password" />
+								<input
+									type="password"
+									name="password"
+									onChange={this.handlePasswordChange}
+									required
+								/>
 							</div>
-							<div className="row">
-								<button>Submit</button>
+							<div className="rowSubmit">
+								<button onClick={this.onSubmit}>Submit</button>
 							</div>
 						</div>
 						<div className="signup">
-							Don't have an account? <a href="#">Sign-up</a>
+							Don't have an account? <Register />
 						</div>
+						{this.errorMsg()}
 					</div>
 				</div>
 			</LoginStyle>
 		);
 	};
 
-	renderModalContent = () => {
-		if (!this.state.loginSuccess) {
-			return (
-				<LoginFormStyle>
-					<Input
-						type="email"
-						placeholder="email"
-						name="email"
-						onChange={this.handleEmailChange}
-						required
-					/>
-
-					<Input
-						type="password"
-						placeholder="password"
-						name="password"
-						onChange={this.handlePasswordChange}
-						required
-					/>
-
-					<button
-						className="SubmitButton"
-						onClick={e => this.onSubmit(e)}
-					>
-						SUBMIT
-					</button>
-				</LoginFormStyle>
-			);
-		} else {
-			return (
-				<div className="text-success text-center m-3">
-					<h1>
-						<b>Login Successful!</b>
-					</h1>
-				</div>
-			);
-		}
-	};
-
 	//className changes model content, style gives you anything you specify to override defaults
-
 	render() {
 		return (
 			<React.Fragment>
 				<a onClick={() => this.openModal()}>
-					<Link>login</Link>
+					{this.props.children ? (
+						<React.Fragment>{this.props.children}</React.Fragment>
+					) : (
+						<Link>login</Link>
+					)}
+					{/* <Link>login</Link> */}
 				</a>
 
 				<Modal
@@ -180,15 +173,18 @@ class Login extends Component {
 					style={customStyles}
 				>
 					<div className="modal-content">
-						{this.renderLoginModal()};
+						{this.renderLoginModal()}
 						{/* {this.renderModalContent()} */}
-						{this.errorMsg()}
 					</div>
 				</Modal>
 			</React.Fragment>
 		);
 	}
 }
+
+const Login = props => (
+	<AuthConsumer>{x => <BaseLogin {...props} context={x} />}</AuthConsumer>
+);
 
 export default Login;
 
@@ -216,41 +212,40 @@ const LoginStyle = styled.div`
 	font-family: IBM Plex Sans;
 	padding-right: 30px;
 
+	.close {
+		float: right;
+		font-size: 1.5rem;
+		font-weight: 700;
+		line-height: 1;
+		color: gray;
+		outline: none;
+		/* text-shadow: 0 1px 0 #7C6E7E; */
+		opacity: 0.5;
+	}
 
-		.close {
-  float: right;
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1;
-  color: white;
-  outline:none;
-  /* text-shadow: 0 1px 0 #7C6E7E; */
-  opacity: .5;
-}
+	.close:hover {
+		color: ${props => props.theme.cardDark};
+		text-decoration: none;
+	}
 
+	.close:active {
+		color: ${props => props.theme.colorBad};
+	}
 
-
-.close:hover {
-  color: ${props => props.theme.cardDark};
-  text-decoration: none;
-}
-
-.close:active {
- color: ${props => props.theme.colorBad};
-}
-
-.close:not(:disabled):not(.disabled):hover, .close:not(:disabled):not(.disabled):focus {
-  opacity: .75;
-}
-
+	.close:not(:disabled):not(.disabled):hover,
+	.close:not(:disabled):not(.disabled):focus {
+		opacity: 0.75;
+	}
 
 	.login {
 		position: absolute;
 
-		transform: translate(-50%, -50%);
+		transform: translate(-50%, -51%);
 		width: 350px;
-		height: 600px;
-		background: whitesmoke;
+		height: 80vh;
+		max-width: 100vw;
+		max-height: 100vh;
+		/* background: whitesmoke; */
 		overflow: hidden;
 
 		.banner {
@@ -287,46 +282,95 @@ const LoginStyle = styled.div`
 			background: #f6f6f6;
 			width: 100%;
 			height: calc(100% - 180px);
+			display: flex;
+			flex-direction: column;
 
 			.wrapper {
 				padding-top: 30px;
-				position: absolute;
+				/* position: absolute;
 				left: 50%;
-				transform: translateX(-50%);
+				transform: translateX(-50%); */
 				width: 85%;
-			}
-			.row {
-				margin: 20px 0px;
-				.label {
-					font-size: 12px;
-					font-weight: 600;
-					color: rgb(100, 100, 100);
-				}
+				margin: 0 auto;
 
-				input {
-					margin-top: 2px;
-					font-size: 13px;
-					color: rgb(70, 70, 70);
-					border: none;
-					border-bottom: 1px solid rgba(100, 100, 100, 0.6);
-					outline: none;
-					height: 25px;
-					background: transparent;
-					width: 100%;
+				.rowSubmit {
+					margin: 20px 0 10px 0;
+					.label {
+						font-size: 12px;
+						font-weight: 600;
+						color: rgb(100, 100, 100);
+					}
+
+					input {
+						margin-top: 2px;
+						font-size: 13px;
+						color: rgb(70, 70, 70);
+						border: none;
+						border-bottom: 1px solid rgba(100, 100, 100, 0.6);
+						outline: none;
+						height: 25px;
+						background: transparent;
+						width: 100%;
+					}
+					button {
+						margin-top: 0px;
+						font-size: 13px;
+						color: rgb(100, 100, 100);
+						
+						border: none;
+						outline: none;
+						height: 40px;
+						text-transform: uppercase;
+						background: ${props => props.theme.starDark};
+						transition: 0.25s;
+						width: 100%;
+						color: whitesmoke;
+						cursor: pointer;
+						
+						:hover,:active{
+							
+								color: ${props => props.theme.colorBad};
+								transition: 0.25s;
+						}
+					}
 				}
-				button {
-					margin-top: 0px;
-					font-size: 13px;
-					color: rgb(100, 100, 100);
-					border: none;
-					outline: none;
-					height: 40px;
-					text-transform: uppercase;
-					background: ${props => props.theme.starDark};
-					width: 100%;
-					color: #fff;
-					cursor: pointer;
+				.row {
+					margin: 20px 0px;
+					.label {
+						font-size: 12px;
+						font-weight: 600;
+						color: rgb(100, 100, 100);
+					}
+
+					input {
+						margin-top: 2px;
+						font-size: 13px;
+						color: rgb(70, 70, 70);
+						border: none;
+						border-bottom: 1px solid rgba(100, 100, 100, 0.6);
+						outline: none;
+						height: 25px;
+						background: transparent;
+						width: 100%;
+					}
+					button {
+						margin-top: 0px;
+						font-size: 13px;
+						color: rgb(100, 100, 100);
+						border: none;
+						outline: none;
+						height: 40px;
+						text-transform: uppercase;
+						background: ${props => props.theme.starDark};
+						width: 100%;
+						color: #fff;
+						cursor: pointer;
+					}
 				}
+			}
+
+			.InvalidLogin {
+				width: 100%;
 			}
 
 			.signup {
@@ -334,12 +378,22 @@ const LoginStyle = styled.div`
 				text-align: center;
 				width: 100%;
 				font-size: 13px;
-				bottom: 50px;
+				bottom: 70px;
 				color: #333;
 				a {
 					color: ${props => props.theme.colorBad};
+					transition: 0.25s;
 					text-decoration: none;
 					font-weight: 600;
+				}
+				:hover,
+				:active {
+					color: ${props => props.theme.franNavy};
+					transition: 0.25s;
+					a {
+						color: ${props => props.theme.franNavy};
+						transition: 0.25s;
+					}
 				}
 			}
 		}
@@ -361,30 +415,6 @@ transform: translate(-50%,-50%); */
 	-moz-box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 1);
 	box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 1);
 
-	.SubmitButton {
-		border: 0;
-		background: none;
-		display: block;
-		margin: 20px auto;
-		text-align: center;
-		border: 2px solid ${props => props.theme.green};
-		padding: 14px 25px;
-		outline: none;
-		color: white;
-		border-radius: 24px;
-		transition: 0.25s;
-		cursor: pointer;
-
-		&:hover {
-			background: ${props => props.theme.green};
-		}
-
-		&:active {
-			background: ${props => props.theme.gold2};
-			border: 2px solid ${props => props.theme.gold2};
-			/* padding: 17px 28px; */
-		}
-	}
 `;
 
 const Input = styled.input`
@@ -411,4 +441,21 @@ const Input = styled.input`
 const HeaderStyle = styled.div`
 	margin-left: 38%;
 	color: whitesmoke;
+`;
+
+const AlertStyle = styled.div`
+	position: relative;
+
+	.AlertText {
+		padding: 10px;
+		background-color: ${props =>
+			props.success ? "#67e8956b" : "#daa97961"};
+
+		font-weight: 500;
+	}
+
+	img {
+		padding-bottom: 10px;
+		width: 42px;
+	}
 `;

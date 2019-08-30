@@ -12,8 +12,9 @@ import { createGlobalStyle } from "styled-components";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
 import FAQ from "./components/FAQ";
-import backgroundImage from"./components/style/Media/backgroundTest.png";
-
+import backgroundImage from "./components/style/Media/starrynight_loop.svg";
+import Footer from "./components/Footer";
+import ScrollUpButton from "react-scroll-up-button";
 
 class App extends Component {
 	state = {
@@ -45,44 +46,56 @@ class App extends Component {
 		console.log("App - rendered");
 		return (
 			<React.Fragment>
-				{/* <StarBackground/>  */}
+				<ScrollUpButton />
+				<GlobalStyle bg={backgroundImage} />
+				<SiteStyle>
+					<div className="SiteContent">
+						<Router>
+							<ToolBar
+								drawerClickHandler={
+									this.drawerToggleClickHandler
+								}
+								handleLogoutState={this.props.handleLogoutState}
+								handleLogin={this.props.handleLogin}
+							/>
+							<SideDrawer
+								show={this.state.sideDrawerOpen}
+								close={this.sideDrawerLinkClickHandler}
+								handleLogoutState={this.props.handleLogoutState}
+								handleLogin={this.props.handleLogin}
+							/>
+							{backdrop}
 
-				<GlobalStyle bg={backgroundImage}/>
-				<Router>
-					<ToolBar
-						drawerClickHandler={this.drawerToggleClickHandler}
-						handleLogoutState={this.props.handleLogoutState}
-						handleLogin={this.props.handleLogin}
-					/>
-					<SideDrawer
-						show={this.state.sideDrawerOpen}
-						close={this.sideDrawerLinkClickHandler}
-						handleLogoutState={this.props.handleLogoutState}
-						handleLogin={this.props.handleLogin}
-					/>
-					{backdrop}
-
-					<Route path="/" exact component={ParksData} />
-					<Route path="/faq" component={FAQ} />
-					<AuthConsumer>
-						{authState => {
-							console.log(authState);
-							return (
-								<Route
-									path="/profile"
-									render={() => {
-										console.log(authState);
-										if (authState.isAuth !== null) {
-											if (authState.isAuth === true)
-												return <Profile />;
-											else return <Redirect to="/" />;
-										}
-									}}
-								/>
-							);
-						}}
-					</AuthConsumer>
-				</Router>
+							<Route path="/" exact component={ParksData} />
+							<Route path="/faq" component={FAQ} />
+							<AuthConsumer>
+								{authState => {
+									console.log(authState);
+									return (
+										<Route
+											path="/profile"
+											render={() => {
+												console.log(authState);
+												if (authState.isAuth !== null) {
+													if (
+														authState.isAuth ===
+														true
+													)
+														return <Profile />;
+													else
+														return (
+															<Redirect to="/" />
+														);
+												}
+											}}
+										/>
+									);
+								}}
+							</AuthConsumer>
+						</Router>
+					</div>
+					<Footer />
+				</SiteStyle>
 			</React.Fragment>
 		);
 	}
@@ -100,16 +113,25 @@ export default App;
 //'Yeseva One', cursive;
 //font-family: 'Barlow', sans-serif;
 
+const SiteStyle = styled.div`
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	.SiteContent {
+		flex: 1 0 auto;
+	}
+`;
+
 const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono:300,400,600|Barlow:300,400,600|IBM+Plex+Sans:300,400,600|&display=swap');
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono:300,400,600|IBM+Plex+Sans:300,400,600|&display=swap');
 
 html {
-  line-height: 1.15;
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  height: 100%;
-  overflow-x: hidden;
-  
+	line-height: 1.15;
+	-webkit-text-size-adjust: 100%;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	height: 100%;
+	overflow-x: hidden;
+	min-height: 100vh;
 }
 
 body{
@@ -120,9 +142,10 @@ body{
 	/* background-image: linear-gradient(150deg,${props =>
 		props.theme.cream} 60%,${props =>
 	props.theme.franNavy} calc(60% + 2px)); */
-	background-image: url(${props => props.bg});
-	background-size: cover;
-	/* background-color: ${props => props.theme.bodyBackground} !important; */
-	text-align: center;
+	/* background-image: url(${props => props.bg});
+	background-size: cover; */
+	background-color: ${props => props.theme.prettyDark} !important;
+
+	text-align: center !important;
 }
 `;

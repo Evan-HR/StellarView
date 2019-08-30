@@ -3,6 +3,9 @@ import axios from "axios";
 import StarReviews from "./StarReviews";
 import { AuthConsumer } from "./AuthContext";
 import StarReviewsStatic from "./StarReviewsStatic";
+import Login from "./Login";
+import styled from "styled-components";
+
 class BaseReviews extends Component {
 	constructor(props) {
 		super(props);
@@ -145,12 +148,22 @@ class BaseReviews extends Component {
 	renderErrorMsg() {
 		if (this.state.noStarError === true) {
 			return (
-				<div class="alert alert-danger" role="alert">
-					You must click a star (1-5) before submission.
-				</div>
+				<AlertStyle>
+					<div className="alertText">
+						You must click a star (1-5) before submission.
+					</div>
+				</AlertStyle>
 			);
 		}
 	}
+
+	formatReviewCards = review => (
+		<ReviewStyle>
+			<div className="ReviewName">{review.name}</div>
+			<div className="ReviewScore">{review.score}/5 Stars</div>
+			<div className="ReviewReview">{review.review}</div>
+		</ReviewStyle>
+	);
 
 	formatReviews = review => (
 		<tr>
@@ -223,15 +236,29 @@ class BaseReviews extends Component {
 		);
 	}
 
+	renderReviewCards = () => {
+		if (this.state.dbReviewList.length > 0) {
+			return this.state.dbReviewList.map(this.formatReviewCards);
+		} else {
+			return (
+				<AlertStyle>
+					<div className="AlertText">
+						No reviews yet - be the first.
+					</div>
+				</AlertStyle>
+			);
+		}
+	};
+
 	//TODO: makerenderScore(), renderNumReviews() and renderStarAvg() on 1 line in css
 	renderReviewsDiv() {
 		return (
 			<div className="border border-primary">
-				{this.renderScore()}
+				{/* {this.renderScore()}
 				{this.renderNumReviews()}
-				{this.renderStarAvg()}
-
+				{this.renderStarAvg()} */}
 				{this.renderErrorMsg()}
+
 				<table className="table table-hover">
 					<tbody>
 						<tr>
@@ -248,9 +275,17 @@ class BaseReviews extends Component {
 
 	renderUserNotLoggedIn() {
 		return (
-			<div class="alert alert-warning" role="alert">
-				You must be logged in to submit a review!
-			</div>
+			<AlertStyle>
+				<div className="AlertText">
+					You must be{" "}
+					<Login>
+						<span>
+							<b>logged-in</b>
+						</span>
+					</Login>{" "}
+					to submit a review!
+				</div>
+			</AlertStyle>
 		);
 	}
 
@@ -294,8 +329,13 @@ class BaseReviews extends Component {
 	render() {
 		return (
 			<div>
-				{this.renderReviewsSwitch(this.state.switchCase)}
-				{this.renderReviewsDiv()}
+				<ReviewsStyle>
+					{this.renderStarAvg()}
+					<div className="NumReviews">{this.renderNumReviews()}</div>
+					<hr />
+					{this.renderReviewsSwitch(this.state.switchCase)}
+					{this.renderReviewCards()}
+				</ReviewsStyle>
 			</div>
 		);
 	}
@@ -308,3 +348,75 @@ const Reviews = props => (
 );
 
 export default Reviews;
+
+const ReviewsStyle = styled.div`
+	.NumReviews {
+		padding-top: 0.5rem;
+		font-weight: normal;
+	}
+`;
+
+const ReviewStyle = styled.div`
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto auto;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 16px;
+	margin: 25px 0px 25px 0px;
+
+	grid-template-areas:
+		"ReviewReview    ReviewReview"
+		"ReviewName    	 ReviewScore";
+
+	border-bottom: 1px solid ${props => props.theme.cardDark};
+
+	.ReviewName {
+		grid-area: ReviewName;
+		/* padding-bottom: 20px; */
+		padding-top: 20px;
+		padding-bottom: 10px;
+		/* text-align: end;
+		padding-right: 25px; */
+	}
+	.ReviewScore {
+		/* padding-bottom: 20px; */
+		/* text-align: start;
+		padding-left: 25px; */
+		grid-area: ReviewScore;
+		padding-top: 20px;
+		padding-bottom: 10px;
+	}
+
+	.ReviewReview {
+		font-weight: 500;
+		font-size: 20px;
+		padding: 20px 0px 20px 0px;
+		background: #d5dae6;
+		border-radius: 14px;
+		grid-area: ReviewReview;
+		text-align: center;
+		box-shadow: 4px 9px #888888;
+	}
+`;
+
+const AlertStyle = styled.div`
+	position: relative;
+
+	margin-bottom: 1rem;
+	margin-top: 1rem;
+
+	.AlertText {
+		background-color: #daa97961;
+		font-weight: 500;
+		padding: 10px;
+		span {
+			color: ${props => props.theme.colorBad};
+			cursor: pointer;
+			:hover {
+				color: ${props => props.theme.franNavy};
+				transition: 0.25s;
+			}
+		}
+	}
+`;

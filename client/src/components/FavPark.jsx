@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { AuthConsumer } from "./AuthContext";
+import Login from "./Login";
+
 class BaseFavPark extends Component {
 	state = {
 		buttonPressed: false,
@@ -77,7 +79,7 @@ class BaseFavPark extends Component {
 					// className=""
 					//onClick={() => this.handleFavSpot()}
 					>
-						<i className="fas fa-heart" />
+						<i className="fas fa-heart fa-2x" />
 					</button>
 				);
 			}
@@ -85,9 +87,9 @@ class BaseFavPark extends Component {
 			console.log("NOT LOGGED IN FAVPARK GOT HERE!");
 
 			return (
-				<button onClick={() => this.handleFavSpotNoAuth()}>
-					<i className="fas fa-heart" />
-				</button>
+				<Login handleLogin={this.props.handleLogin}>
+					<i className="fas fa-heart fa-2x" />
+				</Login>
 			);
 		}
 	};
@@ -95,15 +97,7 @@ class BaseFavPark extends Component {
 	render() {
 		//const { label, score = 0, total = Math.max(1, score) } = this.props;
 
-		return (
-			<div>
-				{this.favSpotButton()}
-
-				{/* {this.handleWarningMsg()} */}
-
-				{/* <p>hello {this.props.context.firstName}</p> */}
-			</div>
-		);
+		return <div>{this.favSpotButton()}</div>;
 	}
 }
 

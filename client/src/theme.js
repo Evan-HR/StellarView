@@ -30,12 +30,18 @@ export const theme = {
 	fontLight: "#EBE630",
 	fontDark: "#2F3334",
 	cardLight: "#BDC2C6",
-	cardDark: "#92A8C1",
+	cardDark: "#bbc4cc",
 	starLight: "#FAE6BF",
 	starDark: "#2F3334",
 	bodyBackground: "#2F3334",
 	clickable: "#FAE6BF",
 	colorGood: "#99C192",
 	colorBad: "#BB6F6F",
-	colorMedium: "#DAA979"
+	colorMedium: "#DAA979",
+	lightDark: "#5A5A5A",
+	prettyDark: "#111414",
+	moreInfoBackground: "#E4E4E4",
+	parkMapGreen: "#174030",
+	lightBlue: "#485261",
+	mapBlue: "#2d333c"
 };

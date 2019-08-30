@@ -8,12 +8,17 @@ import axios from "axios";
 import styled from "styled-components";
 import MoonComponent from "./Moon";
 import { Spring, animated } from "react-spring/renderprops";
+import humidityIcon from "./style/Media/cardIcons/humidity.svg";
+import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
+import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
+import tempIcon from "./style/Media/cardIcons/temperature.svg";
 
 class BaseParksData extends Component {
 	state = {
 		parks: [],
 		fetchReq: [],
 		moon: "",
+		moonFraction: "",
 		moonType: "",
 		isMapLoaded: false,
 		isFetchingParks: false,
@@ -82,6 +87,7 @@ class BaseParksData extends Component {
 			this.setState({
 				parks: JSON.parse(localData).parks,
 				moon: JSON.parse(localData).moonPercent,
+				moonFraction: JSON.parse(localData).moonFraction,
 				moonType: JSON.parse(localData).moonType,
 
 				fetchReq: reqData,
@@ -97,7 +103,7 @@ class BaseParksData extends Component {
 					console.log(response.data);
 					for (var i = 0; i < response.data.parks.length; i++) {
 						response.data.parks[i].score = this.parkScore(
-							response.data.moonPercent,
+							response.data.moonFraction,
 							response.data.parks[i].weather.humidity / 100,
 							response.data.parks[i].weather.clouds / 100,
 							response.data.parks[i].light_pol / 100
@@ -106,6 +112,7 @@ class BaseParksData extends Component {
 					this.setState({
 						parks: response.data.parks,
 						moon: response.data.moonPercent,
+						moonFraction: response.data.moonfraction,
 						moonType: response.data.moonType,
 						fetchReq: reqData,
 						isFetchingParks: false
@@ -125,12 +132,12 @@ class BaseParksData extends Component {
 		}
 	};
 
-	parkScore = (moon, humidity, cloudCov, lightPol) => {
-		// console.log("MOON IS !!!!!!!!!!!!!!",moon)
-		// console.log("CLOUD COV IS !!!!!!!!!!!!!!",cloudCov)
-		// console.log("LIGHT POL IS !!!!!!!!!!!!!!",lightPol)
-		// console.log("humidity COV IS !!!!!!!!!!!!!!",humidity)
-		var moonScore = 0.45 * (-1 * (2 * moon - 1));
+	parkScore = (moonFraction, humidity, cloudCov, lightPol) => {
+		console.log("MOON FRACTION % IS !!!!!!!!!!!!!!", moonFraction);
+		console.log("CLOUD COV IS !!!!!!!!!!!!!!", cloudCov);
+		console.log("LIGHT POL IS !!!!!!!!!!!!!!", lightPol);
+		console.log("humidity COV IS !!!!!!!!!!!!!!", humidity);
+		var moonScore = 0.45 * (-1 * (2 * moonFraction - 1));
 		var lightPolScore = 0.25 * (((-1 * 1) / 3) * (lightPol - 3));
 		var humidityScore = 0;
 		if (humidity < 0.4) {
@@ -194,6 +201,7 @@ class BaseParksData extends Component {
 							location={this.state.fetchReq}
 							onMapLoaded={this.handleMapLoaded}
 							moon={this.state.moon}
+							moonType={this.state.moonType}
 						/>
 					</animated.div>
 				)}
@@ -251,6 +259,7 @@ class BaseParksData extends Component {
 					>
 						Toggle form
 					</button> */}
+					{/* <div className="FormMoonWrapper"> */}
 					{this.renderParkForm()}
 
 					<div className="MoonStyle">
@@ -260,21 +269,41 @@ class BaseParksData extends Component {
 							moonType={this.state.moonType}
 						/>
 					</div>
+					<div className="helpCard">
+					<span className="help">Icon Info</span>
+					<img className="iconA" src={humidityIcon} />
+					<img className="iconB" src={lightPolIcon} />
+					<img className="iconE" src={tempIcon} />
+					<img className="iconD" src={cloudBadIcon} />
+					<i class="far fa-eye iconC"></i>
+					<span className="descA">Humidity</span>
+					<span className="descB">Light Pollution</span>
+					<span className="descE">Temperature</span>
+					<span className="descD">Cloud Coverage</span>
+					<span className="descC">Overall Visibility</span>
+			
+					</div>
+					{/* </div> */}
+
+					<div className="SortByContainer">
+						<div className="SortBy">
+							Sort by:{"  "}
+							<button
+								onClick={this.sortParksDist}
+								disabled={this.state.sortedBy === "dist"}
+							>
+								Distance
+							</button>
+							<button
+								onClick={this.sortParksScore}
+								disabled={this.state.sortedBy === "score"}
+							>
+								Score
+							</button>
+						</div>
+					</div>
 
 					<div className="ParkTableStyle">
-						<b>Sort by:</b>
-						<button
-							onClick={this.sortParksDist}
-							disabled={this.state.sortedBy === "dist"}
-						>
-							Dist
-						</button>
-						<button
-							onClick={this.sortParksScore}
-							disabled={this.state.sortedBy === "score"}
-						>
-							Score
-						</button>
 						<ParkTable
 							parkList={this.state.parks}
 							moon={this.state.moon}
@@ -316,7 +345,7 @@ const MainContentWrapper = styled.div`
 	grid-template-columns: 1fr 1fr;
 	grid-column-gap: 10px;
 	grid-row-gap: 10px;
-	grid-template-areas: "xxx rightSide";
+	grid-template-areas: ". rightSide";
 
 	.ParkMapStyle {
 		/* grid-area: map; */
@@ -342,12 +371,133 @@ const MainContentWrapper = styled.div`
 		/* background-color: whitesmoke; */
 	}
 	.ParkFormStyle {
+		/* height: 11vh; */
+		/* height: 50%; */
 		grid-area: form;
 		${({ active }) => active && `display: none;`}
 	}
+	/* .FormMoonWrapper{
+		min-height: 33.33vh;
+	} */
 
 	.MoonStyle {
-		background: ${props => props.theme.moonCard};
+		/* height: 50%; */
+		/* background: ${props => props.theme.moonCard}; */
+		background: -moz-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* ff3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(35,37,38,1)), color-stop(100%, rgba(55,57,59,1))); /* safari4+,chrome */
+background: -webkit-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* safari5.1+,chrome10+ */
+background: -o-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* opera 11.10+ */
+background: -ms-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* ie10+ */
+background: linear-gradient(108deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* w3c */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#232526', endColorstr='#37393B',GradientType=1 ); /* ie6-9 */
+	}
+
+	.helpCard{
+	font-family: IBM Plex Sans;
+	height: 140px;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr 1fr;
+	grid-template-areas: 
+	"help help help help help"
+	"iconA iconB iconC iconD iconE"
+	"descA descB descC descD descE";
+	padding: 0px 10px 10px 15px;
+	font-size: 14px;
+	/* box-shadow: inset 0px 0px 0px 4px #485261;
+
+	background: ${props=>props.theme.cardLight}; */
+
+	background: -moz-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ff3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(189,194,198,0.95)), color-stop(100%, rgba(172,177,181,1))); /* safari4+,chrome */
+background: -webkit-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* safari5.1+,chrome10+ */
+background: -o-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* opera 11.10+ */
+background: -ms-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ie10+ */
+background: linear-gradient(90deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* w3c */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', endColorstr='#ACB1B5',GradientType=1 ); /* ie6-9 */
+
+	img,i{
+		margin: auto auto auto auto;
+	}
+	span{
+		margin: 0px auto auto auto;
+
+	}
+	.help{
+		color: ${props=>props.theme.fontDark};
+		font-size: 20px;
+		
+		font-weight: 600;
+		margin: auto auto 0px auto;
+		grid-area: help;
+	}
+
+	.iconA{
+		grid-area: iconA
+	}
+	.iconB{
+		grid-area: iconD
+	}
+	.iconC{
+		font-size: 52px;
+		grid-area: iconC
+	}
+	.iconD{
+		grid-area: iconB
+	}
+	.iconE{
+		
+		grid-area: iconE
+	}
+
+	.descA{
+		grid-area: descA
+	}
+	.descB{
+		grid-area: descD
+	}
+	.descC{
+		grid-area: descC
+	}
+	.descD{
+		grid-area: descB
+	}
+	.descE{
+		grid-area: descE
+	}
+
+	}
+
+	.SortByContainer {
+		font-family: IBM Plex Sans;
+	
+		padding: 13px 0px 13px 0px;
+		width: 100%;
+		
+
+		.SortBy {
+			
+			color: whitesmoke;
+			transition: color 0.2s ease;
+			button{
+				
+			all: unset;
+			color: whitesmoke;
+			font-weight: 600;
+			cursor: pointer;
+			margin: 0 0px 0 15px;
+			:hover,
+	:active {
+		color: ${props => props.theme.colorBad};
+		transition: color 0.2s ease;
+
+	}
+
+
+		}
+			display: flex;
+			justify-content: flex-end;
+		}
 	}
 
 	.ParkTableStyle {

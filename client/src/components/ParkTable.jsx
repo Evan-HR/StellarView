@@ -3,14 +3,7 @@ import React, { Component } from "react";
 import ParkCard from "./ParkCard";
 import styled from "styled-components";
 import { Transition, animated } from "react-spring/renderprops";
-import newMoon from "./style/Media/Moon/moon-phase-new.svg";
-import waxingCrescent from "./style/Media/Moon/moon-phase-waxingcrescent.svg";
-import firstQuarter from "./style/Media/Moon/moon-phase-firstquarter.svg";
-import waxingGibbous from "./style/Media/Moon/moon-phase-waxinggibbous.svg";
-import fullMoon from "./style/Media/Moon/moon-phase-full.svg";
-import waningGibbous from "./style/Media/Moon/moon-phase-waninggibbous.svg";
-import lastQuarter from "./style/Media/Moon/moon-phase-lastquarter.svg";
-import waningCrescent from "./style/Media/Moon/moon-phase-waningcrescent.svg";
+
 
 class ParkTable extends Component {
 	state = {};

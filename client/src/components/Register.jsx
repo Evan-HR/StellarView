@@ -96,8 +96,8 @@ class Register extends Component {
 
 	renderRegisterFormStyle = () => {
 		return (
-			<LoginStyle background={backgroundImage}>
-				<div className="login">
+			<RegisterStyle background={backgroundImage}>
+				<div className="register">
 					<div className="banner">
 						<button
 							type="button"
@@ -110,7 +110,7 @@ class Register extends Component {
 					</div>
 					<div className="form">
 						<div className="wrapper">
-						<div className="row">
+							<div className="row">
 								<div className="label">Preferred Name</div>
 								<input type="text" />
 							</div>
@@ -130,54 +130,52 @@ class Register extends Component {
 								<button>Submit</button>
 							</div>
 						</div>
-		
 					</div>
 				</div>
-			</LoginStyle>
+			</RegisterStyle>
 		);
 	};
 
 	renderRegisterForm = () => {
-		return(
-<RegisterFormStyle>
-							<Input
-								type="text"
-								placeholder="preferred name"
-								name="name"
-								onChange={this.handleNameChange}
-								required
-							/>
-							<Input
-								type="email"
-								placeholder="email"
-								name="email"
-								onChange={this.handleEmailChange}
-								required
-							/>
-							<Input
-								type="password"
-								placeholder="password"
-								name="password1"
-								onChange={this.handlePasswordChange1}
-								required
-							/>
-							<Input
-								type="password"
-								placeholder="re-enter password"
-								name="password2"
-								onChange={this.handlePasswordChange2}
-								required
-							/>
-							<button
-								className="SubmitButton"
-								onClick={e => this.onSubmit(e)}
-							>
-								SUBMIT
-							</button>
-						</RegisterFormStyle>
-		)
-		
-	}
+		return (
+			<RegisterFormStyle>
+				<Input
+					type="text"
+					placeholder="preferred name"
+					name="name"
+					onChange={this.handleNameChange}
+					required
+				/>
+				<Input
+					type="email"
+					placeholder="email"
+					name="email"
+					onChange={this.handleEmailChange}
+					required
+				/>
+				<Input
+					type="password"
+					placeholder="password"
+					name="password1"
+					onChange={this.handlePasswordChange1}
+					required
+				/>
+				<Input
+					type="password"
+					placeholder="re-enter password"
+					name="password2"
+					onChange={this.handlePasswordChange2}
+					required
+				/>
+				<button
+					className="SubmitButton"
+					onClick={e => this.onSubmit(e)}
+				>
+					SUBMIT
+				</button>
+			</RegisterFormStyle>
+		);
+	};
 
 	registerSuccess = () => {
 		console.log("get here for some reason?");
@@ -216,7 +214,7 @@ class Register extends Component {
 		return (
 			<React.Fragment>
 				<a onClick={() => this.openModal()}>
-					<Link>register</Link>
+					<Link>Register</Link>
 				</a>
 				<Modal
 					closeTimeoutMS={800}
@@ -229,8 +227,6 @@ class Register extends Component {
 					style={customStyles}
 				>
 					<div className="modal-content">
-					
-
 						{this.renderRegisterFormStyle()}
 
 						{this.errorMsg()}
@@ -269,38 +265,14 @@ position: absolute;
 top: 50%;
 left: 50%;
 transform: translate(-50%,-50%); */
-	background: ${props => props.theme.modalOverlay};
+background: ${props => props.theme.modalOverlay};
 	text-align: center;
 	border-bottom-left-radius: 0.3rem;
 	border-bottom-right-radius: 0.3rem;
-	-webkit-box-shadow: -1px 4px 8px 2px rgba(0, 0, 0, 1);
-	-moz-box-shadow: -1px 4px 8px 2px rgba(0, 0, 0, 1);
-	border-radius: -1px 4px 8px 2px rgba(0, 0, 0, 1);
+	-webkit-box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 1);
+	-moz-box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 1);
+	box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 1);
 
-	.SubmitButton {
-		border: 0;
-		background: none;
-		display: block;
-		margin: 20px auto;
-		text-align: center;
-		border: 2px solid ${props => props.theme.green};
-		padding: 14px 25px;
-		outline: none;
-		color: white;
-		border-radius: 24px;
-		transition: 0.25s;
-		cursor: pointer;
-
-		&:hover {
-			background: ${props => props.theme.green};
-		}
-
-		&:active {
-			background: ${props => props.theme.gold2};
-			border: 2px solid ${props => props.theme.gold2};
-			/* padding: 17px 28px; */
-		}
-	}
 `;
 
 const Input = styled.input`
@@ -309,12 +281,12 @@ const Input = styled.input`
 	display: block;
 	margin: 20px auto;
 	text-align: center;
-	border: 2px solid ${props => props.theme.logoA};
-	padding: 14px 10px;
+	border-bottom: 2px solid ${props => props.theme.clickable};
+	/* padding: 14px 10px; */
 	width: 200px;
 	outline: none;
 	color: white;
-	border-radius: 24px;
+	/* border-radius: 24px; */
 	transition: 0.25s;
 
 	&:focus {
@@ -328,51 +300,51 @@ const HeaderStyle = styled.div`
 	color: whitesmoke;
 `;
 
-const LoginStyle = styled.div`
+const RegisterStyle = styled.div`
 	font-family: IBM Plex Sans;
 	padding-right: 30px;
 
+	.close {
+		float: right;
+		font-size: 1.5rem;
+		font-weight: 700;
+		line-height: 1;
+		color: white;
+		outline: none;
+		/* text-shadow: 0 1px 0 #7C6E7E; */
+		opacity: 0.5;
+	}
 
-		.close {
-  float: right;
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1;
-  color: white;
-  outline:none;
-  /* text-shadow: 0 1px 0 #7C6E7E; */
-  opacity: .5;
-}
+	.close:hover {
+		color: ${props => props.theme.cardDark};
+		text-decoration: none;
+	}
 
-.close:hover {
-  color: ${props => props.theme.cardDark};
-  text-decoration: none;
-}
+	.close:active {
+		color: ${props => props.theme.colorBad};
+	}
 
-.close:active {
- color: ${props => props.theme.colorBad};
-}
+	.close:not(:disabled):not(.disabled):hover,
+	.close:not(:disabled):not(.disabled):focus {
+		opacity: 0.75;
+	}
 
-.close:not(:disabled):not(.disabled):hover, .close:not(:disabled):not(.disabled):focus {
-  opacity: .75;
-}
-
-
-	.login {
+	.register {
 		position: absolute;
 
 		transform: translate(-50%, -50%);
 		width: 350px;
-		height: 600px;
-		background: whitesmoke;
+		height: 80vh;
+		max-width: 100vw;
+		max-height: 100vh;
 		overflow: hidden;
 
 		.banner {
 			position: absolute;
 			top: 0px;
-			height: 0px;
+
 			width: 100%;
-			height: 190px;
+			height: 210px;
 			background: url(${props => props.background}) center no-repeat;
 			background-size: 600px;
 			/* transform: skew(0deg, -8deg) translateY(-25px); */
@@ -428,6 +400,7 @@ const LoginStyle = styled.div`
 					background: transparent;
 					width: 100%;
 				}
+
 				button {
 					margin-top: 0px;
 					font-size: 13px;
@@ -440,22 +413,15 @@ const LoginStyle = styled.div`
 					width: 100%;
 					color: #fff;
 					cursor: pointer;
+
+					:hover,:active{
+							
+							color: ${props => props.theme.colorBad};
+							transition: 0.25s;
+					}
 				}
 			}
 
-			.signup {
-				position: absolute;
-				text-align: center;
-				width: 100%;
-				font-size: 13px;
-				bottom: 50px;
-				color: #333;
-				a {
-					color: ${props => props.theme.colorBad};
-					text-decoration: none;
-					font-weight: 600;
-				}
-			}
 		}
 	}
 `;
