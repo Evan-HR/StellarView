@@ -1,4 +1,4 @@
-//bring in both express and mysql
+//bring in both express and mysql TEST FOR VLAD
 const express = require("express");
 const mysql = require("mysql");
 const morgan = require("morgan");
