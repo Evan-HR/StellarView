@@ -28,6 +28,8 @@ require("dotenv").config();
 const mapsKey1 = process.env.DUSTINMAPKEY;
 const weatherKey1 = process.env.REACT_APP_EVANWEATHERKEY;
 const cookieKey = process.env.SECRET;
+const sqlUsername = process.env.SQLUSERNAME;
+const sqlPassword = process.env.SQLPASSWORD;
 
 //set up simple express server
 const app = express();
@@ -47,16 +49,20 @@ app.listen(port, () => {
 	console.log(`Server started on port ${port}`);
 });
 
+var connection = mysql.createConnection(process.env.JAWSDB_MARIA_URL);
+
+connection.connect();
+
 //tidy connection code
-function getConnection() {
-	return mysql.createConnection({
-		host: "localhost",
-		user: "root",
-		password: "",
-		database: "parks",
-		multipleStatements: true
-	});
-}
+// function connection {
+// 	return mysql.createConnection({
+// 		host: "nkpl8b2jg68m87ht.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+// 		user: { sqlUsername },
+// 		password: { sqlPassword },
+// 		database: "e6da0ztvpz7ectml",
+// 		multipleStatements: true
+// 	});
+// }
 
 //for sessions
 var options = {
@@ -121,34 +127,30 @@ passport.use(
 		},
 		function(username, password, done) {
 			const passQuery = "SELECT id,password from users WHERE email=?";
-			getConnection().query(
-				passQuery,
-				[username],
-				(err, results, fields) => {
-					//passport handles this error
-					if (err) {
-						done(err);
-					}
-					//doesn't exist
-					if (results.length === 0) {
-						done(null, false);
-					} else {
-						//success query
-						console.log("success login");
-						console.log(results[0].password.toString());
-						const hash = results[0].password.toString();
-
-						//used to be user.results[0].id
-						bcrypt.compare(password, hash, function(err, response) {
-							if (response === true) {
-								return done(null, results[0].id);
-							} else {
-								return done(null, false);
-							}
-						});
-					}
+			connection.query(passQuery, [username], (err, results, fields) => {
+				//passport handles this error
+				if (err) {
+					done(err);
 				}
-			);
+				//doesn't exist
+				if (results.length === 0) {
+					done(null, false);
+				} else {
+					//success query
+					console.log("success login");
+					console.log(results[0].password.toString());
+					const hash = results[0].password.toString();
+
+					//used to be user.results[0].id
+					bcrypt.compare(password, hash, function(err, response) {
+						if (response === true) {
+							return done(null, results[0].id);
+						} else {
+							return done(null, false);
+						}
+					});
+				}
+			});
 		}
 	)
 );
@@ -176,7 +178,7 @@ app.post(
 app.get("/api/getUserFavSpots", function(req, res) {
 	const getFavSpotsQuery =
 		"SELECT park_id from favorite_parks where user_id = ?";
-	getConnection().query(
+	connection.query(
 		getFavSpotsQuery,
 		[req.session.passport.user],
 		(err, favSpots) => {
@@ -207,44 +209,40 @@ app.get("/api/getReviews", function(req, res) {
 	const getReviewQuery =
 		"SELECT name, score, review from reviews where p_id = ?";
 
-	getConnection().query(
-		getReviewQuery,
-		[req.query.parkID],
-		(err, reviews) => {
-			if (reviews.length > 0) {
-				if (err) {
-					console.log("failed" + err);
-					res.sendStatus(500);
-					return;
-				} else {
-					console.log("REVIEWS about to be sent: ", reviews);
-					var reviewsJSON = JSON.parse(JSON.stringify(reviews));
-					var score = 0;
-					var reviewsLength = Object.keys(reviewsJSON).length;
-					console.log("num reviews: " + reviewsLength);
-					for (let review in reviewsJSON) {
-						review = reviewsJSON[review];
-						console.log("score is : ", review.score);
-						score = score + review.score;
-					}
-
-					var averageScore =
-						Math.round((score / reviewsLength) * 10) / 10;
-					console.log("average score truncated is: " + averageScore);
-
-					let reply = {
-						reviews: reviews,
-						averageScore: averageScore,
-						numReviews: reviewsLength
-					};
-
-					res.send(reply);
-				}
+	connection.query(getReviewQuery, [req.query.parkID], (err, reviews) => {
+		if (reviews.length > 0) {
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
 			} else {
-				res.sendStatus(204);
+				console.log("REVIEWS about to be sent: ", reviews);
+				var reviewsJSON = JSON.parse(JSON.stringify(reviews));
+				var score = 0;
+				var reviewsLength = Object.keys(reviewsJSON).length;
+				console.log("num reviews: " + reviewsLength);
+				for (let review in reviewsJSON) {
+					review = reviewsJSON[review];
+					console.log("score is : ", review.score);
+					score = score + review.score;
+				}
+
+				var averageScore =
+					Math.round((score / reviewsLength) * 10) / 10;
+				console.log("average score truncated is: " + averageScore);
+
+				let reply = {
+					reviews: reviews,
+					averageScore: averageScore,
+					numReviews: reviewsLength
+				};
+
+				res.send(reply);
 			}
+		} else {
+			res.sendStatus(204);
 		}
-	);
+	});
 });
 
 //put review to database
@@ -259,7 +257,7 @@ app.post("/api/storeReview", function(req, res) {
 	const insertReviewQuery =
 		"INSERT INTO reviews (p_id, score, name, user_id, review) VALUES (?, ?, ?, ?, ?)";
 
-	getConnection().query(
+	connection.query(
 		insertReviewQuery,
 		[
 			req.body.parkID,
@@ -311,7 +309,7 @@ app.post("/api/register", function(req, res) {
 		console.log("name email and password: " + name, email, password);
 
 		const emailQuery = "SELECT * from users WHERE email=?";
-		getConnection().query(emailQuery, [email], (err, results, fields) => {
+		connection.query(emailQuery, [email], (err, results, fields) => {
 			if (err) {
 				console.log("failed" + err);
 				res.sendStatus(500);
@@ -334,7 +332,7 @@ app.post("/api/register", function(req, res) {
 
 					//wrap insert query with bcrypt
 					bcrypt.hash(password, saltRounds, function(err, hash) {
-						getConnection().query(
+						connection.query(
 							insertQuery,
 							[name, email, hash],
 							(err, results, fields) => {
@@ -399,7 +397,7 @@ app.get("/api/getUserInfo", (req, res) => {
 	console.log("SECOND: getuserinfO");
 	const nameQuery = "SELECT name from users WHERE id=?";
 	if (req.session.passport) {
-		getConnection().query(
+		connection.query(
 			nameQuery,
 			[req.session.passport.user],
 			(err, profileInfo) => {
@@ -430,7 +428,7 @@ app.get("/api/getUserReviews", (req, res) => {
 	const getUserReviewQuery = "SELECT p_id from reviews WHERE user_id=?";
 	//if logged in...
 	if (req.session.passport) {
-		getConnection().query(
+		connection.query(
 			getUserReviewQuery,
 			[req.session.passport.user],
 			(err, reviewResults) => {
@@ -466,7 +464,7 @@ app.get("/park/:id", function(req, res) {
 	//get info for id
 	const queryString =
 		"SELECT name, light_pol, lat, lng from ontario_parks WHERE id=?";
-	getConnection().query(queryString, id, (err, parkInfo) => {
+	connection.query(queryString, id, (err, parkInfo) => {
 		if (err) {
 			console.log("failed" + err);
 			res.sendStatus(500);
@@ -492,7 +490,7 @@ app.post("/api/postFavSpot", (req, res) => {
 
 	const insertFavParkQuery =
 		"INSERT INTO favorite_parks (park_id, user_id) VALUES (?, ?)";
-	getConnection().query(
+	connection.query(
 		insertFavParkQuery,
 		[req.body.params.park_id, req.body.params.user_id],
 		(err, results) => {
@@ -521,7 +519,7 @@ app.post("/results.html", (req, res) => {
 	//6371 is km, 3959 is miles
 	const queryString =
 		"SELECT *, ( 6371 * acos( cos( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin( radians( ? ) ) * sin( radians( lat ) ) ) ) AS distance FROM ontario_parks HAVING distance <= ? AND light_pol <= ? ORDER BY distance ASC";
-	getConnection().query(
+	connection.query(
 		queryString,
 		[lat, lng, lat, dist, lightpol],
 		(err, results) => {
@@ -577,7 +575,7 @@ app.post("/api/getProfileParks", async (req, res) => {
 	console.log("userFAVS query is: ", inQuerySet);
 	const queryString = `select * from ontario_parks where id in ${inQuerySet}`;
 
-	getConnection().query(queryString, [inQuerySet], (err, results) => {
+	connection.query(queryString, [inQuerySet], (err, results) => {
 		if (err) {
 			console.log("failed" + err);
 			res.sendStatus(500);
@@ -732,9 +730,10 @@ app.post("/api/getParkData", async (req, res) => {
 
 	//STEP 2: GET PARKS FROM DATABASE USING USER INPUT PARAMS
 	//6371 is km, 3959 is miles
+	console.log("Grabbing database");
 	const queryFromUserForm =
 		"SELECT *, ( 6371 * acos( cos( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin( radians( ? ) ) * sin( radians( lat ) ) ) ) AS distance FROM ontario_parks HAVING distance <= ? AND light_pol <= ? ORDER BY distance ASC";
-	getConnection().query(
+	connection.query(
 		queryFromUserForm,
 		[lat, lng, lat, dist, lightpol],
 		(err, initialResults) => {
@@ -766,7 +765,7 @@ app.post("/api/getParkData", async (req, res) => {
 
 			const allReviewsQuery = `select AVG(score)as avgScore,count(*) as numReviews,p_id from reviews where p_id in ${inParkIDSet} group by p_id`;
 
-			getConnection().query(
+			connection.query(
 				allReviewsQuery,
 				[inParkIDSet],
 				async (err, reviewsResults) => {
