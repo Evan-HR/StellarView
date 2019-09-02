@@ -1,7 +1,7 @@
 //Input form
 import React, { Component } from "react";
 import axios from "axios";
-import { withRouter, Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import qs from "qs";
 // import { makeStyles } from "@material-ui/core/styles";
 import MuiSlider from "@material-ui/core/Slider";
@@ -43,7 +43,6 @@ class BaseParkForm extends Component {
 		super(props);
 		this.sliderLight = this.state.reqData.lightpol;
 		this.sliderDist = this.state.reqData.dist;
-		this.runUpdateHistoryQuery = false;
 	}
 
 	//There are two cases when we would want to load results form url query:
@@ -70,7 +69,7 @@ class BaseParkForm extends Component {
 
 	//Load query into state
 	loadQuery = () => {
-		let query = qs.parse(this.props.history.location.search, {
+		let query = qs.parse(window.location.search, {
 			ignoreQueryPrefix: true
 		});
 		console.log(query);
@@ -324,8 +323,7 @@ class BaseParkForm extends Component {
 
 				reqData: { ...this.state.reqData, utime: d.getTime() }
 			});
-			this.runUpdateHistoryQuery = true;
-			// this.updateHistoryQuery(this.state.reqData);
+			this.updateHistoryQuery(this.state.reqData);
 			this.props.fetchParks(
 				this.convertReqToFloat({
 					...this.state.reqData,
@@ -350,9 +348,8 @@ class BaseParkForm extends Component {
 
 	updateHistoryQuery = reqData => {
 		console.log("Updating history...");
-		this.runUpdateHistoryQuery = false;
 		//this.props.history.push({ query: "test" });
-		let query = qs.parse(this.props.history.location.search, {
+		let query = qs.parse(window.location.search, {
 			ignoreQueryPrefix: true
 		});
 		if (
@@ -361,14 +358,12 @@ class BaseParkForm extends Component {
 			query.dist !== reqData.dist.toString() ||
 			query.lightpol !== parseFloat(reqData.lightpol).toFixed(2)
 		) {
-			return (
-				<Redirect
-					to={`/search?lat=${parseFloat(reqData.lat).toFixed(
-						4
-					)}&lng=${parseFloat(reqData.lng).toFixed(4)}&dist=${
-						reqData.dist
-					}&lightpol=${parseFloat(reqData.lightpol).toFixed(2)}`}
-				/>
+			this.props.history.push(
+				`/search?lat=${parseFloat(reqData.lat).toFixed(
+					4
+				)}&lng=${parseFloat(reqData.lng).toFixed(4)}&dist=${
+					reqData.dist
+				}&lightpol=${parseFloat(reqData.lightpol).toFixed(2)}`
 			);
 		} else {
 			console.log("Attempting to repeat current search.");
@@ -444,7 +439,6 @@ class BaseParkForm extends Component {
 		//console.log("Fetching parks?", this.props.isFetchingParks);
 		return (
 			<SearchFormStyle advancedSearch={this.state.advancedSearch}>
-				{this.runUpdateHistoryQuery ? this.updateHistoryQuery(this.state.reqData) : null}
 				<div className="citySearch">
 					<form
 						onSubmit={e => {

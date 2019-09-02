@@ -31,7 +31,7 @@ class Toolbar extends Component {
 						</div>
 
 						<div className="toolbar__logo">
-							<Link to="/">
+							<Link to="/home">
 								<span className="Stellar">STELLAR</span>
 								<span className="Gaze">GAZE</span>
 							</Link>

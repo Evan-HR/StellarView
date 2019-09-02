@@ -256,7 +256,7 @@ class BaseParksData extends Component {
 
 	renderResults = () => {
 		return (
-			<React.Fragment>
+			<ResultsPageStyle>
 				{/* {this.renderParkMap()} */}
 				<div className="RightSideContainerFull">
 					{/* <button
@@ -321,7 +321,7 @@ class BaseParksData extends Component {
 						/>
 					</div>
 				</div>
-			</React.Fragment>
+			</ResultsPageStyle>
 		);
 	};
 
@@ -345,10 +345,9 @@ class BaseParksData extends Component {
 				pathname={window.location.pathname}
 			>
 				{this.renderParkMap()}
-				<Router>
-					<Route path="/home" render={this.renderLanding} />
-					<Route path="/search" render={this.renderResults} />
-				</Router>
+				{window.location.pathname === "/home"
+					? this.renderLanding()
+					: this.renderResults()}
 			</MainContentWrapper>
 		);
 	}
@@ -371,34 +370,22 @@ export default withRouter(ParksData);
 //////////////////////////////////////////
 
 const LandingPageStyle = styled.div`
-	.ParkMapStyle {
-		display: none;
+	.ParkFormStyle {
+		width: 85%;
 	}
 `;
 
-const MainContentWrapper = styled.div`
+const ResultsPageStyle = styled.div`
 	display: grid;
 	margin: 0 auto 0 auto;
-	margin-top: 2rem;
+	margin-top: -80vh;
 	overflow: none;
-	width: 85%;
+	
 
 	grid-template-columns: 1fr 1fr;
 	grid-column-gap: 10px;
 	grid-row-gap: 10px;
 	grid-template-areas: ". rightSide";
-
-	.ParkMapStyle {
-		/* grid-area: map; */
-
-		position: -webkit-sticky;
-		position: sticky;
-		height: 80vh;
-		width: 42.5vw;
-		top: 10vh;
-		background-color: gray;
-		display: ${props => (props.pathname === "/home" ? "none" : "fixed")};
-	}
 	.Placeholder1 {
 		display: none;
 		grid-area: placeholder1;
@@ -407,7 +394,7 @@ const MainContentWrapper = styled.div`
 	.RightSideContainerFull {
 		z-index: 0;
 		grid-area: rightSide;
-		margin-bottom: 20px;
+		margin-bottom: -13px;
 		/* overflow-y: scroll;
 		overflow-x: hidden; */
 		/* background-color: whitesmoke; */
@@ -559,8 +546,8 @@ const MainContentWrapper = styled.div`
 		}
 	}
 	@media screen and (min-width: 769px) and (max-width: 1300px) {
-		width: 90%;
-		margin-top: 0rem;
+		/* width: 90%; */
+		/* margin-top: 0rem; */
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: auto auto;
 		grid-template-areas:
@@ -569,6 +556,27 @@ const MainContentWrapper = styled.div`
 		.ParkFormStyle {
 			grid-area: form;
 			${({ active }) => active && `display: none;`}
+		}
+	}
+`;
+
+const MainContentWrapper = styled.div`
+	width: 90%;
+	margin: 0 auto 0 auto;
+	.ParkMapStyle {
+		/* grid-area: map; */
+
+		position: -webkit-sticky;
+		position: sticky;
+		height: 80vh;
+		width: 42.5vw;
+		top: 10vh;
+		background-color: gray;
+		display: ${props => (props.pathname === "/home" ? "none" : "fixed")};
+	}
+	@media screen and (max-width: 769px) {
+		.ParkMapStyle {
+			display: ${props => (props.hideMap ? "none" : "fixed")};
 		}
 	}
 `;
