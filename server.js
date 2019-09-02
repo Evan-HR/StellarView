@@ -901,9 +901,10 @@ app.post("/api/getParkData", async (req, res) => {
 							clusterCentroids[clusterNum].longitude
 						);
 						var nightTime = new Date(times.night);
+						var dawnTime = new Date(times.dawn);
 
-						//If current time is past night-time use current weather
-						if (utime > nightTime) {
+						//If current time is past night-time, or before dawn, use current weather
+						if (utime > nightTime || utime < dawnTime) {
 							weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${clusterCentroids[clusterNum].latitude}&lon=${clusterCentroids[clusterNum].longitude}&appid=${weatherKey1}&units=metric`;
 
 							response = await axios
