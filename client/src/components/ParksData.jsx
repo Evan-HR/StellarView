@@ -249,7 +249,7 @@ class BaseParksData extends Component {
 	sortParksScore = () => {
 		let parksArray = this.state.parks;
 		parksArray.sort((a, b) =>
-			a.score > b.score ? 1 : b.score > a.score ? -1 : 0
+			a.score > b.score ? -1 : b.score > a.score ? 1 : 0
 		);
 		this.setState({ parks: parksArray, sortedBy: "score" });
 	};
