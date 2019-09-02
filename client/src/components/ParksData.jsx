@@ -13,7 +13,9 @@ import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
 import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import tempIcon from "./style/Media/cardIcons/temperature.svg";
 
-class BaseParksData extends Component {
+import { withRouter } from "react-router-dom";
+
+class ParksData extends Component {
 	state = {
 		parks: [],
 		fetchReq: [],
@@ -243,11 +245,8 @@ class BaseParksData extends Component {
 
 	renderResults = () => {
 		return (
-			<MainContentWrapper
-				active={this.state.hideForm}
-				hideMap={this.state.hideMap}
-			>
-				{this.renderParkMap()}
+			<React.Fragment>
+				{/* {this.renderParkMap()} */}
 				<div className="RightSideContainerFull">
 					{/* <button
 						onClick={() => {
@@ -311,7 +310,7 @@ class BaseParksData extends Component {
 						/>
 					</div>
 				</div>
-			</MainContentWrapper>
+			</React.Fragment>
 		);
 	};
 
@@ -319,7 +318,7 @@ class BaseParksData extends Component {
 		return (
 			<LandingPageStyle>
 				{this.renderParkForm()}
-				{this.renderParkMap()}
+				{/* {this.renderParkMap()} */}
 			</LandingPageStyle>
 		);
 	};
@@ -327,29 +326,43 @@ class BaseParksData extends Component {
 	//recursively calls render on it's children
 	render() {
 		console.log("ParksData - rendered");
-
+		console.log("Current location: ", this.props.location.pathname)
 		return (
-			<Router>
-				<Route path="/home" render={this.renderLanding} />
-				<Route path="/search" render={this.renderResults} />
-			</Router>
+			<MainContentWrapper
+				active={this.state.hideForm}
+				hideMap={this.state.hideMap}
+			>
+				<Router>
+					<div
+						style={
+							this.props.location.pathname.match("/home")
+								? { display: "none" }
+								: { display: "fixed"}
+						}
+					>
+						{this.renderParkMap()}
+					</div>
+					<Route path="/home" render={this.renderLanding} />
+					<Route path="/search" render={this.renderResults} />
+				</Router>
+			</MainContentWrapper>
 		);
 	}
 }
 
-const ParksData = parkProps => (
-	<Router>
-		<Route
-			path={["/home", "/search"]}
-			render={routerProps => (
-				//Combine props passed to parkForm with router props
-				<BaseParksData {...{ ...parkProps, ...routerProps }} />
-			)}
-		/>
-	</Router>
-);
+// const ParksData = parkProps => (
+// 	<Router>
+// 		<Route
+// 			path={["/home", "/search"]}
+// 			render={routerProps => (
+// 				//Combine props passed to parkForm with router props
+// 				<BaseParksData {...{ ...parkProps, ...routerProps }} />
+// 			)}
+// 		/>
+// 	</Router>
+// );
 
-export default ParksData;
+export default withRouter(ParksData);
 
 //////////////////////////////////////////
 
@@ -380,6 +393,7 @@ const MainContentWrapper = styled.div`
 		width: 42.5vw;
 		top: 10vh;
 		background-color: gray;
+		/* display: ${props => (props.pathname === "/home" ? "none" : "fixed")}; */
 	}
 	.Placeholder1 {
 		display: none;
