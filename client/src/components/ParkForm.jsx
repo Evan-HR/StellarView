@@ -43,6 +43,7 @@ class BaseParkForm extends Component {
 		super(props);
 		this.sliderLight = this.state.reqData.lightpol;
 		this.sliderDist = this.state.reqData.dist;
+		this.doRedirect = false;
 	}
 
 	//There are two cases when we would want to load results form url query:

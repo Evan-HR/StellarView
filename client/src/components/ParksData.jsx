@@ -15,7 +15,7 @@ import tempIcon from "./style/Media/cardIcons/temperature.svg";
 
 import { withRouter } from "react-router-dom";
 
-class ParksData extends Component {
+class BaseParksData extends Component {
 	state = {
 		parks: [],
 		fetchReq: [],
@@ -178,36 +178,54 @@ class ParksData extends Component {
 
 	renderParkMap = () => {
 		return (
-			<Spring
-				native
-				//force
-				//config={{ tension: 2000, friction: 100, precision: 1 }}
-				from={{
-					transform: this.state.hideMap
-						? "translate3d(40px,0,0)"
-						: "translate3d(0,0,0)",
-					opacity: this.state.hideMap ? 0 : 1
-				}}
-				to={{
-					transform: this.state.hideMap
-						? "translate3d(0,0,0)"
-						: "translate3d(40px,0,0)",
-					opacity: this.state.hideMap ? 1 : 0
-				}}
+			// <Spring
+			// 	native
+			// 	//force
+			// 	//config={{ tension: 2000, friction: 100, precision: 1 }}
+			// 	from={{
+			// 		transform: this.state.hideMap
+			// 			? "translate3d(40px,0,0)"
+			// 			: "translate3d(0,0,0)",
+			// 		opacity: this.state.hideMap ? 0 : 1
+			// 	}}
+			// 	to={{
+			// 		transform: this.state.hideMap
+			// 			? "translate3d(0,0,0)"
+			// 			: "translate3d(40px,0,0)",
+			// 		opacity: this.state.hideMap ? 1 : 0
+			// 	}}
+			// >
+			// 	{props => (
+			// 		<animated.div className="ParkMapStyle" style={props}>
+			// 			<ParkMap
+			// 				parkList={this.state.parks}
+			// 				markers={this.markers}
+			// 				location={this.state.fetchReq}
+			// 				onMapLoaded={this.handleMapLoaded}
+			// 				moon={this.state.moon}
+			// 				moonType={this.state.moonType}
+			// 			/>
+			// 		</animated.div>
+			// 	)}
+			// </Spring>
+
+			<div
+				className="ParkMapStyle"
+				style={
+					this.props.location.pathname.match("/home")
+						? { display: "none" }
+						: { display: "fixed" }
+				}
 			>
-				{props => (
-					<animated.div className="ParkMapStyle" style={props}>
-						<ParkMap
-							parkList={this.state.parks}
-							markers={this.markers}
-							location={this.state.fetchReq}
-							onMapLoaded={this.handleMapLoaded}
-							moon={this.state.moon}
-							moonType={this.state.moonType}
-						/>
-					</animated.div>
-				)}
-			</Spring>
+				<ParkMap
+					parkList={this.state.parks}
+					markers={this.markers}
+					location={this.state.fetchReq}
+					onMapLoaded={this.handleMapLoaded}
+					moon={this.state.moon}
+					moonType={this.state.moonType}
+				/>
+			</div>
 		);
 	};
 
@@ -326,22 +344,14 @@ class ParksData extends Component {
 	//recursively calls render on it's children
 	render() {
 		console.log("ParksData - rendered");
-		console.log("Current location: ", this.props.location.pathname)
+		console.log("Current location: ", this.props.location.pathname);
 		return (
 			<MainContentWrapper
 				active={this.state.hideForm}
 				hideMap={this.state.hideMap}
 			>
+				{this.renderParkMap()}
 				<Router>
-					<div
-						style={
-							this.props.location.pathname.match("/home")
-								? { display: "none" }
-								: { display: "fixed"}
-						}
-					>
-						{this.renderParkMap()}
-					</div>
 					<Route path="/home" render={this.renderLanding} />
 					<Route path="/search" render={this.renderResults} />
 				</Router>
@@ -350,17 +360,17 @@ class ParksData extends Component {
 	}
 }
 
-// const ParksData = parkProps => (
-// 	<Router>
-// 		<Route
-// 			path={["/home", "/search"]}
-// 			render={routerProps => (
-// 				//Combine props passed to parkForm with router props
-// 				<BaseParksData {...{ ...parkProps, ...routerProps }} />
-// 			)}
-// 		/>
-// 	</Router>
-// );
+const ParksData = parkProps => (
+	<Router>
+		<Route
+			path={["/home", "/search"]}
+			render={routerProps => (
+				//Combine props passed to parkForm with router props
+				<BaseParksData {...{ ...parkProps, ...routerProps }} />
+			)}
+		/>
+	</Router>
+);
 
 export default withRouter(ParksData);
 
