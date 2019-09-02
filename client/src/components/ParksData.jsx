@@ -209,14 +209,7 @@ class BaseParksData extends Component {
 			// 	)}
 			// </Spring>
 
-			<div
-				className="ParkMapStyle"
-				style={
-					this.props.location.pathname.match("/home")
-						? { display: "none" }
-						: { display: "fixed" }
-				}
-			>
+			<div className="ParkMapStyle">
 				<ParkMap
 					parkList={this.state.parks}
 					markers={this.markers}
@@ -344,11 +337,12 @@ class BaseParksData extends Component {
 	//recursively calls render on it's children
 	render() {
 		console.log("ParksData - rendered");
-		console.log("Current location: ", this.props.location.pathname);
+		console.log("Current location: ", window.location.pathname);
 		return (
 			<MainContentWrapper
 				active={this.state.hideForm}
 				hideMap={this.state.hideMap}
+				pathname={window.location.pathname}
 			>
 				{this.renderParkMap()}
 				<Router>
@@ -403,7 +397,7 @@ const MainContentWrapper = styled.div`
 		width: 42.5vw;
 		top: 10vh;
 		background-color: gray;
-		/* display: ${props => (props.pathname === "/home" ? "none" : "fixed")}; */
+		display: ${props => (props.pathname === "/home" ? "none" : "fixed")};
 	}
 	.Placeholder1 {
 		display: none;
