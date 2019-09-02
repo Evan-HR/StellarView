@@ -140,11 +140,13 @@ class BaseParkForm extends Component {
 			.then(({ data }) => {
 				console.log(data);
 
-				var latLng = new window.google.maps.LatLng(
-					parseFloat(data[0].lat),
-					parseFloat(data[0].lon)
-				); //Makes a latlng
-				this.props.googleMap.panTo(latLng); //Make map global
+				if (window.google) {
+					var latLng = new window.google.maps.LatLng(
+						parseFloat(data[0].lat),
+						parseFloat(data[0].lon)
+					); //Makes a latlng
+					this.props.googleMap.panTo(latLng); //Make map global
+				}
 				this.setState(
 					{
 						isGeocodingLocation: false,
@@ -182,14 +184,10 @@ class BaseParkForm extends Component {
 			navigator.geolocation.getCurrentPosition(
 				async position => {
 					console.log(
-						`https://nominatim.openstreetmap.org/reverse?format=json&lat=${
-							position.coords.latitude
-						}&lon=${position.coords.longitude}`
+						`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
 					);
 					let address = await axios.get(
-						`https://nominatim.openstreetmap.org/reverse?format=json&lat=${
-							position.coords.latitude
-						}&lon=${position.coords.longitude}`
+						`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
 					);
 					address = address["data"]["address"]["city"];
 					console.log(address);
@@ -234,7 +232,7 @@ class BaseParkForm extends Component {
 			);
 		} else {
 			console.log("Fetching auth location");
-			if (window.google) {
+			if (window.google && this.props.googleMap) {
 				this.props.googleMap.panTo(
 					new window.google.maps.LatLng(
 						this.props.authState.userLocation.lat,
@@ -360,13 +358,13 @@ class BaseParkForm extends Component {
 			query.dist !== reqData.dist.toString() ||
 			query.lightpol !== parseFloat(reqData.lightpol).toFixed(2)
 		) {
-			this.props.history.push({
-				search: `?lat=${parseFloat(reqData.lat).toFixed(
+			this.props.history.push(
+				`/search?lat=${parseFloat(reqData.lat).toFixed(
 					4
 				)}&lng=${parseFloat(reqData.lng).toFixed(4)}&dist=${
 					reqData.dist
 				}&lightpol=${parseFloat(reqData.lightpol).toFixed(2)}`
-			});
+			);
 		} else {
 			console.log("Attempting to repeat current search.");
 		}
@@ -675,7 +673,6 @@ const SearchFormStyle = styled.div`
 
 	.advancedSearchToggle {
 		grid-area: advancedSearchToggle;
-	
 
 		button {
 			float: left;
@@ -709,7 +706,6 @@ const SearchFormStyle = styled.div`
 			color: ${props => props.theme.colorBad};
 			transition: color 0.2s ease;
 		}
-
 	}
 
 	.searchTerm:focus {

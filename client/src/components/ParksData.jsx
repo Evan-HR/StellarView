@@ -241,10 +241,7 @@ class BaseParksData extends Component {
 		this.setState({ parks: parksArray, sortedBy: "score" });
 	};
 
-	//recursively calls render on it's children
-	render() {
-		console.log("ParksData - rendered");
-
+	renderResults = () => {
 		return (
 			<MainContentWrapper
 				active={this.state.hideForm}
@@ -316,13 +313,34 @@ class BaseParksData extends Component {
 				</div>
 			</MainContentWrapper>
 		);
+	};
+
+	renderLanding = () => {
+		return (
+			<LandingPageStyle>
+				{this.renderParkForm()}
+				{this.renderParkMap()}
+			</LandingPageStyle>
+		);
+	};
+
+	//recursively calls render on it's children
+	render() {
+		console.log("ParksData - rendered");
+
+		return (
+			<Router>
+				<Route path="/home" render={this.renderLanding} />
+				<Route path="/search" render={this.renderResults} />
+			</Router>
+		);
 	}
 }
 
 const ParksData = parkProps => (
 	<Router>
 		<Route
-			path="/"
+			path={["/home", "/search"]}
 			render={routerProps => (
 				//Combine props passed to parkForm with router props
 				<BaseParksData {...{ ...parkProps, ...routerProps }} />
@@ -334,6 +352,12 @@ const ParksData = parkProps => (
 export default ParksData;
 
 //////////////////////////////////////////
+
+const LandingPageStyle = styled.div`
+	.ParkMapStyle {
+		display: none;
+	}
+`;
 
 const MainContentWrapper = styled.div`
 	display: grid;
@@ -355,7 +379,7 @@ const MainContentWrapper = styled.div`
 		height: 80vh;
 		width: 42.5vw;
 		top: 10vh;
-		background-color: maroon;
+		background-color: gray;
 	}
 	.Placeholder1 {
 		display: none;
@@ -384,87 +408,86 @@ const MainContentWrapper = styled.div`
 		/* height: 50%; */
 		/* background: ${props => props.theme.moonCard}; */
 		background: -moz-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* ff3.6+ */
-background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(35,37,38,1)), color-stop(100%, rgba(55,57,59,1))); /* safari4+,chrome */
-background: -webkit-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* safari5.1+,chrome10+ */
-background: -o-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* opera 11.10+ */
-background: -ms-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* ie10+ */
-background: linear-gradient(108deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* w3c */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#232526', endColorstr='#37393B',GradientType=1 ); /* ie6-9 */
+		background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(35,37,38,1)), color-stop(100%, rgba(55,57,59,1))); /* safari4+,chrome */
+		background: -webkit-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* safari5.1+,chrome10+ */
+		background: -o-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* opera 11.10+ */
+		background: -ms-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* ie10+ */
+		background: linear-gradient(108deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* w3c */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#232526', endColorstr='#37393B',GradientType=1 ); /* ie6-9 */
 	}
 
 	.helpCard{
-	font-family: IBM Plex Sans;
-	height: 140px;
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-	grid-template-rows: 1fr 1fr 1fr;
-	grid-template-areas: 
-	"help help help help help"
-	"iconA iconB iconC iconD iconE"
-	"descA descB descC descD descE";
-	padding: 0px 10px 10px 15px;
-	font-size: 14px;
-	/* box-shadow: inset 0px 0px 0px 4px #485261;
+		font-family: IBM Plex Sans;
+		height: 140px;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+		grid-template-rows: 1fr 1fr 1fr;
+		grid-template-areas: 
+		"help help help help help"
+		"iconA iconB iconC iconD iconE"
+		"descA descB descC descD descE";
+		padding: 0px 10px 10px 15px;
+		font-size: 14px;
+		/* box-shadow: inset 0px 0px 0px 4px #485261;
 
-	background: ${props=>props.theme.cardLight}; */
+		background: ${props => props.theme.cardLight}; */
 
-	background: -moz-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ff3.6+ */
-background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(189,194,198,0.95)), color-stop(100%, rgba(172,177,181,1))); /* safari4+,chrome */
-background: -webkit-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* safari5.1+,chrome10+ */
-background: -o-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* opera 11.10+ */
-background: -ms-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ie10+ */
-background: linear-gradient(90deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* w3c */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', endColorstr='#ACB1B5',GradientType=1 ); /* ie6-9 */
+		background: -moz-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ff3.6+ */
+		background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(189,194,198,0.95)), color-stop(100%, rgba(172,177,181,1))); /* safari4+,chrome */
+		background: -webkit-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* safari5.1+,chrome10+ */
+		background: -o-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* opera 11.10+ */
+		background: -ms-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ie10+ */
+		background: linear-gradient(90deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* w3c */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', endColorstr='#ACB1B5',GradientType=1 ); /* ie6-9 */
 
-	img,i{
-		margin: auto auto auto auto;
-	}
-	span{
-		margin: 0px auto auto auto;
+		img,i{
+			margin: auto auto auto auto;
+		}
+		span{
+			margin: 0px auto auto auto;
+		}
+		.help{
+			color: ${props => props.theme.fontDark};
+			font-size: 20px;
+			
+			font-weight: 600;
+			margin: auto auto 0px auto;
+			grid-area: help;
+		}
 
-	}
-	.help{
-		color: ${props=>props.theme.fontDark};
-		font-size: 20px;
-		
-		font-weight: 600;
-		margin: auto auto 0px auto;
-		grid-area: help;
-	}
+		.iconA{
+			grid-area: iconA
+		}
+		.iconB{
+			grid-area: iconD
+		}
+		.iconC{
+			font-size: 52px;
+			grid-area: iconC
+		}
+		.iconD{
+			grid-area: iconB
+		}
+		.iconE{
+			
+			grid-area: iconE
+		}
 
-	.iconA{
-		grid-area: iconA
-	}
-	.iconB{
-		grid-area: iconD
-	}
-	.iconC{
-		font-size: 52px;
-		grid-area: iconC
-	}
-	.iconD{
-		grid-area: iconB
-	}
-	.iconE{
-		
-		grid-area: iconE
-	}
-
-	.descA{
-		grid-area: descA
-	}
-	.descB{
-		grid-area: descD
-	}
-	.descC{
-		grid-area: descC
-	}
-	.descD{
-		grid-area: descB
-	}
-	.descE{
-		grid-area: descE
-	}
+		.descA{
+			grid-area: descA
+		}
+		.descB{
+			grid-area: descD
+		}
+		.descC{
+			grid-area: descC
+		}
+		.descD{
+			grid-area: descB
+		}
+		.descE{
+			grid-area: descE
+		}
 
 	}
 
@@ -473,28 +496,22 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', end
 	
 		padding: 13px 0px 13px 0px;
 		width: 100%;
-		
 
 		.SortBy {
-			
 			color: whitesmoke;
 			transition: color 0.2s ease;
-			button{
-				
-			all: unset;
-			color: whitesmoke;
-			font-weight: 600;
-			cursor: pointer;
-			margin: 0 0px 0 15px;
-			:hover,
-	:active {
-		color: ${props => props.theme.colorBad};
-		transition: color 0.2s ease;
-
-	}
-
-
-		}
+			button{	
+				all: unset;
+				color: whitesmoke;
+				font-weight: 600;
+				cursor: pointer;
+				margin: 0 0px 0 15px;
+				:hover,
+				:active {
+					color: ${props => props.theme.colorBad};
+					transition: color 0.2s ease;
+				}
+			}
 			display: flex;
 			justify-content: flex-end;
 		}
