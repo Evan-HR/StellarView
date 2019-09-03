@@ -3,6 +3,7 @@ import React from "react";
 import { AuthProvider, AuthConsumer } from "./AuthContext";
 import App from "../App";
 import axios from "axios";
+import Reviews from "./Reviews";
 //import { Cookies } from "react-cookie";
 
 // {"cookie":{"originalMaxAge":null,"expires":null,
@@ -14,6 +15,7 @@ export class Auth extends React.Component {
 			firstName: null,
 			userID: null,
 			isAuth: null,
+			loggedFromReviews: false,
 			isLoggingIn: false,
 			userLocation: { lat: "", lng: "" },
 			hasFavSpots: false,
@@ -56,10 +58,18 @@ export class Auth extends React.Component {
 			userID: null,
 			isAuth: false,
 			hasFavSpots: false,
+			loggedFromReviews: false,
 			hasNoSpots: false,
 			userReviews: [],
 			userFavorites: []
 		});
+	}
+
+	handleReviewModalLoggedIn = () => {
+		this.setState({
+			loggedFromReviews:true
+		});
+
 	}
 
 	//for register function
@@ -98,6 +108,7 @@ export class Auth extends React.Component {
 				console.log(error);
 			});
 	}
+	
 
 	getUserInfo() {
 		var self = this;
@@ -113,6 +124,7 @@ export class Auth extends React.Component {
 				});
 				self.getUserFavSpots();
 				self.getUserReviews();
+				// self.handleReviewModalLoggedIn();
 			})
 			.catch(error => {
 				console.log(error);

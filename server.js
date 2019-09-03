@@ -11,8 +11,6 @@ const axios = require("axios");
 const suncalc = require("suncalc");
 const clustering = require("density-clustering");
 const geolib = require("geolib");
-//moon phases
-var lune = require("lune");
 
 //authentication variables
 var session = require("express-session");
@@ -25,11 +23,11 @@ var cookieParser = require("cookie-parser");
 
 //env variables
 require("dotenv").config();
-const mapsKey1 = process.env.DUSTINMAPKEY;
+const mapsKey1 = process.env.REACT_APP_DUSTINMAPKEY;
 const weatherKey1 = process.env.REACT_APP_EVANWEATHERKEY;
 const cookieKey = process.env.SECRET;
-const sqlUsername = process.env.SQLUSERNAME;
-const sqlPassword = process.env.SQLPASSWORD;
+// const sqlUsername = process.env.SQLUSERNAME;
+// const sqlPassword = process.env.SQLPASSWORD;
 
 //set up simple express server
 const app = express();
@@ -52,6 +50,7 @@ app.listen(port, () => {
 
 var connection = mysql.createConnection(process.env.JAWSDB_MARIA_URL);
 
+
 connection.connect();
 
 //tidy connection code
@@ -67,10 +66,10 @@ connection.connect();
 
 //for sessions
 var options = {
-	host: "localhost",
-	user: "root",
-	password: "",
-	database: "parks"
+	host: process.env.JAWSDB_MARIA_HOST,
+	user: process.env.JAWSDB_MARIA_USER,
+	password: process.env.JAWSDB_MARIA_PASSWORD,
+	database: process.env.JAWSDB_MARIA_DATABASE
 };
 
 var sessionStore = new MySQLStore(options);
@@ -338,7 +337,7 @@ app.post("/api/register", function(req, res) {
 							[name, email, hash],
 							(err, results, fields) => {
 								if (err) {
-									console.log("failed" + err);
+									console.log("failed " + err);
 									res.sendStatus(500);
 									return;
 								} else {
@@ -541,16 +540,11 @@ app.post("/results.html", (req, res) => {
 	);
 });
 
-//format "2014-02-17T00:00-0500", ISO 8601
-function getMoonProfile(userTime) {
-	var phaseInfo = lune.phase(userTime);
-	return phaseInfo;
-}
+
 
 function getMoon(userTime) {
 	var time = new Date(userTime);
 
-	//var phaseDates = lune.phase_hunt(isoDate);
 	var phaseInfo = suncalc.getMoonIllumination(time);
 	return phaseInfo;
 }

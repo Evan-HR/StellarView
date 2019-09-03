@@ -4,6 +4,8 @@ import Modal from "react-modal";
 import { withRouter, Link } from "react-router-dom";
 import styled from "styled-components";
 import backgroundImage from "./style/Media/loginModalPlain.svg";
+import formError from "./style/Media/formError.svg";
+import formSuccess from "./style/Media/formSuccess.svg";
 const modalStyle = {
 	overlay: {
 		position: "fixed",
@@ -82,13 +84,15 @@ class Register extends Component {
 		});
 	};
 
+
 	errorMsg() {
 		if (this.state.errorDB === true) {
 			return this.state.regErrors.map(errors => {
 				return (
-					<div class="alert alert-danger" role="alert">
-						{errors.msg}
-					</div>
+					<AlertStyle success={false}>
+						<img src={formError} />
+						<div className="AlertText">{errors.msg}</div>
+					</AlertStyle>
 				);
 			});
 		}
@@ -112,70 +116,95 @@ class Register extends Component {
 						<div className="wrapper">
 							<div className="row">
 								<div className="label">Preferred Name</div>
-								<input type="text" />
+								<input
+									type="text"
+									placeholder="preferred name"
+									name="name"
+									onChange={this.handleNameChange}
+									required
+								/>
 							</div>
 							<div className="row">
 								<div className="label">E-Mail</div>
-								<input type="text" />
+								<input
+									type="email"
+									placeholder="email"
+									name="email"
+									onChange={this.handleEmailChange}
+									required
+								/>
 							</div>
 							<div className="row">
 								<div className="label">Password</div>
-								<input type="password" />
+								<input
+									type="password"
+									placeholder="password"
+									name="password1"
+									onChange={this.handlePasswordChange1}
+									required
+								/>
 							</div>
 							<div className="row">
 								<div className="label">Re-Enter Password</div>
-								<input type="password" />
+								<input
+									type="password"
+									placeholder="re-enter password"
+									name="password2"
+									onChange={this.handlePasswordChange2}
+									required
+								/>
 							</div>
-							<div className="row">
-								<button>Submit</button>
+							<div className="rowSubmit">
+								<button onClick={this.onSubmit}>Submit</button>
 							</div>
 						</div>
+						{this.errorMsg()}
 					</div>
 				</div>
 			</RegisterStyle>
 		);
 	};
 
-	renderRegisterForm = () => {
-		return (
-			<RegisterFormStyle>
-				<Input
-					type="text"
-					placeholder="preferred name"
-					name="name"
-					onChange={this.handleNameChange}
-					required
-				/>
-				<Input
-					type="email"
-					placeholder="email"
-					name="email"
-					onChange={this.handleEmailChange}
-					required
-				/>
-				<Input
-					type="password"
-					placeholder="password"
-					name="password1"
-					onChange={this.handlePasswordChange1}
-					required
-				/>
-				<Input
-					type="password"
-					placeholder="re-enter password"
-					name="password2"
-					onChange={this.handlePasswordChange2}
-					required
-				/>
-				<button
-					className="SubmitButton"
-					onClick={e => this.onSubmit(e)}
-				>
-					SUBMIT
-				</button>
-			</RegisterFormStyle>
-		);
-	};
+	// renderRegisterForm = () => {
+	// 	return (
+	// 		<RegisterFormStyle>
+	// 			<Input
+	// 				type="text"
+	// 				placeholder="preferred name"
+	// 				name="name"
+	// 				onChange={this.handleNameChange}
+	// 				required
+	// 			/>
+	// 			<Input
+	// 				type="email"
+	// 				placeholder="email"
+	// 				name="email"
+	// 				onChange={this.handleEmailChange}
+	// 				required
+	// 			/>
+	// 			<Input
+	// 				type="password"
+	// 				placeholder="password"
+	// 				name="password1"
+	// 				onChange={this.handlePasswordChange1}
+	// 				required
+	// 			/>
+	// 			<Input
+	// 				type="password"
+	// 				placeholder="re-enter password"
+	// 				name="password2"
+	// 				onChange={this.handlePasswordChange2}
+	// 				required
+	// 			/>
+	// 			<button
+	// 				className="SubmitButton"
+	// 				onClick={e => this.onSubmit(e)}
+	// 			>
+	// 				SUBMIT
+	// 			</button>
+	// 		</RegisterFormStyle>
+	// 	);
+	// };
 
 	registerSuccess = () => {
 		console.log("get here for some reason?");
@@ -187,6 +216,7 @@ class Register extends Component {
 	};
 
 	onSubmit = e => {
+		console.log("SUBMIT BUTTON PRESSED");
 		e.preventDefault();
 		axios
 			.post("/api/register", {
@@ -229,7 +259,7 @@ class Register extends Component {
 					<div className="modal-content">
 						{this.renderRegisterFormStyle()}
 
-						{this.errorMsg()}
+						{/* {this.errorMsg()} */}
 					</div>
 				</Modal>
 			</React.Fragment>
@@ -258,42 +288,9 @@ const customStyles = {
 	// 	}
 };
 
-const RegisterFormStyle = styled.form`
-	width: 498px;
-	/* padding: 40px;
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%,-50%); */
-background: ${props => props.theme.modalOverlay};
-	text-align: center;
-	border-bottom-left-radius: 0.3rem;
-	border-bottom-right-radius: 0.3rem;
-	-webkit-box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 1);
-	-moz-box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 1);
-	box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 1);
 
-`;
 
-const Input = styled.input`
-	border: 0;
-	background: none;
-	display: block;
-	margin: 20px auto;
-	text-align: center;
-	border-bottom: 2px solid ${props => props.theme.clickable};
-	/* padding: 14px 10px; */
-	width: 200px;
-	outline: none;
-	color: white;
-	/* border-radius: 24px; */
-	transition: 0.25s;
 
-	&:focus {
-		width: 280px;
-		border-color: ${props => props.theme.gold2};
-	}
-`;
 
 const HeaderStyle = styled.div`
 	margin-left: 32%;
@@ -309,14 +306,14 @@ const RegisterStyle = styled.div`
 		font-size: 1.5rem;
 		font-weight: 700;
 		line-height: 1;
-		color: white;
+		color: whitesmoke;
 		outline: none;
-		/* text-shadow: 0 1px 0 #7C6E7E; */
+		text-shadow: none;
 		opacity: 0.5;
 	}
 
 	.close:hover {
-		color: ${props => props.theme.cardDark};
+		color: ${props => props.theme.colorBad};
 		text-decoration: none;
 	}
 
@@ -338,6 +335,7 @@ const RegisterStyle = styled.div`
 		max-width: 100vw;
 		max-height: 100vh;
 		overflow: hidden;
+		border-radius: 0.3rem;
 
 		.banner {
 			position: absolute;
@@ -376,11 +374,54 @@ const RegisterStyle = styled.div`
 
 			.wrapper {
 				padding-top: 30px;
-				position: absolute;
+				/* position: absolute;
 				left: 50%;
-				transform: translateX(-50%);
+				transform: translateX(-50%); */
 				width: 85%;
+				margin: 0 auto;
 			}
+
+			.rowSubmit {
+					margin: 20px 0 10px 0;
+					.label {
+						font-size: 12px;
+						font-weight: 600;
+						color: rgb(100, 100, 100);
+					}
+
+					input {
+						margin-top: 2px;
+						font-size: 13px;
+						color: rgb(70, 70, 70);
+						border: none;
+						border-bottom: 1px solid rgba(100, 100, 100, 0.6);
+						outline: none;
+						height: 25px;
+						background: transparent;
+						width: 100%;
+					}
+					button {
+						margin-top: 0px;
+						font-size: 13px;
+						color: rgb(100, 100, 100);
+						
+						border: none;
+						outline: none;
+						height: 40px;
+						text-transform: uppercase;
+						background: ${props => props.theme.starDark};
+						transition: 0.25s;
+						width: 100%;
+						color: whitesmoke;
+						cursor: pointer;
+						
+						:hover,:active{
+							
+								color: ${props => props.theme.colorBad};
+								transition: 0.25s;
+						}
+					}
+				}
 			.row {
 				margin: 20px 0px;
 				.label {
@@ -414,14 +455,28 @@ const RegisterStyle = styled.div`
 					color: #fff;
 					cursor: pointer;
 
-					:hover,:active{
-							
-							color: ${props => props.theme.colorBad};
-							transition: 0.25s;
-					}
+	
 				}
 			}
-
 		}
+
+
+	}
+`;
+
+const AlertStyle = styled.div`
+	position: relative;
+
+	.AlertText {
+		padding: 10px;
+		background-color: ${props =>
+			props.success ? "#67e8956b" : "#daa97961"};
+
+		font-weight: 500;
+	}
+
+	img {
+		padding-bottom: 10px;
+		width: 42px;
 	}
 `;

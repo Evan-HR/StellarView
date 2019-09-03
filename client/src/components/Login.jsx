@@ -79,9 +79,14 @@ class BaseLogin extends Component {
 			this.setState({
 				modalIsOpen: false
 			});
-			this.props.context.handleLogin();
+
+				this.props.context.handleLogin();
+				// this.props.justLoggedIn();
+
+
 		}, 1250);
 	};
+
 
 	onSubmit = e => {
 		e.preventDefault();
@@ -217,14 +222,14 @@ const LoginStyle = styled.div`
 		font-size: 1.5rem;
 		font-weight: 700;
 		line-height: 1;
-		color: gray;
+		color: whitesmoke;
 		outline: none;
-		/* text-shadow: 0 1px 0 #7C6E7E; */
+		text-shadow: none;
 		opacity: 0.5;
 	}
 
 	.close:hover {
-		color: ${props => props.theme.cardDark};
+		color: ${props => props.theme.colorBad};
 		text-decoration: none;
 	}
 
@@ -247,6 +252,7 @@ const LoginStyle = styled.div`
 		max-height: 100vh;
 		/* background: whitesmoke; */
 		overflow: hidden;
+		border-radius: 0.3rem; 
 
 		.banner {
 			position: absolute;
@@ -369,9 +375,7 @@ const LoginStyle = styled.div`
 				}
 			}
 
-			.InvalidLogin {
-				width: 100%;
-			}
+	
 
 			.signup {
 				position: absolute;
@@ -417,26 +421,6 @@ transform: translate(-50%,-50%); */
 
 `;
 
-const Input = styled.input`
-	border: 0;
-	background: none;
-	display: block;
-	line-height: normal;
-	margin: 20px auto;
-	text-align: center;
-	border-bottom: 2px solid ${props => props.theme.clickable};
-	/* padding: 14px 10px; */
-	width: 200px;
-	outline: none;
-	color: white;
-	/* border-radius: 24px; */
-	transition: 0.25s;
-
-	&:focus {
-		width: 280px;
-		border-color: ${props => props.theme.gold2};
-	}
-`;
 
 const HeaderStyle = styled.div`
 	margin-left: 38%;

@@ -104,6 +104,7 @@ class ParkMapModal extends Component {
 	};
 
 	closeModal = () => {
+		console.log("CLOSE GOT HERE!!!!!!");
 		document.body.style.overflow = "visible";
 		this.setState({ modalIsOpen: false });
 	};
@@ -315,7 +316,7 @@ class ParkMapModal extends Component {
 						</div>
 
 						<div className="reviewsContainer">
-							<Reviews parkID={this.park.id} />
+							<Reviews closeInfoModal={this.closeModal} parkID={this.park.id} />
 						</div>
 					</div>
 				</ModalStyle>

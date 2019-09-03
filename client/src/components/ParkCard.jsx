@@ -535,7 +535,7 @@ const CardBootstrap = styled.div`
 		word-wrap: break-word;
 		background-color: #fff;
 		background-clip: border-box;
-		/* border: 1px solid rgba(0, 0, 0, 0.125); */
+		border: none;
 	}
 
 	.card > hr {
