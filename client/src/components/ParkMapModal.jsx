@@ -45,6 +45,7 @@ class ParkMapModal extends Component {
 	constructor(props) {
 		super(props);
 		this.park = { weather: {} };
+		this.toRemountReviews = false;
 	}
 
 	//means..
@@ -111,7 +112,11 @@ class ParkMapModal extends Component {
 
 	refreshModal = () => {
 		console.log("Refreshing..");
-		this.forceUpdate();
+		this.toRemountReviews = true;
+	};
+
+	remountReviews = () => {
+		this.toRemountReviews = false;
 	};
 
 	render() {
@@ -319,10 +324,18 @@ class ParkMapModal extends Component {
 						</div>
 
 						<div className="reviewsContainer">
-							<Reviews
+							{this.toRemountReviews ? (
+								this.remountReviews()
+							) : (
+								<Reviews
+									refreshInfoModal={this.refreshModal}
+									parkID={this.park.id}
+								/>
+							)}
+							{/* <Reviews
 								refreshInfoModal={this.refreshModal}
 								parkID={this.park.id}
-							/>
+							/> */}
 						</div>
 					</div>
 				</ModalStyle>
