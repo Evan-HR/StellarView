@@ -22,8 +22,6 @@ class BaseReviews extends Component {
 		this.handleStarScore = this.handleStarScore.bind(this);
 	}
 
-	
-
 	getHasReviewed() {
 		if (this.props.context.userReviews.includes(this.props.parkID)) {
 			this.setState({ hasReviewed: true });
@@ -36,17 +34,22 @@ class BaseReviews extends Component {
 		});
 	}
 
-	handleJustLoggedIn = () =>{
+	handleJustLoggedIn = () => {
 		console.log("JUST LOGGED IN! IN REVIEWS");
-		console.log("this.props.context.loggedfromReviews "+this.props.context.loggedFromReviews);
- 		this.setState({ state: this.state });
-	}
-
+		console.log(
+			"this.props.context.loggedfromReviews " +
+				this.props.context.loggedFromReviews
+		);
+		this.setState({ state: this.state });
+	};
 
 	componentDidMount() {
 		console.log("reviews comp did mount got here!");
 		console.log("parkID is: " + this.props.parkID);
-		console.log("are you logged in? isAuth is = ",	this.props.context.isAuth);
+		console.log(
+			"are you logged in? isAuth is = ",
+			this.props.context.isAuth
+		);
 
 		//get review status from user and db
 
@@ -154,8 +157,6 @@ class BaseReviews extends Component {
 				});
 		}
 	};
-
-
 
 	renderErrorMsg() {
 		if (this.state.noStarError === true) {
@@ -290,8 +291,9 @@ class BaseReviews extends Component {
 			<AlertStyle>
 				<div className="AlertText">
 					You must be{" "}
-					<Login onClick={this.props.closeInfoModal}>
+					<Login refreshInfoModal={this.props.refreshInfoModal}>
 						<span>
+						{/* <span onClick={() => this.props.closeInfoModal()}> */}
 							<b>logged-in</b>
 						</span>
 					</Login>{" "}
@@ -355,9 +357,15 @@ class BaseReviews extends Component {
 
 const Reviews = props => (
 	<AuthConsumer>
-		{x => <BaseReviews context={x} parkID={props.parkID} />}
+		{x => <BaseReviews {...props} context={x} />}
 	</AuthConsumer>
 );
+
+// BaseReviews.defaultProps = {
+// 	closeInfoModal: () => {
+// 		console.log("Shite");
+// 	}
+// };
 
 export default Reviews;
 

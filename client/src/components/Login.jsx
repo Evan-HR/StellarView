@@ -29,6 +29,8 @@ class BaseLogin extends Component {
 	};
 
 	closeModal = () => {
+		console.log("Closing login modal");
+		this.props.refreshInfoModal();
 		this.setState({ ...this.state, modalIsOpen: false, errorDB: false });
 		document.body.style.overflow = "visible";
 	};
@@ -76,17 +78,11 @@ class BaseLogin extends Component {
 		console.log("get here for some reason?");
 		this.setState({ loginSuccess: true, errorDB: false });
 		setTimeout(() => {
-			this.setState({
-				modalIsOpen: false
-			});
-
-				this.props.context.handleLogin();
-				// this.props.justLoggedIn();
-
-
+			this.closeModal();
+			this.props.context.handleLogin();
+			// this.props.justLoggedIn();
 		}, 1250);
 	};
-
 
 	onSubmit = e => {
 		e.preventDefault();
@@ -159,7 +155,11 @@ class BaseLogin extends Component {
 	render() {
 		return (
 			<React.Fragment>
-				<a onClick={() => this.openModal()}>
+				<a
+					onClick={() => {
+						this.openModal();
+					}}
+				>
 					{this.props.children ? (
 						<React.Fragment>{this.props.children}</React.Fragment>
 					) : (
@@ -190,6 +190,12 @@ class BaseLogin extends Component {
 const Login = props => (
 	<AuthConsumer>{x => <BaseLogin {...props} context={x} />}</AuthConsumer>
 );
+
+BaseLogin.defaultProps = {
+	refreshInfoModal: () => {
+		console.log("Default prop!");
+	}
+};
 
 export default Login;
 
@@ -252,7 +258,7 @@ const LoginStyle = styled.div`
 		max-height: 100vh;
 		/* background: whitesmoke; */
 		overflow: hidden;
-		border-radius: 0.3rem; 
+		border-radius: 0.3rem;
 
 		.banner {
 			position: absolute;
@@ -322,7 +328,7 @@ const LoginStyle = styled.div`
 						margin-top: 0px;
 						font-size: 13px;
 						color: rgb(100, 100, 100);
-						
+
 						border: none;
 						outline: none;
 						height: 40px;
@@ -332,11 +338,11 @@ const LoginStyle = styled.div`
 						width: 100%;
 						color: whitesmoke;
 						cursor: pointer;
-						
-						:hover,:active{
-							
-								color: ${props => props.theme.colorBad};
-								transition: 0.25s;
+
+						:hover,
+						:active {
+							color: ${props => props.theme.colorBad};
+							transition: 0.25s;
 						}
 					}
 				}
@@ -374,8 +380,6 @@ const LoginStyle = styled.div`
 					}
 				}
 			}
-
-	
 
 			.signup {
 				position: absolute;
@@ -418,9 +422,7 @@ transform: translate(-50%,-50%); */
 	-webkit-box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 1);
 	-moz-box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 1);
 	box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 1);
-
 `;
-
 
 const HeaderStyle = styled.div`
 	margin-left: 38%;

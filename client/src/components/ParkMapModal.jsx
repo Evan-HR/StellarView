@@ -109,6 +109,11 @@ class ParkMapModal extends Component {
 		this.setState({ modalIsOpen: false });
 	};
 
+	refreshModal = () => {
+		console.log("Refreshing..");
+		this.forceUpdate();
+	};
+
 	render() {
 		return (
 			<Modal
@@ -258,8 +263,6 @@ class ParkMapModal extends Component {
 												</div>
 												<span className="MoonDisplayContainer">
 													<MoonDisplay
-													
-													
 														phase={this.moon}
 													/>
 												</span>
@@ -316,7 +319,10 @@ class ParkMapModal extends Component {
 						</div>
 
 						<div className="reviewsContainer">
-							<Reviews closeInfoModal={this.closeModal} parkID={this.park.id} />
+							<Reviews
+								refreshInfoModal={this.refreshModal}
+								parkID={this.park.id}
+							/>
 						</div>
 					</div>
 				</ModalStyle>
@@ -486,12 +492,11 @@ const ModalStyle = styled.div`
 			}
 		}
 
-		.MoreInfoDesc{
+		.MoreInfoDesc {
 			text-align: left;
 			display: block;
 			padding: 6px;
-    font-weight: 500;
-
+			font-weight: 500;
 		}
 
 		.ParkScore {
@@ -579,7 +584,6 @@ const ModalStyle = styled.div`
 				}
 
 				.MoonDisplayContainer {
-				
 					width: 59px;
 					margin: auto;
 				}
