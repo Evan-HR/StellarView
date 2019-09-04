@@ -280,7 +280,7 @@ const CardStyle = styled.div`
 		/* "ParkHum     ParkCloud   ParkLightPol ParkScore" */
 		"StarRev    StarRev     StarRev      moreInfo";
 
-	font-family: IBM Plex Sans;
+		font-family: 'Lato', sans-serif;
 	font-style: normal;
 	font-weight: 400;
 	font-size: 18px;
@@ -378,7 +378,7 @@ const CardStyle = styled.div`
 	.WeatherInfo {
 		grid-area: WeatherInfo;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 18px;
     align-content: center;
 	/* padding-left: 15px; */
@@ -536,7 +536,7 @@ const CardBootstrap = styled.div`
 		background-color: #fff;
 		background-clip: border-box;
 		border: none !important;
-   		 border-radius: 0px;
+		border-radius: 0px;
 	}
 
 	.card > hr {

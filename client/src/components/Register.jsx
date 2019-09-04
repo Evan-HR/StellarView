@@ -84,7 +84,6 @@ class Register extends Component {
 		});
 	};
 
-
 	errorMsg() {
 		if (this.state.errorDB === true) {
 			return this.state.regErrors.map(errors => {
@@ -288,17 +287,13 @@ const customStyles = {
 	// 	}
 };
 
-
-
-
-
 const HeaderStyle = styled.div`
 	margin-left: 32%;
 	color: whitesmoke;
 `;
 
 const RegisterStyle = styled.div`
-	font-family: IBM Plex Sans;
+	font-family: "Lato", sans-serif;
 	padding-right: 30px;
 
 	.close {
@@ -382,46 +377,46 @@ const RegisterStyle = styled.div`
 			}
 
 			.rowSubmit {
-					margin: 20px 0 10px 0;
-					.label {
-						font-size: 12px;
-						font-weight: 600;
-						color: rgb(100, 100, 100);
-					}
+				margin: 20px 0 10px 0;
+				.label {
+					font-size: 12px;
+					font-weight: 600;
+					color: rgb(100, 100, 100);
+				}
 
-					input {
-						margin-top: 2px;
-						font-size: 13px;
-						color: rgb(70, 70, 70);
-						border: none;
-						border-bottom: 1px solid rgba(100, 100, 100, 0.6);
-						outline: none;
-						height: 25px;
-						background: transparent;
-						width: 100%;
-					}
-					button {
-						margin-top: 0px;
-						font-size: 13px;
-						color: rgb(100, 100, 100);
-						
-						border: none;
-						outline: none;
-						height: 40px;
-						text-transform: uppercase;
-						background: ${props => props.theme.starDark};
+				input {
+					margin-top: 2px;
+					font-size: 13px;
+					color: rgb(70, 70, 70);
+					border: none;
+					border-bottom: 1px solid rgba(100, 100, 100, 0.6);
+					outline: none;
+					height: 25px;
+					background: transparent;
+					width: 100%;
+				}
+				button {
+					margin-top: 0px;
+					font-size: 13px;
+					color: rgb(100, 100, 100);
+
+					border: none;
+					outline: none;
+					height: 40px;
+					text-transform: uppercase;
+					background: ${props => props.theme.starDark};
+					transition: 0.25s;
+					width: 100%;
+					color: whitesmoke;
+					cursor: pointer;
+
+					:hover,
+					:active {
+						color: ${props => props.theme.colorBad};
 						transition: 0.25s;
-						width: 100%;
-						color: whitesmoke;
-						cursor: pointer;
-						
-						:hover,:active{
-							
-								color: ${props => props.theme.colorBad};
-								transition: 0.25s;
-						}
 					}
 				}
+			}
 			.row {
 				margin: 20px 0px;
 				.label {
@@ -454,13 +449,9 @@ const RegisterStyle = styled.div`
 					width: 100%;
 					color: #fff;
 					cursor: pointer;
-
-	
 				}
 			}
 		}
-
-
 	}
 `;
 

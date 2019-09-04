@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import axios from "axios";
 import Modal from "react-modal";
 import backgroundImage from "./style/Media/loginModalPlain.svg";
-
 import { AuthConsumer } from "./AuthContext";
 import { withRouter, Link } from "react-router-dom";
 import styled from "styled-components";
@@ -115,13 +114,14 @@ class BaseReportPark extends Component {
 							<i class="fas fa-window-close" />
 						</button>
 					</div>
+
 					<div className="form">
 						<div className="wrapper">
 							<div className="rowSubmit">
 								<button onClick={this.onSubmit}>Submit</button>
 							</div>
 						</div>
-				
+
 						{this.errorMsg()}
 					</div>
 				</div>
@@ -132,16 +132,12 @@ class BaseReportPark extends Component {
 	//className changes model content, style gives you anything you specify to override defaults
 	render() {
 		return (
-
-
 			<React.Fragment>
-                 <ReportIconStyle>
-                            <button onClick={() => 	this.openModal()}>
-                              
+				<ReportIconStyle>
+					<button onClick={() => this.openModal()}>
 						<i className="reportIcon fas fa-exclamation-triangle fa-2x"></i>
-                        
 					</button>
-                    </ReportIconStyle>
+				</ReportIconStyle>
 
 				<Modal
 					closeTimeoutMS={800}
@@ -163,7 +159,9 @@ class BaseReportPark extends Component {
 }
 
 const ReportPark = props => (
-	<AuthConsumer>{x => <BaseReportPark {...props} context={x} />}</AuthConsumer>
+	<AuthConsumer>
+		{x => <BaseReportPark {...props} context={x} />}
+	</AuthConsumer>
 );
 
 BaseReportPark.defaultProps = {
@@ -195,7 +193,7 @@ const customStyles = {
 };
 
 const LoginStyle = styled.div`
-	font-family: IBM Plex Sans;
+	font-family: "Lato", sans-serif;
 	padding-right: 30px;
 
 	.close {
@@ -422,12 +420,11 @@ const AlertStyle = styled.div`
 `;
 
 const ReportIconStyle = styled.div`
-	button{
-			all: unset;
-		}
+	button {
+		all: unset;
+	}
 
-        i{
-            color: ${props => props.theme.colorMedium};
-        }
-
+	i {
+		color: ${props => props.theme.colorMedium};
+	}
 `;

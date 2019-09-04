@@ -136,7 +136,8 @@ const ToolbarStyle = styled.header`
 	}
 
 	.toolbar_navigation-items a {
-		font-family: IBM Plex Sans;
+		/* font-family: IBM Plex Sans; */
+		font-family: 'Lato', sans-serif;
 		font-weight:600;
 		text-decoration: none;
 		letter-spacing:0.08em;

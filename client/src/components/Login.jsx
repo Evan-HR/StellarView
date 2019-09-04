@@ -220,7 +220,7 @@ const customStyles = {
 };
 
 const LoginStyle = styled.div`
-	font-family: IBM Plex Sans;
+	font-family: "Lato", sans-serif;
 	padding-right: 30px;
 
 	.close {

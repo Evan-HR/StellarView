@@ -41,8 +41,7 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 		cloudScore += 0;
 	}
 
-	const finalScore =
-		moonScore + cloudScore + humidityScore + lightPolScore;
+	const finalScore = moonScore + cloudScore + humidityScore + lightPolScore;
 	console.log(
 		"Moon score, cloudscore, humidity, lightpolscore ",
 		moonScore,
@@ -52,7 +51,7 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 	);
 	console.log("final score: ", finalScore);
 	return finalScore;
-};
+}
 
 class BaseParksData extends Component {
 	state = {
@@ -86,8 +85,6 @@ class BaseParksData extends Component {
 		// Since they're google map things
 		this.markers = {};
 	}
-
-	
 
 	handleMapLoaded = googleMapActual => {
 		this.googleMap = googleMapActual;
@@ -170,8 +167,6 @@ class BaseParksData extends Component {
 				});
 		}
 	};
-
-	
 
 	//Clear button handler
 	clearParks = () => {
@@ -391,7 +386,7 @@ const MainContentWrapper = styled.div`
 	}
 
 	.helpCard{
-	font-family: IBM Plex Sans;
+		font-family: 'Lato', sans-serif;
 	height: 140px;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -404,7 +399,7 @@ const MainContentWrapper = styled.div`
 	font-size: 14px;
 	/* box-shadow: inset 0px 0px 0px 4px #485261;
 
-	background: ${props=>props.theme.cardLight}; */
+	background: ${props => props.theme.cardLight}; */
 
 	background: -moz-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ff3.6+ */
 background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(189,194,198,0.95)), color-stop(100%, rgba(172,177,181,1))); /* safari4+,chrome */
@@ -422,7 +417,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', end
 
 	}
 	.help{
-		color: ${props=>props.theme.fontDark};
+		color: ${props => props.theme.fontDark};
 		font-size: 20px;
 		
 		font-weight: 600;
@@ -467,7 +462,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', end
 	}
 
 	.SortByContainer {
-		font-family: IBM Plex Sans;
+		font-family: 'Lato', sans-serif;
 	
 		padding: 13px 0px 13px 0px;
 		width: 100%;

@@ -159,9 +159,7 @@ class ParkMapModal extends Component {
 								</div>
 
 								<div className="reportPark">
-									<ReportPark parkID={this.park.id}/> 
-									
-		
+									<ReportPark parkID={this.park.id} />
 
 									<div className="reportParkText">Report</div>
 								</div>
@@ -314,6 +312,7 @@ class ParkMapModal extends Component {
 															this.park.weather
 																.humidity
 														}
+														%
 													</span>
 												</div>
 											</WeatherWrapper>
@@ -396,12 +395,12 @@ const ModalStyle = styled.div`
 	flex-direction: column;
 	width: 452px;
 	height: 95vh;
-	font-family: IBM Plex Sans;
+	font-family: 'Lato', sans-serif;
 	color: ${props => props.theme.fontDark};
 	background: ${props => props.theme.moreInfoBackground};
 
 	.modal-header {
-		font-family: IBM Plex Sans;
+		font-family: 'Lato', sans-serif;
 		font-style: normal;
 		font-weight: normal;
 		font-size: 30px;
@@ -650,7 +649,7 @@ const ModalStyle = styled.div`
 
 const HeaderStyle = styled.div`
 	color: ${props => props.theme.fontDark};
-	font-family: IBM Plex Sans;
+	font-family: "Lato", sans-serif;
 	font-style: normal;
 
 	font-size: 36px;
