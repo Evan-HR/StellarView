@@ -114,15 +114,20 @@ const FavPark = props => (
 export default FavPark;
 
 const FavParkButtonStyle = styled.div`
+		button{
+			all: unset;
+		}
 
 
 		.FavedHeart{
 			color: ${props => props.theme.colorGood};
+			cursor: pointer;
 
 		}
 
 		.UnfavedHeart{
 			color: ${props => props.theme.colorBad};
+			cursor: pointer;
 		}
 	
 `;

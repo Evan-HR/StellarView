@@ -11,6 +11,7 @@ import cloudIcon from "./style/Media/cardIcons/cloud.svg";
 import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
 import cloudGoodIcon from "./style/Media/cardIcons/cloudGood.svg";
 import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
+import ReportPark from "./ReportPark";
 
 const modalStyle = {
 	overlay: {
@@ -149,18 +150,22 @@ class ParkMapModal extends Component {
 					<div className="ContentGrid">
 						<div className="interactIconsContainer">
 							<div className="interactIcons">
-								<i className="shareIcon fas fa-share-alt fa-2x" />
-								<i className="faqIcon fas fa-question-circle fa-2x" />
-								<i>
-									<FavPark
-										className="favIcon"
-										parkID={this.park.id}
-									/>
-								</i>
-								<i className="reportIcon fas fa-exclamation-triangle fa-2x" />
+								{/* <i className="shareIcon fas fa-share-alt fa-2x" />
+								<i className="faqIcon fas fa-question-circle fa-2x" /> */}
+								<div className="favPark">
+									<FavPark parkID={this.park.id} />
+
+									<div className="favParkText">Save</div>
+								</div>
+
+								<div className="reportPark">
+									<ReportPark parkID={this.park.id}/> 
+									
+		
+
+									<div className="reportParkText">Report</div>
+								</div>
 							</div>
-							{/* <br />
-								Click each square for more info! */}
 						</div>
 
 						<ScoreWrapper>
@@ -173,11 +178,11 @@ class ParkMapModal extends Component {
 									<span className="Percentage">%</span>
 								</span>
 								<span className="Value">
-								{this.park.score > 0.8
-								? "Visible"
-								: this.park.score > 0.6
-								? "Partly Visible"
-								: "Not Visible"}
+									{this.park.score > 0.8
+										? "Visible"
+										: this.park.score > 0.6
+										? "Partly Visible"
+										: "Not Visible"}
 								</span>
 							</div>
 						</ScoreWrapper>
@@ -465,20 +470,19 @@ const ModalStyle = styled.div`
 				height: 157px;
 				display: grid;
 				margin: auto auto;
-				grid-template-rows: auto auto;
+				grid-template-rows: 1fr 0.35fr;
 				grid-template-columns: 1fr 1fr;
 				grid-template-areas:
-					"favIcon    reportIcon"
-					"bottomText bottomText";
+					"favPark     reportPark"
+					"favParkText reportParkText";
+				
 
 				i {
-					width: 80%;
+					/* width: 80%; */
 					button {
 						all: unset;
+						cursor: pointer;
 					}
-					cursor: pointer;
-					
-
 					margin: auto auto;
 				}
 				/* .shareIcon {
@@ -489,13 +493,24 @@ const ModalStyle = styled.div`
 					color: ${props => props.theme.fontDark};
 					grid-area: faqIcon;
 				} */
-				.favIcon {
-					grid-area: favIcon;
+				.favPark {
+					grid-area: favPark;
+					margin: auto auto 0 auto;
+					.favParkText{
+						grid-area: favParkText;
+					}
+
 				}
-				.reportIcon {
-					color: ${props => props.theme.colorMedium};
-					grid-area: reportIcon;
+				.reportPark {
+					margin: auto auto 0 auto;
+					grid-area: reportPark;
+				
+					.reportParkText{
+						grid-area: reportParkText;
+					}
 				}
+				
+			
 			}
 		}
 
@@ -566,9 +581,6 @@ const ModalStyle = styled.div`
 				"cloudContainer    lightPolContainer"
 				"moonContainer     humidityContainer";
 
-			/* div {
-				height: 157px;
-			} */
 
 			.cloudContainer {
 				height: 157px;
