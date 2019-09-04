@@ -13,6 +13,47 @@ import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
 import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import tempIcon from "./style/Media/cardIcons/temperature.svg";
 
+function inRange(x, min, max) {
+	return (x - min) * (x - max) <= 0;
+}
+
+export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
+	console.log("MOON FRACTION % IS !!!!!!!!!!!!!!", moonFraction);
+	console.log("CLOUD COV IS !!!!!!!!!!!!!!", cloudCov);
+	console.log("LIGHT POL IS !!!!!!!!!!!!!!", lightPol);
+	console.log("humidity COV IS !!!!!!!!!!!!!!", humidity);
+	var moonScore = 0.45 * (-1 * (2 * moonFraction - 1));
+	var lightPolScore = 0.25 * (((-1 * 1) / 3) * (lightPol - 3));
+	var humidityScore = 0;
+	if (humidity < 0.4) {
+		humidityScore += 0.15 * 1;
+	} else if (inRange(humidity, 0.4, 0.8)) {
+		humidityScore += 0.15 * (-2.5 * humidity + 2);
+	} else if (0.8 < humidity) {
+		humidityScore += 0;
+	}
+	var cloudScore = 0;
+	if (cloudCov < 0.2) {
+		cloudScore += 0.15 * 1;
+	} else if (inRange(cloudCov, 0.2, 0.4)) {
+		cloudScore += 0.15 * (-5 * cloudCov + 2);
+	} else if (0.4 < cloudCov) {
+		cloudScore += 0;
+	}
+
+	const finalScore =
+		moonScore + cloudScore + humidityScore + lightPolScore;
+	console.log(
+		"Moon score, cloudscore, humidity, lightpolscore ",
+		moonScore,
+		cloudScore,
+		humidityScore,
+		lightPolScore
+	);
+	console.log("final score: ", finalScore);
+	return finalScore;
+};
+
 class BaseParksData extends Component {
 	state = {
 		parks: [],
@@ -46,9 +87,7 @@ class BaseParksData extends Component {
 		this.markers = {};
 	}
 
-	inRange(x, min, max) {
-		return (x - min) * (x - max) <= 0;
-	}
+	
 
 	handleMapLoaded = googleMapActual => {
 		this.googleMap = googleMapActual;
@@ -86,7 +125,7 @@ class BaseParksData extends Component {
 			console.log("Loaded from storage:", JSON.parse(localData));
 			this.setState({
 				parks: JSON.parse(localData).parks,
-				moon: JSON.parse(localData).moonPercent,
+				moonPhase: JSON.parse(localData).moonPercent,
 				moonFraction: JSON.parse(localData).moonFraction,
 				moonType: JSON.parse(localData).moonType,
 
@@ -102,7 +141,7 @@ class BaseParksData extends Component {
 				.then(response => {
 					console.log(response.data);
 					for (var i = 0; i < response.data.parks.length; i++) {
-						response.data.parks[i].score = this.parkScore(
+						response.data.parks[i].score = parkScore(
 							response.data.moonFraction,
 							response.data.parks[i].weather.humidity / 100,
 							response.data.parks[i].weather.clouds / 100,
@@ -132,42 +171,7 @@ class BaseParksData extends Component {
 		}
 	};
 
-	parkScore = (moonFraction, humidity, cloudCov, lightPol) => {
-		console.log("MOON FRACTION % IS !!!!!!!!!!!!!!", moonFraction);
-		console.log("CLOUD COV IS !!!!!!!!!!!!!!", cloudCov);
-		console.log("LIGHT POL IS !!!!!!!!!!!!!!", lightPol);
-		console.log("humidity COV IS !!!!!!!!!!!!!!", humidity);
-		var moonScore = 0.45 * (-1 * (2 * moonFraction - 1));
-		var lightPolScore = 0.25 * (((-1 * 1) / 3) * (lightPol - 3));
-		var humidityScore = 0;
-		if (humidity < 0.4) {
-			humidityScore += 0.15 * 1;
-		} else if (this.inRange(humidity, 0.4, 0.8)) {
-			humidityScore += 0.15 * (-2.5 * humidity + 2);
-		} else if (0.8 < humidity) {
-			humidityScore += 0;
-		}
-		var cloudScore = 0;
-		if (cloudCov < 0.2) {
-			cloudScore += 0.15 * 1;
-		} else if (this.inRange(cloudCov, 0.2, 0.4)) {
-			cloudScore += 0.15 * (-5 * cloudCov + 2);
-		} else if (0.4 < cloudCov) {
-			cloudScore += 0;
-		}
-
-		const finalScore =
-			moonScore + cloudScore + humidityScore + lightPolScore;
-		console.log(
-			"Moon score, cloudscore, humidity, lightpolscore ",
-			moonScore,
-			cloudScore,
-			humidityScore,
-			lightPolScore
-		);
-		console.log("final score: ", finalScore);
-		return finalScore;
-	};
+	
 
 	//Clear button handler
 	clearParks = () => {
@@ -200,7 +204,7 @@ class BaseParksData extends Component {
 							markers={this.markers}
 							location={this.state.fetchReq}
 							onMapLoaded={this.handleMapLoaded}
-							moon={this.state.moon}
+							moon={this.state.moonPhase}
 							moonType={this.state.moonType}
 						/>
 					</animated.div>
@@ -264,7 +268,7 @@ class BaseParksData extends Component {
 
 					<div className="MoonStyle">
 						<MoonComponent
-							moon={this.state.moon}
+							moon={this.state.moonPhase}
 							parkList={this.state.parks}
 							moonType={this.state.moonType}
 						/>
@@ -306,7 +310,7 @@ class BaseParksData extends Component {
 					<div className="ParkTableStyle">
 						<ParkTable
 							parkList={this.state.parks}
-							moon={this.state.moon}
+							moon={this.state.moonPhase}
 							moonType={this.state.moonType}
 							googleMap={this.googleMap}
 							markers={this.markers}
