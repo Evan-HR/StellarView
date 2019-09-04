@@ -173,14 +173,18 @@ class ParkMapModal extends Component {
 									<span className="Percentage">%</span>
 								</span>
 								<span className="Value">
-									{this.park.score < 0.5
-										? "Not Recommended."
-										: this.park.score < 0.75
-										? "Passable."
-										: "Recommended."}
+								{this.park.score > 0.8
+								? "Visible"
+								: this.park.score > 0.6
+								? "Partly Visible"
+								: "Not Visible"}
 								</span>
 							</div>
 						</ScoreWrapper>
+
+						<span className="textContainer">
+							Tap a square for more info
+						</span>
 
 						<div className="weatherContainer">
 							<div className="cloudContainer">
@@ -429,9 +433,10 @@ const ModalStyle = styled.div`
 	.ContentGrid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		grid-template-rows: auto auto auto;
+		grid-template-rows: auto auto auto auto;
 		grid-template-areas:
 			"interactIconsContainer    parkScore"
+			"infoText 				   infoText"
 			"weatherContainer    	   weatherContainer"
 			"reviewsContainer          reviewsContainer";
 		grid-row-gap: 20px;
@@ -449,6 +454,10 @@ const ModalStyle = styled.div`
     margin: auto;
 } */
 
+.textContainer{
+	grid-area: infoText;
+}
+
 		.interactIconsContainer {
 			grid-area: interactIconsContainer;
 
@@ -456,29 +465,30 @@ const ModalStyle = styled.div`
 				height: 157px;
 				display: grid;
 				margin: auto auto;
-				grid-template-rows: 1fr 1fr;
+				grid-template-rows: auto auto;
 				grid-template-columns: 1fr 1fr;
 				grid-template-areas:
-					"shareIcon    faqIcon"
-					"favIcon      reportIcon";
+					"favIcon    reportIcon"
+					"bottomText bottomText";
 
 				i {
 					width: 80%;
 					button {
 						all: unset;
 					}
-					color: ${props => props.theme.colorBad};
+					cursor: pointer;
+					
 
 					margin: auto auto;
 				}
-				.shareIcon {
+				/* .shareIcon {
 					color: ${props => props.theme.fontDark};
 					grid-area: shareIcon;
 				}
 				.faqIcon {
 					color: ${props => props.theme.fontDark};
 					grid-area: faqIcon;
-				}
+				} */
 				.favIcon {
 					grid-area: favIcon;
 				}
@@ -564,6 +574,7 @@ const ModalStyle = styled.div`
 				height: 157px;
 				grid-area: cloudContainer;
 				position: relative;
+				cursor: pointer;
 
 				.cloudCard {
 					height: 157px;
@@ -576,6 +587,7 @@ const ModalStyle = styled.div`
 				height: 157px;
 				grid-area: lightPolContainer;
 				position: relative;
+				cursor: pointer;
 
 				.lightPolCard {
 					height: 157px;
@@ -588,6 +600,7 @@ const ModalStyle = styled.div`
 				height: 157px;
 				grid-area: moonContainer;
 				position: relative;
+				cursor: pointer;
 
 				.moonCard {
 					height: 157px;
@@ -605,6 +618,7 @@ const ModalStyle = styled.div`
 				height: 157px;
 				grid-area: humidityContainer;
 				position: relative;
+				cursor: pointer;
 
 				.humidityCard {
 					height: 157px;

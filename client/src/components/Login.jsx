@@ -163,7 +163,7 @@ class BaseLogin extends Component {
 					{this.props.children ? (
 						<React.Fragment>{this.props.children}</React.Fragment>
 					) : (
-						<Link>login</Link>
+						<Link>Login</Link>
 					)}
 					{/* <Link>login</Link> */}
 				</a>

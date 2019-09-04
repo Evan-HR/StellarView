@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { AuthConsumer } from "./AuthContext";
 import Login from "./Login";
+import styled from "styled-components";
 
 class BaseFavPark extends Component {
 	state = {
@@ -62,6 +63,7 @@ class BaseFavPark extends Component {
 
 	favSpotButton = () => {
 		//console.log("BUTTON CLICKED!!");
+
 		if (this.props.context.isAuth === true) {
 			if (
 				this.state.buttonPressed === false &&
@@ -69,7 +71,7 @@ class BaseFavPark extends Component {
 			) {
 				return (
 					<button onClick={() => this.handleFavSpot()}>
-						<i className="fas fa-heart" />
+						<i className="fas fa-heart fa-2x UnfavedHeart" />
 					</button>
 				);
 			} else {
@@ -79,7 +81,7 @@ class BaseFavPark extends Component {
 					// className=""
 					//onClick={() => this.handleFavSpot()}
 					>
-						<i className="fas fa-heart fa-2x" />
+						<i className="fas fa-heart fa-2x FavedHeart" />
 					</button>
 				);
 			}
@@ -88,7 +90,7 @@ class BaseFavPark extends Component {
 
 			return (
 				<Login handleLogin={this.props.handleLogin}>
-					<i className="fas fa-heart fa-2x" />
+					<i className="fas fa-heart fa-2x UnfavedHeart" />
 				</Login>
 			);
 		}
@@ -97,7 +99,7 @@ class BaseFavPark extends Component {
 	render() {
 		//const { label, score = 0, total = Math.max(1, score) } = this.props;
 
-		return <div>{this.favSpotButton()}</div>;
+		return <FavParkButtonStyle>{this.favSpotButton()}</FavParkButtonStyle>;
 	}
 }
 
@@ -110,3 +112,17 @@ const FavPark = props => (
 );
 
 export default FavPark;
+
+const FavParkButtonStyle = styled.div`
+
+
+		.FavedHeart{
+			color: ${props => props.theme.colorGood};
+
+		}
+
+		.UnfavedHeart{
+			color: ${props => props.theme.colorBad};
+		}
+	
+`;
