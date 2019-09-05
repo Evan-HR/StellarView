@@ -12,6 +12,7 @@ import humidityIcon from "./style/Media/cardIcons/humidity.svg";
 import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
 import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import tempIcon from "./style/Media/cardIcons/temperature.svg";
+import { withRouter } from "react-router-dom";
 
 function inRange(x, min, max) {
 	return (x - min) * (x - max) <= 0;
@@ -175,36 +176,47 @@ class BaseParksData extends Component {
 
 	renderParkMap = () => {
 		return (
-			<Spring
-				native
-				//force
-				//config={{ tension: 2000, friction: 100, precision: 1 }}
-				from={{
-					transform: this.state.hideMap
-						? "translate3d(40px,0,0)"
-						: "translate3d(0,0,0)",
-					opacity: this.state.hideMap ? 0 : 1
-				}}
-				to={{
-					transform: this.state.hideMap
-						? "translate3d(0,0,0)"
-						: "translate3d(40px,0,0)",
-					opacity: this.state.hideMap ? 1 : 0
-				}}
-			>
-				{props => (
-					<animated.div className="ParkMapStyle" style={props}>
-						<ParkMap
-							parkList={this.state.parks}
-							markers={this.markers}
-							location={this.state.fetchReq}
-							onMapLoaded={this.handleMapLoaded}
-							moon={this.state.moonPhase}
-							moonType={this.state.moonType}
-						/>
-					</animated.div>
-				)}
-			</Spring>
+			// <Spring
+			// 	native
+			// 	//force
+			// 	//config={{ tension: 2000, friction: 100, precision: 1 }}
+			// 	from={{
+			// 		transform: this.state.hideMap
+			// 			? "translate3d(40px,0,0)"
+			// 			: "translate3d(0,0,0)",
+			// 		opacity: this.state.hideMap ? 0 : 1
+			// 	}}
+			// 	to={{
+			// 		transform: this.state.hideMap
+			// 			? "translate3d(0,0,0)"
+			// 			: "translate3d(40px,0,0)",
+			// 		opacity: this.state.hideMap ? 1 : 0
+			// 	}}
+			// >
+			// 	{props => (
+			// 		<animated.div className="ParkMapStyle" style={props}>
+			// 			<ParkMap
+			// 				parkList={this.state.parks}
+			// 				markers={this.markers}
+			// 				location={this.state.fetchReq}
+			// 				onMapLoaded={this.handleMapLoaded}
+			// 				moon={this.state.moon}
+			// 				moonType={this.state.moonType}
+			// 			/>
+			// 		</animated.div>
+			// 	)}
+			// </Spring>
+
+			<div className="ParkMapStyle">
+				<ParkMap
+					parkList={this.state.parks}
+					markers={this.markers}
+					location={this.state.fetchReq}
+					onMapLoaded={this.handleMapLoaded}
+					moon={this.state.moonPhase}
+					moonType={this.state.moonType}
+				/>
+			</div>
 		);
 	};
 
@@ -235,21 +247,15 @@ class BaseParksData extends Component {
 	sortParksScore = () => {
 		let parksArray = this.state.parks;
 		parksArray.sort((a, b) =>
-			a.score > b.score ? 1 : b.score > a.score ? -1 : 0
+			a.score > b.score ? -1 : b.score > a.score ? 1 : 0
 		);
 		this.setState({ parks: parksArray, sortedBy: "score" });
 	};
 
-	//recursively calls render on it's children
-	render() {
-		console.log("ParksData - rendered");
-
+	renderResults = () => {
 		return (
-			<MainContentWrapper
-				active={this.state.hideForm}
-				hideMap={this.state.hideMap}
-			>
-				{this.renderParkMap()}
+			<ResultsPageStyle>
+				{/* {this.renderParkMap()} */}
 				<div className="RightSideContainerFull">
 					{/* <button
 						onClick={() => {
@@ -313,6 +319,33 @@ class BaseParksData extends Component {
 						/>
 					</div>
 				</div>
+			</ResultsPageStyle>
+		);
+	};
+
+	renderLanding = () => {
+		return (
+			<LandingPageStyle>
+				{this.renderParkForm()}
+				{/* {this.renderParkMap()} */}
+			</LandingPageStyle>
+		);
+	};
+
+	//recursively calls render on it's children
+	render() {
+		console.log("ParksData - rendered");
+		console.log("Current location: ", window.location.pathname);
+		return (
+			<MainContentWrapper
+				active={this.state.hideForm}
+				hideMap={this.state.hideMap}
+				pathname={window.location.pathname}
+			>
+				{this.renderParkMap()}
+				{window.location.pathname === "/home"
+					? this.renderLanding()
+					: this.renderResults()}
 			</MainContentWrapper>
 		);
 	}
@@ -321,7 +354,7 @@ class BaseParksData extends Component {
 const ParksData = parkProps => (
 	<Router>
 		<Route
-			path="/"
+			path={["/home", "/search"]}
 			render={routerProps => (
 				//Combine props passed to parkForm with router props
 				<BaseParksData {...{ ...parkProps, ...routerProps }} />
@@ -330,32 +363,27 @@ const ParksData = parkProps => (
 	</Router>
 );
 
-export default ParksData;
+export default withRouter(ParksData);
 
 //////////////////////////////////////////
 
-const MainContentWrapper = styled.div`
+const LandingPageStyle = styled.div`
+	.ParkFormStyle {
+		width: 85%;
+	}
+`;
+
+const ResultsPageStyle = styled.div`
 	display: grid;
 	margin: 0 auto 0 auto;
-	margin-top: 2rem;
+	margin-top: -80vh;
 	overflow: none;
-	width: 85%;
+	
 
 	grid-template-columns: 1fr 1fr;
 	grid-column-gap: 10px;
 	grid-row-gap: 10px;
 	grid-template-areas: ". rightSide";
-
-	.ParkMapStyle {
-		/* grid-area: map; */
-
-		position: -webkit-sticky;
-		position: sticky;
-		height: 80vh;
-		width: 42.5vw;
-		top: 10vh;
-		background-color: maroon;
-	}
 	.Placeholder1 {
 		display: none;
 		grid-area: placeholder1;
@@ -364,7 +392,7 @@ const MainContentWrapper = styled.div`
 	.RightSideContainerFull {
 		z-index: 0;
 		grid-area: rightSide;
-		margin-bottom: 20px;
+		margin-bottom: -13px;
 		/* overflow-y: scroll;
 		overflow-x: hidden; */
 		/* background-color: whitesmoke; */
@@ -387,77 +415,76 @@ const MainContentWrapper = styled.div`
 
 	.helpCard{
 		font-family: 'Lato', sans-serif;
-	height: 140px;
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-	grid-template-rows: 1fr 1fr 1fr;
-	grid-template-areas: 
-	"help help help help help"
-	"iconA iconB iconC iconD iconE"
-	"descA descB descC descD descE";
-	padding: 0px 10px 10px 15px;
-	font-size: 14px;
-	/* box-shadow: inset 0px 0px 0px 4px #485261;
+		height: 140px;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+		grid-template-rows: 1fr 1fr 1fr;
+		grid-template-areas: 
+		"help help help help help"
+		"iconA iconB iconC iconD iconE"
+		"descA descB descC descD descE";
+		padding: 0px 10px 10px 15px;
+		font-size: 14px;
+		/* box-shadow: inset 0px 0px 0px 4px #485261;
 
-	background: ${props => props.theme.cardLight}; */
+		background: ${props => props.theme.cardLight}; */
 
-	background: -moz-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ff3.6+ */
-background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(189,194,198,0.95)), color-stop(100%, rgba(172,177,181,1))); /* safari4+,chrome */
-background: -webkit-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* safari5.1+,chrome10+ */
-background: -o-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* opera 11.10+ */
-background: -ms-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ie10+ */
-background: linear-gradient(90deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* w3c */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', endColorstr='#ACB1B5',GradientType=1 ); /* ie6-9 */
+		background: -moz-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ff3.6+ */
+		background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(189,194,198,0.95)), color-stop(100%, rgba(172,177,181,1))); /* safari4+,chrome */
+		background: -webkit-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* safari5.1+,chrome10+ */
+		background: -o-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* opera 11.10+ */
+		background: -ms-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ie10+ */
+		background: linear-gradient(90deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* w3c */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', endColorstr='#ACB1B5',GradientType=1 ); /* ie6-9 */
 
-	img,i{
-		margin: auto auto auto auto;
-	}
-	span{
-		margin: 0px auto auto auto;
+		img,i{
+			margin: auto auto auto auto;
+		}
+		span{
+			margin: 0px auto auto auto;
+		}
+		.help{
+			color: ${props => props.theme.fontDark};
+			font-size: 20px;
+			
+			font-weight: 600;
+			margin: auto auto 0px auto;
+			grid-area: help;
+		}
 
-	}
-	.help{
-		color: ${props => props.theme.fontDark};
-		font-size: 20px;
-		
-		font-weight: 600;
-		margin: auto auto 0px auto;
-		grid-area: help;
-	}
+		.iconA{
+			grid-area: iconA
+		}
+		.iconB{
+			grid-area: iconD
+		}
+		.iconC{
+			font-size: 52px;
+			grid-area: iconC
+		}
+		.iconD{
+			grid-area: iconB
+		}
+		.iconE{
+			
+			grid-area: iconE
+		}
 
-	.iconA{
-		grid-area: iconA
-	}
-	.iconB{
-		grid-area: iconD
-	}
-	.iconC{
-		font-size: 52px;
-		grid-area: iconC
-	}
-	.iconD{
-		grid-area: iconB
-	}
-	.iconE{
-		
-		grid-area: iconE
-	}
-
-	.descA{
-		grid-area: descA
-	}
-	.descB{
-		grid-area: descD
-	}
-	.descC{
-		grid-area: descC
-	}
-	.descD{
-		grid-area: descB
-	}
-	.descE{
-		grid-area: descE
-	}
+		.descA{
+			grid-area: descA
+		}
+		.descB{
+			grid-area: descD
+		}
+		.descC{
+			grid-area: descC
+		}
+		.descD{
+			grid-area: descB
+		}
+		.descE{
+			grid-area: descE
+		}
 
 	}
 
@@ -466,28 +493,22 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', end
 	
 		padding: 13px 0px 13px 0px;
 		width: 100%;
-		
 
 		.SortBy {
-			
 			color: whitesmoke;
 			transition: color 0.2s ease;
-			button{
-				
-			all: unset;
-			color: whitesmoke;
-			font-weight: 600;
-			cursor: pointer;
-			margin: 0 0px 0 15px;
-			:hover,
-	:active {
-		color: ${props => props.theme.colorBad};
-		transition: color 0.2s ease;
-
-	}
-
-
-		}
+			button{	
+				all: unset;
+				color: whitesmoke;
+				font-weight: 600;
+				cursor: pointer;
+				margin: 0 0px 0 15px;
+				:hover,
+				:active {
+					color: ${props => props.theme.colorBad};
+					transition: color 0.2s ease;
+				}
+			}
 			display: flex;
 			justify-content: flex-end;
 		}
@@ -517,8 +538,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', end
 		}
 	}
 	@media screen and (min-width: 769px) and (max-width: 1300px) {
-		width: 90%;
-		margin-top: 0rem;
+		/* width: 90%; */
+		/* margin-top: 0rem; */
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: auto auto;
 		grid-template-areas:
@@ -527,6 +548,27 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', end
 		.ParkFormStyle {
 			grid-area: form;
 			${({ active }) => active && `display: none;`}
+		}
+	}
+`;
+
+const MainContentWrapper = styled.div`
+	width: 90%;
+	margin: 0 auto 0 auto;
+	.ParkMapStyle {
+		/* grid-area: map; */
+
+		position: -webkit-sticky;
+		position: sticky;
+		height: 80vh;
+		width: 42.5vw;
+		top: 10vh;
+		background-color: gray;
+		display: ${props => (props.pathname === "/home" ? "none" : "fixed")};
+	}
+	@media screen and (max-width: 769px) {
+		.ParkMapStyle {
+			display: ${props => (props.hideMap ? "none" : "fixed")};
 		}
 	}
 `;

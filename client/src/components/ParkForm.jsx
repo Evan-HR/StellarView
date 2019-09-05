@@ -69,7 +69,7 @@ class BaseParkForm extends Component {
 
 	//Load query into state
 	loadQuery = () => {
-		let query = qs.parse(this.props.history.location.search, {
+		let query = qs.parse(window.location.search, {
 			ignoreQueryPrefix: true
 		});
 		console.log(query);
@@ -140,11 +140,13 @@ class BaseParkForm extends Component {
 			.then(({ data }) => {
 				console.log(data);
 
-				var latLng = new window.google.maps.LatLng(
-					parseFloat(data[0].lat),
-					parseFloat(data[0].lon)
-				); //Makes a latlng
-				this.props.googleMap.panTo(latLng); //Make map global
+				if (window.google) {
+					var latLng = new window.google.maps.LatLng(
+						parseFloat(data[0].lat),
+						parseFloat(data[0].lon)
+					); //Makes a latlng
+					this.props.googleMap.panTo(latLng); //Make map global
+				}
 				this.setState(
 					{
 						isGeocodingLocation: false,
@@ -230,7 +232,7 @@ class BaseParkForm extends Component {
 			);
 		} else {
 			console.log("Fetching auth location");
-			if (window.google) {
+			if (window.google && this.props.googleMap) {
 				this.props.googleMap.panTo(
 					new window.google.maps.LatLng(
 						this.props.authState.userLocation.lat,
@@ -347,7 +349,7 @@ class BaseParkForm extends Component {
 	updateHistoryQuery = reqData => {
 		console.log("Updating history...");
 		//this.props.history.push({ query: "test" });
-		let query = qs.parse(this.props.history.location.search, {
+		let query = qs.parse(window.location.search, {
 			ignoreQueryPrefix: true
 		});
 		if (
@@ -356,13 +358,13 @@ class BaseParkForm extends Component {
 			query.dist !== reqData.dist.toString() ||
 			query.lightpol !== parseFloat(reqData.lightpol).toFixed(2)
 		) {
-			this.props.history.push({
-				search: `?lat=${parseFloat(reqData.lat).toFixed(
+			this.props.history.push(
+				`/search?lat=${parseFloat(reqData.lat).toFixed(
 					4
 				)}&lng=${parseFloat(reqData.lng).toFixed(4)}&dist=${
 					reqData.dist
 				}&lightpol=${parseFloat(reqData.lightpol).toFixed(2)}`
-			});
+			);
 		} else {
 			console.log("Attempting to repeat current search.");
 		}

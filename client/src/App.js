@@ -66,7 +66,16 @@ class App extends Component {
 							/>
 							{backdrop}
 
-							<Route path="/" exact component={ParksData} />
+							<Route
+								exact path="/"
+								render={() => {
+									return <Redirect to="/home" />;
+								}}
+							/>
+							<Route
+								path={["/home", "/search"]}
+								component={ParksData}
+							/>
 							<Route path="/faq" component={FAQ} />
 							<AuthConsumer>
 								{authState => {
