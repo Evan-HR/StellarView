@@ -9,6 +9,7 @@
     "letter-grade": "^1.0.0",
     "qs": "^6.7.0",
     "react": "^16.8.6",
+    "react-countup": "^4.2.2",
     "react-dom": "^16.8.6",
     "react-dynamic-font": "^2.0.1",
     "react-modal": "^3.8.1",

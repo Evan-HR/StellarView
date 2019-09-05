@@ -13,6 +13,8 @@ import cloudGoodIcon from "./style/Media/cardIcons/cloudGood.svg";
 import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import ReportPark from "./ReportPark";
 
+import CountUp from 'react-countup';
+
 const modalStyle = {
 	overlay: {
 		position: "fixed",
@@ -169,8 +171,22 @@ class ParkMapModal extends Component {
 										</span>
 									</div>
 									<span className="ScoreNumerator">
-										{Math.round(this.park.score * 100)}
-										<span className="Percentage">%</span>
+										<CountUp
+											start={0}
+											end={Math.round(
+												this.park.score * 100
+											)}
+											delay={0}
+										>
+											{({ countUpRef }) => (
+												<div className="Score">
+													<span ref={countUpRef} />
+													<span className="Percentage">%</span>
+												</div>
+											)}
+										</CountUp>
+
+										
 									</span>
 									<span className="Value">
 										{this.park.score > 0.8
