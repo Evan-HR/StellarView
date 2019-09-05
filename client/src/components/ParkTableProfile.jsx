@@ -1,6 +1,7 @@
 //Displays park table
 import React, { Component } from "react";
 import ParkCard from "./ParkCard";
+import ParkMapModal from "./ParkMapModal";
 
 class ParkTableProfile extends Component {
 	state = {};
@@ -19,6 +20,11 @@ class ParkTableProfile extends Component {
 [0]     city: 'St. George' } ]
         }
     */
+
+	constructor(props) {
+		super(props);
+		this.parkModalChild = React.createRef();
+	}
 
 	renderParkTable = () => {
 		if (this.props.parkList.length > 0) {
@@ -47,41 +53,37 @@ class ParkTableProfile extends Component {
 	// 	}
 	// }
 
-	renderPark = park => (
-		<ParkCard park={park} />
-		// <tr>
-		// 	<td>{park.name_alt}</td>
-		// 	<td>{park.light_pol}</td>
-		// 	<td>{park.dist}</td>
-		// 	<td>{park.clouds}</td>
-		// 	<td>{park.cloudDesc}</td>
-		// 	<td>{park.humidity}</td>
-		// 	<td>{park.moon}</td>
-		// 	<td>{park.moonType}</td>
-		// </tr>
-	);
+	renderPark = park => {
+		return (
+			<ParkCard
+				park={park}
+				handleMouseClick={this.handleCardMouseClick}
+			/>
+		);
+	};
+
+	handleCardMouseClick = parkID => {
+		for (var i = 0; i < this.props.parkList.length; i++) {
+			if (this.props.parkList[i].id === parkID) {
+				let content = {
+					park: this.props.parkList[i],
+					moon: this.props.moonPhase,
+					moonType: this.props.moonType
+				};
+				this.parkModalChild.current.openModal(content);
+			}
+		}
+	};
 
 	render() {
 		console.log("ParkTable - rendered");
 		return (
-			<div className="border border-primary">
-				{this.renderParkTable()}
-				{/* <table className="table table-hover">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Light</th>
-							<th>Distance</th>
-							<th>Cloud Coverage</th>
-							<th>Cloud Type</th>
-							<th>Humidity</th>
-							<th>Moon %</th>
-							<th>Moon Phase</th>
-						</tr>
-					</thead>
-					<tbody>{this.renderParkTable()}</tbody>
-				</table> */}
-			</div>
+			<React.Fragment>
+				<div className="border border-primary">
+					{this.renderParkTable()}
+				</div>
+				<ParkMapModal ref={this.parkModalChild} />
+			</React.Fragment>
 		);
 	}
 }

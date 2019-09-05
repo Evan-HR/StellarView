@@ -11,8 +11,6 @@ const axios = require("axios");
 const suncalc = require("suncalc");
 const clustering = require("density-clustering");
 const geolib = require("geolib");
-//moon phases
-var lune = require("lune");
 
 //authentication variables
 var session = require("express-session");
@@ -25,11 +23,11 @@ var cookieParser = require("cookie-parser");
 
 //env variables
 require("dotenv").config();
-const mapsKey1 = process.env.DUSTINMAPKEY;
+const mapsKey1 = process.env.REACT_APP_DUSTINMAPKEY;
 const weatherKey1 = process.env.REACT_APP_EVANWEATHERKEY;
 const cookieKey = process.env.SECRET;
-const sqlUsername = process.env.SQLUSERNAME;
-const sqlPassword = process.env.SQLPASSWORD;
+// const sqlUsername = process.env.SQLUSERNAME;
+// const sqlPassword = process.env.SQLPASSWORD;
 
 //set up simple express server
 const app = express();
@@ -67,10 +65,10 @@ connection.connect();
 
 //for sessions
 var options = {
-	host: "localhost",
-	user: "root",
-	password: "",
-	database: "parks"
+	host: process.env.JAWSDB_MARIA_HOST,
+	user: process.env.JAWSDB_MARIA_USER,
+	password: process.env.JAWSDB_MARIA_PASSWORD,
+	database: process.env.JAWSDB_MARIA_DATABASE
 };
 
 var sessionStore = new MySQLStore(options);
@@ -338,7 +336,7 @@ app.post("/api/register", function(req, res) {
 							[name, email, hash],
 							(err, results, fields) => {
 								if (err) {
-									console.log("failed" + err);
+									console.log("failed " + err);
 									res.sendStatus(500);
 									return;
 								} else {
@@ -505,6 +503,50 @@ app.post("/api/postFavSpot", (req, res) => {
 	);
 });
 
+app.post("/api/postUnfavSpot", (req, res) => {
+	console.log("body: ", req.body);
+	console.log("user_id: " + req.body.params.user_id);
+	console.log("park_id: " + req.body.params.park_id);
+
+	const deleteFavParkQuery =
+	
+		"DELETE FROM favorite_parks WHERE park_id=? AND user_id=?";
+	connection.query(
+		deleteFavParkQuery,
+		[req.body.params.park_id, req.body.params.user_id],
+		(err, results) => {
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
+			}
+			res.end();
+		}
+	);
+});
+
+app.post("/api/reportPark", (req, res) => {
+	console.log("park_id: " + req.body.params.park_id);
+	console.log("reportIssue: " + req.body.params.reportIssue);
+
+	const insertReportParkQuery =
+		"INSERT INTO reports (park_id, issue) VALUES (?, ?)";
+	connection.query(
+		insertReportParkQuery,
+		[req.body.params.park_id, req.body.params.reportIssue],
+		(err, results) => {
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
+			}
+			res.end();
+		}
+	);
+});
+
+
+
 //note, res.send sends the HTTP response, res.end ends the response process
 app.post("/results.html", (req, res) => {
 	console.log("Latitude entered: " + req.body.lat);
@@ -541,16 +583,9 @@ app.post("/results.html", (req, res) => {
 	);
 });
 
-//format "2014-02-17T00:00-0500", ISO 8601
-function getMoonProfile(userTime) {
-	var phaseInfo = lune.phase(userTime);
-	return phaseInfo;
-}
-
 function getMoon(userTime) {
 	var time = new Date(userTime);
 
-	//var phaseDates = lune.phase_hunt(isoDate);
 	var phaseInfo = suncalc.getMoonIllumination(time);
 	return phaseInfo;
 }
@@ -593,6 +628,7 @@ app.post("/api/getProfileParks", async (req, res) => {
 		// }
 
 		// await Promise.all()
+		console.log(parkData);
 
 		for (var parkKey in parkData) {
 			park = parkData[parkKey];
@@ -606,25 +642,24 @@ app.post("/api/getProfileParks", async (req, res) => {
 				);
 
 			//moon stuff
-			var phaseInfo = getMoon(req.body.userTime);
-			var moonType = "";
-			var percentMoon = phaseInfo.phase;
+			// var phaseInfo = getMoon(req.body.userTime);
+			// var moonType = "";
 
-			if (
-				inRange(percentMoon, 0, 0.125) ||
-				inRange(percentMoon, 0.875, 1)
-			) {
-				moonType = "New Moon";
-			} else if (inRange(percentMoon, 0.125, 0.375)) {
-				moonType = "First Quarter";
-			} else if (inRange(percentMoon, 0.375, 0.625)) {
-				moonType = "Full Moon";
-			} else if (inRange(percentMoon, 0.625, 0.875)) {
-				moonType = "Last Quarter";
-			}
+			// if (
+			// 	inRange(percentMoon, 0, 0.125) ||
+			// 	inRange(percentMoon, 0.875, 1)
+			// ) {
+			// 	moonType = "New Moon";
+			// } else if (inRange(percentMoon, 0.125, 0.375)) {
+			// 	moonType = "First Quarter";
+			// } else if (inRange(percentMoon, 0.375, 0.625)) {
+			// 	moonType = "Full Moon";
+			// } else if (inRange(percentMoon, 0.625, 0.875)) {
+			// 	moonType = "Last Quarter";
+			// }
 
-			park.moon = phaseInfo.fraction;
-			park.moonType = phaseInfo.phase;
+			// park.moon = phaseInfo.fraction;
+			// park.moonType = phaseInfo.phase;
 
 			//axios goes here normally
 		}
@@ -655,52 +690,134 @@ app.post("/api/getProfileParksWeather", async (req, res) => {
 		console.log(park.id);
 	}
 
-	res.send(parkData);
+	var phaseInfo = getMoon(userTime);
+
+	var moonType;
+	if (
+		inRange(phaseInfo.phase, 0.9375, 1) ||
+		inRange(phaseInfo.phase, 0, 0.0625)
+	) {
+		moonType = "New Moon";
+	} else if (inRange(phaseInfo.phase, 0.0625, 0.1875)) {
+		moonType = "Waxing Crescent";
+	} else if (inRange(phaseInfo.phase, 0.1875, 0.3125)) {
+		moonType = "First Quarter";
+	} else if (inRange(phaseInfo.phase, 0.3125, 0.4375)) {
+		moonType = "Waxing Gibbous";
+	} else if (inRange(phaseInfo.phase, 0.4375, 0.5625)) {
+		moonType = "Full Moon";
+	} else if (inRange(phaseInfo.phase, 0.5625, 0.6875)) {
+		moonType = "Waning Gibbous";
+	} else if (inRange(phaseInfo.phase, 0.6875, 0.8125)) {
+		moonType = "Last Quarter";
+	} else if (inRange(phaseInfo.phase, 0.8125, 0.9375)) {
+		moonType = "Waning Crescent";
+	} else {
+		moonType = "New Moon";
+	}
+
+	let reply = {
+		parks: parkData,
+		moonFraction: phaseInfo.fraction,
+		moonPhase: phaseInfo.phase,
+		moonType: moonType
+	};
+
+	res.send(reply);
 });
 
-function getParkWeatherAxios(park, userTime) {
-	weatherURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${park.lat}&lon=${park.lng}&appid=${weatherKey1}`;
-	console.log(weatherURL);
+async function getParkWeatherAxios(park, userTime) {
+	// console.log(weatherURL);
+	var utime = new Date(userTime);
 
-	var times = suncalc.getTimes(new Date(userTime), park.lat, park.lng);
+	var times = suncalc.getTimes(utime, park.lat, park.lng);
 
 	console.log("Sun data:", times);
 
 	var nightTime = new Date(times.night);
-	console.log(nightTime);
+	var dawnTime = new Date(times.dawn);
+	// console.log(nightTime);
 
-	return axios
+	let weatherInstance = null;
+	let response = null;
+	let forecast = false;
+
+	//If ucurrent time is past night-time or dawn use current weather
+	if (utime > nightTime || utime < dawnTime) {
+		weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${park.lat}&lon=${park.lng}&appid=${weatherKey1}&units=metric`;
+	} else {
+		forecast = true;
+		weatherURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${park.lat}&lon=${park.lng}&appid=${weatherKey1}&units=metric`;
+	}
+	response = await axios
 		.get(weatherURL)
-		.then(function(response) {
-			//console.log("Weather data:", response.data);
+		.then(response => response.data)
+		.catch(false);
 
-			response = response.data;
+	if (!forecast) {
+		//Get current weather
+		weatherInstance = response;
 
-			let weatherInstance = null;
-
-			for (var i = 0; i < response.cnt; i++) {
-				console.log(
-					new Date(response.list[i].dt_txt).getTime(),
-					nightTime.getTime(),
-					new Date(response.list[i].dt_txt).getTime() >
-						nightTime.getTime()
-				);
-				if (
-					new Date(response.list[i].dt_txt).getTime() >
+		park.weather = {
+			time: utime.getTime(),
+			city: response.name,
+			clouds: weatherInstance.clouds.all,
+			cloudDesc: weatherInstance.weather[0].description,
+			humidity: weatherInstance.main.humidity,
+			temp: weatherInstance.main.temp,
+			stationCoord: {
+				lat: response.coord.lat,
+				lng: response.coord.lon
+			},
+			stationDist:
+				geolib.getDistance(
+					{
+						lat: park.lat,
+						lng: park.lng
+					},
+					{
+						lat: response.coord.lat,
+						lng: response.coord.lon
+					}
+				) / 1000
+		};
+	} else {
+		//Get forecast weather
+		for (var i = 0; i < response.cnt; i++) {
+			console.log(
+				new Date(response.list[i].dt_txt).getTime(),
+				nightTime.getTime(),
+				new Date(response.list[i].dt_txt).getTime() >
 					nightTime.getTime()
+			);
+			if (
+				new Date(response.list[i].dt_txt).getTime() >
+				nightTime.getTime()
+			) {
+				//If the date before nightfall is closer to nightfall than the one after, pick the closer one
+				let succInst = i;
+				if (
+					i > 0 &&
+					Math.abs(
+						new Date(response.list[i - 1].dt_txt) -
+							nightTime.getTime()
+					) <
+						Math.abs(
+							new Date(response.list[i].dt_txt).getTime() -
+								nightTime.getTime()
+						)
 				) {
-					console.log(
-						"Success! Looking at ",
-						i,
-						":",
-						response.list[i]
-					);
-					weatherInstance = response.list[i];
-					break;
+					succInst = i - 1;
 				}
+				console.log(
+					"Success! Looking at ",
+					succInst,
+					":",
+					response.list[succInst]
+				);
+				weatherInstance = response.list[succInst];
+				break;
 			}
-
-			console.log(weatherInstance);
 
 			park.weather = {
 				time: new Date(weatherInstance.dt_txt).getTime(),
@@ -708,17 +825,27 @@ function getParkWeatherAxios(park, userTime) {
 				clouds: weatherInstance.clouds.all,
 				cloudDesc: weatherInstance.weather[0].description,
 				humidity: weatherInstance.main.humidity,
-				temp: weatherInstance.main.temp
+				temp: weatherInstance.main.temp,
+				stationCoord: {
+					lat: response.city.coord.lat,
+					lng: response.city.coord.lon
+				},
+				stationDist:
+					geolib.getDistance(
+						{
+							lat: park.lat,
+							lng: park.lng
+						},
+						{
+							lat: response.city.coord.lat,
+							lng: response.city.coord.lon
+						}
+					) / 1000
 			};
-			// park.clouds = response.data.clouds.all;
-			// park.cloudDesc = "dunno lmao";
-			// park.humidity = response.data.main.humidity;
-			return park;
-		})
-		.catch(function(response) {
-			console.log(response);
-			return false;
-		});
+		}
+	}
+
+	return park;
 }
 
 app.post("/api/getParkData", async (req, res) => {

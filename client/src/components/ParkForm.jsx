@@ -621,7 +621,7 @@ export default withRouter(ParkForm);
 
 const SearchFormStyle = styled.div`
 	background-color: ${props => props.theme.bodyBackground};
-	font-family: IBM Plex Sans;
+	font-family: "Lato", sans-serif;
 	padding: 13px;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
@@ -759,7 +759,7 @@ const SliderStyle = styled.div`
 	}
 	.MuiSlider-markLabel {
 		color: #bdbdbd;
-		font-family: IBM Plex Sans;
+		font-family: "Lato", sans-serif;
 	}
 	.MuiSlider-markLabelActive {
 		color: ${props => props.theme.colorBad};
