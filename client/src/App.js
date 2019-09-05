@@ -132,7 +132,7 @@ const SiteStyle = styled.div`
 `;
 
 const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono:300,400,600|Lato:300,400,700|IBM+Plex+Sans:300,400,600|&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,600,700|IBM+Plex+Sans:300,600|&display=swap');
 
 html {
 	line-height: 1.15;
