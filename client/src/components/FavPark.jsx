@@ -145,6 +145,7 @@ export default FavPark;
 const FavParkButtonStyle = styled.div`
 	button {
 		all: unset;
+		outline: none;
 	}
 
 	.FavedHeart {

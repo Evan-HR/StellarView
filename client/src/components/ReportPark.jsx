@@ -400,6 +400,7 @@ const AlertStyle = styled.div`
 const ReportIconStyle = styled.div`
 	button {
 		all: unset;
+		outline: none;
 	}
 
 	i {

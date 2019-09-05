@@ -516,6 +516,9 @@ const ModalStyle = styled.div`
 				.reportPark {
 					margin: auto 0;
 					grid-area: reportPark;
+					button{
+						outline: none;
+					}
 				
 					.reportParkText{
 						grid-area: reportParkText;
