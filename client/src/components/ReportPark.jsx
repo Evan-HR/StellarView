@@ -12,11 +12,10 @@ import formSuccess from "./style/Media/formSuccess.svg";
 Modal.setAppElement("#root");
 class BaseReportPark extends Component {
 	state = {
-		userEmail: "",
-		userPassword: "",
+		reportIssue: "",
 		errorDB: false,
 		modalIsOpen: false,
-		loginSuccess: false
+		reportSuccess: false
 	};
 
 	openModal = () => {
@@ -58,24 +57,24 @@ class BaseReportPark extends Component {
 				<AlertStyle success={false}>
 					<img src={formError} />
 					<div className="AlertText">
-						Invalid login credentials! Please try again
+						Could not submit - try again!
 					</div>
 				</AlertStyle>
 			);
 		}
-		if (this.state.loginSuccess) {
+		if (this.state.reportSuccess) {
 			return (
 				<AlertStyle success={true}>
 					<img src={formSuccess} />
-					<div className="AlertText">Login successful</div>
+					<div className="AlertText">Thank you for the report!</div>
 				</AlertStyle>
 			);
 		}
 	}
 
-	loginSuccess = () => {
+	reportSuccess = () => {
 		console.log("get here for some reason?");
-		this.setState({ loginSuccess: true, errorDB: false });
+		this.setState({ reportSuccess: true, errorDB: false });
 		setTimeout(() => {
 			this.closeModal();
 			this.props.context.handleLogin();
@@ -83,21 +82,60 @@ class BaseReportPark extends Component {
 		}, 1250);
 	};
 
+	handleFormChange = e => {
+		this.setState({
+			reportIssue: e.currentTarget.value
+		  });
+	  }
+
 	onSubmit = e => {
 		e.preventDefault();
 		axios
-			.post("/api/login", {
-				email: this.state.userEmail,
-				password: this.state.userPassword
+			.post("/api/reportPark", {
+				params:{
+					reportIssue: this.state.reportIssue,
+					park_id: this.props.parkID
+				}
+				
+		//add comma to add more 
 			})
 			//this.loginSuccess() will run function automatically
-			.then(this.loginSuccess)
+			.then(this.reportSuccess)
 
 			.catch(err => {
 				console.error("ERROR OCCURRED!", err);
 				this.handleErrorAlert();
 				//.then(this.closemModal) is needed
 			});
+	};
+
+	renderRadioForm = () => {
+		return (
+			<ReportFormStyle>
+				<h1>What's the reason?</h1>
+				<label class="container">
+					Park does not exist
+					<input type="radio" name="report" id="DNE" value="DNE" onChange={this.handleFormChange} />
+					<span class="checkmark"></span>
+				</label>
+				<label class="container">
+					By-laws enforced
+					<input type="radio" name="report" id="bylaw" value="bylaw"onChange={this.handleFormChange}  />
+					<span class="checkmark"></span>
+				</label>
+				<label class="container">
+					No Parking
+					<input type="radio" name="report" id="noparking" value="noparking"onChange={this.handleFormChange} />
+					<span class="checkmark"></span>
+				</label>
+				<label class="container">
+					Inaccessible
+					<input type="radio" name="report" id="inaccessible" value="inaccessible" onChange={this.handleFormChange} />
+					
+					<span class="checkmark"></span>
+				</label>
+			</ReportFormStyle>
+		);
 	};
 
 	renderLoginModal = () => {
@@ -117,8 +155,15 @@ class BaseReportPark extends Component {
 
 					<div className="form">
 						<div className="wrapper">
+							{this.renderRadioForm()}
 							<div className="rowSubmit">
-								<button onClick={this.onSubmit}>Submit</button>
+								<button 
+								onClick={this.onSubmit}
+								
+								
+								>
+									Submit
+								</button>
 							</div>
 						</div>
 
@@ -285,18 +330,6 @@ const LoginStyle = styled.div`
 						font-weight: 600;
 						color: rgb(100, 100, 100);
 					}
-
-					input {
-						margin-top: 2px;
-						font-size: 13px;
-						color: rgb(70, 70, 70);
-						border: none;
-						border-bottom: 1px solid rgba(100, 100, 100, 0.6);
-						outline: none;
-						height: 25px;
-						background: transparent;
-						width: 100%;
-					}
 					button {
 						margin-top: 0px;
 						font-size: 13px;
@@ -319,64 +352,9 @@ const LoginStyle = styled.div`
 						}
 					}
 				}
-				.row {
-					margin: 20px 0px;
-					.label {
-						font-size: 12px;
-						font-weight: 600;
-						color: rgb(100, 100, 100);
-					}
 
-					input {
-						margin-top: 2px;
-						font-size: 13px;
-						color: rgb(70, 70, 70);
-						border: none;
-						border-bottom: 1px solid rgba(100, 100, 100, 0.6);
-						outline: none;
-						height: 25px;
-						background: transparent;
-						width: 100%;
-					}
-					button {
-						margin-top: 0px;
-						font-size: 13px;
-						color: rgb(100, 100, 100);
-						border: none;
-						outline: none;
-						height: 40px;
-						text-transform: uppercase;
-						background: ${props => props.theme.starDark};
-						width: 100%;
-						color: #fff;
-						cursor: pointer;
-					}
-				}
 			}
 
-			.signup {
-				position: absolute;
-				text-align: center;
-				width: 100%;
-				font-size: 13px;
-				bottom: 70px;
-				color: #333;
-				a {
-					color: ${props => props.theme.colorBad};
-					transition: 0.25s;
-					text-decoration: none;
-					font-weight: 600;
-				}
-				:hover,
-				:active {
-					color: ${props => props.theme.franNavy};
-					transition: 0.25s;
-					a {
-						color: ${props => props.theme.franNavy};
-						transition: 0.25s;
-					}
-				}
-			}
 		}
 	}
 `;
@@ -427,4 +405,81 @@ const ReportIconStyle = styled.div`
 	i {
 		color: ${props => props.theme.colorMedium};
 	}
+`;
+
+const ReportFormStyle = styled.div`
+position: relative;
+margin-top: 10px;
+h1{
+    padding-bottom: 20px;
+    font-size: 25px;
+    padding-top: 15px;
+    text-align: left;
+}
+
+/* The container */
+.container {
+  display: block;
+  position: relative;
+  padding-left: 40px;
+  margin-bottom: 25px;
+  text-align: initial;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-size: 20px;
+}
+
+/* Hide the browser's default radio button */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+  
+}
+
+/* Style the indicator (dot/circle) */
+.container .checkmark:after {
+ 	top: 9px;
+	left: 9px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: white;
+}
 `;

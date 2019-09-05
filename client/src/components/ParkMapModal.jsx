@@ -148,42 +148,40 @@ class ParkMapModal extends Component {
 						</button>
 					</div>
 					<div className="ContentGrid">
-						<div className="interactIconsContainer">
-							<div className="interactIcons">
-								{/* <i className="shareIcon fas fa-share-alt fa-2x" />
-								<i className="faqIcon fas fa-question-circle fa-2x" /> */}
-								<div className="favPark">
-									<FavPark parkID={this.park.id} />
+						<div className="HeaderGrid">
+							<div className="favPark">
+								<FavPark parkID={this.park.id} />
 
-									<div className="favParkText">Save</div>
-								</div>
-
-								<div className="reportPark">
-									<ReportPark parkID={this.park.id} />
-
-									<div className="reportParkText">Report</div>
-								</div>
+								<div className="favParkText">Save</div>
 							</div>
+
+							<div className="reportPark">
+								<ReportPark parkID={this.park.id} />
+
+								<div className="reportParkText">Report</div>
+							</div>
+
+							<ScoreWrapper>
+								<div className="ParkScore">
+									<div className="Heading">
+										<span>
+											<u>Overall Score</u>
+										</span>
+									</div>
+									<span className="ScoreNumerator">
+										{Math.round(this.park.score * 100)}
+										<span className="Percentage">%</span>
+									</span>
+									<span className="Value">
+										{this.park.score > 0.8
+											? "Visible"
+											: this.park.score > 0.6
+											? "Partly Visible"
+											: "Not Visible"}
+									</span>
+								</div>
+							</ScoreWrapper>
 						</div>
-
-						<ScoreWrapper>
-							<div className="ParkScore">
-								<div className="Heading">
-									<span>Overall Score</span>
-								</div>
-								<span className="ScoreNumerator">
-									{Math.round(this.park.score * 100)}
-									<span className="Percentage">%</span>
-								</span>
-								<span className="Value">
-									{this.park.score > 0.8
-										? "Visible"
-										: this.park.score > 0.6
-										? "Partly Visible"
-										: "Not Visible"}
-								</span>
-							</div>
-						</ScoreWrapper>
 
 						<span className="textContainer">
 							Tap a square for more info
@@ -434,12 +432,14 @@ const ModalStyle = styled.div`
 		}
 	}
 
+
+
 	.ContentGrid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: auto auto auto auto;
 		grid-template-areas:
-			"interactIconsContainer    parkScore"
+			"HeaderGrid    			   HeaderGrid"
 			"infoText 				   infoText"
 			"weatherContainer    	   weatherContainer"
 			"reviewsContainer          reviewsContainer";
@@ -449,41 +449,47 @@ const ModalStyle = styled.div`
 		height: 100%;
 		overflow-y: auto;
 
-		/* img{
-	position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-} */
 
 .textContainer{
 	grid-area: infoText;
+	font-size: 20px;
 }
 
-		.interactIconsContainer {
-			grid-area: interactIconsContainer;
+.HeaderGrid{
+		display: grid;
+		grid-area: HeaderGrid;
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-rows: auto auto;
+		grid-template-areas:
+		"favPark 	 ParkScore reportPark"
+		"favParkText ParkScore reportParkText";
 
-			.interactIcons {
-				height: 157px;
-				display: grid;
-				margin: auto auto;
-				grid-template-rows: 1fr 0.35fr;
-				grid-template-columns: 1fr 1fr;
-				grid-template-areas:
-					"favPark     reportPark"
-					"favParkText reportParkText";
-				
+		.ParkScore {
+			grid-area: ParkScore;
+			display: inline-block;
+			vertical-align: middle;
+			text-align: center;
+			margin: auto auto;
+			display: flex;
+			flex-direction: column;
 
-				i {
-					/* width: 80%; */
-					button {
-						all: unset;
-						cursor: pointer;
-					}
-					margin: auto auto;
+			.ScoreNumerator {
+				/* font-family: Barlow; */
+				font-weight: 600;
+				font-size: 64px;
+				.Percentage {
+					font-size: 24px;
 				}
+			}
+
+			.ScoreDenominator {
+				/* font-family: Barlow; */
+				font-weight: 500;
+
+				font-size: 24px;
+			}
+		}
+
 				/* .shareIcon {
 					color: ${props => props.theme.fontDark};
 					grid-area: shareIcon;
@@ -492,16 +498,23 @@ const ModalStyle = styled.div`
 					color: ${props => props.theme.fontDark};
 					grid-area: faqIcon;
 				} */
+				i{
+						font-size: 40px;
+					}
+
+					
 				.favPark {
+					margin: auto 0;
 					grid-area: favPark;
-					margin: auto auto 0 auto;
+				
+					
 					.favParkText{
 						grid-area: favParkText;
 					}
 
 				}
 				.reportPark {
-					margin: auto auto 0 auto;
+					margin: auto 0;
 					grid-area: reportPark;
 				
 					.reportParkText{
@@ -510,8 +523,10 @@ const ModalStyle = styled.div`
 				}
 				
 			
-			}
-		}
+			
+		
+	}
+
 
 		.Heading,
 		.Value {
@@ -536,31 +551,7 @@ const ModalStyle = styled.div`
 			font-weight: 500;
 		}
 
-		.ParkScore {
-			grid-area: parkScore;
-			display: inline-block;
-			vertical-align: middle;
-			text-align: center;
-			margin: auto auto;
-			display: flex;
-			flex-direction: column;
 
-			.ScoreNumerator {
-				/* font-family: Barlow; */
-				font-weight: 600;
-				font-size: 64px;
-				.Percentage {
-					font-size: 24px;
-				}
-			}
-
-			.ScoreDenominator {
-				/* font-family: Barlow; */
-				font-weight: 500;
-
-				font-size: 24px;
-			}
-		}
 
 		.weatherContainer {
 			img {

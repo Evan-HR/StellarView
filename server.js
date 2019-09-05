@@ -503,6 +503,50 @@ app.post("/api/postFavSpot", (req, res) => {
 	);
 });
 
+app.post("/api/postUnfavSpot", (req, res) => {
+	console.log("body: ", req.body);
+	console.log("user_id: " + req.body.params.user_id);
+	console.log("park_id: " + req.body.params.park_id);
+
+	const deleteFavParkQuery =
+	
+		"DELETE FROM favorite_parks WHERE park_id=? AND user_id=?";
+	connection.query(
+		deleteFavParkQuery,
+		[req.body.params.park_id, req.body.params.user_id],
+		(err, results) => {
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
+			}
+			res.end();
+		}
+	);
+});
+
+app.post("/api/reportPark", (req, res) => {
+	console.log("park_id: " + req.body.params.park_id);
+	console.log("reportIssue: " + req.body.params.reportIssue);
+
+	const insertReportParkQuery =
+		"INSERT INTO reports (park_id, issue) VALUES (?, ?)";
+	connection.query(
+		insertReportParkQuery,
+		[req.body.params.park_id, req.body.params.reportIssue],
+		(err, results) => {
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
+			}
+			res.end();
+		}
+	);
+});
+
+
+
 //note, res.send sends the HTTP response, res.end ends the response process
 app.post("/results.html", (req, res) => {
 	console.log("Latitude entered: " + req.body.lat);
