@@ -182,14 +182,10 @@ class BaseParkForm extends Component {
 			navigator.geolocation.getCurrentPosition(
 				async position => {
 					console.log(
-						`https://nominatim.openstreetmap.org/reverse?format=json&lat=${
-							position.coords.latitude
-						}&lon=${position.coords.longitude}`
+						`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
 					);
 					let address = await axios.get(
-						`https://nominatim.openstreetmap.org/reverse?format=json&lat=${
-							position.coords.latitude
-						}&lon=${position.coords.longitude}`
+						`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
 					);
 					address = address["data"]["address"]["city"];
 					console.log(address);
@@ -623,7 +619,7 @@ export default withRouter(ParkForm);
 
 const SearchFormStyle = styled.div`
 	background-color: ${props => props.theme.bodyBackground};
-	font-family: IBM Plex Sans;
+	font-family: "Lato", sans-serif;
 	padding: 13px;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
@@ -675,7 +671,6 @@ const SearchFormStyle = styled.div`
 
 	.advancedSearchToggle {
 		grid-area: advancedSearchToggle;
-	
 
 		button {
 			float: left;
@@ -709,7 +704,6 @@ const SearchFormStyle = styled.div`
 			color: ${props => props.theme.colorBad};
 			transition: color 0.2s ease;
 		}
-
 	}
 
 	.searchTerm:focus {
@@ -763,7 +757,7 @@ const SliderStyle = styled.div`
 	}
 	.MuiSlider-markLabel {
 		color: #bdbdbd;
-		font-family: IBM Plex Sans;
+		font-family: "Lato", sans-serif;
 	}
 	.MuiSlider-markLabelActive {
 		color: ${props => props.theme.colorBad};

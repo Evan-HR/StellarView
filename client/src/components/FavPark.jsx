@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import axios from "axios";
 import { AuthConsumer } from "./AuthContext";
 import Login from "./Login";
+import styled from "styled-components";
 
 class BaseFavPark extends Component {
 	state = {
 		buttonPressed: false,
 		clickedNoAuth: false,
-		hasFaved: false
+		hasFaved: false,
+		hasUnfaved: false
 	};
 
 	handleFavSpotNoAuth = () => {
@@ -37,6 +39,29 @@ class BaseFavPark extends Component {
 		}
 	}
 
+	handleUnfavSpot() {
+		console.log(this.props.parkID);
+		console.log(this.props.context.userID);
+		axios
+			.post("/api/postUnfavSpot", {
+				params: {
+					park_id: this.props.parkID,
+					user_id: this.props.context.userID
+				}
+			})
+			.then(response => {
+				//TODO: send handler to auth about fav spots
+				console.log({ message: "Fav Spot is: ", response });
+				this.setState({ buttonPressed: true, hasUnfaved: true, hasFaved:false });
+				this.props.context.userFavorites.pop(this.props.parkID);
+				// this.props.context.hasFavSpots = true;
+				// this.props.context.hasNoSpots = false;
+			})
+			.catch(error => {
+				console.log(error);
+			});
+	}
+
 	handleFavSpot() {
 		console.log(this.props.parkID);
 		console.log(this.props.context.userID);
@@ -50,7 +75,7 @@ class BaseFavPark extends Component {
 			.then(response => {
 				//TODO: send handler to auth about fav spots
 				console.log({ message: "Fav Spot is: ", response });
-				this.setState({ buttonPressed: true });
+				this.setState({ buttonPressed: true,hasFaved: true,hasUnfaved:false });
 				this.props.context.userFavorites.push(this.props.parkID);
 				this.props.context.hasFavSpots = true;
 				this.props.context.hasNoSpots = false;
@@ -62,6 +87,7 @@ class BaseFavPark extends Component {
 
 	favSpotButton = () => {
 		//console.log("BUTTON CLICKED!!");
+
 		if (this.props.context.isAuth === true) {
 			if (
 				this.state.buttonPressed === false &&
@@ -69,17 +95,22 @@ class BaseFavPark extends Component {
 			) {
 				return (
 					<button onClick={() => this.handleFavSpot()}>
-						<i className="fas fa-heart" />
+						<i className="fas fa-heart fa-2x UnfavedHeart" />
+					</button>
+				);
+			} else if (
+				this.state.buttonPressed === true &&
+				this.state.hasUnfaved === true
+			) {
+				return (
+					<button onClick={() => this.handleFavSpot()}>
+						<i className="fas fa-heart fa-2x UnfavedHeart" />
 					</button>
 				);
 			} else {
 				return (
-					<button
-					//TODO: Green color on success
-					// className=""
-					//onClick={() => this.handleFavSpot()}
-					>
-						<i className="fas fa-heart fa-2x" />
+					<button onClick={() => this.handleUnfavSpot()}>
+						<i className="fas fa-heart fa-2x FavedHeart" />
 					</button>
 				);
 			}
@@ -88,7 +119,7 @@ class BaseFavPark extends Component {
 
 			return (
 				<Login handleLogin={this.props.handleLogin}>
-					<i className="fas fa-heart fa-2x" />
+					<i className="fas fa-heart fa-2x UnfavedHeart" />
 				</Login>
 			);
 		}
@@ -97,7 +128,7 @@ class BaseFavPark extends Component {
 	render() {
 		//const { label, score = 0, total = Math.max(1, score) } = this.props;
 
-		return <div>{this.favSpotButton()}</div>;
+		return <FavParkButtonStyle>{this.favSpotButton()}</FavParkButtonStyle>;
 	}
 }
 
@@ -110,3 +141,19 @@ const FavPark = props => (
 );
 
 export default FavPark;
+
+const FavParkButtonStyle = styled.div`
+	button {
+		all: unset;
+	}
+
+	.FavedHeart {
+		color: ${props => props.theme.colorGood};
+		cursor: pointer;
+	}
+
+	.UnfavedHeart {
+		color: ${props => props.theme.colorBad};
+		cursor: pointer;
+	}
+`;

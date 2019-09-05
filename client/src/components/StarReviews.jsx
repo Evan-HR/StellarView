@@ -15,14 +15,14 @@ class StarReviews extends Component {
 		return (
 			<Ratings
 				rating={this.state.rating}
-				widgetRatedColors="yellow"
+				widgetRatedColors="#2F3334"
 				changeRating={this.changeRating}
 			>
-				<Ratings.Widget rating={1} />
-				<Ratings.Widget rating={2} />
-				<Ratings.Widget rating={3} />
-				<Ratings.Widget rating={4} />
-				<Ratings.Widget rating={5} />
+				<Ratings.Widget widgetHoverColor="#2F3334" rating={1} />
+				<Ratings.Widget widgetHoverColor="#2F3334" rating={2} />
+				<Ratings.Widget widgetHoverColor="#2F3334" rating={3} />
+				<Ratings.Widget widgetHoverColor="#2F3334" rating={4} />
+				<Ratings.Widget widgetHoverColor="#2F3334" rating={5} />
 			</Ratings>
 		);
 	}

@@ -11,8 +11,6 @@ const axios = require("axios");
 const suncalc = require("suncalc");
 const clustering = require("density-clustering");
 const geolib = require("geolib");
-//moon phases
-var lune = require("lune");
 
 //authentication variables
 var session = require("express-session");
@@ -25,9 +23,11 @@ var cookieParser = require("cookie-parser");
 
 //env variables
 require("dotenv").config();
-const mapsKey1 = process.env.DUSTINMAPKEY;
+const mapsKey1 = process.env.REACT_APP_DUSTINMAPKEY;
 const weatherKey1 = process.env.REACT_APP_EVANWEATHERKEY;
 const cookieKey = process.env.SECRET;
+// const sqlUsername = process.env.SQLUSERNAME;
+// const sqlPassword = process.env.SQLPASSWORD;
 
 //set up simple express server
 const app = express();
@@ -39,31 +39,36 @@ app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "client", "build")));
 //app.use(express.static(__dirname + '/public'));
 
-app.get("*", (req, res) => {
-	res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-});
+// app.get("*", (req, res) => {
+// 	res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+// });
+
 //arbitrary port 5000
 app.listen(port, () => {
 	console.log(`Server started on port ${port}`);
 });
 
+var connection = mysql.createConnection(process.env.JAWSDB_MARIA_URL);
+
+connection.connect();
+
 //tidy connection code
-function getConnection() {
-	return mysql.createConnection({
-		host: "localhost",
-		user: "root",
-		password: "",
-		database: "parks",
-		multipleStatements: true
-	});
-}
+// function connection {
+// 	return mysql.createConnection({
+// 		host: "nkpl8b2jg68m87ht.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+// 		user: { sqlUsername },
+// 		password: { sqlPassword },
+// 		database: "e6da0ztvpz7ectml",
+// 		multipleStatements: true
+// 	});
+// }
 
 //for sessions
 var options = {
-	host: "localhost",
-	user: "root",
-	password: "",
-	database: "parks"
+	host: process.env.JAWSDB_MARIA_HOST,
+	user: process.env.JAWSDB_MARIA_USER,
+	password: process.env.JAWSDB_MARIA_PASSWORD,
+	database: process.env.JAWSDB_MARIA_DATABASE
 };
 
 var sessionStore = new MySQLStore(options);
@@ -121,34 +126,30 @@ passport.use(
 		},
 		function(username, password, done) {
 			const passQuery = "SELECT id,password from users WHERE email=?";
-			getConnection().query(
-				passQuery,
-				[username],
-				(err, results, fields) => {
-					//passport handles this error
-					if (err) {
-						done(err);
-					}
-					//doesn't exist
-					if (results.length === 0) {
-						done(null, false);
-					} else {
-						//success query
-						console.log("success login");
-						console.log(results[0].password.toString());
-						const hash = results[0].password.toString();
-
-						//used to be user.results[0].id
-						bcrypt.compare(password, hash, function(err, response) {
-							if (response === true) {
-								return done(null, results[0].id);
-							} else {
-								return done(null, false);
-							}
-						});
-					}
+			connection.query(passQuery, [username], (err, results, fields) => {
+				//passport handles this error
+				if (err) {
+					done(err);
 				}
-			);
+				//doesn't exist
+				if (results.length === 0) {
+					done(null, false);
+				} else {
+					//success query
+					console.log("success login");
+					console.log(results[0].password.toString());
+					const hash = results[0].password.toString();
+
+					//used to be user.results[0].id
+					bcrypt.compare(password, hash, function(err, response) {
+						if (response === true) {
+							return done(null, results[0].id);
+						} else {
+							return done(null, false);
+						}
+					});
+				}
+			});
 		}
 	)
 );
@@ -176,7 +177,7 @@ app.post(
 app.get("/api/getUserFavSpots", function(req, res) {
 	const getFavSpotsQuery =
 		"SELECT park_id from favorite_parks where user_id = ?";
-	getConnection().query(
+	connection.query(
 		getFavSpotsQuery,
 		[req.session.passport.user],
 		(err, favSpots) => {
@@ -207,44 +208,40 @@ app.get("/api/getReviews", function(req, res) {
 	const getReviewQuery =
 		"SELECT name, score, review from reviews where p_id = ?";
 
-	getConnection().query(
-		getReviewQuery,
-		[req.query.parkID],
-		(err, reviews) => {
-			if (reviews.length > 0) {
-				if (err) {
-					console.log("failed" + err);
-					res.sendStatus(500);
-					return;
-				} else {
-					console.log("REVIEWS about to be sent: ", reviews);
-					var reviewsJSON = JSON.parse(JSON.stringify(reviews));
-					var score = 0;
-					var reviewsLength = Object.keys(reviewsJSON).length;
-					console.log("num reviews: " + reviewsLength);
-					for (let review in reviewsJSON) {
-						review = reviewsJSON[review];
-						console.log("score is : ", review.score);
-						score = score + review.score;
-					}
-
-					var averageScore =
-						Math.round((score / reviewsLength) * 10) / 10;
-					console.log("average score truncated is: " + averageScore);
-
-					let reply = {
-						reviews: reviews,
-						averageScore: averageScore,
-						numReviews: reviewsLength
-					};
-
-					res.send(reply);
-				}
+	connection.query(getReviewQuery, [req.query.parkID], (err, reviews) => {
+		if (reviews.length > 0) {
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
 			} else {
-				res.sendStatus(204);
+				console.log("REVIEWS about to be sent: ", reviews);
+				var reviewsJSON = JSON.parse(JSON.stringify(reviews));
+				var score = 0;
+				var reviewsLength = Object.keys(reviewsJSON).length;
+				console.log("num reviews: " + reviewsLength);
+				for (let review in reviewsJSON) {
+					review = reviewsJSON[review];
+					console.log("score is : ", review.score);
+					score = score + review.score;
+				}
+
+				var averageScore =
+					Math.round((score / reviewsLength) * 10) / 10;
+				console.log("average score truncated is: " + averageScore);
+
+				let reply = {
+					reviews: reviews,
+					averageScore: averageScore,
+					numReviews: reviewsLength
+				};
+
+				res.send(reply);
 			}
+		} else {
+			res.sendStatus(204);
 		}
-	);
+	});
 });
 
 //put review to database
@@ -259,7 +256,7 @@ app.post("/api/storeReview", function(req, res) {
 	const insertReviewQuery =
 		"INSERT INTO reviews (p_id, score, name, user_id, review) VALUES (?, ?, ?, ?, ?)";
 
-	getConnection().query(
+	connection.query(
 		insertReviewQuery,
 		[
 			req.body.parkID,
@@ -311,7 +308,7 @@ app.post("/api/register", function(req, res) {
 		console.log("name email and password: " + name, email, password);
 
 		const emailQuery = "SELECT * from users WHERE email=?";
-		getConnection().query(emailQuery, [email], (err, results, fields) => {
+		connection.query(emailQuery, [email], (err, results, fields) => {
 			if (err) {
 				console.log("failed" + err);
 				res.sendStatus(500);
@@ -334,12 +331,12 @@ app.post("/api/register", function(req, res) {
 
 					//wrap insert query with bcrypt
 					bcrypt.hash(password, saltRounds, function(err, hash) {
-						getConnection().query(
+						connection.query(
 							insertQuery,
 							[name, email, hash],
 							(err, results, fields) => {
 								if (err) {
-									console.log("failed" + err);
+									console.log("failed " + err);
 									res.sendStatus(500);
 									return;
 								} else {
@@ -399,7 +396,7 @@ app.get("/api/getUserInfo", (req, res) => {
 	console.log("SECOND: getuserinfO");
 	const nameQuery = "SELECT name from users WHERE id=?";
 	if (req.session.passport) {
-		getConnection().query(
+		connection.query(
 			nameQuery,
 			[req.session.passport.user],
 			(err, profileInfo) => {
@@ -430,7 +427,7 @@ app.get("/api/getUserReviews", (req, res) => {
 	const getUserReviewQuery = "SELECT p_id from reviews WHERE user_id=?";
 	//if logged in...
 	if (req.session.passport) {
-		getConnection().query(
+		connection.query(
 			getUserReviewQuery,
 			[req.session.passport.user],
 			(err, reviewResults) => {
@@ -466,7 +463,7 @@ app.get("/park/:id", function(req, res) {
 	//get info for id
 	const queryString =
 		"SELECT name, light_pol, lat, lng from ontario_parks WHERE id=?";
-	getConnection().query(queryString, id, (err, parkInfo) => {
+	connection.query(queryString, id, (err, parkInfo) => {
 		if (err) {
 			console.log("failed" + err);
 			res.sendStatus(500);
@@ -492,7 +489,7 @@ app.post("/api/postFavSpot", (req, res) => {
 
 	const insertFavParkQuery =
 		"INSERT INTO favorite_parks (park_id, user_id) VALUES (?, ?)";
-	getConnection().query(
+	connection.query(
 		insertFavParkQuery,
 		[req.body.params.park_id, req.body.params.user_id],
 		(err, results) => {
@@ -505,6 +502,50 @@ app.post("/api/postFavSpot", (req, res) => {
 		}
 	);
 });
+
+app.post("/api/postUnfavSpot", (req, res) => {
+	console.log("body: ", req.body);
+	console.log("user_id: " + req.body.params.user_id);
+	console.log("park_id: " + req.body.params.park_id);
+
+	const deleteFavParkQuery =
+	
+		"DELETE FROM favorite_parks WHERE park_id=? AND user_id=?";
+	connection.query(
+		deleteFavParkQuery,
+		[req.body.params.park_id, req.body.params.user_id],
+		(err, results) => {
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
+			}
+			res.end();
+		}
+	);
+});
+
+app.post("/api/reportPark", (req, res) => {
+	console.log("park_id: " + req.body.params.park_id);
+	console.log("reportIssue: " + req.body.params.reportIssue);
+
+	const insertReportParkQuery =
+		"INSERT INTO reports (park_id, issue) VALUES (?, ?)";
+	connection.query(
+		insertReportParkQuery,
+		[req.body.params.park_id, req.body.params.reportIssue],
+		(err, results) => {
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
+			}
+			res.end();
+		}
+	);
+});
+
+
 
 //note, res.send sends the HTTP response, res.end ends the response process
 app.post("/results.html", (req, res) => {
@@ -521,7 +562,7 @@ app.post("/results.html", (req, res) => {
 	//6371 is km, 3959 is miles
 	const queryString =
 		"SELECT *, ( 6371 * acos( cos( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin( radians( ? ) ) * sin( radians( lat ) ) ) ) AS distance FROM ontario_parks HAVING distance <= ? AND light_pol <= ? ORDER BY distance ASC";
-	getConnection().query(
+	connection.query(
 		queryString,
 		[lat, lng, lat, dist, lightpol],
 		(err, results) => {
@@ -542,16 +583,9 @@ app.post("/results.html", (req, res) => {
 	);
 });
 
-//format "2014-02-17T00:00-0500", ISO 8601
-function getMoonProfile(userTime) {
-	var phaseInfo = lune.phase(userTime);
-	return phaseInfo;
-}
-
 function getMoon(userTime) {
 	var time = new Date(userTime);
 
-	//var phaseDates = lune.phase_hunt(isoDate);
 	var phaseInfo = suncalc.getMoonIllumination(time);
 	return phaseInfo;
 }
@@ -577,7 +611,7 @@ app.post("/api/getProfileParks", async (req, res) => {
 	console.log("userFAVS query is: ", inQuerySet);
 	const queryString = `select * from ontario_parks where id in ${inQuerySet}`;
 
-	getConnection().query(queryString, [inQuerySet], (err, results) => {
+	connection.query(queryString, [inQuerySet], (err, results) => {
 		if (err) {
 			console.log("failed" + err);
 			res.sendStatus(500);
@@ -594,6 +628,7 @@ app.post("/api/getProfileParks", async (req, res) => {
 		// }
 
 		// await Promise.all()
+		console.log(parkData);
 
 		for (var parkKey in parkData) {
 			park = parkData[parkKey];
@@ -607,25 +642,24 @@ app.post("/api/getProfileParks", async (req, res) => {
 				);
 
 			//moon stuff
-			var phaseInfo = getMoon(req.body.userTime);
-			var moonType = "";
-			var percentMoon = phaseInfo.phase;
+			// var phaseInfo = getMoon(req.body.userTime);
+			// var moonType = "";
 
-			if (
-				inRange(percentMoon, 0, 0.125) ||
-				inRange(percentMoon, 0.875, 1)
-			) {
-				moonType = "New Moon";
-			} else if (inRange(percentMoon, 0.125, 0.375)) {
-				moonType = "First Quarter";
-			} else if (inRange(percentMoon, 0.375, 0.625)) {
-				moonType = "Full Moon";
-			} else if (inRange(percentMoon, 0.625, 0.875)) {
-				moonType = "Last Quarter";
-			}
+			// if (
+			// 	inRange(percentMoon, 0, 0.125) ||
+			// 	inRange(percentMoon, 0.875, 1)
+			// ) {
+			// 	moonType = "New Moon";
+			// } else if (inRange(percentMoon, 0.125, 0.375)) {
+			// 	moonType = "First Quarter";
+			// } else if (inRange(percentMoon, 0.375, 0.625)) {
+			// 	moonType = "Full Moon";
+			// } else if (inRange(percentMoon, 0.625, 0.875)) {
+			// 	moonType = "Last Quarter";
+			// }
 
-			park.moon = phaseInfo.fraction;
-			park.moonType = phaseInfo.phase;
+			// park.moon = phaseInfo.fraction;
+			// park.moonType = phaseInfo.phase;
 
 			//axios goes here normally
 		}
@@ -656,52 +690,134 @@ app.post("/api/getProfileParksWeather", async (req, res) => {
 		console.log(park.id);
 	}
 
-	res.send(parkData);
+	var phaseInfo = getMoon(userTime);
+
+	var moonType;
+	if (
+		inRange(phaseInfo.phase, 0.9375, 1) ||
+		inRange(phaseInfo.phase, 0, 0.0625)
+	) {
+		moonType = "New Moon";
+	} else if (inRange(phaseInfo.phase, 0.0625, 0.1875)) {
+		moonType = "Waxing Crescent";
+	} else if (inRange(phaseInfo.phase, 0.1875, 0.3125)) {
+		moonType = "First Quarter";
+	} else if (inRange(phaseInfo.phase, 0.3125, 0.4375)) {
+		moonType = "Waxing Gibbous";
+	} else if (inRange(phaseInfo.phase, 0.4375, 0.5625)) {
+		moonType = "Full Moon";
+	} else if (inRange(phaseInfo.phase, 0.5625, 0.6875)) {
+		moonType = "Waning Gibbous";
+	} else if (inRange(phaseInfo.phase, 0.6875, 0.8125)) {
+		moonType = "Last Quarter";
+	} else if (inRange(phaseInfo.phase, 0.8125, 0.9375)) {
+		moonType = "Waning Crescent";
+	} else {
+		moonType = "New Moon";
+	}
+
+	let reply = {
+		parks: parkData,
+		moonFraction: phaseInfo.fraction,
+		moonPhase: phaseInfo.phase,
+		moonType: moonType
+	};
+
+	res.send(reply);
 });
 
-function getParkWeatherAxios(park, userTime) {
-	weatherURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${park.lat}&lon=${park.lng}&appid=${weatherKey1}`;
-	console.log(weatherURL);
+async function getParkWeatherAxios(park, userTime) {
+	// console.log(weatherURL);
+	var utime = new Date(userTime);
 
-	var times = suncalc.getTimes(new Date(userTime), park.lat, park.lng);
+	var times = suncalc.getTimes(utime, park.lat, park.lng);
 
 	console.log("Sun data:", times);
 
 	var nightTime = new Date(times.night);
-	console.log(nightTime);
+	var dawnTime = new Date(times.dawn);
+	// console.log(nightTime);
 
-	return axios
+	let weatherInstance = null;
+	let response = null;
+	let forecast = false;
+
+	//If ucurrent time is past night-time or dawn use current weather
+	if (utime > nightTime || utime < dawnTime) {
+		weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${park.lat}&lon=${park.lng}&appid=${weatherKey1}&units=metric`;
+	} else {
+		forecast = true;
+		weatherURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${park.lat}&lon=${park.lng}&appid=${weatherKey1}&units=metric`;
+	}
+	response = await axios
 		.get(weatherURL)
-		.then(function(response) {
-			//console.log("Weather data:", response.data);
+		.then(response => response.data)
+		.catch(false);
 
-			response = response.data;
+	if (!forecast) {
+		//Get current weather
+		weatherInstance = response;
 
-			let weatherInstance = null;
-
-			for (var i = 0; i < response.cnt; i++) {
-				console.log(
-					new Date(response.list[i].dt_txt).getTime(),
-					nightTime.getTime(),
-					new Date(response.list[i].dt_txt).getTime() >
-						nightTime.getTime()
-				);
-				if (
-					new Date(response.list[i].dt_txt).getTime() >
+		park.weather = {
+			time: utime.getTime(),
+			city: response.name,
+			clouds: weatherInstance.clouds.all,
+			cloudDesc: weatherInstance.weather[0].description,
+			humidity: weatherInstance.main.humidity,
+			temp: weatherInstance.main.temp,
+			stationCoord: {
+				lat: response.coord.lat,
+				lng: response.coord.lon
+			},
+			stationDist:
+				geolib.getDistance(
+					{
+						lat: park.lat,
+						lng: park.lng
+					},
+					{
+						lat: response.coord.lat,
+						lng: response.coord.lon
+					}
+				) / 1000
+		};
+	} else {
+		//Get forecast weather
+		for (var i = 0; i < response.cnt; i++) {
+			console.log(
+				new Date(response.list[i].dt_txt).getTime(),
+				nightTime.getTime(),
+				new Date(response.list[i].dt_txt).getTime() >
 					nightTime.getTime()
+			);
+			if (
+				new Date(response.list[i].dt_txt).getTime() >
+				nightTime.getTime()
+			) {
+				//If the date before nightfall is closer to nightfall than the one after, pick the closer one
+				let succInst = i;
+				if (
+					i > 0 &&
+					Math.abs(
+						new Date(response.list[i - 1].dt_txt) -
+							nightTime.getTime()
+					) <
+						Math.abs(
+							new Date(response.list[i].dt_txt).getTime() -
+								nightTime.getTime()
+						)
 				) {
-					console.log(
-						"Success! Looking at ",
-						i,
-						":",
-						response.list[i]
-					);
-					weatherInstance = response.list[i];
-					break;
+					succInst = i - 1;
 				}
+				console.log(
+					"Success! Looking at ",
+					succInst,
+					":",
+					response.list[succInst]
+				);
+				weatherInstance = response.list[succInst];
+				break;
 			}
-
-			console.log(weatherInstance);
 
 			park.weather = {
 				time: new Date(weatherInstance.dt_txt).getTime(),
@@ -709,17 +825,27 @@ function getParkWeatherAxios(park, userTime) {
 				clouds: weatherInstance.clouds.all,
 				cloudDesc: weatherInstance.weather[0].description,
 				humidity: weatherInstance.main.humidity,
-				temp: weatherInstance.main.temp
+				temp: weatherInstance.main.temp,
+				stationCoord: {
+					lat: response.city.coord.lat,
+					lng: response.city.coord.lon
+				},
+				stationDist:
+					geolib.getDistance(
+						{
+							lat: park.lat,
+							lng: park.lng
+						},
+						{
+							lat: response.city.coord.lat,
+							lng: response.city.coord.lon
+						}
+					) / 1000
 			};
-			// park.clouds = response.data.clouds.all;
-			// park.cloudDesc = "dunno lmao";
-			// park.humidity = response.data.main.humidity;
-			return park;
-		})
-		.catch(function(response) {
-			console.log(response);
-			return false;
-		});
+		}
+	}
+
+	return park;
 }
 
 app.post("/api/getParkData", async (req, res) => {
@@ -732,9 +858,10 @@ app.post("/api/getParkData", async (req, res) => {
 
 	//STEP 2: GET PARKS FROM DATABASE USING USER INPUT PARAMS
 	//6371 is km, 3959 is miles
+	console.log("Grabbing database");
 	const queryFromUserForm =
 		"SELECT *, ( 6371 * acos( cos( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin( radians( ? ) ) * sin( radians( lat ) ) ) ) AS distance FROM ontario_parks HAVING distance <= ? AND light_pol <= ? ORDER BY distance ASC";
-	getConnection().query(
+	connection.query(
 		queryFromUserForm,
 		[lat, lng, lat, dist, lightpol],
 		(err, initialResults) => {
@@ -766,7 +893,7 @@ app.post("/api/getParkData", async (req, res) => {
 
 			const allReviewsQuery = `select AVG(score)as avgScore,count(*) as numReviews,p_id from reviews where p_id in ${inParkIDSet} group by p_id`;
 
-			getConnection().query(
+			connection.query(
 				allReviewsQuery,
 				[inParkIDSet],
 				async (err, reviewsResults) => {

@@ -13,6 +13,46 @@ import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
 import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import tempIcon from "./style/Media/cardIcons/temperature.svg";
 
+function inRange(x, min, max) {
+	return (x - min) * (x - max) <= 0;
+}
+
+export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
+	console.log("MOON FRACTION % IS !!!!!!!!!!!!!!", moonFraction);
+	console.log("CLOUD COV IS !!!!!!!!!!!!!!", cloudCov);
+	console.log("LIGHT POL IS !!!!!!!!!!!!!!", lightPol);
+	console.log("humidity COV IS !!!!!!!!!!!!!!", humidity);
+	var moonScore = 0.45 * (-1 * (2 * moonFraction - 1));
+	var lightPolScore = 0.25 * (((-1 * 1) / 3) * (lightPol - 3));
+	var humidityScore = 0;
+	if (humidity < 0.4) {
+		humidityScore += 0.15 * 1;
+	} else if (inRange(humidity, 0.4, 0.8)) {
+		humidityScore += 0.15 * (-2.5 * humidity + 2);
+	} else if (0.8 < humidity) {
+		humidityScore += 0;
+	}
+	var cloudScore = 0;
+	if (cloudCov < 0.2) {
+		cloudScore += 0.15 * 1;
+	} else if (inRange(cloudCov, 0.2, 0.4)) {
+		cloudScore += 0.15 * (-5 * cloudCov + 2);
+	} else if (0.4 < cloudCov) {
+		cloudScore += 0;
+	}
+
+	const finalScore = moonScore + cloudScore + humidityScore + lightPolScore;
+	console.log(
+		"Moon score, cloudscore, humidity, lightpolscore ",
+		moonScore,
+		cloudScore,
+		humidityScore,
+		lightPolScore
+	);
+	console.log("final score: ", finalScore);
+	return finalScore;
+}
+
 class BaseParksData extends Component {
 	state = {
 		parks: [],
@@ -44,10 +84,6 @@ class BaseParksData extends Component {
 		// They're referenced in odd places and may update at weird times from the rest of doms
 		// Since they're google map things
 		this.markers = {};
-	}
-
-	inRange(x, min, max) {
-		return (x - min) * (x - max) <= 0;
 	}
 
 	handleMapLoaded = googleMapActual => {
@@ -86,7 +122,7 @@ class BaseParksData extends Component {
 			console.log("Loaded from storage:", JSON.parse(localData));
 			this.setState({
 				parks: JSON.parse(localData).parks,
-				moon: JSON.parse(localData).moonPercent,
+				moonPhase: JSON.parse(localData).moonPercent,
 				moonFraction: JSON.parse(localData).moonFraction,
 				moonType: JSON.parse(localData).moonType,
 
@@ -102,7 +138,7 @@ class BaseParksData extends Component {
 				.then(response => {
 					console.log(response.data);
 					for (var i = 0; i < response.data.parks.length; i++) {
-						response.data.parks[i].score = this.parkScore(
+						response.data.parks[i].score = parkScore(
 							response.data.moonFraction,
 							response.data.parks[i].weather.humidity / 100,
 							response.data.parks[i].weather.clouds / 100,
@@ -130,43 +166,6 @@ class BaseParksData extends Component {
 					this.setState({ isFetchingParks: false });
 				});
 		}
-	};
-
-	parkScore = (moonFraction, humidity, cloudCov, lightPol) => {
-		console.log("MOON FRACTION % IS !!!!!!!!!!!!!!", moonFraction);
-		console.log("CLOUD COV IS !!!!!!!!!!!!!!", cloudCov);
-		console.log("LIGHT POL IS !!!!!!!!!!!!!!", lightPol);
-		console.log("humidity COV IS !!!!!!!!!!!!!!", humidity);
-		var moonScore = 0.45 * (-1 * (2 * moonFraction - 1));
-		var lightPolScore = 0.25 * (((-1 * 1) / 3) * (lightPol - 3));
-		var humidityScore = 0;
-		if (humidity < 0.4) {
-			humidityScore += 0.15 * 1;
-		} else if (this.inRange(humidity, 0.4, 0.8)) {
-			humidityScore += 0.15 * (-2.5 * humidity + 2);
-		} else if (0.8 < humidity) {
-			humidityScore += 0;
-		}
-		var cloudScore = 0;
-		if (cloudCov < 0.2) {
-			cloudScore += 0.15 * 1;
-		} else if (this.inRange(cloudCov, 0.2, 0.4)) {
-			cloudScore += 0.15 * (-5 * cloudCov + 2);
-		} else if (0.4 < cloudCov) {
-			cloudScore += 0;
-		}
-
-		const finalScore =
-			moonScore + cloudScore + humidityScore + lightPolScore;
-		console.log(
-			"Moon score, cloudscore, humidity, lightpolscore ",
-			moonScore,
-			cloudScore,
-			humidityScore,
-			lightPolScore
-		);
-		console.log("final score: ", finalScore);
-		return finalScore;
 	};
 
 	//Clear button handler
@@ -200,7 +199,7 @@ class BaseParksData extends Component {
 							markers={this.markers}
 							location={this.state.fetchReq}
 							onMapLoaded={this.handleMapLoaded}
-							moon={this.state.moon}
+							moon={this.state.moonPhase}
 							moonType={this.state.moonType}
 						/>
 					</animated.div>
@@ -264,12 +263,12 @@ class BaseParksData extends Component {
 
 					<div className="MoonStyle">
 						<MoonComponent
-							moon={this.state.moon}
+							moon={this.state.moonPhase}
 							parkList={this.state.parks}
 							moonType={this.state.moonType}
 						/>
 					</div>
-					<div className="helpCard">
+					{/* <div className="helpCard">
 					<span className="help">Icon Info</span>
 					<img className="iconA" src={humidityIcon} />
 					<img className="iconB" src={lightPolIcon} />
@@ -282,7 +281,7 @@ class BaseParksData extends Component {
 					<span className="descD">Cloud Coverage</span>
 					<span className="descC">Overall Visibility</span>
 			
-					</div>
+					</div> */}
 					{/* </div> */}
 
 					<div className="SortByContainer">
@@ -306,7 +305,7 @@ class BaseParksData extends Component {
 					<div className="ParkTableStyle">
 						<ParkTable
 							parkList={this.state.parks}
-							moon={this.state.moon}
+							moon={this.state.moonPhase}
 							moonType={this.state.moonType}
 							googleMap={this.googleMap}
 							markers={this.markers}
@@ -383,17 +382,11 @@ const MainContentWrapper = styled.div`
 	.MoonStyle {
 		/* height: 50%; */
 		/* background: ${props => props.theme.moonCard}; */
-		background: -moz-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* ff3.6+ */
-background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(35,37,38,1)), color-stop(100%, rgba(55,57,59,1))); /* safari4+,chrome */
-background: -webkit-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* safari5.1+,chrome10+ */
-background: -o-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* opera 11.10+ */
-background: -ms-linear-gradient(342deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* ie10+ */
-background: linear-gradient(108deg, rgba(35,37,38,1) 0%, rgba(55,57,59,1) 100%); /* w3c */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#232526', endColorstr='#37393B',GradientType=1 ); /* ie6-9 */
+		background: #242627;
 	}
 
 	.helpCard{
-	font-family: IBM Plex Sans;
+		font-family: 'Lato', sans-serif;
 	height: 140px;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -406,7 +399,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#232526', end
 	font-size: 14px;
 	/* box-shadow: inset 0px 0px 0px 4px #485261;
 
-	background: ${props=>props.theme.cardLight}; */
+	background: ${props => props.theme.cardLight}; */
 
 	background: -moz-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ff3.6+ */
 background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(189,194,198,0.95)), color-stop(100%, rgba(172,177,181,1))); /* safari4+,chrome */
@@ -424,7 +417,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', end
 
 	}
 	.help{
-		color: ${props=>props.theme.fontDark};
+		color: ${props => props.theme.fontDark};
 		font-size: 20px;
 		
 		font-weight: 600;
@@ -469,7 +462,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', end
 	}
 
 	.SortByContainer {
-		font-family: IBM Plex Sans;
+		font-family: 'Lato', sans-serif;
 	
 		padding: 13px 0px 13px 0px;
 		width: 100%;
