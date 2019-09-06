@@ -8,7 +8,7 @@ import MuiSlider from "@material-ui/core/Slider";
 import { sizing } from "@material-ui/system";
 import { AuthConsumer } from "./AuthContext";
 import styled from "styled-components";
-import nearMeButton from "./style/Media/round-my_location-24px.svg";
+// import nearMeButton from "./style/Media/round-my_location-24px.svg";
 // import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 // const theme1 = createMuiTheme({
@@ -483,7 +483,8 @@ class BaseParkForm extends Component {
 					>
 						<span>NEAR ME</span>
 
-						<img src={nearMeButton} />
+
+						{/* <img src={nearMeButton} /> */}
 						{/* <strong>{this.renderLocationSpinner()}</strong> */}
 					</button>
 				</div>
@@ -615,12 +616,14 @@ const ParkForm = parkFormProps => (
 	</AuthConsumer>
 );
 
+
+
 export default withRouter(ParkForm);
 
 ////////////////////////////////////////////
 
 const SearchFormStyle = styled.div`
-	background-color: ${props => props.theme.bodyBackground};
+	background-color: ${props => props.theme.mapBlue};
 	font-family: "Lato", sans-serif;
 	padding: 13px;
 	display: grid;
@@ -657,15 +660,27 @@ const SearchFormStyle = styled.div`
 			height: 36px;
 			width: 100%;
 			color: ${props => props.theme.whitesmoke};
-			transition: color 0.2s ease;
-			img {
-				width: 28px;
-				margin-left: 5px;
-			}
+			transition: color 0.1s ease;
+			-webkit-transition: background-color 0.1s linear;
+    -ms-transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear;
+	font-size: 15px;
+    font-weight: 600;
+
+	:hover{
+			
+			background: ${props => props.theme.prettyDarkish};
+		
+    -webkit-transition: background-color 0.1s linear;
+    -ms-transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear;
+		}
+			
+			
 			:hover,
 			:active {
 				color: ${props => props.theme.colorBad};
-				transition: color 0.2s ease;
+				transition: color 0.1s ease;
 			}
 		}
 		grid-area: myLocation;
@@ -695,17 +710,28 @@ const SearchFormStyle = styled.div`
 		background: ${props => props.theme.prettyDark};
 		text-align: center;
 
-		color: #fff;
+		color: ${props => props.theme.white};
 		/* border-radius: 0 5px 5px 0; */
 		cursor: pointer;
 		font-size: 20px;
 		border: none;
 		float: left;
-		:hover,
-		:active {
-			color: ${props => props.theme.colorBad};
-			transition: color 0.2s ease;
+		transition: color 0.1s ease;
+			-webkit-transition: background-color 0.1s linear;
+    -ms-transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear;
+
+	:hover,:active{
+			
+			background: ${props => props.theme.prettyDarkish};
+		
+    -webkit-transition: background-color 0.1s linear;
+    -ms-transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear;
+	color: ${props => props.theme.colorBad};
+			transition: color 0.1s ease;
 		}
+
 	}
 
 	.searchTerm:focus {
@@ -720,7 +746,8 @@ const SearchFormStyle = styled.div`
 
 	.searchTerm {
 		width: calc(100% - 40px);
-		background: ${props => props.theme.lightDark};
+		background-color: ${props => props.theme.darkAccent};
+		transition: background-color 0.1s ease;
 		/* border: 3px solid #00b4cc; */
 		/* border-right: none; */
 		padding: 5px;
@@ -730,6 +757,12 @@ const SearchFormStyle = styled.div`
 		color: whitesmoke;
 		border: none;
 		float: left;
+		:hover,
+		:active {
+			background-color: ${props => props.theme.moonBackground};
+			transition: background-color  0.1s ease;
+		}
+
 	}
 
 	.ToggleAdvancedSearch {

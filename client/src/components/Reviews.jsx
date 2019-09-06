@@ -384,7 +384,7 @@ const ReviewFormStyle = styled.div`
 			background: ${props => props.theme.starDark};
 			transition: 0.25s;
 			width: 100%;
-			color: whitesmoke;
+			color: ${props => props.theme.white};
 			cursor: pointer;
 
 			:hover,

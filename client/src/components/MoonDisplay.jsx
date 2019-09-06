@@ -45,7 +45,7 @@ export default function MoonDisplay({phase}) {
 						cy="100"
 						r="100"
 						// stroke="whitesmoke"
-						fill="whitesmoke"
+						fill="#dadada"
 						class="bg"
 					/>
 					<circle
@@ -67,7 +67,7 @@ export default function MoonDisplay({phase}) {
 						cy="100"
 						r="100"
 						// stroke="whitesmoke"
-						fill="whitesmoke"
+						fill="#dadada"
 						class="bg"
 					/>
 					<circle
