@@ -40,8 +40,13 @@ export const theme = {
 	colorMedium: "#DAA979",
 	lightDark: "#5A5A5A",
 	prettyDark: "#111414",
+	prettyDarkish:"#111414d1",
 	moreInfoBackground: "#E4E4E4",
 	parkMapGreen: "#174030",
 	lightBlue: "#485261",
-	mapBlue: "#2d333c"
+	mapBlue: "#2d333c",
+	lightDarkish: "#4e4e4e",
+	moonBackground: "#242627",
+	darkAccent: "#1b1c1d",
+	white:"#dadada"
 };

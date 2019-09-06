@@ -167,7 +167,7 @@ class ParkMapModal extends Component {
 								<div className="ParkScore">
 									<div className="Heading">
 										<span>
-											<u>Overall Score</u>
+											Overall Score
 										</span>
 									</div>
 									<span className="ScoreNumerator">

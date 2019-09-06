@@ -14,15 +14,17 @@ const FooterStyle = styled.div`
     display: flex;
     margin-top: 20px;
     justify-content: center;
+    font-family: Lato;
     align-items: center;
 
     height: 150px;
-    font-family: monospace;
-    font-weight: 300;
-    font-size: 25px;
+    /* font-family: monospace; */
+    font-weight: 600;
+    font-size: 22px;
     background-color: ${props=>props.theme.prettyDark};
-    color: whitesmoke;
+    color: ${props => props.theme.white};
     .Names{
-        font-size: 12px;
+        font-weight: 400;
+        font-size: 13px;
     }
 `;

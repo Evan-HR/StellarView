@@ -23,7 +23,7 @@ class Moon extends Component {
 export default Moon;
 ///////////////////////////////////////////////////////////////
 const MoonStyle = styled.div`
-	color: whitesmoke;
+	color: ${props => props.theme.white};
 	/* font-family: IBM Plex Sans; */
 	font-family: "Lato", sans-serif;
 	font-weight: 600;

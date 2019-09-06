@@ -343,7 +343,7 @@ const CardStyle = styled.div`
 		justify-content: space-between;
 		align-items: center;
 		/* padding-bottom: 8px; */
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 		padding: 0 13px 0 13px;
 		cursor: pointer;
 		:hover{
@@ -540,7 +540,7 @@ const CardBootstrap = styled.div`
 		flex-direction: column;
 		min-width: 0;
 		word-wrap: break-word;
-		background-color: #fff;
+		background-color: ${props => props.theme.white};
 		background-clip: border-box;
 		border: none !important;
 		border-radius: 0px;

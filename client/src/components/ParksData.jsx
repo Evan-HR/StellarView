@@ -395,7 +395,7 @@ const ResultsPageStyle = styled.div`
 		margin-bottom: -13px;
 		/* overflow-y: scroll;
 		overflow-x: hidden; */
-		/* background-color: whitesmoke; */
+		/* background-color: ${props => props.theme.white}; */
 	}
 	.ParkFormStyle {
 		/* height: 11vh; */
@@ -495,11 +495,11 @@ const ResultsPageStyle = styled.div`
 		width: 100%;
 
 		.SortBy {
-			color: whitesmoke;
+			color: ${props => props.theme.white};
 			transition: color 0.2s ease;
 			button{	
 				all: unset;
-				color: whitesmoke;
+				color: ${props => props.theme.white};
 				font-weight: 600;
 				cursor: pointer;
 				margin: 0 0px 0 15px;

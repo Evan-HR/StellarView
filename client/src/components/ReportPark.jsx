@@ -124,7 +124,7 @@ class BaseReportPark extends Component {
 					<span class="checkmark"></span>
 				</label>
 				<label class="container">
-					No Parking
+					No parking
 					<input type="radio" name="report" id="noparking" value="noparking"onChange={this.handleFormChange} />
 					<span class="checkmark"></span>
 				</label>
@@ -246,7 +246,7 @@ const LoginStyle = styled.div`
 		font-size: 1.5rem;
 		font-weight: 700;
 		line-height: 1;
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 		outline: none;
 		text-shadow: none;
 		opacity: 0.5;
@@ -274,7 +274,7 @@ const LoginStyle = styled.div`
 		height: 80vh;
 		max-width: 100vw;
 		max-height: 100vh;
-		/* background: whitesmoke; */
+		/* background: ${props => props.theme.white}; */
 		overflow: hidden;
 		border-radius: 0.3rem;
 
@@ -285,7 +285,7 @@ const LoginStyle = styled.div`
 			width: 100%;
 			height: 210px;
 			background: url(${props => props.background}) center no-repeat;
-			background-size: 600px;
+			/* background-size: 600px; */
 			/* transform: skew(0deg, -8deg) translateY(-25px); */
 			z-index: 2;
 		}
@@ -295,7 +295,7 @@ const LoginStyle = styled.div`
 			width: 80px;
 			height: 80px;
 			background: ${props => props.theme.colorMedium};
-			color: #fff;
+			color: ${props => props.theme.white};
 			bottom: -35px;
 			left: 38%;
 			line-height: 80px;
@@ -342,7 +342,7 @@ const LoginStyle = styled.div`
 						background: ${props => props.theme.starDark};
 						transition: 0.25s;
 						width: 100%;
-						color: whitesmoke;
+						color: ${props => props.theme.white};
 						cursor: pointer;
 
 						:hover,
@@ -377,7 +377,7 @@ transform: translate(-50%,-50%); */
 
 const HeaderStyle = styled.div`
 	margin-left: 38%;
-	color: whitesmoke;
+	color: ${props => props.theme.white};
 `;
 
 const AlertStyle = styled.div`
