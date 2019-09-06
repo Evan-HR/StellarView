@@ -526,6 +526,7 @@ const ModalStyle = styled.div`
 					
 					.favParkText{
 						grid-area: favParkText;
+						font-size: 20px;
 					}
 
 				}
@@ -538,6 +539,7 @@ const ModalStyle = styled.div`
 				
 					.reportParkText{
 						grid-area: reportParkText;
+						font-size: 20px;
 					}
 				}
 				
