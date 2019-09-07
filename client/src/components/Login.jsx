@@ -9,6 +9,7 @@ import styled from "styled-components";
 import Register from "./Register";
 import formError from "./style/Media/formError.svg";
 import formSuccess from "./style/Media/formSuccess.svg";
+import StarBackground from "./StarBackground";
 
 Modal.setAppElement("#root");
 class BaseLogin extends Component {
@@ -103,9 +104,10 @@ class BaseLogin extends Component {
 
 	renderLoginModal = () => {
 		return (
-			<LoginStyle background={backgroundImage}>
+			<LoginStyle>
 				<div className="login">
 					<div className="banner">
+						<StarBackground/>
 						<button
 							type="button"
 							onClick={this.closeModal}

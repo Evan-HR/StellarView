@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter, Link } from "react-router-dom";
 import styled from 'styled-components';
+import StarBackgroundLess from "./StarBackgroundLess";
 
 
 
@@ -12,11 +13,7 @@ class NotFoundPage extends React.Component{
     
 
           <NotFoundStyle>
-          {/* <StarBackground>
-          		<div id='stars'></div>
-        <div id='stars2'></div>
-        <div id='stars3'></div>
-        </StarBackground> */}
+<StarBackgroundLess/>
         <div className="message">
               <h1>404</h1>
               <h3>LOST IN <span><del>SPACE</del></span> <span className="stellar">STELLARGAZE?</span> Hmm, looks like that page doesn't exist.</h3>
