@@ -43,6 +43,7 @@ class BaseParkForm extends Component {
 		super(props);
 		this.sliderLight = this.state.reqData.lightpol;
 		this.sliderDist = this.state.reqData.dist;
+		this.autoComplete = false;
 	}
 
 	//There are two cases when we would want to load results form url query:
@@ -60,6 +61,9 @@ class BaseParkForm extends Component {
 	}
 
 	componentDidUpdate() {
+		if (window.google && !this.autoComplete) {
+			this.loadAutoComplete();
+		}
 		//On back button load previous results
 		window.onpopstate = e => {
 			console.log("Back button pressed");
@@ -435,6 +439,27 @@ class BaseParkForm extends Component {
 		}
 	};
 
+	loadAutoComplete = () => {
+		this.autoComplete = new window.google.maps.places.SearchBox(
+			document.getElementById("autoComplete")
+		);
+		this.autoComplete.addListener("place_changed", this.onPlaceChanged);
+		// this.autoCompleteLoaded = true;
+	};
+
+	onPlaceChanged = () => {
+		let places = this.autoComplete.getPlaces();
+		if (places == 0) {
+			return;
+		}
+
+		var place = places[0];
+		console.log(place);
+		if (place.geometry && place.geometry.location) {
+			console.log(place.geometry.location.toJSON());
+		}
+	};
+
 	render() {
 		//console.log("Fetching parks?", this.props.isFetchingParks);
 		return (
@@ -446,6 +471,7 @@ class BaseParkForm extends Component {
 						}}
 					>
 						<input
+							id="autoComplete"
 							className="searchTerm"
 							type="text"
 							name="placeName"
