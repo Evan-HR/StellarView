@@ -316,7 +316,7 @@ class BaseParkForm extends Component {
 	//fetchP(x) --> getParkData(x)
 	onSubmit = e => {
 		if (e) e.preventDefault();
-		//console.log(this.state.reqData);
+		console.log(this.state.reqData);
 		const errors = this.validate(this.state.reqData);
 		if (errors.length === 0) {
 			var d = new Date();
@@ -443,7 +443,7 @@ class BaseParkForm extends Component {
 		this.autoComplete = new window.google.maps.places.SearchBox(
 			document.getElementById("autoComplete")
 		);
-		this.autoComplete.addListener("place_changed", this.onPlaceChanged);
+		this.autoComplete.addListener("places_changed", this.onPlaceChanged);
 		// this.autoCompleteLoaded = true;
 	};
 
@@ -456,7 +456,22 @@ class BaseParkForm extends Component {
 		var place = places[0];
 		console.log(place);
 		if (place.geometry && place.geometry.location) {
-			console.log(place.geometry.location.toJSON());
+			let location = place.geometry.location.toJSON();
+			console.log(location);
+			if (window.google) {
+				this.props.googleMap.panTo(place.geometry.location); //Make map global
+			}
+			this.setState(
+				{
+					reqData: {
+						...this.state.reqData,
+						placeName: place.formatted_address,
+						lat: location.lat,
+						lng: location.lng
+					}
+				},
+				() => this.onSubmit()
+			);
 		}
 	};
 
@@ -487,12 +502,14 @@ class BaseParkForm extends Component {
 								// 	? " btn-danger"
 								// 	: " btn-primary")
 							}
+							type="submit"
 							disabled={
 								this.state.reqData.placeName === "" ||
 								this.state.isGeocodingLocation
 							}
 							onClick={e => {
-								this.getPlaceCoordinates(e);
+								// this.onPlaceChanged();
+								// this.getPlaceCoordinates(e);
 							}}
 						>
 							<i className="fa fa-search" />
