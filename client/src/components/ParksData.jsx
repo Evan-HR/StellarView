@@ -58,7 +58,7 @@ class BaseParksData extends Component {
 	state = {
 		parks: [],
 		fetchReq: [],
-		moon: "",
+		moonPhase: "",
 		moonFraction: "",
 		moonType: "",
 		isMapLoaded: false,
@@ -148,7 +148,7 @@ class BaseParksData extends Component {
 					}
 					this.setState({
 						parks: response.data.parks,
-						moon: response.data.moonPercent,
+						moonPhase: response.data.moonPercent,
 						moonFraction: response.data.moonfraction,
 						moonType: response.data.moonType,
 						fetchReq: reqData,
@@ -269,7 +269,7 @@ class BaseParksData extends Component {
 
 					<div className="MoonStyle">
 						<MoonComponent
-							moon={this.state.moonPhase}
+							moonPhase={this.state.moonPhase}
 							parkList={this.state.parks}
 							moonType={this.state.moonType}
 						/>
