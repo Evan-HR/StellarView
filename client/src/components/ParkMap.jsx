@@ -32,9 +32,7 @@ class ParkMap extends Component {
 	componentDidMount() {
 		const googleMapScript = document.createElement("script");
 		//NOTE: Find a better way to secure the api key
-		googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=${
-			process.env.REACT_APP_DUSTINMAPKEY //TODO: See if this can be hidden better
-		}`;
+		googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_DUSTINMAPKEY}`;
 		window.document.body.appendChild(googleMapScript);
 		googleMapScript.addEventListener("load", () => {
 			this.googleMap = this.createGoogleMap();
@@ -98,11 +96,10 @@ class ParkMap extends Component {
 
 		if (this.props.markers[park.id]) {
 			console.log("Park marker already on map!");
-			console.log("PARK SCORE IS: ",park.score)
-			
+			console.log("PARK SCORE IS: ", park.score);
 		} else {
 			let markerIcon = markerBad;
-			let tempScore = park.score*100;
+			let tempScore = park.score * 100;
 			if (tempScore > 80) {
 				markerIcon = markerGood;
 			} else if (tempScore > 60) {

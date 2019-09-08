@@ -10,6 +10,7 @@ import { AuthConsumer } from "./AuthContext";
 import styled from "styled-components";
 // import nearMeButton from "./style/Media/round-my_location-24px.svg";
 // import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import LocationSearchInput from "./LocationSearchInput";
 
 // const theme1 = createMuiTheme({
 // 	overrides: {
@@ -483,7 +484,6 @@ class BaseParkForm extends Component {
 					>
 						<span>NEAR ME</span>
 
-
 						{/* <img src={nearMeButton} /> */}
 						{/* <strong>{this.renderLocationSpinner()}</strong> */}
 					</button>
@@ -515,6 +515,7 @@ class BaseParkForm extends Component {
 				</div>
 
 				<div className="AdvancedSearch">
+					<LocationSearchInput />
 					<form>
 						<span className="FormTitle">Max Distance (km)</span>
 
@@ -616,8 +617,6 @@ const ParkForm = parkFormProps => (
 	</AuthConsumer>
 );
 
-
-
 export default withRouter(ParkForm);
 
 ////////////////////////////////////////////
@@ -662,21 +661,19 @@ const SearchFormStyle = styled.div`
 			color: ${props => props.theme.whitesmoke};
 			transition: color 0.1s ease;
 			-webkit-transition: background-color 0.1s linear;
-    -ms-transition: background-color 0.1s linear;
-    transition: background-color 0.1s linear;
-	font-size: 15px;
-    font-weight: 600;
+			-ms-transition: background-color 0.1s linear;
+			transition: background-color 0.1s linear;
+			font-size: 15px;
+			font-weight: 600;
 
-	:hover{
-			
-			background: ${props => props.theme.prettyDarkish};
-		
-    -webkit-transition: background-color 0.1s linear;
-    -ms-transition: background-color 0.1s linear;
-    transition: background-color 0.1s linear;
-		}
-			
-			
+			:hover {
+				background: ${props => props.theme.prettyDarkish};
+
+				-webkit-transition: background-color 0.1s linear;
+				-ms-transition: background-color 0.1s linear;
+				transition: background-color 0.1s linear;
+			}
+
 			:hover,
 			:active {
 				color: ${props => props.theme.colorBad};
@@ -717,21 +714,20 @@ const SearchFormStyle = styled.div`
 		border: none;
 		float: left;
 		transition: color 0.1s ease;
-			-webkit-transition: background-color 0.1s linear;
-    -ms-transition: background-color 0.1s linear;
-    transition: background-color 0.1s linear;
+		-webkit-transition: background-color 0.1s linear;
+		-ms-transition: background-color 0.1s linear;
+		transition: background-color 0.1s linear;
 
-	:hover,:active{
-			
+		:hover,
+		:active {
 			background: ${props => props.theme.prettyDarkish};
-		
-    -webkit-transition: background-color 0.1s linear;
-    -ms-transition: background-color 0.1s linear;
-    transition: background-color 0.1s linear;
-	color: ${props => props.theme.colorBad};
+
+			-webkit-transition: background-color 0.1s linear;
+			-ms-transition: background-color 0.1s linear;
+			transition: background-color 0.1s linear;
+			color: ${props => props.theme.colorBad};
 			transition: color 0.1s ease;
 		}
-
 	}
 
 	.searchTerm:focus {
@@ -760,9 +756,8 @@ const SearchFormStyle = styled.div`
 		:hover,
 		:active {
 			background-color: ${props => props.theme.moonBackground};
-			transition: background-color  0.1s ease;
+			transition: background-color 0.1s ease;
 		}
-
 	}
 
 	.ToggleAdvancedSearch {
