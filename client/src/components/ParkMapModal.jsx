@@ -11,6 +11,9 @@ import cloudIcon from "./style/Media/cardIcons/cloud.svg";
 import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
 import cloudGoodIcon from "./style/Media/cardIcons/cloudGood.svg";
 import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
+import ReportPark from "./ReportPark";
+
+import CountUp from 'react-countup';
 
 const modalStyle = {
 	overlay: {
@@ -45,6 +48,7 @@ class ParkMapModal extends Component {
 	constructor(props) {
 		super(props);
 		this.park = { weather: {} };
+		this.toRemountReviews = false;
 	}
 
 	//means..
@@ -104,8 +108,18 @@ class ParkMapModal extends Component {
 	};
 
 	closeModal = () => {
+		console.log("CLOSE GOT HERE!!!!!!");
 		document.body.style.overflow = "visible";
 		this.setState({ modalIsOpen: false });
+	};
+
+	refreshModal = () => {
+		console.log("Refreshing..");
+		this.toRemountReviews = true;
+	};
+
+	remountReviews = () => {
+		this.toRemountReviews = false;
 	};
 
 	render() {
@@ -136,40 +150,58 @@ class ParkMapModal extends Component {
 						</button>
 					</div>
 					<div className="ContentGrid">
-						<div className="interactIconsContainer">
-							<div className="interactIcons">
-								<i className="shareIcon fas fa-share-alt fa-2x" />
-								<i className="faqIcon fas fa-question-circle fa-2x" />
-								<i>
-									<FavPark
-										className="favIcon"
-										parkID={this.park.id}
-									/>
-								</i>
-								<i className="reportIcon fas fa-exclamation-triangle fa-2x" />
+						<div className="HeaderGrid">
+							<div className="favPark">
+								<FavPark parkID={this.park.id} />
+
+								<div className="favParkText">Save</div>
 							</div>
-							{/* <br />
-								Click each square for more info! */}
+
+							<div className="reportPark">
+								<ReportPark parkID={this.park.id} />
+
+								<div className="reportParkText">Report</div>
+							</div>
+
+							<ScoreWrapper>
+								<div className="ParkScore">
+									<div className="Heading">
+										<span>
+											Overall Score
+										</span>
+									</div>
+									<span className="ScoreNumerator">
+										<CountUp
+											start={0}
+											end={Math.round(
+												this.park.score * 100
+											)}
+											delay={0}
+										>
+											{({ countUpRef }) => (
+												<div className="Score">
+													<span ref={countUpRef} />
+													<span className="Percentage">%</span>
+												</div>
+											)}
+										</CountUp>
+
+										
+									</span>
+									<span className="Value">
+										{this.park.score > 0.8
+											? "Visible"
+											: this.park.score > 0.6
+											? "Partly Visible"
+											: "Not Visible"}
+									</span>
+								</div>
+							</ScoreWrapper>
 						</div>
 
-						<ScoreWrapper>
-							<div className="ParkScore">
-								<div className="Heading">
-									<span>Overall Score</span>
-								</div>
-								<span className="ScoreNumerator">
-									{Math.round(this.park.score * 100)}
-									<span className="Percentage">%</span>
-								</span>
-								<span className="Value">
-									{this.park.score < 0.5
-										? "Not Recommended."
-										: this.park.score < 0.75
-										? "Passable."
-										: "Recommended."}
-								</span>
-							</div>
-						</ScoreWrapper>
+						<span className="textContainer">
+							Tap a square for more info
+						</span>
 
 						<div className="weatherContainer">
 							<div className="cloudContainer">
@@ -257,8 +289,6 @@ class ParkMapModal extends Component {
 												</div>
 												<span className="MoonDisplayContainer">
 													<MoonDisplay
-													
-													
 														phase={this.moon}
 													/>
 												</span>
@@ -296,6 +326,7 @@ class ParkMapModal extends Component {
 															this.park.weather
 																.humidity
 														}
+														%
 													</span>
 												</div>
 											</WeatherWrapper>
@@ -315,7 +346,18 @@ class ParkMapModal extends Component {
 						</div>
 
 						<div className="reviewsContainer">
-							<Reviews parkID={this.park.id} />
+							{this.toRemountReviews ? (
+								this.remountReviews()
+							) : (
+								<Reviews
+									refreshInfoModal={this.refreshModal}
+									parkID={this.park.id}
+								/>
+							)}
+							{/* <Reviews
+								refreshInfoModal={this.refreshModal}
+								parkID={this.park.id}
+							/> */}
 						</div>
 					</div>
 				</ModalStyle>
@@ -367,12 +409,12 @@ const ModalStyle = styled.div`
 	flex-direction: column;
 	width: 452px;
 	height: 95vh;
-	font-family: IBM Plex Sans;
+	font-family: 'Lato', sans-serif;
 	color: ${props => props.theme.fontDark};
 	background: ${props => props.theme.moreInfoBackground};
 
 	.modal-header {
-		font-family: IBM Plex Sans;
+		font-family: 'Lato', sans-serif;
 		font-style: normal;
 		font-weight: normal;
 		font-size: 30px;
@@ -406,12 +448,15 @@ const ModalStyle = styled.div`
 		}
 	}
 
+
+
 	.ContentGrid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		grid-template-rows: auto auto auto;
+		grid-template-rows: auto auto auto auto;
 		grid-template-areas:
-			"interactIconsContainer    parkScore"
+			"HeaderGrid    			   HeaderGrid"
+			"infoText 				   infoText"
 			"weatherContainer    	   weatherContainer"
 			"reviewsContainer          reviewsContainer";
 		grid-row-gap: 20px;
@@ -420,81 +465,23 @@ const ModalStyle = styled.div`
 		height: 100%;
 		overflow-y: auto;
 
-		/* img{
-	position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-} */
 
-		.interactIconsContainer {
-			grid-area: interactIconsContainer;
+.textContainer{
+	grid-area: infoText;
+	font-size: 20px;
+}
 
-			.interactIcons {
-				height: 157px;
-				display: grid;
-				margin: auto auto;
-				grid-template-rows: 1fr 1fr;
-				grid-template-columns: 1fr 1fr;
-				grid-template-areas:
-					"shareIcon    faqIcon"
-					"favIcon      reportIcon";
-
-				i {
-					width: 80%;
-					button {
-						all: unset;
-					}
-					color: ${props => props.theme.colorBad};
-
-					margin: auto auto;
-				}
-				.shareIcon {
-					color: ${props => props.theme.fontDark};
-					grid-area: shareIcon;
-				}
-				.faqIcon {
-					color: ${props => props.theme.fontDark};
-					grid-area: faqIcon;
-				}
-				.favIcon {
-					grid-area: favIcon;
-				}
-				.reportIcon {
-					color: ${props => props.theme.colorMedium};
-					grid-area: reportIcon;
-				}
-			}
-		}
-
-		.Heading,
-		.Value {
-			font-style: normal;
-			font-weight: 600;
-			font-size: 18px;
-			display: flex;
-			justify-content: center; /* align horizontal */
-			align-items: center; /* align vertical */
-
-			span {
-				display: inline-block;
-				vertical-align: middle;
-				line-height: normal;
-			}
-		}
-
-		.MoreInfoDesc{
-			text-align: left;
-			display: block;
-			padding: 6px;
-    font-weight: 500;
-
-		}
+.HeaderGrid{
+		display: grid;
+		grid-area: HeaderGrid;
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-rows: auto auto;
+		grid-template-areas:
+		"favPark 	 ParkScore reportPark"
+		"favParkText ParkScore reportParkText";
 
 		.ParkScore {
-			grid-area: parkScore;
+			grid-area: ParkScore;
 			display: inline-block;
 			vertical-align: middle;
 			text-align: center;
@@ -519,6 +506,72 @@ const ModalStyle = styled.div`
 			}
 		}
 
+				/* .shareIcon {
+					color: ${props => props.theme.fontDark};
+					grid-area: shareIcon;
+				}
+				.faqIcon {
+					color: ${props => props.theme.fontDark};
+					grid-area: faqIcon;
+				} */
+				i{
+						font-size: 40px;
+					}
+
+					
+				.favPark {
+					margin: auto 0;
+					grid-area: favPark;
+				
+					
+					.favParkText{
+						grid-area: favParkText;
+					}
+
+				}
+				.reportPark {
+					margin: auto 0;
+					grid-area: reportPark;
+					button{
+						outline: none;
+					}
+				
+					.reportParkText{
+						grid-area: reportParkText;
+					}
+				}
+				
+			
+			
+		
+	}
+
+
+		.Heading,
+		.Value {
+			font-style: normal;
+			font-weight: 600;
+			font-size: 18px;
+			display: flex;
+			justify-content: center; /* align horizontal */
+			align-items: center; /* align vertical */
+
+			span {
+				display: inline-block;
+				vertical-align: middle;
+				line-height: normal;
+			}
+		}
+
+		.MoreInfoDesc {
+			text-align: left;
+			display: block;
+			padding: 6px;
+			font-weight: 500;
+		}
+
+
+
 		.weatherContainer {
 			img {
 				/* width: 100%; */
@@ -537,14 +590,12 @@ const ModalStyle = styled.div`
 				"cloudContainer    lightPolContainer"
 				"moonContainer     humidityContainer";
 
-			/* div {
-				height: 157px;
-			} */
 
 			.cloudContainer {
 				height: 157px;
 				grid-area: cloudContainer;
 				position: relative;
+				cursor: pointer;
 
 				.cloudCard {
 					height: 157px;
@@ -557,6 +608,7 @@ const ModalStyle = styled.div`
 				height: 157px;
 				grid-area: lightPolContainer;
 				position: relative;
+				cursor: pointer;
 
 				.lightPolCard {
 					height: 157px;
@@ -569,6 +621,7 @@ const ModalStyle = styled.div`
 				height: 157px;
 				grid-area: moonContainer;
 				position: relative;
+				cursor: pointer;
 
 				.moonCard {
 					height: 157px;
@@ -578,7 +631,6 @@ const ModalStyle = styled.div`
 				}
 
 				.MoonDisplayContainer {
-				
 					width: 59px;
 					margin: auto;
 				}
@@ -587,6 +639,7 @@ const ModalStyle = styled.div`
 				height: 157px;
 				grid-area: humidityContainer;
 				position: relative;
+				cursor: pointer;
 
 				.humidityCard {
 					height: 157px;
@@ -606,7 +659,7 @@ const ModalStyle = styled.div`
 
 const HeaderStyle = styled.div`
 	color: ${props => props.theme.fontDark};
-	font-family: IBM Plex Sans;
+	font-family: "Lato", sans-serif;
 	font-style: normal;
 
 	font-size: 36px;

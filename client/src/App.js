@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { AuthProvider, AuthConsumer } from "./components/AuthContext";
 import ParksData from "./components/ParksData";
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import { Link, BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Profile from "./components/Profile";
 import Login from "./components/Login";
 import ToolBar from "./components/ToolBar/Toolbar";
@@ -15,6 +15,7 @@ import FAQ from "./components/FAQ";
 import backgroundImage from "./components/style/Media/starrynight_loop.svg";
 import Footer from "./components/Footer";
 import ScrollUpButton from "react-scroll-up-button";
+import NotFoundPage from "./components/NotFoundPage";
 
 class App extends Component {
 	state = {
@@ -50,7 +51,8 @@ class App extends Component {
 				<GlobalStyle bg={backgroundImage} />
 				<SiteStyle>
 					<div className="SiteContent">
-						<Router>
+					<Router>
+						
 							<ToolBar
 								drawerClickHandler={
 									this.drawerToggleClickHandler
@@ -65,18 +67,6 @@ class App extends Component {
 								handleLogin={this.props.handleLogin}
 							/>
 							{backdrop}
-
-							<Route
-								exact path="/"
-								render={() => {
-									return <Redirect to="/home" />;
-								}}
-							/>
-							<Route
-								path={["/home", "/search"]}
-								component={ParksData}
-							/>
-							<Route path="/faq" component={FAQ} />
 							<AuthConsumer>
 								{authState => {
 									console.log(authState);
@@ -101,6 +91,23 @@ class App extends Component {
 									);
 								}}
 							</AuthConsumer>
+							<Switch>
+						
+							<Route
+								exact path="/"
+								render={() => {
+									return <Redirect to="/home" />;
+								}}
+							/>
+							
+							<Route
+								path={["/home", "/search"]}
+								component={ParksData}
+							/>
+							<Route path="/faq" component={FAQ} />
+							
+							<Route path="*" component={NotFoundPage}/>
+							</Switch>
 						</Router>
 					</div>
 					<Footer />
@@ -132,7 +139,7 @@ const SiteStyle = styled.div`
 `;
 
 const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono:300,400,600|IBM+Plex+Sans:300,400,600|&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,600,700&display=swap');
 
 html {
 	line-height: 1.15;

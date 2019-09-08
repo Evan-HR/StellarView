@@ -34,9 +34,22 @@ class BaseReviews extends Component {
 		});
 	}
 
+	handleJustLoggedIn = () => {
+		console.log("JUST LOGGED IN! IN REVIEWS");
+		console.log(
+			"this.props.context.loggedfromReviews " +
+				this.props.context.loggedFromReviews
+		);
+		this.setState({ state: this.state });
+	};
+
 	componentDidMount() {
 		console.log("reviews comp did mount got here!");
 		console.log("parkID is: " + this.props.parkID);
+		console.log(
+			"are you logged in? isAuth is = ",
+			this.props.context.isAuth
+		);
 
 		//get review status from user and db
 
@@ -149,7 +162,7 @@ class BaseReviews extends Component {
 		if (this.state.noStarError === true) {
 			return (
 				<AlertStyle>
-					<div className="alertText">
+					<div className="AlertText">
 						You must click a star (1-5) before submission.
 					</div>
 				</AlertStyle>
@@ -157,58 +170,55 @@ class BaseReviews extends Component {
 		}
 	}
 
-	formatReviewCards = review => (
-		<ReviewStyle>
-			<div className="ReviewName">{review.name}</div>
-			<div className="ReviewScore">{review.score}/5 Stars</div>
-			<div className="ReviewReview">{review.review}</div>
-		</ReviewStyle>
-	);
+	formatReviewCards = review => {
+		return review.review === "" ? (
+			<ReviewStyle>
+				<div className="ReviewName">{review.name}</div>
+				<div className="ReviewScore">{review.score}/5 Stars</div>
+				<div className="ReviewReview"><StarReviewsStatic avgScore={review.score} /></div>
+			</ReviewStyle>
+		) : (
+			<ReviewStyle>
+				<div className="ReviewName">{review.name}</div>
+				<div className="ReviewScore">{review.score}/5 Stars</div>
+				<div className="ReviewReview">{review.review}</div>
+			</ReviewStyle>
+		);
+	};
 
-	formatReviews = review => (
-		<tr>
-			<td>{review.name}</td>
-			<td>{review.score}</td>
-			<td>{review.review}</td>
-		</tr>
-	);
+	// formatReviews = review => (
+	// 	<tr>
+	// 		<td>{review.name}</td>
+	// 		<td>{review.score}</td>
+	// 		<td>{review.review}</td>
+	// 	</tr>
+	// );
 
 	renderUserNoReview() {
 		return (
-			<form id="reviewForm">
-				{/* <label>
-					Name: <br />
-					<input
-						type="text"
-						placeholder={this.name}
-						name="name"
-						onChange={this.handleNameChange}
-						value={this.state.name}
-					/>
-				</label> */}
-				<br />
-				<StarReviews scoreProp={this.handleStarScore} />
-				<br />
-				Share your thoughts!
-				<br />
-				<label>
-					<textarea
-						rows="4"
-						cols="30"
-						name="review"
-						placeholder="Enter text here..."
-						onChange={this.handleReviewChange}
-						value={this.state.review}
-					/>
-				</label>
-				<br />
-				<button
-					className="btn btn-primary m-2"
-					onClick={e => this.onSubmit(e)}
-				>
-					Submit
-				</button>
-			</form>
+			<ReviewFormStyle>
+				<form id="reviewForm">
+
+					<label>
+						<textarea
+							rows="4"
+							cols="30"
+							name="review"
+							placeholder="Share your thoughts... "
+							onChange={this.handleReviewChange}
+							value={this.state.review}
+						/>
+					</label>
+		
+					<StarReviews scoreProp={this.handleStarScore} />
+					<div className="submitButton">
+						<button onClick={e => this.onSubmit(e)}>
+							Submit Review
+						</button>
+					</div>
+				</form>
+				{this.renderErrorMsg()}
+			</ReviewFormStyle>
 		);
 	}
 
@@ -257,7 +267,6 @@ class BaseReviews extends Component {
 				{/* {this.renderScore()}
 				{this.renderNumReviews()}
 				{this.renderStarAvg()} */}
-				{this.renderErrorMsg()}
 
 				<table className="table table-hover">
 					<tbody>
@@ -278,8 +287,9 @@ class BaseReviews extends Component {
 			<AlertStyle>
 				<div className="AlertText">
 					You must be{" "}
-					<Login>
+					<Login refreshInfoModal={this.props.refreshInfoModal}>
 						<span>
+							{/* <span onClick={() => this.props.closeInfoModal()}> */}
 							<b>logged-in</b>
 						</span>
 					</Login>{" "}
@@ -306,21 +316,21 @@ class BaseReviews extends Component {
 		}
 	}
 
-	renderReviewTable = () => {
-		if (this.state.dbReviewList.length > 0) {
-			return this.state.dbReviewList.map(this.formatReviews);
-		} else {
-			return (
-				<tr>
-					<td colSpan={3}>
-						<strong style={{ color: "red" }}>
-							No reviews available. Be the first!
-						</strong>
-					</td>
-				</tr>
-			);
-		}
-	};
+	// renderReviewTable = () => {
+	// 	if (this.state.dbReviewList.length > 0) {
+	// 		return this.state.dbReviewList.map(this.formatReviews);
+	// 	} else {
+	// 		return (
+	// 			<tr>
+	// 				<td colSpan={3}>
+	// 					<strong style={{ color: "red" }}>
+	// 						No reviews available. Be the first!
+	// 					</strong>
+	// 				</td>
+	// 			</tr>
+	// 		);
+	// 	}
+	// };
 
 	handleReviewChange = e => {
 		this.setState({ review: e.target.value });
@@ -342,10 +352,14 @@ class BaseReviews extends Component {
 }
 
 const Reviews = props => (
-	<AuthConsumer>
-		{x => <BaseReviews context={x} parkID={props.parkID} />}
-	</AuthConsumer>
+	<AuthConsumer>{x => <BaseReviews {...props} context={x} />}</AuthConsumer>
 );
+
+// BaseReviews.defaultProps = {
+// 	closeInfoModal: () => {
+// 		console.log("Shite");
+// 	}
+// };
 
 export default Reviews;
 
@@ -353,6 +367,49 @@ const ReviewsStyle = styled.div`
 	.NumReviews {
 		padding-top: 0.5rem;
 		font-weight: normal;
+	}
+`;
+
+const ReviewFormStyle = styled.div`
+	.submitButton {
+		button {
+			margin-top: 15px;
+			font-size: 13px;
+			color: rgb(100, 100, 100);
+
+			border: none;
+			outline: none;
+			height: 40px;
+			text-transform: uppercase;
+			background: ${props => props.theme.starDark};
+			transition: 0.25s;
+			width: 100%;
+			color: ${props => props.theme.white};
+			cursor: pointer;
+
+			:hover,
+			:active {
+				color: ${props => props.theme.colorBad};
+				transition: 0.25s;
+			}
+		}
+	}
+	label {
+		display: block;
+		textarea {
+			background-color: #9898981c;
+			border: none;
+			width: 100%;
+			padding: 5px 15px;
+		}
+	}
+
+	span {
+		display: block;
+		/* text-align: left; */
+		text-align: left;
+		font-size: 15px;
+		padding-bottom: 10px;
 	}
 `;
 

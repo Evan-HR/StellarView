@@ -136,12 +136,13 @@ const ToolbarStyle = styled.header`
 	}
 
 	.toolbar_navigation-items a {
-		font-family: IBM Plex Sans;
+		/* font-family: IBM Plex Sans; */
+		font-family: 'Lato', sans-serif;
 		font-weight:600;
 		text-decoration: none;
 		letter-spacing:0.08em;
 		transition: color 0.2s ease;
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 		
 	}
 
@@ -196,7 +197,7 @@ const ToolbarStyle = styled.header`
 	.toolbar__logo{	
 		font-weight: 400;
 		font-size: 60px;
-		font-family: IBM Plex Sans;
+		font-family: Lato;
 		.Stellar{
 			font-weight: 600;
 		}
@@ -240,6 +241,6 @@ const ToolbarStyle = styled.header`
 
 	.toolbar__logo a{
 		text-decoration: none;
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 	}
 `;

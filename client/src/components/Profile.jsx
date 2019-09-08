@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { AuthConsumer } from "./AuthContext";
 import ParkTableProfile from "./ParkTableProfile";
+import { parkScore } from "./ParksData";
 
 class BaseProfile extends Component {
 	constructor(props) {
@@ -86,10 +87,22 @@ class BaseProfile extends Component {
 				})
 				.then(response => {
 					console.log("Response from second call", response);
-					this.setState({
-						parkDataForTable: response.data,
-						parkDataLoaded: true,
 
+					for (var i = 0; i < response.data.parks.length; i++) {
+						response.data.parks[i].score = parkScore(
+							response.data.moonFraction,
+							response.data.parks[i].weather.humidity / 100,
+							response.data.parks[i].weather.clouds / 100,
+							response.data.parks[i].light_pol / 100
+						);
+					}
+
+					this.setState({
+						parkDataForTable: response.data.parks,
+						parkDataLoaded: true,
+						moonFraction: response.data.moonFraction,
+						moonPhase: response.data.moonPhase,
+						moonType: response.data.moonType,
 						isLoadingParks: false
 					});
 				});
@@ -109,8 +122,8 @@ class BaseProfile extends Component {
 			return (
 				<ParkTableProfile
 					parkList={this.state.parkDataForTable}
-					// moon={this.state.moon}
-					// moonType={this.state.moonType}
+					moonPhase={this.state.moonPhase}
+					moonType={this.state.moonType}
 				/>
 			);
 		} else {
@@ -150,7 +163,7 @@ class BaseProfile extends Component {
 }
 
 const Profile = props => (
-	<AuthConsumer>{x => <BaseProfile context={x} />}</AuthConsumer>
+	<AuthConsumer>{x => <BaseProfile {...props} context={x} />}</AuthConsumer>
 );
 
 export default Profile;

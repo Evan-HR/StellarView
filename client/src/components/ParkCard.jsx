@@ -11,6 +11,7 @@ import tempIcon from "./style/Media/cardIcons/temperature.svg";
 import infoIcon from "./style/Media/cardIcons/moreInfo.svg";
 import resultsGood from "./style/Media/resultsGood.svg";
 import resultsBad from "./style/Media/resultsBad.svg";
+import CountUp from 'react-countup';
 
 class ParkCard extends Component {
 	state = {};
@@ -190,19 +191,23 @@ class ParkCard extends Component {
 						</div>
 
 						<div className="ScoreLabel">
-							<span>Score:</span>{" "}
-							{Math.round(this.props.park.score * 100)}%
+							
+							<CountUp
+											start={0}
+											end={Math.round(this.props.park.score * 100)}
+											delay={0}
+										>
+											{({ countUpRef }) => (
+												<div className="Score">
+													<span className="ScoreTitle">Score:{" "}</span>
+													<span ref={countUpRef} />
+													<span className="Percentage">%</span>
+													
+												</div>
+											)}
+										</CountUp>
+						
 						</div>
-						{/* <div className="ParkScore">
-
-							<div className="ScoreWrapper">
-								<span className="ScoreNumerator">
-									
-									{Math.round(this.props.park.score * 100)}
-								</span>
-								<span className="Percentage">%</span>
-							</div>
-						</div> */}
 						<div className="ParkScoreIcon">
 							{this.props.park.score > 0.8 ? (
 								<i class="far fa-eye visibleGoodIcon"></i>
@@ -280,7 +285,7 @@ const CardStyle = styled.div`
 		/* "ParkHum     ParkCloud   ParkLightPol ParkScore" */
 		"StarRev    StarRev     StarRev      moreInfo";
 
-	font-family: IBM Plex Sans;
+		font-family: 'Lato', sans-serif;
 	font-style: normal;
 	font-weight: 400;
 	font-size: 18px;
@@ -316,10 +321,12 @@ const CardStyle = styled.div`
         margin: auto 5px 15px 0;
 	font-size: 20px;
     font-weight: 600;
-	span{
-		font-size: 15px;
-		font-weight: 300;
+
+	.ScoreTitle{
+		font-size: 20px;
+    font-weight: 300;
 	}
+
 	}
 
 
@@ -336,7 +343,7 @@ const CardStyle = styled.div`
 		justify-content: space-between;
 		align-items: center;
 		/* padding-bottom: 8px; */
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 		padding: 0 13px 0 13px;
 		cursor: pointer;
 		:hover{
@@ -378,7 +385,7 @@ const CardStyle = styled.div`
 	.WeatherInfo {
 		grid-area: WeatherInfo;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 18px;
     align-content: center;
 	/* padding-left: 15px; */
@@ -533,9 +540,10 @@ const CardBootstrap = styled.div`
 		flex-direction: column;
 		min-width: 0;
 		word-wrap: break-word;
-		background-color: #fff;
+		background-color: ${props => props.theme.white};
 		background-clip: border-box;
-		/* border: 1px solid rgba(0, 0, 0, 0.125); */
+		border: none !important;
+		border-radius: 0px;
 	}
 
 	.card > hr {

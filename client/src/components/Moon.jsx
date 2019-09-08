@@ -11,7 +11,7 @@ class Moon extends Component {
 				<div className="moonDisplay">
 					<span>{this.props.moonType.split(" ")[0]}</span>
 					<span className="MoonDisplayContainer">
-						<MoonDisplay phase={this.props.moon} />
+						<MoonDisplay phase={this.props.moonPhase} />
 					</span>
 					<span>{this.props.moonType.split(" ")[1]}</span>
 				</div>
@@ -23,15 +23,14 @@ class Moon extends Component {
 export default Moon;
 ///////////////////////////////////////////////////////////////
 const MoonStyle = styled.div`
-	color: whitesmoke;
-	font-family: IBM Plex Sans;
-	font-weight: 300;
+	color: ${props => props.theme.white};
+	/* font-family: IBM Plex Sans; */
+	font-family: "Lato", sans-serif;
+	font-weight: 600;
 	font-style: normal;
 	font-size: 30px;
 	text-align: center;
 	text-transform: uppercase;
-
-
 
 	.moonDisplay {
 		height: 140px;
@@ -41,10 +40,9 @@ const MoonStyle = styled.div`
 		align-content: space-between;
 
 		.MoonDisplayContainer {
-			  border-radius:100px;
-  box-shadow: 0 0 20px #485261;
+			border-radius: 100px;
+			box-shadow: 0 0 20px #485261;
 			width: 90px;
-			
 		}
 	}
 `;
