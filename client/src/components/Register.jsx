@@ -177,7 +177,7 @@ class Register extends Component {
 						</div>
 
 						<div className="form__field">
-							<input type="submit" value="Sign In" />
+							<input type="submit" value="Register" />
 						</div>
 					</form>
 
@@ -464,9 +464,9 @@ const AlertStyle = styled.div`
 	position: relative;
 
 	.AlertText {
-		padding: 10px;
+		/* padding: 10px;
 		background-color: ${props =>
-			props.success ? "#67e8956b" : "#daa97961"};
+			props.success ? "#67e8956b" : "#daa97961"}; */
 
 		font-weight: 500;
 	}
@@ -597,6 +597,21 @@ const NewLoginStyle = styled.div`
 
 	input[type="submit"] {
 		cursor: pointer;
+
+		background-position: center;
+			transition: background 0.4s;
+		
+		:hover {
+			background: rgba(0, 0, 0, .1)
+				radial-gradient(circle, transparent 1%, rgba(0, 0, 0, .1) 1%)
+				center/15000%;
+		}
+		:active {
+			
+			background-color: rgba(0, 0, 0, .1);
+			background-size: 100%;
+			transition: background 0s;
+		}
 	}
 
 	.form {

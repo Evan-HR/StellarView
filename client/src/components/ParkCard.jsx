@@ -13,6 +13,7 @@ import resultsGood from "./style/Media/resultsGood.svg";
 import resultsBad from "./style/Media/resultsBad.svg";
 import CountUp from 'react-countup';
 
+
 class ParkCard extends Component {
 	state = {};
 
@@ -346,6 +347,7 @@ const CardStyle = styled.div`
 		color: ${props => props.theme.white};
 		padding: 0 13px 0 13px;
 		cursor: pointer;
+		
 		:hover{
 			
 			background: ${props => props.theme.lightBlue};

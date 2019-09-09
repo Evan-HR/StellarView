@@ -309,6 +309,8 @@ const NewLoginStyle = styled.div`
 		outline: none;
 		text-shadow: none;
 		opacity: 0.5;
+
+		
 	}
 
 	.close:hover {
@@ -394,6 +396,22 @@ const NewLoginStyle = styled.div`
 
 	input[type="submit"] {
 		cursor: pointer;
+	
+			
+			background-position: center;
+			transition: background 0.4s;
+		
+		:hover {
+			background: rgba(0, 0, 0, .1)
+				radial-gradient(circle, transparent 1%, rgba(0, 0, 0, .1) 1%)
+				center/15000%;
+		}
+		:active {
+			
+			background-color: rgba(0, 0, 0, .1);
+			background-size: 100%;
+			transition: background 0s;
+		}
 	}
 
 	.form {
@@ -413,6 +431,7 @@ const NewLoginStyle = styled.div`
 		display: flex;
 		margin: 14px;
 		margin: 0.875rem;
+		
 	}
 
 	.form__input {

@@ -14,6 +14,7 @@ import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import tempIcon from "./style/Media/cardIcons/temperature.svg";
 import { withRouter } from "react-router-dom";
 
+
 function inRange(x, min, max) {
 	return (x - min) * (x - max) <= 0;
 }

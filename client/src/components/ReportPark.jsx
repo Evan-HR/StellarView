@@ -405,6 +405,13 @@ const ReportIconStyle = styled.div`
 
 	i {
 		color: ${props => props.theme.colorMedium};
+		transition: 0.25s;
+		:focus,
+	:hover {
+		text-decoration: none;
+		color: ${props => props.theme.colorMediumHover};
+		transition: 0.25s;
+	}
 	}
 `;
 
