@@ -426,7 +426,7 @@ const ReviewStyle = styled.div`
 		"ReviewReview    ReviewReview"
 		"ReviewName    	 ReviewScore";
 
-	border-bottom: 1px solid ${props => props.theme.cardDark};
+	/* border-bottom: 1px solid ${props => props.theme.cardDark}; */
 
 	.ReviewName {
 		grid-area: ReviewName;
@@ -449,11 +449,11 @@ const ReviewStyle = styled.div`
 		font-weight: 500;
 		font-size: 20px;
 		padding: 20px 0px 20px 0px;
-		background: #d5dae6;
-		border-radius: 14px;
+		/* background: #d5dae6; */
+		/* border-radius: 14px; */
 		grid-area: ReviewReview;
 		text-align: center;
-		box-shadow: 4px 9px #888888;
+		/* box-shadow: 0px 2px 5px 0px #888888; */
 	}
 `;
 
@@ -464,8 +464,9 @@ const AlertStyle = styled.div`
 	margin-top: 1rem;
 
 	.AlertText {
-		background-color: #daa97961;
-		font-weight: 500;
+		/* background-color: #daa97961; */
+		font-size: 20px;
+		
 		padding: 10px;
 		span {
 			color: ${props => props.theme.colorBad};

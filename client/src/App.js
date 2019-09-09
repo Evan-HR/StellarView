@@ -16,6 +16,7 @@ import backgroundImage from "./components/style/Media/starrynight_loop.svg";
 import Footer from "./components/Footer";
 import ScrollUpButton from "react-scroll-up-button";
 import NotFoundPage from "./components/NotFoundPage";
+import StarBackgroundLess from "./components/StarBackgroundLess";
 
 class App extends Component {
 	state = {
@@ -48,7 +49,8 @@ class App extends Component {
 		return (
 			<React.Fragment>
 				<ScrollUpButton />
-				<GlobalStyle bg={backgroundImage} />
+				<GlobalStyle/>
+				{/* <StarBackgroundLess/> */}
 				<SiteStyle>
 					<div className="SiteContent">
 					<Router>

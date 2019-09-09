@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import ParkCard from "./ParkCard";
 import styled from "styled-components";
 import { Transition, animated } from "react-spring/renderprops";
+import NoResultsModal from "./NoResultsModal";
 
 
 class ParkTable extends Component {
@@ -64,11 +65,12 @@ class ParkTable extends Component {
 			// return <div>{this.props.parkList.map(this.renderParkCard)}</div>;
 		} else {
 			return (
-				<div className="text-center">
-					<div className="card text-white bg-danger">
-						<div className="card-header">No parks available.</div>
-					</div>
-				</div>
+				<NoResultsModal />
+				// <div className="text-center">
+				// 	<div className="card text-white bg-danger">
+				// 		<div className="card-header">No parks available.</div>
+				// 	</div>
+				// </div>
 			);
 		}
 	};
@@ -108,13 +110,15 @@ class ParkTable extends Component {
 			return this.props.parkList.map(this.renderPark);
 		} else {
 			return (
-				<tr>
-					<td colSpan={3}>
-						<strong style={{ color: "red" }}>
-							No parks available.
-						</strong>
-					</td>
-				</tr>
+				<NoResultsModal/>
+				
+				// <tr>
+				// 	<td colSpan={3}>
+				// 		<strong style={{ color: "red" }}>
+				// 			No parks available.
+				// 		</strong>
+				// 	</td>
+				// </tr>
 			);
 		}
 	};

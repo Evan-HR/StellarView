@@ -11,7 +11,7 @@ class Moon extends Component {
 				<div className="moonDisplay">
 					<span>{this.props.moonType.split(" ")[0]}</span>
 					<span className="MoonDisplayContainer">
-						<MoonDisplay phase={this.props.moonPhase} />
+					<MoonDisplay phase={this.props.moonPhase} />
 					</span>
 					<span>{this.props.moonType.split(" ")[1]}</span>
 				</div>
