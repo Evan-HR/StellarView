@@ -118,10 +118,10 @@ const MoonSVGStyle = styled.div`
 		transform: scaleX(${props => props.phaseRight});
 	}
 	.moon-left .bg {
-		fill: #121414;
+		fill: ${props => props.theme.prettyDark};
 	}
 	.moon-left .fg {
-		fill: whitesmoke;
+		fill: ${props => props.theme.white};
 		transform-origin: 0% 0%;
 		transform: translate(${props => props.phaseTrans}px, 0)
 			scaleX(${props => 1 - props.phaseScale});

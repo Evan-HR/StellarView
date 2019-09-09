@@ -558,7 +558,7 @@ class BaseParkForm extends Component {
 				</div>
 
 				<div className="AdvancedSearch">
-					<LocationSearchInput />
+					{/* <LocationSearchInput /> */}
 					<form>
 						<span className="FormTitle">Max Distance (km)</span>
 
@@ -703,19 +703,10 @@ const SearchFormStyle = styled.div`
 			width: 100%;
 			color: ${props => props.theme.whitesmoke};
 			transition: color 0.1s ease;
-			-webkit-transition: background-color 0.1s linear;
-			-ms-transition: background-color 0.1s linear;
-			transition: background-color 0.1s linear;
+
 			font-size: 15px;
 			font-weight: 600;
 
-			:hover {
-				background: ${props => props.theme.prettyDarkish};
-
-				-webkit-transition: background-color 0.1s linear;
-				-ms-transition: background-color 0.1s linear;
-				transition: background-color 0.1s linear;
-			}
 
 			:hover,
 			:active {
@@ -757,17 +748,10 @@ const SearchFormStyle = styled.div`
 		border: none;
 		float: left;
 		transition: color 0.1s ease;
-		-webkit-transition: background-color 0.1s linear;
-		-ms-transition: background-color 0.1s linear;
-		transition: background-color 0.1s linear;
 
 		:hover,
 		:active {
-			background: ${props => props.theme.prettyDarkish};
-
-			-webkit-transition: background-color 0.1s linear;
-			-ms-transition: background-color 0.1s linear;
-			transition: background-color 0.1s linear;
+			
 			color: ${props => props.theme.colorBad};
 			transition: color 0.1s ease;
 		}

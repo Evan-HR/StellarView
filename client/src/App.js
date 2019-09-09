@@ -50,7 +50,7 @@ class App extends Component {
 			<React.Fragment>
 				<ScrollUpButton />
 				<GlobalStyle/>
-				<StarBackgroundLess/>
+				{/* <StarBackgroundLess/> */}
 				<SiteStyle>
 					<div className="SiteContent">
 					<Router>

@@ -31,7 +31,8 @@ const modalStyle = {
 		right: "auto",
 		bottom: "auto",
 		padding: "0px",
-		borderRadius: "2px",
+		border: "none",
+		borderRadius: "4px",
 		marginRight: "-50%",
 		transform: "translate(-50%, -50%)",
 		maxWidth: "100vw",
@@ -167,7 +168,7 @@ class ParkMapModal extends Component {
 								<div className="ParkScore">
 									<div className="Heading">
 										<span>
-											Overall Score
+											SCORE
 										</span>
 									</div>
 									<span className="ScoreNumerator">
@@ -410,6 +411,7 @@ const ModalStyle = styled.div`
 	width: 452px;
 	height: 95vh;
 	font-family: 'Lato', sans-serif;
+	border: none;
 	color: ${props => props.theme.fontDark};
 	background: ${props => props.theme.moreInfoBackground};
 
@@ -417,35 +419,42 @@ const ModalStyle = styled.div`
 		font-family: 'Lato', sans-serif;
 		font-style: normal;
 		font-weight: normal;
+		color: ${props => props.theme.white};
 		font-size: 30px;
-		border-bottom: 2px solid #9ea6ad;
+		padding: 2rem 1rem;
+		background: ${props => props.theme.mapBlue};
+		border: none;
+		border-top-left-radius: 0rem;
+    border-top-right-radius: 0rem;
+		/* border-bottom: 2px solid #9ea6ad; */
 		.close {
-			i {
-				color: ${props => props.theme.prettyDark};
-			}
-			float: right;
-			font-size: 1.5rem;
-			font-weight: 700;
-			line-height: 1;
-			color: gray;
-			outline: none;
-			/* text-shadow: 0 1px 0 #7C6E7E; */
-			opacity: 0.5;
-		}
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		float: right;
+		font-size: 2.5rem;
+		font-weight: 700;
+		line-height: 1;
+		color: whitesmoke;
+		outline: none;
+		text-shadow: none;
+		opacity: 0.5;
+	}
 
-		.close:hover {
-			color: ${props => props.theme.colorBad};
-			text-decoration: none;
-		}
+	.close:hover {
+		color: ${props => props.theme.colorBad};
+		text-decoration: none;
+	}
 
-		.close:active {
-			color: ${props => props.theme.prettyDark};
-		}
+	.close:active {
+		color: ${props => props.theme.colorBad};
+	}
 
-		.close:not(:disabled):not(.disabled):hover,
-		.close:not(:disabled):not(.disabled):focus {
-			opacity: 0.75;
-		}
+	.close:not(:disabled):not(.disabled):hover,
+	.close:not(:disabled):not(.disabled):focus {
+		opacity: 0.75;
+	}
+
 	}
 
 
@@ -464,6 +473,7 @@ const ModalStyle = styled.div`
 		padding: 20px 20px 0 20px;
 		height: 100%;
 		overflow-y: auto;
+		background: ${props => props.theme.white};
 
 
 .textContainer{
@@ -488,6 +498,13 @@ const ModalStyle = styled.div`
 			margin: auto auto;
 			display: flex;
 			flex-direction: column;
+
+			.Heading{
+				font-size: 30px;
+			}
+
+	
+			
 
 			.ScoreNumerator {
 				/* font-family: Barlow; */
