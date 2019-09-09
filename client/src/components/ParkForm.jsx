@@ -44,6 +44,7 @@ class BaseParkForm extends Component {
 		super(props);
 		this.sliderLight = this.state.reqData.lightpol;
 		this.sliderDist = this.state.reqData.dist;
+		this.autoComplete = false;
 	}
 
 	//There are two cases when we would want to load results form url query:
@@ -61,6 +62,9 @@ class BaseParkForm extends Component {
 	}
 
 	componentDidUpdate() {
+		if (window.google && !this.autoComplete) {
+			this.loadAutoComplete();
+		}
 		//On back button load previous results
 		window.onpopstate = e => {
 			console.log("Back button pressed");
@@ -313,7 +317,7 @@ class BaseParkForm extends Component {
 	//fetchP(x) --> getParkData(x)
 	onSubmit = e => {
 		if (e) e.preventDefault();
-		//console.log(this.state.reqData);
+		console.log(this.state.reqData);
 		const errors = this.validate(this.state.reqData);
 		if (errors.length === 0) {
 			var d = new Date();
@@ -436,6 +440,42 @@ class BaseParkForm extends Component {
 		}
 	};
 
+	loadAutoComplete = () => {
+		this.autoComplete = new window.google.maps.places.SearchBox(
+			document.getElementById("autoComplete")
+		);
+		this.autoComplete.addListener("places_changed", this.onPlaceChanged);
+		// this.autoCompleteLoaded = true;
+	};
+
+	onPlaceChanged = () => {
+		let places = this.autoComplete.getPlaces();
+		if (places == 0) {
+			return;
+		}
+
+		var place = places[0];
+		console.log(place);
+		if (place.geometry && place.geometry.location) {
+			let location = place.geometry.location.toJSON();
+			console.log(location);
+			if (window.google) {
+				this.props.googleMap.panTo(place.geometry.location); //Make map global
+			}
+			this.setState(
+				{
+					reqData: {
+						...this.state.reqData,
+						placeName: place.formatted_address,
+						lat: location.lat,
+						lng: location.lng
+					}
+				},
+				() => this.onSubmit()
+			);
+		}
+	};
+
 	render() {
 		//console.log("Fetching parks?", this.props.isFetchingParks);
 		return (
@@ -447,6 +487,7 @@ class BaseParkForm extends Component {
 						}}
 					>
 						<input
+							id="autoComplete"
 							className="searchTerm"
 							type="text"
 							name="placeName"
@@ -462,12 +503,14 @@ class BaseParkForm extends Component {
 								// 	? " btn-danger"
 								// 	: " btn-primary")
 							}
+							type="submit"
 							disabled={
 								this.state.reqData.placeName === "" ||
 								this.state.isGeocodingLocation
 							}
 							onClick={e => {
-								this.getPlaceCoordinates(e);
+								// this.onPlaceChanged();
+								// this.getPlaceCoordinates(e);
 							}}
 						>
 							<i className="fa fa-search" />

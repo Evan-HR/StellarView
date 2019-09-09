@@ -59,7 +59,7 @@ class BaseLogin extends Component {
 			return (
 				<AlertStyle success={false}>
 					<img src={formError} />
-					<div className="AlertText">
+					<div classNameName="AlertText">
 						Invalid login credentials! Please try again
 					</div>
 				</AlertStyle>
@@ -69,7 +69,7 @@ class BaseLogin extends Component {
 			return (
 				<AlertStyle success={true}>
 					<img src={formSuccess} />
-					<div className="AlertText">Login successful</div>
+					<div classNameName="AlertText">Login successful</div>
 				</AlertStyle>
 			);
 		}
@@ -102,36 +102,69 @@ class BaseLogin extends Component {
 			});
 	};
 
+	renderNewLogin = () => {
+return(
+	<NewLoginStyle>
+		{/* <StarBackground/> */}
+		 <div className="grid">
+			 
+<form action="https://httpbin.org/post" method="POST" className="form login">
+
+  <div className="form__field">
+	<label for="login__username"><svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref="#user"></use></svg><span className="hidden">Username</span></label>
+	<input id="login__username" type="text" name="username" className="form__input" placeholder="Username" required/>
+  </div>
+
+  <div className="form__field">
+	<label for="login__password"><svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref="#lock"></use></svg><span className="hidden">Password</span></label>
+	<input id="login__password" type="password" name="password" className="form__input" placeholder="Password" required/>
+  </div>
+
+  <div className="form__field">
+	<input type="submit" value="Sign In"/>
+  </div>
+
+</form>
+
+<p className="text--center">Not a member? <a href="#">Sign up now</a> </p>
+
+</div>
+
+<svg xmlns="http://www.w3.org/2000/svg" className="icons"><symbol id="arrow-right" viewBox="0 0 1792 1792"><path d="M1600 960q0 54-37 91l-651 651q-39 37-91 37-51 0-90-37l-75-75q-38-38-38-91t38-91l293-293H245q-52 0-84.5-37.5T128 1024V896q0-53 32.5-90.5T245 768h704L656 474q-38-36-38-90t38-90l75-75q38-38 90-38 53 0 91 38l651 651q37 35 37 90z"/></symbol><symbol id="lock" viewBox="0 0 1792 1792"><path d="M640 768h512V576q0-106-75-181t-181-75-181 75-75 181v192zm832 96v576q0 40-28 68t-68 28H416q-40 0-68-28t-28-68V864q0-40 28-68t68-28h32V576q0-184 132-316t316-132 316 132 132 316v192h32q40 0 68 28t28 68z"/></symbol><symbol id="user" viewBox="0 0 1792 1792"><path d="M1600 1405q0 120-73 189.5t-194 69.5H459q-121 0-194-69.5T192 1405q0-53 3.5-103.5t14-109T236 1084t43-97.5 62-81 85.5-53.5T538 832q9 0 42 21.5t74.5 48 108 48T896 971t133.5-21.5 108-48 74.5-48 42-21.5q61 0 111.5 20t85.5 53.5 62 81 43 97.5 26.5 108.5 14 109 3.5 103.5zm-320-893q0 159-112.5 271.5T896 896 624.5 783.5 512 512t112.5-271.5T896 128t271.5 112.5T1280 512z"/></symbol></svg>
+	</NewLoginStyle>
+)
+	};
+
 	renderLoginModal = () => {
 		return (
 			<LoginStyle>
-				<div className="login">
-					<div className="banner">
+				<div classNameName="login">
+					<div classNameName="banner">
 						<StarBackground/>
 						<button
 							type="button"
 							onClick={this.closeModal}
-							className="close"
+							classNameName="close"
 							aria-label="Close"
 						>
-							<i class="fas fa-window-close" />
+							<i className="fas fa-window-close" />
 						</button>
 					</div>
-					<div className="form">
-						<div className="wrapper">
-							<div className="row">
-								<div className="label">E-Mail</div>
+					<div classNameName="form">
+						<div classNameName="wrapper">
+							<div classNameName="row">
+								<div classNameName="label">E-Mail</div>
 								<input
 									type="text"
-									className="email"
+									classNameName="email"
 									name="email"
 									// value={this.state.userEmail || ""}
 									onChange={this.handleEmailChange}
 									required
 								/>
 							</div>
-							<div className="row">
-								<div className="label">Password</div>
+							<div classNameName="row">
+								<div classNameName="label">Password</div>
 								<input
 									type="password"
 									name="password"
@@ -139,11 +172,11 @@ class BaseLogin extends Component {
 									required
 								/>
 							</div>
-							<div className="rowSubmit">
+							<div classNameName="rowSubmit">
 								<button onClick={this.onSubmit}>Submit</button>
 							</div>
 						</div>
-						<div className="signup">
+						<div classNameName="signup">
 							Don't have an account? <Register />
 						</div>
 						{this.errorMsg()}
@@ -153,7 +186,7 @@ class BaseLogin extends Component {
 		);
 	};
 
-	//className changes model content, style gives you anything you specify to override defaults
+	//classNameName changes model content, style gives you anything you specify to override defaults
 	render() {
 		return (
 			<React.Fragment>
@@ -176,12 +209,13 @@ class BaseLogin extends Component {
 					onAfterOpen={this.afterOpenModal}
 					onRequestClose={this.closeModal}
 					contentLabel="Login Modal"
-					className="modal-dialog"
+					classNameName="modal-dialog"
 					style={customStyles}
 				>
-					<div className="modal-content">
-						{this.renderLoginModal()}
+					<div classNameName="modal-content">
+						{/* {this.renderLoginModal()} */}
 						{/* {this.renderModalContent()} */}
+						{this.renderNewLogin()}
 					</div>
 				</Modal>
 			</React.Fragment>
@@ -212,13 +246,24 @@ const customStyles = {
 		bottom: 0,
 		backgroundColor: "rgba(0,0,0,0.9)",
 		transition: "opacity 400ms ease-in-out"
+	},
+	content: {
+		top: "50%",
+		left: "50%",
+		right: "auto",
+		bottom: "auto",
+		padding: "0px",
+		border:"none",
+		borderRadius: "2px",
+		marginRight: "-50%",
+		transform: "translate(-50%, -50%)",
+		maxWidth: "100vw",
+		maxHeight: "100vh",
+		overflow: "hidden"
 	}
-
-	// 	,
-
-	// 	content: {
-	// backgroundColor:"green"
-	// 	}
+	
+	
+	
 };
 
 const LoginStyle = styled.div`
@@ -446,4 +491,189 @@ const AlertStyle = styled.div`
 		padding-bottom: 10px;
 		width: 42px;
 	}
+`;
+
+
+//style the "modal" here - don't worry about the ccontent shit
+const NewLoginStyle = styled.div`
+
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+		  justify-content: center;
+	height: 80vh;
+    width: 80vw;
+	position: relative;
+	background: black;
+
+
+
+
+/* helpers/grid.css */
+
+.grid {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 320px;
+  max-width: 20rem;
+  width: 90%;
+}
+
+/* helpers/hidden.css */
+
+.hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+/* helpers/icon.css */
+
+.icons {
+  display: none;
+}
+
+.icon {
+  display: inline-block;
+  fill: #606468;
+  font-size: 16px;
+  font-size: 1rem;
+  height: 1em;
+  vertical-align: middle;
+  width: 1em;
+}
+
+
+a {
+  color: #eee;
+  outline: 0;
+  text-decoration: none;
+}
+
+a:focus,
+a:hover {
+  text-decoration: underline;
+}
+
+/* modules/form.css */
+
+input {
+  background-image: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  margin: 0;
+  outline: 0;
+  padding: 0;
+  -webkit-transition: background-color 0.3s;
+  transition: background-color 0.3s;
+}
+
+input[type='submit'] {
+  cursor: pointer;
+}
+
+.form {
+  margin: -14px;
+  margin: -0.875rem;
+}
+
+.form input[type='password'],
+.form input[type='text'],
+.form input[type='submit'] {
+  width: 100%;
+}
+
+.form__field {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 14px;
+  margin: 0.875rem;
+}
+
+.form__input {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+/* modules/login.css */
+
+.login {
+  color: #eee;
+}
+
+.login label,
+.login input[type='text'],
+.login input[type='password'],
+.login input[type='submit'] {
+  border-radius: 0.25rem;
+  padding: 16px;
+  padding: 1rem;
+}
+
+.login label {
+  background-color: #363b41;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  padding-left: 20px;
+  padding-left: 1.25rem;
+  padding-right: 20px;
+  padding-right: 1.25rem;
+}
+
+.login input[type='password'],
+.login input[type='text'] {
+  background-color: #3b4148;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.login input[type='password']:focus,
+.login input[type='password']:hover,
+.login input[type='text']:focus,
+.login input[type='text']:hover {
+  background-color: #434a52;
+}
+
+.login input[type='submit'] {
+  background-color: #ea4c88;
+  color: #eee;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.login input[type='submit']:focus,
+.login input[type='submit']:hover {
+  background-color: #d44179;
+}
+
+/* modules/text.css */
+
+p {
+  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
+  margin-top: 24px;
+  margin-top: 1.5rem;
+}
+
+.text--center {
+  text-align: center;
+}
+
 `;

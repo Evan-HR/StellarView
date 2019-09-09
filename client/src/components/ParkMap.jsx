@@ -32,7 +32,9 @@ class ParkMap extends Component {
 	componentDidMount() {
 		const googleMapScript = document.createElement("script");
 		//NOTE: Find a better way to secure the api key
-		googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_DUSTINMAPKEY}`;
+		googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=${
+			process.env.REACT_APP_DUSTINMAPKEY //TODO: See if this can be hidden better
+		}&libraries=places`;
 		window.document.body.appendChild(googleMapScript);
 		googleMapScript.addEventListener("load", () => {
 			this.googleMap = this.createGoogleMap();
