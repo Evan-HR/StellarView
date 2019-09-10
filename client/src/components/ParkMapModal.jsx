@@ -7,13 +7,12 @@ import "./modal.css";
 import MoonDisplay from "./MoonDisplay";
 import { useSpring, animated as a } from "react-spring";
 import humidityIcon from "./style/Media/cardIcons/humidity.svg";
-import cloudIcon from "./style/Media/cardIcons/cloud.svg";
 import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
 import cloudGoodIcon from "./style/Media/cardIcons/cloudGood.svg";
 import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import ReportPark from "./ReportPark";
+import CountUp from "react-countup";
 
-import CountUp from 'react-countup';
 
 const modalStyle = {
 	overlay: {
@@ -81,16 +80,6 @@ class ParkMapModal extends Component {
 		}
 	}
 
-	// {this.props.park.light_pol < 0.25
-	// 	? "Pure Dark Sky"
-	// 	: this.props.park.light_pol < 0.4
-	// 	? "Dark Sky"
-	// 	: this.props.park.light_pol < 1
-	// 	? "Rural"
-	// : this.props.park.light_pol < 3
-	// ? "Rural/Suburban"
-	// : this.props.park.light_pol < 6
-	// ? "Suburban"
 
 	openModal = content => {
 		if (content === "") {
@@ -125,6 +114,7 @@ class ParkMapModal extends Component {
 
 	render() {
 		return (
+		
 			<Modal
 				// className="modal-dialog"
 				closeTimeoutMS={800}
@@ -134,6 +124,7 @@ class ParkMapModal extends Component {
 				style={modalStyle}
 				contentLabel="Example Modal"
 			>
+
 				{/* <div className="modal-content"> */}
 				<ModalStyle>
 					<div className="modal-header">
@@ -167,9 +158,7 @@ class ParkMapModal extends Component {
 							<ScoreWrapper>
 								<div className="ParkScore">
 									<div className="Heading">
-										<span>
-											SCORE
-										</span>
+										<span>SCORE</span>
 									</div>
 									<span className="ScoreNumerator">
 										<CountUp
@@ -182,12 +171,12 @@ class ParkMapModal extends Component {
 											{({ countUpRef }) => (
 												<div className="Score">
 													<span ref={countUpRef} />
-													<span className="Percentage">%</span>
+													<span className="Percentage">
+														%
+													</span>
 												</div>
 											)}
 										</CountUp>
-
-										
 									</span>
 									<span className="Value">
 										{this.park.score > 0.8
@@ -361,9 +350,12 @@ class ParkMapModal extends Component {
 							/> */}
 						</div>
 					</div>
+				
 				</ModalStyle>
+				
 				{/* </div> */}
 			</Modal>
+			
 		);
 	}
 }
@@ -376,10 +368,15 @@ function Card(props) {
 		config: { mass: 5, tension: 500, friction: 80 }
 	});
 	return (
-		<div onClick={() => set(state => !state)}>
+		<div
+
+			onClick={() => set(state => !state)}
+		>
 			<a.div
 				className={props.cardName}
 				style={{
+
+
 					opacity: opacity.interpolate(o => 1 - o),
 					transform
 				}}
@@ -413,7 +410,7 @@ const ModalStyle = styled.div`
 	font-family: 'Lato', sans-serif;
 	border: none;
 	color: ${props => props.theme.fontDark};
-	background: ${props => props.theme.moreInfoBackground};
+	background:black;
 
 	.modal-header {
 		font-family: 'Lato', sans-serif;
@@ -424,8 +421,7 @@ const ModalStyle = styled.div`
 		padding: 2rem 1rem;
 		background: ${props => props.theme.mapBlue};
 		border: none;
-		border-top-left-radius: 0rem;
-    border-top-right-radius: 0rem;
+		border-radius: 0rem;
 		/* border-bottom: 2px solid #9ea6ad; */
 		.close {
 		position: absolute;
@@ -435,7 +431,7 @@ const ModalStyle = styled.div`
 		font-size: 2.5rem;
 		font-weight: 700;
 		line-height: 1;
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 		outline: none;
 		text-shadow: none;
 		opacity: 0.5;
@@ -447,7 +443,7 @@ const ModalStyle = styled.div`
 	}
 
 	.close:active {
-		color: ${props => props.theme.colorBad};
+		color: ${props => props.theme.white};
 	}
 
 	.close:not(:disabled):not(.disabled):hover,
@@ -478,7 +474,8 @@ const ModalStyle = styled.div`
 
 .textContainer{
 	grid-area: infoText;
-	font-size: 20px;
+	font-family: monospace;
+    font-size: 15px;
 }
 
 .HeaderGrid{
@@ -539,6 +536,8 @@ const ModalStyle = styled.div`
 				.favPark {
 					margin: auto 0;
 					grid-area: favPark;
+					button:focus {outline:0;}
+					
 				
 					
 					.favParkText{
@@ -615,6 +614,14 @@ const ModalStyle = styled.div`
 				grid-area: cloudContainer;
 				position: relative;
 				cursor: pointer;
+	
+  transition: transform 0.4s ease;
+  &:hover {
+
+    transition: transform 0.4s ease;
+    transform: translate3d(0px, -3px, 0px) scale(1.03);
+  }
+				
 
 				.cloudCard {
 					height: 157px;
@@ -628,15 +635,31 @@ const ModalStyle = styled.div`
 				grid-area: lightPolContainer;
 				position: relative;
 				cursor: pointer;
+				transition: transform 0.4s ease;
+  &:hover {
+
+    transition: transform 0.4s ease;
+    transform: translate3d(0px, -3px, 0px) scale(1.03);
+  }
+				
 
 				.lightPolCard {
 					height: 157px;
 					position: absolute;
 					width: 100%;
 					background-color: ${props => props.theme.cardDark};
+					
+
+
 				}
 			}
 			.moonContainer {
+				transition: transform 0.4s ease;
+  &:hover {
+
+    transition: transform 0.4s ease;
+    transform: translate3d(0px, -3px, 0px) scale(1.03);
+  }
 				height: 157px;
 				grid-area: moonContainer;
 				position: relative;
@@ -655,6 +678,12 @@ const ModalStyle = styled.div`
 				}
 			}
 			.humidityContainer {
+				transition: transform 0.4s ease;
+  &:hover {
+
+    transition: transform 0.4s ease;
+    transform: translate3d(0px, -3px, 0px) scale(1.03);
+  }
 				height: 157px;
 				grid-area: humidityContainer;
 				position: relative;

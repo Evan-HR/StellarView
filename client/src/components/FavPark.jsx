@@ -4,6 +4,7 @@ import { AuthConsumer } from "./AuthContext";
 import Login from "./Login";
 import styled from "styled-components";
 
+
 class BaseFavPark extends Component {
 	state = {
 		buttonPressed: false,
@@ -94,24 +95,30 @@ class BaseFavPark extends Component {
 				this.state.hasFaved === false
 			) {
 				return (
+				
 					<button onClick={() => this.handleFavSpot()}>
 						<i className="fas fa-heart fa-2x UnfavedHeart" />
 					</button>
+				
 				);
 			} else if (
 				this.state.buttonPressed === true &&
 				this.state.hasUnfaved === true
 			) {
 				return (
+				
 					<button onClick={() => this.handleFavSpot()}>
 						<i className="fas fa-heart fa-2x UnfavedHeart" />
 					</button>
+			
 				);
 			} else {
 				return (
+					
 					<button onClick={() => this.handleUnfavSpot()}>
 						<i className="fas fa-heart fa-2x FavedHeart" />
 					</button>
+				
 				);
 			}
 		} else {
@@ -151,10 +158,24 @@ const FavParkButtonStyle = styled.div`
 	.FavedHeart {
 		color: ${props => props.theme.colorGood};
 		cursor: pointer;
+		transition: 0.25s;
+		:focus,
+	:hover {
+		text-decoration: none;
+		color: ${props => props.theme.colorBad};
+		transition: 0.25s;
+	}
 	}
 
 	.UnfavedHeart {
 		color: ${props => props.theme.colorBad};
 		cursor: pointer;
+			transition: 0.25s;
+			:focus,
+	:hover {
+		text-decoration: none;
+		color: ${props => props.theme.colorBadHover};
+		transition: 0.25s;
+	}
 	}
 `;

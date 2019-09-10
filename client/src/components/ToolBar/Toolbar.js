@@ -110,7 +110,7 @@ const ToolbarStyle = styled.header`
 	/* z-index: 100; */
 	
 	@media screen and (max-width: 767.999px) {
-		position: absolute;
+		
 	}
 
 	.toolbar__center{
@@ -204,35 +204,7 @@ const ToolbarStyle = styled.header`
 		.Gaze{
 			font-weight: 300;
 		}
-		/* text-transform: uppercase;
-		font-weight: 400;
-		font-size: 70px;
-		text-shadow: 4px 5px #e6e6d8, 6px 7px #c6a39a; */
-		/* transform: matrix(1, -0.05, 0, 1, 0, 0); */
-		:hover{
-			.logo_A {
-				transition: color 1.0s ease;
-				color: ${props => props.theme.gold2};
-			}
-			.logo_tele{		
-				transform: rotate(-5deg);
-				transition: transform 1s;
-			}
-		}
-
-		.logo_A{
-			transition: color 1.0s ease;
-			color: ${props => props.theme.franRed};
-		}
-
-		.logo_tele{
-			/* transform: translate(-505%,-120%); */
-			transform: rotate(5deg);
-			transition: transform 1s;
-			position: absolute;
-			margin-left: -121px;
-			margin-top: -10px;			
-		}
+		
 	}
 
 	.Link{

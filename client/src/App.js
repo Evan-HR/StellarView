@@ -18,6 +18,7 @@ import ScrollUpButton from "react-scroll-up-button";
 import NotFoundPage from "./components/NotFoundPage";
 import StarBackgroundLess from "./components/StarBackgroundLess";
 
+
 class App extends Component {
 	state = {
 		sideDrawerOpen: false
@@ -114,6 +115,7 @@ class App extends Component {
 					</div>
 					<Footer />
 				</SiteStyle>
+				
 			</React.Fragment>
 		);
 	}

@@ -118,7 +118,7 @@ class BaseLogin extends Component {
 								<svg className="icon">
 									<use
 										xmlnsXlink="http://www.w3.org/1999/xlink"
-										xlinkHref="#user"
+										xlinkHref="#email"
 									></use>
 								</svg>
 								<span className="hidden">Username</span>
@@ -174,6 +174,9 @@ class BaseLogin extends Component {
 					</symbol>
 					<symbol id="user" viewBox="0 0 1792 1792">
 						<path d="M1600 1405q0 120-73 189.5t-194 69.5H459q-121 0-194-69.5T192 1405q0-53 3.5-103.5t14-109T236 1084t43-97.5 62-81 85.5-53.5T538 832q9 0 42 21.5t74.5 48 108 48T896 971t133.5-21.5 108-48 74.5-48 42-21.5q61 0 111.5 20t85.5 53.5 62 81 43 97.5 26.5 108.5 14 109 3.5 103.5zm-320-893q0 159-112.5 271.5T896 896 624.5 783.5 512 512t112.5-271.5T896 128t271.5 112.5T1280 512z" />
+					</symbol>
+					<symbol id="email" viewBox="0 0 25 25">
+					<path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z"/>
 					</symbol>
 				</svg>
 			</NewLoginStyle>
@@ -305,10 +308,12 @@ const NewLoginStyle = styled.div`
 		font-size: 2.5rem;
 		font-weight: 700;
 		line-height: 1;
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 		outline: none;
 		text-shadow: none;
 		opacity: 0.5;
+
+		
 	}
 
 	.close:hover {
@@ -317,7 +322,7 @@ const NewLoginStyle = styled.div`
 	}
 
 	.close:active {
-		color: ${props => props.theme.colorBad};
+		color: ${props => props.theme.white};
 	}
 
 	.close:not(:disabled):not(.disabled):hover,
@@ -394,6 +399,22 @@ const NewLoginStyle = styled.div`
 
 	input[type="submit"] {
 		cursor: pointer;
+	
+			
+			background-position: center;
+			transition: background 0.4s;
+		
+		:hover {
+			background: rgba(0, 0, 0, .1)
+				radial-gradient(circle, transparent 1%, rgba(0, 0, 0, .1) 1%)
+				center/15000%;
+		}
+		:active {
+			
+			background-color: rgba(0, 0, 0, .1);
+			background-size: 100%;
+			transition: background 0s;
+		}
 	}
 
 	.form {
@@ -413,6 +434,7 @@ const NewLoginStyle = styled.div`
 		display: flex;
 		margin: 14px;
 		margin: 0.875rem;
+		
 	}
 
 	.form__input {

@@ -48,5 +48,9 @@ export const theme = {
 	lightDarkish: "#4e4e4e",
 	moonBackground: "#242627",
 	darkAccent: "#1b1c1d",
-	white:"#dadada"
+	white:"#dadada",
+	colorBadHover: "#d47b7b",
+	colorMediumHover: "#ecbc8e",
+	cardDarkHover: "#c2c8ce",
+	cardLightHover: "#c2ccd4"
 };

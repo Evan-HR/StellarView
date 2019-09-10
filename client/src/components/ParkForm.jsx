@@ -12,17 +12,6 @@ import styled from "styled-components";
 // import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import LocationSearchInput from "./LocationSearchInput";
 
-// const theme1 = createMuiTheme({
-// 	overrides: {
-// 		MuiSlider: {
-
-// 			root: {
-// 				color:'#BDC2C6',
-// 			},
-// 		},
-// 	},
-//   });
-
 class BaseParkForm extends Component {
 	state = {
 		reqData: {
@@ -517,19 +506,22 @@ class BaseParkForm extends Component {
 						</button>
 					</form>
 				</div>
-				<div className="myLocation">
-					<button
-						// onClick={this.getParkData.bind(this, this.state.formInput)}
-						className="nearMe"
-						type="button"
-						disabled={this.state.isLoadingLocation}
-						onClick={this.getMyLocation}
-					>
-						<span>NEAR ME</span>
 
-						{/* <img src={nearMeButton} /> */}
-						{/* <strong>{this.renderLocationSpinner()}</strong> */}
-					</button>
+				<div className="myLocation">
+					
+						<button
+							// onClick={this.getParkData.bind(this, this.state.formInput)}
+							className="nearMe"
+							type="button"
+							disabled={this.state.isLoadingLocation}
+							onClick={this.getMyLocation}
+						>
+							<span>NEAR ME</span>
+
+							{/* <img src={nearMeButton} /> */}
+							{/* <strong>{this.renderLocationSpinner()}</strong> */}
+						</button>
+				
 				</div>
 
 				{/* CLEAR BUTTON!!!! */}
@@ -693,26 +685,38 @@ const SearchFormStyle = styled.div`
 	}
 
 	.myLocation {
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 		font-size: 13px;
+
+
 		.nearMe {
 			all: unset;
 			cursor: pointer;
 			background-color: ${props => props.theme.prettyDark};
 			height: 36px;
 			width: 100%;
-			color: ${props => props.theme.whitesmoke};
+			color: ${props => props.theme.white};
 			transition: color 0.1s ease;
 
 			font-size: 15px;
 			font-weight: 600;
-
-
-			:hover,
-			:active {
+			
+			background-position: center;
+			transition: background 0.4s;
+		
+		:hover {
+			background: ${props => props.theme.prettyDark}
+				radial-gradient(circle, transparent 1%, rgba(0, 0, 0, .3) 1%)
+				center/15000%;
 				color: ${props => props.theme.colorBad};
-				transition: color 0.1s ease;
-			}
+		
+		}
+		:active {
+			
+			background-color: rgba(0, 0, 0, .3);
+			background-size: 100%;
+			transition: background 0s;
+		}
 		}
 		grid-area: myLocation;
 	}
@@ -745,15 +749,27 @@ const SearchFormStyle = styled.div`
 		/* border-radius: 0 5px 5px 0; */
 		cursor: pointer;
 		font-size: 20px;
+		:focus {
+			outline: 0;
+		}
 		border: none;
 		float: left;
 		transition: color 0.1s ease;
-
-		:hover,
+		background-position: center;
+			transition: background 0.4s;
+		
+		:hover {
+			background: ${props => props.theme.prettyDark}
+				radial-gradient(circle, transparent 1%, rgba(0, 0, 0, .3) 1%)
+				center/15000%;
+				color: ${props => props.theme.colorBad};
+		
+		}
 		:active {
 			
-			color: ${props => props.theme.colorBad};
-			transition: color 0.1s ease;
+			background-color: rgba(0, 0, 0, .3);
+			background-size: 100%;
+			transition: background 0s;
 		}
 	}
 

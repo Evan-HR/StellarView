@@ -13,6 +13,7 @@ import resultsGood from "./style/Media/resultsGood.svg";
 import resultsBad from "./style/Media/resultsBad.svg";
 import CountUp from 'react-countup';
 
+
 class ParkCard extends Component {
 	state = {};
 
@@ -199,7 +200,7 @@ class ParkCard extends Component {
 										>
 											{({ countUpRef }) => (
 												<div className="Score">
-													<span className="ScoreTitle">Score:{" "}</span>
+													{/* <span className="ScoreTitle">Score:{" "}</span> */}
 													<span ref={countUpRef} />
 													<span className="Percentage">%</span>
 													
@@ -241,7 +242,7 @@ class ParkCard extends Component {
 								)}
 							</div>
 						</div>
-
+{/* 
 						<div
 							className="moreInfo"
 							onClick={() => {
@@ -249,7 +250,7 @@ class ParkCard extends Component {
 							}}
 						>
 							<i className="faqIcon fas fa-question-circle moreInfoIcon" />
-						</div>
+						</div> */}
 					</CardStyle>
 				</div>
 			</CardBootstrap>
@@ -283,7 +284,7 @@ const CardStyle = styled.div`
 		"WeatherInfo WeatherInfo WeatherInfo  ScoreLabel"
 		"WeatherIcons WeatherIcons WeatherIcons ParkScoreIcon"
 		/* "ParkHum     ParkCloud   ParkLightPol ParkScore" */
-		"StarRev    StarRev     StarRev      moreInfo";
+		"StarRev    StarRev     StarRev      ParkScoreIcon";
 
 		font-family: 'Lato', sans-serif;
 	font-style: normal;
@@ -293,9 +294,9 @@ const CardStyle = styled.div`
 	text-align: left;
 
 	color: ${props => props.theme.fontDark};
-
+/* 
 	.moreInfo{
-		grid-area: moreInfo;
+		grid-area: MoreInfo;
 		margin: auto 0px 0px auto;
     padding: 0px 10px 10px 0;
 	cursor: pointer;
@@ -312,19 +313,19 @@ const CardStyle = styled.div`
 
 	}
 
-	}
+	} */
 
 
 	.ScoreLabel{
 		grid-area: ScoreLabel;
 		text-align: center;
-        margin: auto 5px 15px 0;
-	font-size: 20px;
+        margin: 50px 0 0 0;
+	font-size: 50px;
     font-weight: 600;
 
-	.ScoreTitle{
-		font-size: 20px;
-    font-weight: 300;
+	.Percentage{
+		font-size: 17px;
+    font-weight: 400;
 	}
 
 	}
@@ -345,7 +346,9 @@ const CardStyle = styled.div`
 		/* padding-bottom: 8px; */
 		color: ${props => props.theme.white};
 		padding: 0 13px 0 13px;
+		height: 80px;
 		cursor: pointer;
+		
 		:hover{
 			
 			background: ${props => props.theme.lightBlue};
@@ -353,6 +356,16 @@ const CardStyle = styled.div`
     -webkit-transition: background-color 0.1s linear;
     -ms-transition: background-color 0.1s linear;
     transition: background-color 0.1s linear;
+		}
+
+		:active{
+	
+			background: ${props => props.theme.mapBlue};
+		
+    -webkit-transition: background-color 0.1s linear;
+    -ms-transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear;
+		
 		}
 
 		.Title {
@@ -386,12 +399,13 @@ const CardStyle = styled.div`
 		grid-area: WeatherInfo;
     font-weight: 400;
     font-size: 16px;
-    line-height: 18px;
+	line-height: 18px;
+	font-family: monospace;
     align-content: center;
 	/* padding-left: 15px; */
     text-align: center;
    
-    margin: auto 0px auto 0px;
+	margin: auto 20px auto 20px;
 	}
 
 	.WeatherIcons {
@@ -469,7 +483,7 @@ const CardStyle = styled.div`
 		}
 		.Percentage {
 			display:inline;
-				font-size: 30px;
+				font-size: 20px;
 			}
 		
 		
@@ -482,7 +496,7 @@ const CardStyle = styled.div`
 		display: block;
 		align-content: center;
     text-align: center;
-    margin: auto 0px auto 0px;
+    margin: auto 10px auto 10px;
 		/* margin: 0px auto auto auto; */
   /* width: 50px; */
   .visibleGoodIcon{

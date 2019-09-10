@@ -14,6 +14,7 @@ import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import tempIcon from "./style/Media/cardIcons/temperature.svg";
 import { withRouter } from "react-router-dom";
 
+
 function inRange(x, min, max) {
 	return (x - min) * (x - max) <= 0;
 }
@@ -503,9 +504,12 @@ const ResultsPageStyle = styled.div`
 				font-weight: 600;
 				cursor: pointer;
 				margin: 0 0px 0 15px;
-				:hover,
-				:active {
+				:hover {
 					color: ${props => props.theme.colorBad};
+					transition: color 0.2s ease;
+				}
+				:active {
+					color: ${props => props.theme.white};
 					transition: color 0.2s ease;
 				}
 			}
@@ -527,7 +531,7 @@ const ResultsPageStyle = styled.div`
 		grid-template-columns: 1fr;
 		grid-template-rows: ${props => (props.hideMap ? "0px auto" : "50% auto")};
 		grid-template-areas:
-			"map"
+			/* "map" */
 			"rightSide";
 		.RightSideContainerFull {
 			overflow: none;
