@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import Modal from "react-modal";
 import { AuthConsumer } from "./AuthContext";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Link, NavLink  } from "react-router-dom";
 import styled from "styled-components";
 import Register from "./Register";
 import formError from "./style/Media/formError.svg";
@@ -109,12 +109,12 @@ class BaseLogin extends Component {
 					className="close"
 					aria-label="Close"
 				>
-					<i class="fas fa-window-close" />
+					<i className="fas fa-window-close" />
 				</button>
 				<div className="grid">
 					<form onSubmit={this.onSubmit} className="form login">
 						<div className="form__field">
-							<label for="login__username">
+							<label htmlFor ="login__username">
 								<svg className="icon">
 									<use
 										xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -135,7 +135,7 @@ class BaseLogin extends Component {
 						</div>
 
 						<div className="form__field">
-							<label for="login__password">
+							<label htmlFor ="login__password">
 								<svg className="icon">
 									<use
 										xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -195,7 +195,7 @@ class BaseLogin extends Component {
 					{this.props.children ? (
 						<React.Fragment>{this.props.children}</React.Fragment>
 					) : (
-						<Link>Login</Link>
+						<Link to="/">Login</Link>
 					)}
 					{/* <Link>login</Link> */}
 				</a>

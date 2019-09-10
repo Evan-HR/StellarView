@@ -7,7 +7,7 @@ class StarReviews extends Component {
 	};
 
 	changeRating = newRating => {
-		this.state.rating = newRating;
+		this.setState({ rating: newRating });
 		this.props.scoreProp(newRating);
 	};
 

@@ -34,9 +34,9 @@ export default function MoonDisplay({phase}) {
 			phaseRight={phaseRight}
 			phaseFlip={phaseFlip}
 		>
-			<div class="moon">
+			<div className="moon">
 				<svg
-					class="moon-left"
+					className="moon-left"
 					viewBox="0 0 100 200"
 					xmlns="http://www.w3.org/2000/svg"
 				>
@@ -46,7 +46,7 @@ export default function MoonDisplay({phase}) {
 						r="100"
 						// stroke="whitesmoke"
 						fill="#dadada"
-						class="bg"
+						className="bg"
 					/>
 					<circle
 						cx="100"
@@ -54,11 +54,11 @@ export default function MoonDisplay({phase}) {
 						r="100"
 						// stroke="whitesmoke"
 						fill="#121414"
-						class="fg"
+						className="fg"
 					/>
 				</svg>
 				<svg
-					class="moon-right"
+					className="moon-right"
 					viewBox="0 0 100 200"
 					xmlns="http://www.w3.org/2000/svg"
 				>
@@ -68,7 +68,7 @@ export default function MoonDisplay({phase}) {
 						r="100"
 						// stroke="whitesmoke"
 						fill="#dadada"
-						class="bg"
+						className="bg"
 					/>
 					<circle
 						cx="0"
@@ -76,7 +76,7 @@ export default function MoonDisplay({phase}) {
 						r="100"
 						// stroke="whitesmoke"
 						fill="#121414"
-						class="fg"
+						className="fg"
 					/>
 				</svg>
 			</div>

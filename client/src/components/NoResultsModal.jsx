@@ -31,7 +31,7 @@ class NoResultsModal extends Component {
 					className="close"
 					aria-label="Close"
 				>
-					<i class="fas fa-window-close" />
+					<i className="fas fa-window-close" />
 				</button>
 				<span>
 					Sorry! The stargazing conditions right now are poor in this

@@ -211,11 +211,11 @@ class ParkCard extends Component {
 						</div>
 						<div className="ParkScoreIcon">
 							{this.props.park.score > 0.8 ? (
-								<i class="far fa-eye visibleGoodIcon"></i>
+								<i className="far fa-eye visibleGoodIcon"></i>
 							) : this.props.park.score > 0.6 ? (
-								<i class="far fa-eye visiblePartlyIcon"></i>
+								<i className="far fa-eye visiblePartlyIcon"></i>
 							) : (
-								<i class="fas fa-eye-slash invisibleIcon"></i>
+								<i className="fas fa-eye-slash invisibleIcon"></i>
 							)}
 							<br />
 							{this.props.park.score > 0.8

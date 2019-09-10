@@ -408,7 +408,7 @@ class BaseParkForm extends Component {
 		if (this.state.isLoadingLocation) {
 			return (
 				<React.Fragment>
-					<span class="spinner-border spinner-border-sm" />
+					<span className="spinner-border spinner-border-sm" />
 					Locating
 				</React.Fragment>
 			);
@@ -421,7 +421,7 @@ class BaseParkForm extends Component {
 		if (Object.keys(this.state.formErrors).length > 0) {
 			return (
 				<React.Fragment>
-					<b class="text-danger">
+					<b className="text-danger">
 						{this.state.formErrors.join(", ")}
 					</b>
 				</React.Fragment>
@@ -545,7 +545,7 @@ class BaseParkForm extends Component {
 						}
 					>
 						Advanced Search
-						<i class="fas fa-caret-down" />
+						<i className="fas fa-caret-down" />
 					</button>
 				</div>
 

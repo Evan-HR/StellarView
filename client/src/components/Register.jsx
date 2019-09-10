@@ -89,7 +89,7 @@ class Register extends Component {
 					className="close"
 					aria-label="Close"
 				>
-					<i class="fas fa-window-close" />
+					<i className="fas fa-window-close" />
 				</button>
 				<div className="grid">
 					<form onSubmit={this.onSubmit} className="form login">
@@ -243,7 +243,7 @@ class Register extends Component {
 		return (
 			<React.Fragment>
 				<a onClick={() => this.openModal()}>
-					<Link>Register</Link>
+					<Link to="/">Register</Link>
 				</a>
 				<Modal
 					closeTimeoutMS={800}

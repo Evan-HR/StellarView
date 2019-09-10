@@ -3,6 +3,7 @@ import { AuthProvider, AuthConsumer } from "./components/AuthContext";
 import ParksData from "./components/ParksData";
 import {
 	Link,
+	NavLink,
 	BrowserRouter as Router,
 	Route,
 	Switch,

@@ -100,6 +100,7 @@ class BaseReviews extends Component {
 					console.log("BLAH!?");
 					tempReviewsArr = response.data.reviews.map(x => {
 						return {
+							id: x.id,
 							name: x.name,
 							score: x.score,
 							review: x.review,
@@ -180,7 +181,7 @@ class BaseReviews extends Component {
 	formatReviewCards = review => {
 		//if there is no review, show the static Stars in the main placeholder
 		return review.review === "" ? (
-			<ReviewStyle>
+			<ReviewStyle key={review.id}>
 				<div className="ReviewName">{review.name}</div>
 				<div className="ReviewScore">{review.score}/5 Stars</div>
 				<div className="ReviewDate">{review.date}</div>
@@ -189,7 +190,7 @@ class BaseReviews extends Component {
 				</div>
 			</ReviewStyle>
 		) : (
-			<ReviewStyle>
+			<ReviewStyle key={review.id}>
 				<div className="ReviewName">{review.name}</div>
 				<div className="ReviewScore">{review.score}/5 Stars</div>
 				<div className="ReviewReview">{review.review}</div>
