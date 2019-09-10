@@ -685,7 +685,7 @@ const SearchFormStyle = styled.div`
 	}
 
 	.myLocation {
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 		font-size: 13px;
 
 
@@ -695,7 +695,7 @@ const SearchFormStyle = styled.div`
 			background-color: ${props => props.theme.prettyDark};
 			height: 36px;
 			width: 100%;
-			color: ${props => props.theme.whitesmoke};
+			color: ${props => props.theme.white};
 			transition: color 0.1s ease;
 
 			font-size: 15px;

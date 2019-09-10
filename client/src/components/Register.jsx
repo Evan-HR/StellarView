@@ -118,7 +118,7 @@ class Register extends Component {
 								<svg className="icon">
 									<use
 										xmlnsXlink="http://www.w3.org/1999/xlink"
-										xlinkHref="#user"
+										xlinkHref="#email"
 									></use>
 								</svg>
 								<span className="hidden">Username</span>
@@ -195,6 +195,9 @@ class Register extends Component {
 					</symbol>
 					<symbol id="user" viewBox="0 0 1792 1792">
 						<path d="M1600 1405q0 120-73 189.5t-194 69.5H459q-121 0-194-69.5T192 1405q0-53 3.5-103.5t14-109T236 1084t43-97.5 62-81 85.5-53.5T538 832q9 0 42 21.5t74.5 48 108 48T896 971t133.5-21.5 108-48 74.5-48 42-21.5q61 0 111.5 20t85.5 53.5 62 81 43 97.5 26.5 108.5 14 109 3.5 103.5zm-320-893q0 159-112.5 271.5T896 896 624.5 783.5 512 512t112.5-271.5T896 128t271.5 112.5T1280 512z" />
+					</symbol>
+					<symbol id="email" viewBox="0 0 25 25">
+					<path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z"/>
 					</symbol>
 				</svg>
 			</NewLoginStyle>
@@ -297,169 +300,6 @@ const HeaderStyle = styled.div`
 	color: whitesmoke;
 `;
 
-const RegisterStyle = styled.div`
-	font-family: "Lato", sans-serif;
-	padding-right: 30px;
-
-	.close {
-		float: right;
-		font-size: 1.5rem;
-		font-weight: 700;
-		line-height: 1;
-		color: whitesmoke;
-		outline: none;
-		text-shadow: none;
-		opacity: 0.5;
-	}
-
-	.close:hover {
-		color: ${props => props.theme.colorBad};
-		text-decoration: none;
-	}
-
-	.close:active {
-		color: ${props => props.theme.colorBad};
-	}
-
-	.close:not(:disabled):not(.disabled):hover,
-	.close:not(:disabled):not(.disabled):focus {
-		opacity: 0.75;
-	}
-
-	.register {
-		position: absolute;
-
-		transform: translate(-50%, -50%);
-		width: 350px;
-		height: 80vh;
-		max-width: 100vw;
-		max-height: 100vh;
-		overflow: hidden;
-		border-radius: 0.3rem;
-
-		.banner {
-			position: absolute;
-			top: 0px;
-
-			width: 100%;
-			height: 210px;
-			background: url(${props => props.background}) center no-repeat;
-			background-size: 600px;
-			/* transform: skew(0deg, -8deg) translateY(-25px); */
-			z-index: 2;
-		}
-		.banner:before {
-			content: "Register";
-			position: absolute;
-			width: 100px;
-			height: 100px;
-			background: ${props => props.theme.colorBad};
-			color: #fff;
-			bottom: -50px;
-			left: 35%;
-			line-height: 100px;
-			font-size: 17px;
-			text-transform: uppercase;
-			border-radius: 50%;
-			text-align: center;
-			/* transform: skew(0deg, 8deg) translateX(-50%); */
-		}
-
-		.form {
-			position: absolute;
-			top: 210px;
-			background: #f6f6f6;
-			width: 100%;
-			height: calc(100% - 180px);
-
-			.wrapper {
-				padding-top: 30px;
-				/* position: absolute;
-				left: 50%;
-				transform: translateX(-50%); */
-				width: 85%;
-				margin: 0 auto;
-			}
-
-			.rowSubmit {
-				margin: 20px 0 10px 0;
-				.label {
-					font-size: 12px;
-					font-weight: 600;
-					color: rgb(100, 100, 100);
-				}
-
-				input {
-					margin-top: 2px;
-					font-size: 13px;
-					color: rgb(70, 70, 70);
-					border: none;
-					border-bottom: 1px solid rgba(100, 100, 100, 0.6);
-					outline: none;
-					height: 25px;
-					background: transparent;
-					width: 100%;
-				}
-				button {
-					margin-top: 0px;
-					font-size: 13px;
-					color: rgb(100, 100, 100);
-
-					border: none;
-					outline: none;
-					height: 40px;
-					text-transform: uppercase;
-					background: ${props => props.theme.starDark};
-					transition: 0.25s;
-					width: 100%;
-					color: whitesmoke;
-					cursor: pointer;
-
-					:hover,
-					:active {
-						color: ${props => props.theme.colorBad};
-						transition: 0.25s;
-					}
-				}
-			}
-			.row {
-				margin: 20px 0px;
-				.label {
-					font-size: 12px;
-					font-weight: 600;
-					color: rgb(100, 100, 100);
-				}
-
-				input {
-					margin-top: 2px;
-					font-size: 13px;
-					color: rgb(70, 70, 70);
-					border: none;
-					border-bottom: 1px solid rgba(100, 100, 100, 0.6);
-					outline: none;
-					height: 25px;
-					background: transparent;
-					width: 100%;
-				}
-
-				button {
-					margin-top: 0px;
-					font-size: 13px;
-					color: rgb(100, 100, 100);
-					border: none;
-					outline: none;
-					height: 40px;
-					text-transform: uppercase;
-					background: ${props => props.theme.starDark};
-					width: 100%;
-					color: #fff;
-					cursor: pointer;
-				}
-			}
-		}
-	}
-`;
-
 const AlertStyle = styled.div`
 	position: relative;
 
@@ -508,7 +348,7 @@ const NewLoginStyle = styled.div`
 		font-size: 2.5rem;
 		font-weight: 700;
 		line-height: 1;
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 		outline: none;
 		text-shadow: none;
 		opacity: 0.5;
@@ -520,7 +360,7 @@ const NewLoginStyle = styled.div`
 	}
 
 	.close:active {
-		color: ${props => props.theme.colorBad};
+		color: ${props => props.theme.white};
 	}
 
 	.close:not(:disabled):not(.disabled):hover,

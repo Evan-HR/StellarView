@@ -206,7 +206,7 @@ app.get("/api/getUserFavSpots", function(req, res) {
 //get reviews from db
 app.get("/api/getReviews", function(req, res) {
 	const getReviewQuery =
-		"SELECT name, score, review from reviews where p_id = ?";
+		"SELECT name, score, review, date from reviews where p_id = ?";
 
 	connection.query(getReviewQuery, [req.query.parkID], (err, reviews) => {
 		if (reviews.length > 0) {

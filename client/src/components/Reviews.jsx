@@ -5,6 +5,7 @@ import { AuthConsumer } from "./AuthContext";
 import StarReviewsStatic from "./StarReviewsStatic";
 import Login from "./Login";
 import styled from "styled-components";
+import formError from "./style/Media/formError.svg";
 
 class BaseReviews extends Component {
 	constructor(props) {
@@ -20,6 +21,10 @@ class BaseReviews extends Component {
 			dbReviewList: []
 		};
 		this.handleStarScore = this.handleStarScore.bind(this);
+	}
+
+	dateFormatter(date) {
+		return date.slice(0, 10);
 	}
 
 	getHasReviewed() {
@@ -97,7 +102,8 @@ class BaseReviews extends Component {
 						return {
 							name: x.name,
 							score: x.score,
-							review: x.review
+							review: x.review,
+							date: this.dateFormatter(x.date)
 						};
 					});
 					this.setState({
@@ -162,6 +168,7 @@ class BaseReviews extends Component {
 		if (this.state.noStarError === true) {
 			return (
 				<AlertStyle>
+					<img className="formError" src={formError} />
 					<div className="AlertText">
 						You must click a star (1-5) before submission.
 					</div>
@@ -171,17 +178,22 @@ class BaseReviews extends Component {
 	}
 
 	formatReviewCards = review => {
+		//if there is no review, show the static Stars in the main placeholder
 		return review.review === "" ? (
 			<ReviewStyle>
 				<div className="ReviewName">{review.name}</div>
 				<div className="ReviewScore">{review.score}/5 Stars</div>
-				<div className="ReviewReview"><StarReviewsStatic avgScore={review.score} /></div>
+				<div className="ReviewDate">{review.date}</div>
+				<div className="ReviewReview">
+					<StarReviewsStatic avgScore={review.score} />
+				</div>
 			</ReviewStyle>
 		) : (
 			<ReviewStyle>
 				<div className="ReviewName">{review.name}</div>
 				<div className="ReviewScore">{review.score}/5 Stars</div>
 				<div className="ReviewReview">{review.review}</div>
+				<div className="ReviewDate">{review.date}</div>
 			</ReviewStyle>
 		);
 	};
@@ -198,7 +210,6 @@ class BaseReviews extends Component {
 		return (
 			<ReviewFormStyle>
 				<form id="reviewForm">
-
 					<label>
 						<textarea
 							rows="4"
@@ -209,7 +220,7 @@ class BaseReviews extends Component {
 							value={this.state.review}
 						/>
 					</label>
-		
+
 					<StarReviews scoreProp={this.handleStarScore} />
 					<div className="submitButton">
 						<button onClick={e => this.onSubmit(e)}>
@@ -260,28 +271,6 @@ class BaseReviews extends Component {
 		}
 	};
 
-	//TODO: makerenderScore(), renderNumReviews() and renderStarAvg() on 1 line in css
-	renderReviewsDiv() {
-		return (
-			<div className="border border-primary">
-				{/* {this.renderScore()}
-				{this.renderNumReviews()}
-				{this.renderStarAvg()} */}
-
-				<table className="table table-hover">
-					<tbody>
-						<tr>
-							<th>Name</th>
-							<th>Score</th>
-							<th>Review</th>
-						</tr>
-					</tbody>
-					<tbody>{this.renderReviewTable()}</tbody>
-				</table>
-			</div>
-		);
-	}
-
 	renderUserNotLoggedIn() {
 		return (
 			<AlertStyle>
@@ -303,7 +292,9 @@ class BaseReviews extends Component {
 		switch (param) {
 			case "loggedInHasReviewed":
 				console.log("loggedinhasreviewed got here");
-				return "Thank you for your review!";
+				return (
+					<div className="success">Thank you for your review!</div>
+				);
 			case "loggedInNotReviewed":
 				console.log("loggedinNotreviewed got here");
 				return this.renderUserNoReview();
@@ -315,22 +306,6 @@ class BaseReviews extends Component {
 				return null;
 		}
 	}
-
-	// renderReviewTable = () => {
-	// 	if (this.state.dbReviewList.length > 0) {
-	// 		return this.state.dbReviewList.map(this.formatReviews);
-	// 	} else {
-	// 		return (
-	// 			<tr>
-	// 				<td colSpan={3}>
-	// 					<strong style={{ color: "red" }}>
-	// 						No reviews available. Be the first!
-	// 					</strong>
-	// 				</td>
-	// 			</tr>
-	// 		);
-	// 	}
-	// };
 
 	handleReviewChange = e => {
 		this.setState({ review: e.target.value });
@@ -368,12 +343,20 @@ const ReviewsStyle = styled.div`
 		padding-top: 0.5rem;
 		font-weight: normal;
 	}
+	.success {
+		font-size: 20px;
+	}
 `;
 
 const ReviewFormStyle = styled.div`
+	textarea::placeholder {
+		color: ${props => props.theme.mapBlue};
+	}
+
 	.submitButton {
 		button {
 			margin-top: 15px;
+			margin-bottom: 15px;
 			font-size: 13px;
 			color: rgb(100, 100, 100);
 
@@ -386,11 +369,24 @@ const ReviewFormStyle = styled.div`
 			width: 100%;
 			color: ${props => props.theme.white};
 			cursor: pointer;
+			background-position: center;
+			transition: background 0.6s;
 
-			:hover,
-			:active {
+			:hover {
+				background: ${props => props.theme.starDark}
+					radial-gradient(
+						circle,
+						transparent 1%,
+						rgba(0, 0, 0, 0.6) 1%
+					)
+					center/15000%;
 				color: ${props => props.theme.colorBad};
-				transition: 0.25s;
+			}
+			:active {
+				background-color: rgba(0, 0, 0, 0.6);
+				background-size: 100%;
+				transition: background 0s;
+				transition: color 0.25s;
 			}
 		}
 	}
@@ -415,45 +411,42 @@ const ReviewFormStyle = styled.div`
 
 const ReviewStyle = styled.div`
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr;
 	grid-template-rows: auto auto;
 	font-style: normal;
 	font-weight: 400;
-	font-size: 16px;
+	font-size: 14px;
 	margin: 25px 0px 25px 0px;
+	font-family: monospace;
 
 	grid-template-areas:
-		"ReviewReview    ReviewReview"
-		"ReviewName    	 ReviewScore";
-
-	/* border-bottom: 1px solid ${props => props.theme.cardDark}; */
+		"ReviewReview ReviewReview ReviewReview"
+		"ReviewName   ReviewDate   ReviewScore";
 
 	.ReviewName {
 		grid-area: ReviewName;
-		/* padding-bottom: 20px; */
-		padding-top: 20px;
-		padding-bottom: 10px;
-		/* text-align: end;
-		padding-right: 25px; */
+		padding-top: 2px;
+		text-align: start;
 	}
 	.ReviewScore {
-		/* padding-bottom: 20px; */
-		/* text-align: start;
-		padding-left: 25px; */
 		grid-area: ReviewScore;
-		padding-top: 20px;
-		padding-bottom: 10px;
+		padding-top: 2px;
+		text-align: end;
 	}
 
+	.ReviewDate {
+		grid-area: ReviewDate;
+		padding-top: 2px;
+		
+	}
 	.ReviewReview {
+		background: #c2ccd4b0;
+		border-radius: 20px;
 		font-weight: 500;
-		font-size: 20px;
-		padding: 20px 0px 20px 0px;
-		/* background: #d5dae6; */
-		/* border-radius: 14px; */
+		font-size: 16px;
+		padding: 20px 10px 20px 10px;
 		grid-area: ReviewReview;
 		text-align: center;
-		/* box-shadow: 0px 2px 5px 0px #888888; */
 	}
 `;
 
@@ -461,12 +454,16 @@ const AlertStyle = styled.div`
 	position: relative;
 
 	margin-bottom: 1rem;
-	margin-top: 1rem;
+	margin-top: 1.5rem;
+	img {
+		padding-bottom: 10px;
+		width: 42px;
+	}
 
 	.AlertText {
 		/* background-color: #daa97961; */
 		font-size: 20px;
-		
+
 		padding: 10px;
 		span {
 			color: ${props => props.theme.colorBad};

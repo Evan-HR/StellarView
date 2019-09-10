@@ -13,6 +13,7 @@ import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import ReportPark from "./ReportPark";
 import CountUp from "react-countup";
 
+
 const modalStyle = {
 	overlay: {
 		position: "fixed",
@@ -113,6 +114,7 @@ class ParkMapModal extends Component {
 
 	render() {
 		return (
+		
 			<Modal
 				// className="modal-dialog"
 				closeTimeoutMS={800}
@@ -122,6 +124,7 @@ class ParkMapModal extends Component {
 				style={modalStyle}
 				contentLabel="Example Modal"
 			>
+
 				{/* <div className="modal-content"> */}
 				<ModalStyle>
 					<div className="modal-header">
@@ -347,9 +350,12 @@ class ParkMapModal extends Component {
 							/> */}
 						</div>
 					</div>
+				
 				</ModalStyle>
+				
 				{/* </div> */}
 			</Modal>
+			
 		);
 	}
 }
@@ -404,13 +410,7 @@ const ModalStyle = styled.div`
 	font-family: 'Lato', sans-serif;
 	border: none;
 	color: ${props => props.theme.fontDark};
-	background: -moz-linear-gradient(90deg, rgba(218,218,218,1) 0%, rgba(235,235,235,1) 100%); /* ff3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(235,235,235,1)), color-stop(100%, rgba(218,218,218,1))); /* safari4+,chrome */
-background: -webkit-linear-gradient(90deg, rgba(218,218,218,1) 0%, rgba(235,235,235,1) 100%); /* safari5.1+,chrome10+ */
-background: -o-linear-gradient(90deg, rgba(218,218,218,1) 0%, rgba(235,235,235,1) 100%); /* opera 11.10+ */
-background: -ms-linear-gradient(90deg, rgba(218,218,218,1) 0%, rgba(235,235,235,1) 100%); /* ie10+ */
-background: linear-gradient(0deg, rgba(218,218,218,1) 0%, rgba(235,235,235,1) 100%); /* w3c */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EBEBEB', endColorstr='#dadada',GradientType=0 ); /* ie6-9 */
+	background:black;
 
 	.modal-header {
 		font-family: 'Lato', sans-serif;
@@ -431,7 +431,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EBEBEB', end
 		font-size: 2.5rem;
 		font-weight: 700;
 		line-height: 1;
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 		outline: none;
 		text-shadow: none;
 		opacity: 0.5;
@@ -443,7 +443,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EBEBEB', end
 	}
 
 	.close:active {
-		color: ${props => props.theme.colorBad};
+		color: ${props => props.theme.white};
 	}
 
 	.close:not(:disabled):not(.disabled):hover,
@@ -474,7 +474,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EBEBEB', end
 
 .textContainer{
 	grid-area: infoText;
-	font-size: 20px;
+	font-family: monospace;
+    font-size: 15px;
 }
 
 .HeaderGrid{
@@ -535,6 +536,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EBEBEB', end
 				.favPark {
 					margin: auto 0;
 					grid-area: favPark;
+					button:focus {outline:0;}
+					
 				
 					
 					.favParkText{

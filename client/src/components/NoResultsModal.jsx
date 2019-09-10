@@ -135,7 +135,7 @@ const NoResultsStyle = styled.div`
 		font-size: 2.5rem;
 		font-weight: 700;
 		line-height: 1;
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 		outline: none;
 		text-shadow: none;
 		opacity: 0.5;
@@ -147,7 +147,7 @@ const NoResultsStyle = styled.div`
 	}
 
 	.close:active {
-		color: ${props => props.theme.colorBad};
+		color: ${props => props.theme.white};
 	}
 
 	.close:not(:disabled):not(.disabled):hover,
