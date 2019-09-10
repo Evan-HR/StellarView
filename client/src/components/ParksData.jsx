@@ -275,13 +275,14 @@ class BaseParksData extends Component {
 							moonType={this.state.moonType}
 						/>
 					</div>
+
 					{/* <div className="helpCard">
 					<span className="help">Icon Info</span>
 					<img className="iconA" src={humidityIcon} />
 					<img className="iconB" src={lightPolIcon} />
 					<img className="iconE" src={tempIcon} />
 					<img className="iconD" src={cloudBadIcon} />
-					<i class="far fa-eye iconC"></i>
+					<i className="far fa-eye iconC"></i>
 					<span className="descA">Humidity</span>
 					<span className="descB">Light Pollution</span>
 					<span className="descE">Temperature</span>

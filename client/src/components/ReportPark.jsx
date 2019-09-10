@@ -113,7 +113,7 @@ class BaseReportPark extends Component {
 		return (
 			<ReportFormStyle>
 				<h1>What's the reason?</h1>
-				<label class="container">
+				<label className="container">
 					Park does not exist
 					<input
 						type="radio"
@@ -122,9 +122,9 @@ class BaseReportPark extends Component {
 						value="DNE"
 						onChange={this.handleFormChange}
 					/>
-					<span class="checkmark"></span>
+					<span className="checkmark"></span>
 				</label>
-				<label class="container">
+				<label className="container">
 					By-laws enforced
 					<input
 						type="radio"
@@ -133,9 +133,9 @@ class BaseReportPark extends Component {
 						value="bylaw"
 						onChange={this.handleFormChange}
 					/>
-					<span class="checkmark"></span>
+					<span className="checkmark"></span>
 				</label>
-				<label class="container">
+				<label className="container">
 					No parking
 					<input
 						type="radio"
@@ -144,9 +144,9 @@ class BaseReportPark extends Component {
 						value="noparking"
 						onChange={this.handleFormChange}
 					/>
-					<span class="checkmark"></span>
+					<span className="checkmark"></span>
 				</label>
-				<label class="container">
+				<label className="container">
 					Inaccessible
 					<input
 						type="radio"
@@ -155,7 +155,7 @@ class BaseReportPark extends Component {
 						value="inaccessible"
 						onChange={this.handleFormChange}
 					/>
-					<span class="checkmark"></span>
+					<span className="checkmark"></span>
 				</label>
 			</ReportFormStyle>
 		);
@@ -170,7 +170,7 @@ class BaseReportPark extends Component {
 					className="close"
 					aria-label="Close"
 				>
-					<i class="fas fa-window-close" />
+					<i className="fas fa-window-close" />
 				</button>
 				<div className="form">
 					<div className="wrapper">
@@ -288,7 +288,7 @@ const LoginStyle = styled.div`
 	width: 60vw;
 	position: relative;
 	background: ${props => props.theme.mapBlue};
-	font-family: "Lato";
+	font-family: "Lato", sans-serif;
 	color: ${props => props.theme.white};
 	/* min-height: 100vh; */
 
@@ -336,11 +336,10 @@ const LoginStyle = styled.div`
 			font-size: 15px;
 			font-weight: 600;
 
-		
 			transition: background 0.4s;
 			:hover {
 				background-color: ${props => props.theme.cardLightHover};
-	
+
 				transition: background 0s;
 			}
 			:active {

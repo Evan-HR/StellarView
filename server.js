@@ -154,6 +154,10 @@ passport.use(
 	)
 );
 
+app.get("/*", function(req, res) {
+	res.redirect("/");
+});
+
 app.get("/logout", function(req, res) {
 	console.log("LOG OUT GOT HERE!???!?");
 	req.logout();
@@ -206,7 +210,7 @@ app.get("/api/getUserFavSpots", function(req, res) {
 //get reviews from db
 app.get("/api/getReviews", function(req, res) {
 	const getReviewQuery =
-		"SELECT name, score, review, date from reviews where p_id = ?";
+		"SELECT id, name, score, review, date from reviews where p_id = ?";
 
 	connection.query(getReviewQuery, [req.query.parkID], (err, reviews) => {
 		if (reviews.length > 0) {
@@ -509,7 +513,6 @@ app.post("/api/postUnfavSpot", (req, res) => {
 	console.log("park_id: " + req.body.params.park_id);
 
 	const deleteFavParkQuery =
-	
 		"DELETE FROM favorite_parks WHERE park_id=? AND user_id=?";
 	connection.query(
 		deleteFavParkQuery,
@@ -544,8 +547,6 @@ app.post("/api/reportPark", (req, res) => {
 		}
 	);
 });
-
-
 
 //note, res.send sends the HTTP response, res.end ends the response process
 app.post("/results.html", (req, res) => {

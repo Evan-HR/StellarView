@@ -21,7 +21,7 @@ class BaseFavPark extends Component {
 	handleWarningMsg = () => {
 		if (this.state.clickedNoAuth === true) {
 			return (
-				<div class="alert alert-warning" role="alert">
+				<div className="alert alert-warning" role="alert">
 					You must be logged-in to add to favorites!
 				</div>
 			);

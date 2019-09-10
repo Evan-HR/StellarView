@@ -138,7 +138,7 @@ class ParkMapModal extends Component {
 							className="close"
 							aria-label="Close"
 						>
-							<i class="fas fa-window-close" />
+							<i className="fas fa-window-close" />
 						</button>
 					</div>
 					<div className="ContentGrid">

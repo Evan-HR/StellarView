@@ -197,7 +197,7 @@ const ToolbarStyle = styled.header`
 	.toolbar__logo{	
 		font-weight: 400;
 		font-size: 60px;
-		font-family: Lato;
+		font-family: 'Lato', sans-serif;
 		.Stellar{
 			font-weight: 600;
 		}
