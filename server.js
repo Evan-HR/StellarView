@@ -39,9 +39,9 @@ app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "client", "build")));
 //app.use(express.static(__dirname + '/public'));
 
-// app.get("*", (req, res) => {
-// 	res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-// });
+app.get("*", (req, res) => {
+	res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
 
 //arbitrary port 5000
 app.listen(port, () => {
@@ -154,13 +154,14 @@ passport.use(
 	)
 );
 
-app.get("/home", function(req, res) {
-	res.redirect("/home");
-});
+// app.get("/home", function(req, res) {
+// 	res.redirect("/");
 
-app.get("/search", function(req, res) {
-	res.redirect("/search");
-});
+// });
+
+// app.get("/search", function(req, res) {
+// 	res.redirect("/");
+// });
 
 app.get("/logout", function(req, res) {
 	console.log("LOG OUT GOT HERE!???!?");
