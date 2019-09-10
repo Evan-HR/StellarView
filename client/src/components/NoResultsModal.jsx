@@ -33,10 +33,7 @@ class NoResultsModal extends Component {
 				>
 					<i className="fas fa-window-close" />
 				</button>
-				<span>
-					Sorry! The stargazing conditions right now are poor in this
-					area. Please try again in X days.
-				</span>
+				<span>Sorry, we couldn't find any parks in thsi area!</span>
 			</NoResultsStyle>
 		);
 	};

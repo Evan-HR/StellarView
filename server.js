@@ -154,8 +154,12 @@ passport.use(
 	)
 );
 
-app.get("/*", function(req, res) {
-	res.redirect("/");
+app.get("/home", function(req, res) {
+	res.redirect("/home");
+});
+
+app.get("/search", function(req, res) {
+	res.redirect("/search");
 });
 
 app.get("/logout", function(req, res) {
