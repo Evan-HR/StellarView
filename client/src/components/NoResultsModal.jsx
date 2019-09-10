@@ -3,7 +3,6 @@ import Modal from "react-modal";
 import { withRouter, Link } from "react-router-dom";
 import styled from "styled-components";
 
-
 Modal.setAppElement("#root");
 class NoResultsModal extends Component {
 	state = {
@@ -19,15 +18,14 @@ class NoResultsModal extends Component {
 	};
 
 	closeModal = () => {
-		this.setState({ ...this.state, modalIsOpen: false});
+		this.setState({ ...this.state, modalIsOpen: false });
 		document.body.style.overflow = "visible";
 	};
 
-	
 	renderNoParks = () => {
 		return (
 			<NoResultsStyle>
-                <button
+				<button
 					type="button"
 					onClick={this.closeModal}
 					className="close"
@@ -35,16 +33,17 @@ class NoResultsModal extends Component {
 				>
 					<i class="fas fa-window-close" />
 				</button>
-                <span>Sorry!  The stargazing conditions right now are poor in this area.  Please try again in X days.</span>
+				<span>
+					Sorry! The stargazing conditions right now are poor in this
+					area. Please try again in X days.
+				</span>
 			</NoResultsStyle>
 		);
-    };
-    
-    componentDidMount(){
-        this.openModal();
-    }
+	};
 
-
+	componentDidMount() {
+		this.openModal();
+	}
 
 	//classNameName changes model content, style gives you anything you specify to override defaults
 	render() {
@@ -80,7 +79,7 @@ const customStyles = {
 		top: 0,
 		left: 0,
 		right: 0,
-        bottom: 0,
+		bottom: 0,
 		backgroundColor: "rgba(0,0,0,0.9)",
 		transition: "opacity 400ms ease-in-out"
 	},
@@ -100,7 +99,6 @@ const customStyles = {
 	}
 };
 
-
 //style the "modal" here - don't worry about the ccontent shit
 const NoResultsStyle = styled.div`
 	-webkit-box-align: center;
@@ -116,16 +114,15 @@ const NoResultsStyle = styled.div`
 	-webkit-box-pack: center;
 	-ms-flex-pack: center;
 	justify-content: center;
-    width: 60vw;
-    height: 30vh;
-    border: none;
+	width: 60vw;
+	height: 30vh;
+	border: none;
 	width: 60vw;
 	position: relative;
 	background: ${props => props.theme.prettyDark};
-	font-family: "Lato";
+	font-family: "Lato", sans-serif;
 	color: ${props => props.theme.white};
 	/* min-height: 100vh; */
-
 
 	.close {
 		position: absolute;
@@ -154,5 +151,4 @@ const NoResultsStyle = styled.div`
 	.close:not(:disabled):not(.disabled):focus {
 		opacity: 0.75;
 	}
-
 `;

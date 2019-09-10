@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import { AuthProvider, AuthConsumer } from "./components/AuthContext";
 import ParksData from "./components/ParksData";
-import { Link, BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import {
+	Link,
+	BrowserRouter as Router,
+	Route,
+	Switch,
+	Redirect
+} from "react-router-dom";
 import Profile from "./components/Profile";
 import Login from "./components/Login";
 import ToolBar from "./components/ToolBar/Toolbar";
@@ -17,7 +23,6 @@ import Footer from "./components/Footer";
 import ScrollUpButton from "react-scroll-up-button";
 import NotFoundPage from "./components/NotFoundPage";
 import StarBackgroundLess from "./components/StarBackgroundLess";
-
 
 class App extends Component {
 	state = {
@@ -50,12 +55,11 @@ class App extends Component {
 		return (
 			<React.Fragment>
 				<ScrollUpButton />
-				<GlobalStyle/>
+				<GlobalStyle />
 				{/* <StarBackgroundLess/> */}
 				<SiteStyle>
 					<div className="SiteContent">
-					<Router>
-						
+						<Router>
 							<ToolBar
 								drawerClickHandler={
 									this.drawerToggleClickHandler
@@ -95,27 +99,26 @@ class App extends Component {
 								}}
 							</AuthConsumer>
 							<Switch>
-						
-							<Route
-								exact path="/"
-								render={() => {
-									return <Redirect to="/home" />;
-								}}
-							/>
-							
-							<Route
-								path={["/home", "/search"]}
-								component={ParksData}
-							/>
-							<Route path="/faq" component={FAQ} />
-							
-							<Route path="*" component={NotFoundPage}/>
+								<Route
+									exact
+									path="/"
+									render={() => {
+										return <Redirect to="/home" />;
+									}}
+								/>
+
+								<Route
+									path={["/home", "/search"]}
+									component={ParksData}
+								/>
+								<Route path="/faq" component={FAQ} />
+
+								<Route path="*" component={NotFoundPage} />
 							</Switch>
 						</Router>
 					</div>
 					<Footer />
 				</SiteStyle>
-				
 			</React.Fragment>
 		);
 	}
@@ -159,13 +162,8 @@ body{
 	font-size: 1rem;
 	font-weight: 300;
 	line-height: 1.5;
-	/* background-image: linear-gradient(150deg,${props =>
-		props.theme.cream} 60%,${props =>
-	props.theme.franNavy} calc(60% + 2px)); */
-	/* background-image: url(${props => props.bg});
-	background-size: cover; */
+	font-family: 'Lato', sans-serif;
 	background-color: ${props => props.theme.prettyDark} !important;
-
 	text-align: center !important;
 }
 `;

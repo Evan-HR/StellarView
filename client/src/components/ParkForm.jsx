@@ -702,7 +702,7 @@ const SearchFormStyle = styled.div`
 			font-weight: 600;
 			
 			background-position: center;
-			transition: background 0.4s;
+			transition: background 0.2s;
 		
 		:hover {
 			background: ${props => props.theme.prettyDark}
@@ -756,7 +756,7 @@ const SearchFormStyle = styled.div`
 		float: left;
 		transition: color 0.1s ease;
 		background-position: center;
-			transition: background 0.4s;
+			transition: background 0.2s;
 		
 		:hover {
 			background: ${props => props.theme.prettyDark}

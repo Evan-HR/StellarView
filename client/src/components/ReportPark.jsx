@@ -288,7 +288,7 @@ const LoginStyle = styled.div`
 	width: 60vw;
 	position: relative;
 	background: ${props => props.theme.mapBlue};
-	font-family: "Lato";
+	font-family: "Lato", sans-serif;
 	color: ${props => props.theme.white};
 	/* min-height: 100vh; */
 
@@ -336,11 +336,10 @@ const LoginStyle = styled.div`
 			font-size: 15px;
 			font-weight: 600;
 
-		
 			transition: background 0.4s;
 			:hover {
 				background-color: ${props => props.theme.cardLightHover};
-	
+
 				transition: background 0s;
 			}
 			:active {
