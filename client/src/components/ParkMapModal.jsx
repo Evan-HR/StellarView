@@ -13,7 +13,6 @@ import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import ReportPark from "./ReportPark";
 import CountUp from "react-countup";
 
-
 const modalStyle = {
 	overlay: {
 		position: "fixed",
@@ -80,7 +79,6 @@ class ParkMapModal extends Component {
 		}
 	}
 
-
 	openModal = content => {
 		if (content === "") {
 			content = "No content.";
@@ -114,7 +112,6 @@ class ParkMapModal extends Component {
 
 	render() {
 		return (
-		
 			<Modal
 				// className="modal-dialog"
 				closeTimeoutMS={800}
@@ -124,7 +121,6 @@ class ParkMapModal extends Component {
 				style={modalStyle}
 				contentLabel="Example Modal"
 			>
-
 				{/* <div className="modal-content"> */}
 				<ModalStyle>
 					<div className="modal-header">
@@ -350,12 +346,10 @@ class ParkMapModal extends Component {
 							/> */}
 						</div>
 					</div>
-				
 				</ModalStyle>
-				
+
 				{/* </div> */}
 			</Modal>
-			
 		);
 	}
 }
@@ -368,15 +362,10 @@ function Card(props) {
 		config: { mass: 5, tension: 500, friction: 80 }
 	});
 	return (
-		<div
-
-			onClick={() => set(state => !state)}
-		>
+		<div onClick={() => set(state => !state)}>
 			<a.div
 				className={props.cardName}
 				style={{
-
-
 					opacity: opacity.interpolate(o => 1 - o),
 					transform
 				}}
