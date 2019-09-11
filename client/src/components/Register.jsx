@@ -255,11 +255,11 @@ class Register extends Component {
 					contentLabel="Register Modal"
 					style={customStyles}
 				>
-					<div className="modal-content">
+					<ModalStyle>
 						{this.renderNewRegisterFormStyle()}
 
 						{/* {this.errorMsg()} */}
-					</div>
+				</ModalStyle>
 				</Modal>
 			</React.Fragment>
 		);
@@ -539,4 +539,19 @@ const NewLoginStyle = styled.div`
 	.text--center {
 		text-align: center;
 	}
+`;
+
+const ModalStyle = styled.div`
+
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-clip: padding-box;
+  border-radius: 0.3rem;
+  outline: 0;
+
 `;
