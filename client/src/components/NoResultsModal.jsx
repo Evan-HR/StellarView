@@ -55,11 +55,11 @@ class NoResultsModal extends Component {
 					className="modal-dialog"
 					style={customStyles}
 				>
-					<div className="modal-content">
+					<ModalStyle>
 						{/* {this.renderLoginModal()} */}
 						{/* {this.renderModalContent()} */}
 						{this.renderNoParks()}
-					</div>
+					</ModalStyle>
 				</Modal>
 			</React.Fragment>
 		);
@@ -148,4 +148,20 @@ const NoResultsStyle = styled.div`
 	.close:not(:disabled):not(.disabled):focus {
 		opacity: 0.75;
 	}
+`;
+
+
+const ModalStyle = styled.div`
+
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-clip: padding-box;
+  border-radius: 0.3rem;
+  outline: 0;
+
 `;

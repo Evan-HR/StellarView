@@ -464,7 +464,7 @@ const AlertStyle = styled.div`
 	.AlertText {
 		/* background-color: #daa97961; */
 		font-size: 20px;
-
+		font-weight: 400;
 		padding: 10px;
 		span {
 			color: ${props => props.theme.colorBad};

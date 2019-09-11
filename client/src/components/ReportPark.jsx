@@ -218,10 +218,12 @@ class BaseReportPark extends Component {
 					className="modal-dialog"
 					style={customStyles}
 				>
+					<ModalStyle>
 					<div className="modal-content">
 						{this.renderReportModal()}
 						{/* {this.renderModalContent()} */}
 					</div>
+					</ModalStyle>
 				</Modal>
 			</React.Fragment>
 		);
@@ -466,4 +468,19 @@ const ReportFormStyle = styled.div`
 		border-radius: 50%;
 		background: ${props => props.theme.white};
 	}
+`;
+
+const ModalStyle = styled.div`
+
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-clip: padding-box;
+  border-radius: 0.3rem;
+  outline: 0;
+
 `;
