@@ -1,23 +1,28 @@
-import React, { Component } from "react";
+import React, { useState, Component } from "react";
 import styled from "styled-components";
 import MoonDisplay from "./MoonDisplay";
+import { useSpring, animated as a } from "react-spring";
 
-class Moon extends Component {
-	state = {};
+function Moon(props) {
+	const springStyle = useSpring({ opacity: props.moonPhase ? 1 : 0 });
 
-	render() {
-		return (
+	return (
+		<a.div style={springStyle}>
 			<MoonStyle>
-				<div className="moonDisplay">
-					<span>{this.props.moonType.split(" ")[0]}</span>
-					<span className="MoonDisplayContainer">
-					<MoonDisplay phase={this.props.moonPhase} />
-					</span>
-					<span>{this.props.moonType.split(" ")[1]}</span>
-				</div>
+				{props.moonPhase ? (
+					<div className="moonDisplay">
+						<span>{props.moonType.split(" ")[0]}</span>
+						<span className="MoonDisplayContainer">
+							<MoonDisplay phase={props.moonPhase} />
+						</span>
+						<span>{props.moonType.split(" ")[1]}</span>
+					</div>
+				) : (
+					""
+				)}
 			</MoonStyle>
-		);
-	}
+		</a.div>
+	);
 }
 
 export default Moon;

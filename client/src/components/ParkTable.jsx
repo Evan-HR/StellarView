@@ -38,15 +38,15 @@ class ParkTable extends Component {
 						items={this.props.parkList}
 						keys={item => item.id}
 						from={{
-							transform: "translate3d(-40px,0,0)",
+							// transform: "translate3d(0,-40px,0)",
 							opacity: 0
 						}}
 						enter={{
-							transform: "translate3d(0,0px,0)",
+							// transform: "translate3d(0,0px,0)",
 							opacity: 1
 						}}
 						leave={{
-							transform: "translate3d(-40px,0,0)",
+							// transform: "translate3d(0,-40px,0)",
 							opacity: 0
 						}}
 						//update={[{ opacity: 0.5 }, { opacity: 1 }]}
