@@ -69,7 +69,7 @@ class ParkMap extends Component {
 			position: location,
 			icon: {
 				url:
-					"http://maps.google.com/mapfiles/kml/shapes/placemark_circle.png",
+					"https://maps.google.com/mapfiles/kml/shapes/placemark_circle.png",
 				anchor: new window.google.maps.Point(15, 17)
 			},
 			map: this.googleMap

@@ -14,17 +14,23 @@ import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import tempIcon from "./style/Media/cardIcons/temperature.svg";
 import { withRouter } from "react-router-dom";
 
-
 function inRange(x, min, max) {
 	return (x - min) * (x - max) <= 0;
 }
 
 export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
-	console.log("MOON FRACTION % IS !!!!!!!!!!!!!!", moonFraction);
-	console.log("CLOUD COV IS !!!!!!!!!!!!!!", cloudCov);
-	console.log("LIGHT POL IS !!!!!!!!!!!!!!", lightPol);
-	console.log("humidity COV IS !!!!!!!!!!!!!!", humidity);
-	var moonScore = 0.45 * (-1 * (2 * moonFraction - 1));
+	// console.log("MOON FRACTION % IS !!!!!!!!!!!!!!", moonFraction);
+	// console.log("CLOUD COV IS !!!!!!!!!!!!!!", cloudCov);
+	// console.log("LIGHT POL IS !!!!!!!!!!!!!!", lightPol);
+	// console.log("humidity COV IS !!!!!!!!!!!!!!", humidity);
+	var moonScore = 0;
+	if (moonFraction < 0.2) {
+		moonScore = 1;
+	} else if (inRange(moonFraction, 0.2, 0.7)) {
+		moonScore = -2 * moonFraction + 1.4;
+	} else {
+		moonScore = 0;
+	}
 	var lightPolScore = 0.25 * (((-1 * 1) / 3) * (lightPol - 3));
 	var humidityScore = 0;
 	if (humidity < 0.4) {
@@ -44,6 +50,13 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 	}
 
 	const finalScore = moonScore + cloudScore + humidityScore + lightPolScore;
+
+	if (finalScore < 0) {
+		finalScore = 0;
+	} else if (finalScore > 100) {
+		finalScore = 100;
+	}
+
 	console.log(
 		"Moon score, cloudscore, humidity, lightpolscore ",
 		moonScore,
