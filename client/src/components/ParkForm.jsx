@@ -543,8 +543,9 @@ class BaseParkForm extends Component {
 								advancedSearch: !this.state.advancedSearch
 							})
 						}
-					>
+					><span>
 						Advanced Search
+						</span>
 						<i className="fas fa-caret-down" />
 					</button>
 				</div>
@@ -723,6 +724,9 @@ const SearchFormStyle = styled.div`
 
 	.advancedSearchToggle {
 		grid-area: advancedSearchToggle;
+		span{
+			font-weight: 500;
+		}
 
 		button {
 			float: left;

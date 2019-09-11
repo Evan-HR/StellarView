@@ -190,47 +190,47 @@ class BaseParksData extends Component {
 
 	renderParkMap = () => {
 		return (
-			// <Spring
-			// 	native
-			// 	//force
-			// 	//config={{ tension: 2000, friction: 100, precision: 1 }}
-			// 	from={{
-			// 		transform: this.state.hideMap
-			// 			? "translate3d(40px,0,0)"
-			// 			: "translate3d(0,0,0)",
-			// 		opacity: this.state.hideMap ? 0 : 1
-			// 	}}
-			// 	to={{
-			// 		transform: this.state.hideMap
-			// 			? "translate3d(0,0,0)"
-			// 			: "translate3d(40px,0,0)",
-			// 		opacity: this.state.hideMap ? 1 : 0
-			// 	}}
-			// >
-			// 	{props => (
-			// 		<animated.div className="ParkMapStyle" style={props}>
-			// 			<ParkMap
-			// 				parkList={this.state.parks}
-			// 				markers={this.markers}
-			// 				location={this.state.fetchReq}
-			// 				onMapLoaded={this.handleMapLoaded}
-			// 				moon={this.state.moon}
-			// 				moonType={this.state.moonType}
-			// 			/>
-			// 		</animated.div>
-			// 	)}
-			// </Spring>
+			<Spring
+				native
+				//force
+				config={{ tension: 2000, friction: 100, precision: 1 }}
+				from={{
+					transform: this.state.hideMap
+						? "translate3d(0,30px,0)"
+						: "translate3d(0,0,0)",
+					opacity: this.state.hideMap ? 0 : 1
+				}}
+				to={{
+					transform: this.state.hideMap
+						? "translate3d(0,0,0)"
+						: "translate3d(0,30px,0)",
+					opacity: this.state.hideMap ? 1 : 0
+				}}
+			>
+				{props => (
+					<animated.div className="ParkMapStyle" style={props}>
+						<ParkMap
+							parkList={this.state.parks}
+							markers={this.markers}
+							location={this.state.fetchReq}
+							onMapLoaded={this.handleMapLoaded}
+							moon={this.state.moon}
+							moonType={this.state.moonType}
+						/>
+					</animated.div>
+				)}
+			</Spring>
 
-			<div className="ParkMapStyle">
-				<ParkMap
-					parkList={this.state.parks}
-					markers={this.markers}
-					location={this.state.fetchReq}
-					onMapLoaded={this.handleMapLoaded}
-					moon={this.state.moonPhase}
-					moonType={this.state.moonType}
-				/>
-			</div>
+			// <div className="ParkMapStyle">
+			// 	<ParkMap
+			// 		parkList={this.state.parks}
+			// 		markers={this.markers}
+			// 		location={this.state.fetchReq}
+			// 		onMapLoaded={this.handleMapLoaded}
+			// 		moon={this.state.moonPhase}
+			// 		moonType={this.state.moonType}
+			// 	/>
+			// </div>
 		);
 	};
 
