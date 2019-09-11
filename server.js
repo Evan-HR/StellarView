@@ -100,7 +100,7 @@ app.use(
 		//only logged/registered users have cookies
 		saveUninitialized: false,
 		//cookie: { secure: true }
-		cookie: { httpOnly: false }
+		cookie: { httpOnly: false, secure: true }
 	})
 );
 
