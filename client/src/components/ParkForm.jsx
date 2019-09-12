@@ -459,7 +459,7 @@ class BaseParkForm extends Component {
 						lat: location.lat,
 						lng: location.lng
 					}
-				},
+				}
 				// () => this.onSubmit()
 			);
 		}
@@ -498,7 +498,7 @@ class BaseParkForm extends Component {
 								this.state.isGeocodingLocation
 							}
 							onClick={e => {
-								this.onSubmit()
+								this.onSubmit();
 								// this.onPlaceChanged();
 								// this.getPlaceCoordinates(e);
 							}}
