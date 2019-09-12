@@ -39,9 +39,11 @@ app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "client", "build")));
 //app.use(express.static(__dirname + '/public'));
 
-app.get("*", (req, res) => {
+// if (process.env.NODE_ENV === "production") {
+app.get(/^\/(?!api).*/, (req, res) => {
 	res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
+// }
 
 //arbitrary port 5000
 app.listen(port, () => {
@@ -1216,8 +1218,16 @@ app.post("/api/getParkData", async (req, res) => {
 						moonType = "New Moon";
 					}
 
-					let sunTimeData = suncalc.getTimes(utime, parseFloat(lat), parseFloat(lng));
-					let moonTimeData = suncalc.getMoonTimes(utime, parseFloat(lat), parseFloat(lng));
+					let sunTimeData = suncalc.getTimes(
+						utime,
+						parseFloat(lat),
+						parseFloat(lng)
+					);
+					let moonTimeData = suncalc.getMoonTimes(
+						utime,
+						parseFloat(lat),
+						parseFloat(lng)
+					);
 
 					//STEP 9: FORMAT RESPONSE JSON
 					let reply = {
