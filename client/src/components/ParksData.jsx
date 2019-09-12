@@ -215,7 +215,7 @@ class BaseParksData extends Component {
 							markers={this.markers}
 							location={this.state.fetchReq}
 							onMapLoaded={this.handleMapLoaded}
-							moon={this.state.moon}
+							moonPhase={this.state.moonPhase}
 							moonType={this.state.moonType}
 						/>
 					</animated.div>

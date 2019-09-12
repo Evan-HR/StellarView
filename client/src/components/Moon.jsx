@@ -10,13 +10,15 @@ function Moon(props) {
 		<a.div style={springStyle}>
 			<MoonStyle>
 				{props.moonPhase ? (
-					<div className="moonDisplay">
-						<span>{props.moonType.split(" ")[0]}</span>
-						<span className="MoonDisplayContainer">
-							<MoonDisplay phase={props.moonPhase} />
-						</span>
-						<span>{props.moonType.split(" ")[1]}</span>
-					</div>
+					<React.Fragment>
+						<div className="moonDisplay">
+							<span>{props.moonType.split(" ")[0]}</span>
+							<span className="MoonDisplayContainer">
+								<MoonDisplay phase={props.moonPhase} />
+							</span>
+							<span>{props.moonType.split(" ")[1]}</span>
+						</div>
+					</React.Fragment>
 				) : (
 					""
 				)}

@@ -85,7 +85,7 @@ class ParkMapModal extends Component {
 		}
 		this.modalContent = content;
 		this.park = content.park;
-		this.moon = content.moon;
+		this.moonPhase = content.moonPhase;
 		this.moonType = content.moonType;
 		console.log(this.park);
 		this.setState({ modalIsOpen: true });
@@ -275,7 +275,7 @@ class ParkMapModal extends Component {
 												</div>
 												<span className="MoonDisplayContainer">
 													<MoonDisplay
-														phase={this.moon}
+														phase={this.moonPhase}
 													/>
 												</span>
 												<div className="Value">

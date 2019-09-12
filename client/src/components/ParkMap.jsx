@@ -133,7 +133,7 @@ class ParkMap extends Component {
 				console.log("Clicked marker at", marker.title);
 				let modalContent = {
 					park: park,
-					moon: this.props.moon,
+					moonPhase: this.props.moonPhase,
 					moonType: this.props.moonType
 				};
 				this.openModal(modalContent);
