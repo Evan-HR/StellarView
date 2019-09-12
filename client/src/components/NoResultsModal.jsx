@@ -33,7 +33,10 @@ class NoResultsModal extends Component {
 				>
 					<i className="fas fa-window-close" />
 				</button>
-				<span>Sorry, we couldn't find any parks in this area!</span>
+				<span>
+					Sorry, we couldn't find any parks in this area!{" "}
+					{this.props.moonPhase}
+				</span>
 			</NoResultsStyle>
 		);
 	};
@@ -150,18 +153,15 @@ const NoResultsStyle = styled.div`
 	}
 `;
 
-
 const ModalStyle = styled.div`
-
-  position: relative;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  width: 100%;
-  pointer-events: auto;
-  background-clip: padding-box;
-  border-radius: 0.3rem;
-  outline: 0;
-
+	position: relative;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	width: 100%;
+	pointer-events: auto;
+	background-clip: padding-box;
+	border-radius: 0.3rem;
+	outline: 0;
 `;

@@ -109,7 +109,7 @@ class ParkTable extends Component {
 			return this.props.parkList.map(this.renderPark);
 		} else {
 			return (
-				<NoResultsModal />
+				<NoResultsModal moonPhase={this.props.moon} />
 
 				// <tr>
 				// 	<td colSpan={3}>
