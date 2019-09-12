@@ -33,7 +33,7 @@ class NoResultsModal extends Component {
 				>
 					<i className="fas fa-window-close" />
 				</button>
-				<span>Sorry, we couldn't find any parks in thsi area!</span>
+				<span>Sorry, we couldn't find any parks in this area!</span>
 			</NoResultsStyle>
 		);
 	};

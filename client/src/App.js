@@ -167,4 +167,11 @@ body{
 	background-color: ${props => props.theme.prettyDark} !important;
 	text-align: center !important;
 }
+
+
+.pac-container {
+	background-color:${props => props.theme.white};
+	font-family: 'Lato', sans-serif;
+}
+
 `;

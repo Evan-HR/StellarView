@@ -515,7 +515,8 @@ const styleSelector = {
 			elementType: "geometry",
 			stylers: [
 				{
-					color: "#373737"
+					visibility: "on",
+					color: "#191a1c"
 				}
 			]
 		},
