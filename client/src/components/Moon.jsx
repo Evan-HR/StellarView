@@ -1,29 +1,40 @@
-import React, { Component } from "react";
+import React, { useState, Component } from "react";
 import styled from "styled-components";
 import MoonDisplay from "./MoonDisplay";
+import { useSpring, animated as a } from "react-spring";
 
-class Moon extends Component {
-	state = {};
+function Moon(props) {
+	const springStyle = useSpring({ opacity: props.moonPhase ? 1 : 0 });
 
-	render() {
-		return (
+	return (
+		<a.div style={springStyle}>
 			<MoonStyle>
-				<div className="moonDisplay">
-					<span>{this.props.moonType.split(" ")[0]}</span>
-					<span className="MoonDisplayContainer">
-						<MoonDisplay phase={this.props.moon} />
-					</span>
-					<span>{this.props.moonType.split(" ")[1]}</span>
-				</div>
+				{props.moonPhase ? (
+					<React.Fragment>
+						<div className="moonDisplay">
+							<span>{props.moonType.split(" ")[0]}</span>
+							<span className="MoonDisplayContainer">
+								<MoonDisplay phase={props.moonPhase} />
+							</span>
+							<span>{props.moonType.split(" ")[1]}</span>
+						</div>
+						<div className="stellarDataDisplay">
+							Nightfall:{" "}
+							{new Date(props.stellarData.night).toLocaleString()}
+						</div>
+					</React.Fragment>
+				) : (
+					""
+				)}
 			</MoonStyle>
-		);
-	}
+		</a.div>
+	);
 }
 
 export default Moon;
 ///////////////////////////////////////////////////////////////
 const MoonStyle = styled.div`
-	color: whitesmoke;
+	color: ${props => props.theme.white};
 	/* font-family: IBM Plex Sans; */
 	font-family: "Lato", sans-serif;
 	font-weight: 600;

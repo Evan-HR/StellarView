@@ -38,7 +38,10 @@ export class Auth extends React.Component {
 	}
 
 	setUserLocation = (latArg, lngArg) => {
-		this.setState({ userLocation: { lat: latArg, lng: lngArg } });
+		this.setState({
+			...this.state,
+			userLocation: { lat: latArg, lng: lngArg }
+		});
 	};
 
 	componentDidMount() {
@@ -66,15 +69,12 @@ export class Auth extends React.Component {
 	}
 
 	handleReviewModalLoggedIn = () => {
-		this.setState({
-			loggedFromReviews:true
-		});
-
-	}
+		this.setState({ ...this.state, loggedFromReviews: true });
+	};
 
 	//for register function
 	handleLogin = () => {
-		console.log("REGISTER GOT HERE, should be FIRST");
+		console.log("GOT HERE, should be FIRST");
 
 		this.getUserInfo();
 		//this.getUserFavSpots();
@@ -108,7 +108,6 @@ export class Auth extends React.Component {
 				console.log(error);
 			});
 	}
-	
 
 	getUserInfo() {
 		var self = this;
@@ -117,7 +116,9 @@ export class Auth extends React.Component {
 			.get("/api/getUserInfo")
 
 			.then(({ data }) => {
+				console.log("Got user info, setting state")
 				this.setState({
+					...this.state,
 					firstName: data.firstName,
 					isAuth: data.isAuth,
 					userID: data.userID
@@ -139,12 +140,11 @@ export class Auth extends React.Component {
 			.then(favSpots => {
 				if (favSpots.status === 204) {
 					console.log("204!!!!!!! NO FAV SPOTS!!");
-					this.setState({
-						hasNoSpots: true
-					});
+					this.setState({ ...this.state, hasNoSpots: true });
 				} else {
 					console.log("fav spots: ", favSpots);
 					this.setState({
+						...this.state,
 						userFavorites: favSpots.data,
 						hasFavSpots: true,
 						hasNoSpots: false
@@ -165,8 +165,12 @@ export class Auth extends React.Component {
 			.get("/api/getUserReviews")
 
 			.then(reviews => {
-				if (!reviews.status === 204) {
+				console.log("REVIEWS CONSOLE LOG: ", reviews.data);
+				console.log("REVIEWS STATUS CONSOLE LOG: ", reviews.status);
+				if (!(reviews.status === 204)) {
+					console.log("REVIEWS STATE UPDATE GOT HERE?");
 					this.setState({
+						...this.state,
 						userReviews: reviews.data
 					});
 				}

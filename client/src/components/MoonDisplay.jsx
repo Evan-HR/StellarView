@@ -34,9 +34,9 @@ export default function MoonDisplay({phase}) {
 			phaseRight={phaseRight}
 			phaseFlip={phaseFlip}
 		>
-			<div class="moon">
+			<div className="moon">
 				<svg
-					class="moon-left"
+					className="moon-left"
 					viewBox="0 0 100 200"
 					xmlns="http://www.w3.org/2000/svg"
 				>
@@ -45,8 +45,8 @@ export default function MoonDisplay({phase}) {
 						cy="100"
 						r="100"
 						// stroke="whitesmoke"
-						fill="whitesmoke"
-						class="bg"
+						fill="#dadada"
+						className="bg"
 					/>
 					<circle
 						cx="100"
@@ -54,11 +54,11 @@ export default function MoonDisplay({phase}) {
 						r="100"
 						// stroke="whitesmoke"
 						fill="#121414"
-						class="fg"
+						className="fg"
 					/>
 				</svg>
 				<svg
-					class="moon-right"
+					className="moon-right"
 					viewBox="0 0 100 200"
 					xmlns="http://www.w3.org/2000/svg"
 				>
@@ -67,8 +67,8 @@ export default function MoonDisplay({phase}) {
 						cy="100"
 						r="100"
 						// stroke="whitesmoke"
-						fill="whitesmoke"
-						class="bg"
+						fill="#dadada"
+						className="bg"
 					/>
 					<circle
 						cx="0"
@@ -76,7 +76,7 @@ export default function MoonDisplay({phase}) {
 						r="100"
 						// stroke="whitesmoke"
 						fill="#121414"
-						class="fg"
+						className="fg"
 					/>
 				</svg>
 			</div>
@@ -118,10 +118,10 @@ const MoonSVGStyle = styled.div`
 		transform: scaleX(${props => props.phaseRight});
 	}
 	.moon-left .bg {
-		fill: #121414;
+		fill: ${props => props.theme.prettyDark};
 	}
 	.moon-left .fg {
-		fill: whitesmoke;
+		fill: ${props => props.theme.white};
 		transform-origin: 0% 0%;
 		transform: translate(${props => props.phaseTrans}px, 0)
 			scaleX(${props => 1 - props.phaseScale});

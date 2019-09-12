@@ -8,19 +8,9 @@ import MuiSlider from "@material-ui/core/Slider";
 import { sizing } from "@material-ui/system";
 import { AuthConsumer } from "./AuthContext";
 import styled from "styled-components";
-import nearMeButton from "./style/Media/round-my_location-24px.svg";
+// import nearMeButton from "./style/Media/round-my_location-24px.svg";
 // import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-
-// const theme1 = createMuiTheme({
-// 	overrides: {
-// 		MuiSlider: {
-
-// 			root: {
-// 				color:'#BDC2C6',
-// 			},
-// 		},
-// 	},
-//   });
+// import LocationSearchInput from "./LocationSearchInput";
 
 class BaseParkForm extends Component {
 	state = {
@@ -43,6 +33,7 @@ class BaseParkForm extends Component {
 		super(props);
 		this.sliderLight = this.state.reqData.lightpol;
 		this.sliderDist = this.state.reqData.dist;
+		this.autoComplete = false;
 	}
 
 	//There are two cases when we would want to load results form url query:
@@ -60,6 +51,9 @@ class BaseParkForm extends Component {
 	}
 
 	componentDidUpdate() {
+		if (window.google && !this.autoComplete) {
+			this.loadAutoComplete();
+		}
 		//On back button load previous results
 		window.onpopstate = e => {
 			console.log("Back button pressed");
@@ -69,7 +63,7 @@ class BaseParkForm extends Component {
 
 	//Load query into state
 	loadQuery = () => {
-		let query = qs.parse(this.props.history.location.search, {
+		let query = qs.parse(window.location.search, {
 			ignoreQueryPrefix: true
 		});
 		console.log(query);
@@ -140,11 +134,13 @@ class BaseParkForm extends Component {
 			.then(({ data }) => {
 				console.log(data);
 
-				var latLng = new window.google.maps.LatLng(
-					parseFloat(data[0].lat),
-					parseFloat(data[0].lon)
-				); //Makes a latlng
-				this.props.googleMap.panTo(latLng); //Make map global
+				if (window.google) {
+					var latLng = new window.google.maps.LatLng(
+						parseFloat(data[0].lat),
+						parseFloat(data[0].lon)
+					); //Makes a latlng
+					this.props.googleMap.panTo(latLng); //Make map global
+				}
 				this.setState(
 					{
 						isGeocodingLocation: false,
@@ -230,7 +226,7 @@ class BaseParkForm extends Component {
 			);
 		} else {
 			console.log("Fetching auth location");
-			if (window.google) {
+			if (window.google && this.props.googleMap) {
 				this.props.googleMap.panTo(
 					new window.google.maps.LatLng(
 						this.props.authState.userLocation.lat,
@@ -310,7 +306,7 @@ class BaseParkForm extends Component {
 	//fetchP(x) --> getParkData(x)
 	onSubmit = e => {
 		if (e) e.preventDefault();
-		//console.log(this.state.reqData);
+		console.log(this.state.reqData);
 		const errors = this.validate(this.state.reqData);
 		if (errors.length === 0) {
 			var d = new Date();
@@ -347,7 +343,7 @@ class BaseParkForm extends Component {
 	updateHistoryQuery = reqData => {
 		console.log("Updating history...");
 		//this.props.history.push({ query: "test" });
-		let query = qs.parse(this.props.history.location.search, {
+		let query = qs.parse(window.location.search, {
 			ignoreQueryPrefix: true
 		});
 		if (
@@ -356,13 +352,13 @@ class BaseParkForm extends Component {
 			query.dist !== reqData.dist.toString() ||
 			query.lightpol !== parseFloat(reqData.lightpol).toFixed(2)
 		) {
-			this.props.history.push({
-				search: `?lat=${parseFloat(reqData.lat).toFixed(
+			this.props.history.push(
+				`/search?lat=${parseFloat(reqData.lat).toFixed(
 					4
 				)}&lng=${parseFloat(reqData.lng).toFixed(4)}&dist=${
 					reqData.dist
 				}&lightpol=${parseFloat(reqData.lightpol).toFixed(2)}`
-			});
+			);
 		} else {
 			console.log("Attempting to repeat current search.");
 		}
@@ -412,7 +408,7 @@ class BaseParkForm extends Component {
 		if (this.state.isLoadingLocation) {
 			return (
 				<React.Fragment>
-					<span class="spinner-border spinner-border-sm" />
+					<span className="spinner-border spinner-border-sm" />
 					Locating
 				</React.Fragment>
 			);
@@ -425,10 +421,46 @@ class BaseParkForm extends Component {
 		if (Object.keys(this.state.formErrors).length > 0) {
 			return (
 				<React.Fragment>
-					<b class="text-danger">
+					<b className="text-danger">
 						{this.state.formErrors.join(", ")}
 					</b>
 				</React.Fragment>
+			);
+		}
+	};
+
+	loadAutoComplete = () => {
+		this.autoComplete = new window.google.maps.places.SearchBox(
+			document.getElementById("autoComplete")
+		);
+		this.autoComplete.addListener("places_changed", this.onPlaceChanged);
+		// this.autoCompleteLoaded = true;
+	};
+
+	onPlaceChanged = () => {
+		let places = this.autoComplete.getPlaces();
+		if (places == 0) {
+			return;
+		}
+
+		var place = places[0];
+		console.log(place);
+		if (place.geometry && place.geometry.location) {
+			let location = place.geometry.location.toJSON();
+			console.log(location);
+			if (window.google) {
+				this.props.googleMap.panTo(place.geometry.location); //Make map global
+			}
+			this.setState(
+				{
+					reqData: {
+						...this.state.reqData,
+						placeName: place.formatted_address,
+						lat: location.lat,
+						lng: location.lng
+					}
+				}
+				// () => this.onSubmit()
 			);
 		}
 	};
@@ -444,6 +476,7 @@ class BaseParkForm extends Component {
 						}}
 					>
 						<input
+							id="autoComplete"
 							className="searchTerm"
 							type="text"
 							name="placeName"
@@ -459,18 +492,22 @@ class BaseParkForm extends Component {
 								// 	? " btn-danger"
 								// 	: " btn-primary")
 							}
+							type="submit"
 							disabled={
 								this.state.reqData.placeName === "" ||
 								this.state.isGeocodingLocation
 							}
 							onClick={e => {
-								this.getPlaceCoordinates(e);
+								this.onSubmit();
+								// this.onPlaceChanged();
+								// this.getPlaceCoordinates(e);
 							}}
 						>
 							<i className="fa fa-search" />
 						</button>
 					</form>
 				</div>
+
 				<div className="myLocation">
 					<button
 						// onClick={this.getParkData.bind(this, this.state.formInput)}
@@ -481,7 +518,7 @@ class BaseParkForm extends Component {
 					>
 						<span>NEAR ME</span>
 
-						<img src={nearMeButton} />
+						{/* <img src={nearMeButton} /> */}
 						{/* <strong>{this.renderLocationSpinner()}</strong> */}
 					</button>
 				</div>
@@ -506,12 +543,13 @@ class BaseParkForm extends Component {
 							})
 						}
 					>
-						Advanced Search
-						<i class="fas fa-caret-down" />
+						<span>Advanced Search</span>
+						<i className="fas fa-caret-down" />
 					</button>
 				</div>
 
 				<div className="AdvancedSearch">
+					{/* <LocationSearchInput /> */}
 					<form>
 						<span className="FormTitle">Max Distance (km)</span>
 
@@ -618,7 +656,8 @@ export default withRouter(ParkForm);
 ////////////////////////////////////////////
 
 const SearchFormStyle = styled.div`
-	background-color: ${props => props.theme.bodyBackground};
+background: none;
+	/* background-color: ${props => props.theme.mapBlue}; */
 	font-family: "Lato", sans-serif;
 	padding: 13px;
 	display: grid;
@@ -640,37 +679,55 @@ const SearchFormStyle = styled.div`
 		grid-area:advancedSearch;
 
 		.FormTitle {
-			color: whitesmoke;
+			color: ${props => props.theme.white};
 			font-weight: 600;
 		}
 	}
 
 	.myLocation {
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 		font-size: 13px;
+
+
 		.nearMe {
 			all: unset;
 			cursor: pointer;
-			background-color: ${props => props.theme.prettyDark};
+			/* background-color: ${props => props.theme.prettyDark}; */
+			background: ${props => props.theme.yellow};
+			border-radius: 20px;
 			height: 36px;
 			width: 100%;
-			color: ${props => props.theme.whitesmoke};
-			transition: color 0.2s ease;
-			img {
-				width: 28px;
-				margin-left: 5px;
-			}
-			:hover,
-			:active {
+			color: ${props => props.theme.prettyDark};
+			transition: color 0.1s ease;
+
+			font-size: 15px;
+			font-weight: 600;
+			
+
+			/* transition: background-color 0.2s; */
+		
+		:hover {
+
 				color: ${props => props.theme.colorBad};
-				transition: color 0.2s ease;
-			}
+		
+		}
+		:active {
+		
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+
+			/* background-color: #fff3e5; */
+			
+		}
 		}
 		grid-area: myLocation;
 	}
 
 	.advancedSearchToggle {
 		grid-area: advancedSearchToggle;
+		span{
+			font-weight: 500;
+		}
 
 		button {
 			float: left;
@@ -693,21 +750,36 @@ const SearchFormStyle = styled.div`
 		background: ${props => props.theme.prettyDark};
 		text-align: center;
 
-		color: #fff;
+		color: ${props => props.theme.white};
 		/* border-radius: 0 5px 5px 0; */
 		cursor: pointer;
 		font-size: 20px;
+		:focus {
+			outline: 0;
+		}
 		border: none;
 		float: left;
-		:hover,
+		transition: color 0.1s ease;
+		background-position: center;
+			transition: background 0.2s;
+		
+		:hover {
+			background: ${props => props.theme.prettyDark}
+				radial-gradient(circle, transparent 1%, rgba(0, 0, 0, .3) 1%)
+				center/15000%;
+				color: ${props => props.theme.colorBad};
+		
+		}
 		:active {
-			color: ${props => props.theme.colorBad};
-			transition: color 0.2s ease;
+			
+			background-color: rgba(0, 0, 0, .3);
+			background-size: 100%;
+			transition: background 0s;
 		}
 	}
 
 	.searchTerm:focus {
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 	}
 	/* .search {
 		width: 100%;
@@ -718,16 +790,28 @@ const SearchFormStyle = styled.div`
 
 	.searchTerm {
 		width: calc(100% - 40px);
-		background: ${props => props.theme.lightDark};
+		background-color: ${props => props.theme.darkAccent};
+		transition: background-color 0.1s ease;
 		/* border: 3px solid #00b4cc; */
 		/* border-right: none; */
 		padding: 5px;
 		height: 36px;
 		/* border-radius: 5px 0 0 5px; */
 		outline: none;
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 		border: none;
 		float: left;
+		:hover,
+		:active {
+			background-color: ${props => props.theme.moonBackground};
+			transition: background-color 0.1s ease;
+		}
+		
+::placeholder {
+
+ font-weight: 300;
+ opacity: 0.3;
+}
 	}
 
 	.ToggleAdvancedSearch {

@@ -1,7 +1,14 @@
 import React, { Component } from "react";
 import { AuthProvider, AuthConsumer } from "./components/AuthContext";
 import ParksData from "./components/ParksData";
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import {
+	Link,
+	NavLink,
+	BrowserRouter as Router,
+	Route,
+	Switch,
+	Redirect
+} from "react-router-dom";
 import Profile from "./components/Profile";
 import Login from "./components/Login";
 import ToolBar from "./components/ToolBar/Toolbar";
@@ -15,6 +22,8 @@ import FAQ from "./components/FAQ";
 import backgroundImage from "./components/style/Media/starrynight_loop.svg";
 import Footer from "./components/Footer";
 import ScrollUpButton from "react-scroll-up-button";
+import NotFoundPage from "./components/NotFoundPage";
+import StarBackgroundLess from "./components/StarBackgroundLess";
 
 class App extends Component {
 	state = {
@@ -47,7 +56,8 @@ class App extends Component {
 		return (
 			<React.Fragment>
 				<ScrollUpButton />
-				<GlobalStyle bg={backgroundImage} />
+				<GlobalStyle />
+				{/* <StarBackgroundLess/> */}
 				<SiteStyle>
 					<div className="SiteContent">
 						<Router>
@@ -65,9 +75,6 @@ class App extends Component {
 								handleLogin={this.props.handleLogin}
 							/>
 							{backdrop}
-
-							<Route path="/" exact component={ParksData} />
-							<Route path="/faq" component={FAQ} />
 							<AuthConsumer>
 								{authState => {
 									console.log(authState);
@@ -92,6 +99,23 @@ class App extends Component {
 									);
 								}}
 							</AuthConsumer>
+							<Switch>
+								<Route
+									exact
+									path="/"
+									render={() => {
+										return <Redirect to="/home" />;
+									}}
+								/>
+
+								<Route
+									path={["/home", "/search"]}
+									component={ParksData}
+								/>
+								<Route path="/faq" component={FAQ} />
+
+								<Route path="*" component={NotFoundPage} />
+							</Switch>
 						</Router>
 					</div>
 					<Footer />
@@ -123,7 +147,7 @@ const SiteStyle = styled.div`
 `;
 
 const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono:300,400,600|Lato:300,400,700|IBM+Plex+Sans:300,400,600|&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,600,700&display=swap');
 
 html {
 	line-height: 1.15;
@@ -139,13 +163,15 @@ body{
 	font-size: 1rem;
 	font-weight: 300;
 	line-height: 1.5;
-	/* background-image: linear-gradient(150deg,${props =>
-		props.theme.cream} 60%,${props =>
-	props.theme.franNavy} calc(60% + 2px)); */
-	/* background-image: url(${props => props.bg});
-	background-size: cover; */
+	font-family: 'Lato', sans-serif;
 	background-color: ${props => props.theme.prettyDark} !important;
-
 	text-align: center !important;
 }
+
+
+.pac-container {
+	background-color:${props => props.theme.white};
+	font-family: 'Lato', sans-serif;
+}
+
 `;

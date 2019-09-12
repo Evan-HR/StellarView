@@ -34,7 +34,7 @@ class ParkMap extends Component {
 		//NOTE: Find a better way to secure the api key
 		googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=${
 			process.env.REACT_APP_DUSTINMAPKEY //TODO: See if this can be hidden better
-		}`;
+		}&libraries=places`;
 		window.document.body.appendChild(googleMapScript);
 		googleMapScript.addEventListener("load", () => {
 			this.googleMap = this.createGoogleMap();
@@ -69,7 +69,7 @@ class ParkMap extends Component {
 			position: location,
 			icon: {
 				url:
-					"http://maps.google.com/mapfiles/kml/shapes/placemark_circle.png",
+					"https://maps.google.com/mapfiles/kml/shapes/placemark_circle.png",
 				anchor: new window.google.maps.Point(15, 17)
 			},
 			map: this.googleMap
@@ -98,11 +98,10 @@ class ParkMap extends Component {
 
 		if (this.props.markers[park.id]) {
 			console.log("Park marker already on map!");
-			console.log("PARK SCORE IS: ",park.score)
-			
+			console.log("PARK SCORE IS: ", park.score);
 		} else {
 			let markerIcon = markerBad;
-			let tempScore = park.score*100;
+			let tempScore = park.score * 100;
 			if (tempScore > 80) {
 				markerIcon = markerGood;
 			} else if (tempScore > 60) {
@@ -134,7 +133,7 @@ class ParkMap extends Component {
 				console.log("Clicked marker at", marker.title);
 				let modalContent = {
 					park: park,
-					moon: this.props.moon,
+					moonPhase: this.props.moonPhase,
 					moonType: this.props.moonType
 				};
 				this.openModal(modalContent);
@@ -266,7 +265,7 @@ const styleSelector = {
 			elementType: "geometry",
 			stylers: [
 				{
-					color: "#2D333C"
+					color: "#9298a0"
 				}
 			]
 		}
@@ -309,7 +308,7 @@ const styleSelector = {
 			elementType: "geometry",
 			stylers: [
 				{
-					color: "#373737"
+					color: "#1f1e1e"
 				}
 			]
 		},
@@ -351,7 +350,7 @@ const styleSelector = {
 			featureType: "landscape",
 			stylers: [
 				{
-					color: "#222222"
+					color: "#151617"
 				},
 				{
 					visibility: "on"
@@ -363,7 +362,7 @@ const styleSelector = {
 			elementType: "geometry",
 			stylers: [
 				{
-					color: "#222222"
+					color: "#1b1c1d"
 				},
 				{
 					visibility: "off"
@@ -375,7 +374,7 @@ const styleSelector = {
 			elementType: "geometry.fill",
 			stylers: [
 				{
-					color: "#222222"
+					color: "#1f1e1e"
 				},
 				{
 					visibility: "simplified"
@@ -436,7 +435,7 @@ const styleSelector = {
 			elementType: "geometry",
 			stylers: [
 				{
-					color: "#174030"
+					color: "#1b2722"
 				},
 				{
 					visibility: "on"
@@ -516,7 +515,8 @@ const styleSelector = {
 			elementType: "geometry",
 			stylers: [
 				{
-					color: "#373737"
+					visibility: "on",
+					color: "#191a1c"
 				}
 			]
 		},

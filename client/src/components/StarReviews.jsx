@@ -7,7 +7,7 @@ class StarReviews extends Component {
 	};
 
 	changeRating = newRating => {
-		this.state.rating = newRating;
+		this.setState({ rating: newRating });
 		this.props.scoreProp(newRating);
 	};
 
@@ -16,6 +16,7 @@ class StarReviews extends Component {
 			<Ratings
 				rating={this.state.rating}
 				widgetRatedColors="#2F3334"
+				widgetEmptyColors="#989898"
 				changeRating={this.changeRating}
 			>
 				<Ratings.Widget widgetHoverColor="#2F3334" rating={1} />

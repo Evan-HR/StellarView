@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import ParkCard from "./ParkCard";
 import styled from "styled-components";
 import { Transition, animated } from "react-spring/renderprops";
-
+import NoResultsModal from "./NoResultsModal";
 
 class ParkTable extends Component {
 	state = {};
@@ -37,15 +37,15 @@ class ParkTable extends Component {
 						items={this.props.parkList}
 						keys={item => item.id}
 						from={{
-							transform: "translate3d(-40px,0,0)",
+							// transform: "translate3d(0,-40px,0)",
 							opacity: 0
 						}}
 						enter={{
-							transform: "translate3d(0,0px,0)",
+							// transform: "translate3d(0,0px,0)",
 							opacity: 1
 						}}
 						leave={{
-							transform: "translate3d(-40px,0,0)",
+							// transform: "translate3d(0,-40px,0)",
 							opacity: 0
 						}}
 						//update={[{ opacity: 0.5 }, { opacity: 1 }]}
@@ -64,11 +64,12 @@ class ParkTable extends Component {
 			// return <div>{this.props.parkList.map(this.renderParkCard)}</div>;
 		} else {
 			return (
-				<div className="text-center">
-					<div className="card text-white bg-danger">
-						<div className="card-header">No parks available.</div>
-					</div>
-				</div>
+				<NoResultsModal />
+				// <div className="text-center">
+				// 	<div className="card text-white bg-danger">
+				// 		<div className="card-header">No parks available.</div>
+				// 	</div>
+				// </div>
 			);
 		}
 	};
@@ -108,13 +109,15 @@ class ParkTable extends Component {
 			return this.props.parkList.map(this.renderPark);
 		} else {
 			return (
-				<tr>
-					<td colSpan={3}>
-						<strong style={{ color: "red" }}>
-							No parks available.
-						</strong>
-					</td>
-				</tr>
+				<NoResultsModal moonPhase={this.props.moon} />
+
+				// <tr>
+				// 	<td colSpan={3}>
+				// 		<strong style={{ color: "red" }}>
+				// 			No parks available.
+				// 		</strong>
+				// 	</td>
+				// </tr>
 			);
 		}
 	};
@@ -122,7 +125,7 @@ class ParkTable extends Component {
 	renderLoading = () => {
 		return (
 			<div
-				class="spinner-grow text-primary"
+				className="spinner-grow text-primary"
 				style={{ width: "3rem", height: "3rem" }}
 			/>
 		);
@@ -148,6 +151,10 @@ export default ParkTable;
 
 //OOF
 const ParkCardListStyle = styled.div`
+	.cardAnimationContainer .card {
+		margin-bottom: 30px;
+		border-radius: 20px;
+	}
 	.cardAnimationContainer:nth-of-type(even) .card {
 		background-color: ${props => props.theme.cardDark};
 	}
