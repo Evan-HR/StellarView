@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { Transition, animated } from "react-spring/renderprops";
 import NoResultsModal from "./NoResultsModal";
 
-
 class ParkTable extends Component {
 	state = {};
 	/* Note [OUT OF DATE] - park object is:
@@ -110,8 +109,8 @@ class ParkTable extends Component {
 			return this.props.parkList.map(this.renderPark);
 		} else {
 			return (
-				<NoResultsModal/>
-				
+				<NoResultsModal moonPhase={this.props.moon} />
+
 				// <tr>
 				// 	<td colSpan={3}>
 				// 		<strong style={{ color: "red" }}>
@@ -126,7 +125,7 @@ class ParkTable extends Component {
 	renderLoading = () => {
 		return (
 			<div
-			className="spinner-grow text-primary"
+				className="spinner-grow text-primary"
 				style={{ width: "3rem", height: "3rem" }}
 			/>
 		);
@@ -152,15 +151,15 @@ export default ParkTable;
 
 //OOF
 const ParkCardListStyle = styled.div`
+	.cardAnimationContainer .card {
+		margin-bottom: 30px;
+		border-radius: 20px;
+	}
 	.cardAnimationContainer:nth-of-type(even) .card {
 		background-color: ${props => props.theme.cardDark};
-		margin-bottom: 2rem;
-		border-radius: 20px;
 	}
 
 	.cardAnimationContainer:nth-of-type(odd) .card {
 		background-color: ${props => props.theme.cardLight};
-		margin-bottom: 2rem;
-		border-radius: 20px;
 	}
 `;

@@ -20,7 +20,7 @@ const TelescopeCircle = props => (
 				<div className="starround2"></div>
 			</div>
 
-			<div classNameName="stars4">
+			<div className="stars4">
 				<div className="starround2"></div>
 				<div className="star-six"></div>
 			</div>
@@ -40,7 +40,7 @@ const TeleStyle = styled.div`
 		width: 300px;
 		height: 300px;
 		margin: 15px auto 0;
-		background: ${props=>props.theme.darkAccent};
+		background: ${props => props.theme.darkAccent};
 		border-radius: 50%;
 		/* moz-border-radius: 50%; */
 		overflow: hidden;
@@ -83,17 +83,24 @@ const TeleStyle = styled.div`
 	}
 
 	.star-six {
-		position: relative;
-		top: -20px;
-		left: 100px;
-		animation: orbitrev 5s linear infinite;
+		width: 0;
+		height: 0;
+		border-left: 5px solid transparent;
+		border-right: 5px solid transparent;
+		border-bottom: 9px solid #edd9c0;
+		position: absolute;
 	}
 
 	.star-six:after {
-		position: relative;
-		top: -20px;
-		left: 100px;
-		animation: orbitrev 5s linear infinite;
+		width: 0;
+		height: 0;
+		border-left: 5px solid transparent;
+		border-right: 5px solid transparent;
+		border-top: 9px solid #edd9c0;
+		position: absolute;
+		content: "";
+		top: 3px;
+		left: -5px;
 	}
 
 	.moon {

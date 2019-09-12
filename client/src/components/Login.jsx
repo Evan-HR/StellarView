@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import Modal from "react-modal";
 import { AuthConsumer } from "./AuthContext";
-import { withRouter, Link, NavLink  } from "react-router-dom";
+import { withRouter, Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import Register from "./Register";
 import formError from "./style/Media/formError.svg";
@@ -114,7 +114,7 @@ class BaseLogin extends Component {
 				<div className="grid">
 					<form onSubmit={this.onSubmit} className="form login">
 						<div className="form__field">
-							<label htmlFor ="login__username">
+							<label htmlFor="login__username">
 								<svg className="icon">
 									<use
 										xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -135,7 +135,7 @@ class BaseLogin extends Component {
 						</div>
 
 						<div className="form__field">
-							<label htmlFor ="login__password">
+							<label htmlFor="login__password">
 								<svg className="icon">
 									<use
 										xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -183,7 +183,6 @@ class BaseLogin extends Component {
 		);
 	};
 
-	//classNameName changes model content, style gives you anything you specify to override defaults
 	render() {
 		return (
 			<React.Fragment>
@@ -213,7 +212,7 @@ class BaseLogin extends Component {
 						{/* {this.renderLoginModal()} */}
 						{/* {this.renderModalContent()} */}
 						{this.renderNewLogin()}
-						</ModalStyle>
+					</ModalStyle>
 				</Modal>
 			</React.Fragment>
 		);
@@ -502,18 +501,15 @@ const NewLoginStyle = styled.div`
 	}
 `;
 
-
 const ModalStyle = styled.div`
-
-  position: relative;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  width: 100%;
-  pointer-events: auto;
-  background-clip: padding-box;
-  border-radius: 0.3rem;
-  outline: 0;
-
+	position: relative;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	width: 100%;
+	pointer-events: auto;
+	background-clip: padding-box;
+	border-radius: 0.3rem;
+	outline: 0;
 `;

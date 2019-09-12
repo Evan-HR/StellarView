@@ -10,7 +10,7 @@ import { AuthConsumer } from "./AuthContext";
 import styled from "styled-components";
 // import nearMeButton from "./style/Media/round-my_location-24px.svg";
 // import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import LocationSearchInput from "./LocationSearchInput";
+// import LocationSearchInput from "./LocationSearchInput";
 
 class BaseParkForm extends Component {
 	state = {
@@ -459,8 +459,8 @@ class BaseParkForm extends Component {
 						lat: location.lat,
 						lng: location.lng
 					}
-				},
-				() => this.onSubmit()
+				}
+				// () => this.onSubmit()
 			);
 		}
 	};
@@ -498,6 +498,7 @@ class BaseParkForm extends Component {
 								this.state.isGeocodingLocation
 							}
 							onClick={e => {
+								this.onSubmit();
 								// this.onPlaceChanged();
 								// this.getPlaceCoordinates(e);
 							}}
@@ -508,20 +509,18 @@ class BaseParkForm extends Component {
 				</div>
 
 				<div className="myLocation">
-					
-						<button
-							// onClick={this.getParkData.bind(this, this.state.formInput)}
-							className="nearMe"
-							type="button"
-							disabled={this.state.isLoadingLocation}
-							onClick={this.getMyLocation}
-						>
-							<span>NEAR ME</span>
+					<button
+						// onClick={this.getParkData.bind(this, this.state.formInput)}
+						className="nearMe"
+						type="button"
+						disabled={this.state.isLoadingLocation}
+						onClick={this.getMyLocation}
+					>
+						<span>NEAR ME</span>
 
-							{/* <img src={nearMeButton} /> */}
-							{/* <strong>{this.renderLocationSpinner()}</strong> */}
-						</button>
-				
+						{/* <img src={nearMeButton} /> */}
+						{/* <strong>{this.renderLocationSpinner()}</strong> */}
+					</button>
 				</div>
 
 				{/* CLEAR BUTTON!!!! */}
@@ -543,9 +542,8 @@ class BaseParkForm extends Component {
 								advancedSearch: !this.state.advancedSearch
 							})
 						}
-					><span>
-						Advanced Search
-						</span>
+					>
+						<span>Advanced Search</span>
 						<i className="fas fa-caret-down" />
 					</button>
 				</div>
@@ -808,6 +806,12 @@ background: none;
 			background-color: ${props => props.theme.moonBackground};
 			transition: background-color 0.1s ease;
 		}
+		
+::placeholder {
+
+ font-weight: 300;
+ opacity: 0.3;
+}
 	}
 
 	.ToggleAdvancedSearch {

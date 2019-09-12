@@ -74,7 +74,7 @@ export class Auth extends React.Component {
 
 	//for register function
 	handleLogin = () => {
-		console.log("REGISTER GOT HERE, should be FIRST");
+		console.log("GOT HERE, should be FIRST");
 
 		this.getUserInfo();
 		//this.getUserFavSpots();
@@ -116,6 +116,7 @@ export class Auth extends React.Component {
 			.get("/api/getUserInfo")
 
 			.then(({ data }) => {
+				console.log("Got user info, setting state")
 				this.setState({
 					...this.state,
 					firstName: data.firstName,
