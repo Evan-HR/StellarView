@@ -29,6 +29,7 @@
 		"express-session": "^1.16.2",
 		"express-validator": "^5.3.1",
 		"geolib": "^3.0.4",
+		"heroku-ssl-redirect": "0.0.4",
 		"lune": "^0.4.0",
 		"material-ui": "^1.0.0-beta.47",
 		"morgan": "^1.9.1",
