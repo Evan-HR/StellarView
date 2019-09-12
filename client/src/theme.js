@@ -30,7 +30,7 @@ export const theme = {
 	fontLight: "#EBE630",
 	fontDark: "#2F3334",
 	cardLight: "#BDC2C6",
-	cardDark: "#bbc4cc",
+	cardDark: "#cecece",
 	starLight: "#FAE6BF",
 	starDark: "#2F3334",
 	bodyBackground: "#2F3334",
@@ -52,5 +52,8 @@ export const theme = {
 	colorBadHover: "#d47b7b",
 	colorMediumHover: "#ecbc8e",
 	cardDarkHover: "#c2c8ce",
-	cardLightHover: "#c2ccd4"
+	cardLightHover: "#c2ccd4",
+	yellow: "#edd9c0",
+	cardHeader: "#9298a0",
+	cardHeaderHover:"#707a88"
 };

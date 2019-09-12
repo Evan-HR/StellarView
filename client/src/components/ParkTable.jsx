@@ -154,9 +154,13 @@ export default ParkTable;
 const ParkCardListStyle = styled.div`
 	.cardAnimationContainer:nth-of-type(even) .card {
 		background-color: ${props => props.theme.cardDark};
+		margin-bottom: 2rem;
+		border-radius: 20px;
 	}
 
 	.cardAnimationContainer:nth-of-type(odd) .card {
 		background-color: ${props => props.theme.cardLight};
+		margin-bottom: 2rem;
+		border-radius: 20px;
 	}
 `;
