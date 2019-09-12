@@ -19,8 +19,8 @@ const FooterStyle = styled.div`
 
     height: 150px;
     /* font-family: monospace; */
-    font-weight: 600;
-    font-size: 22px;
+    font-weight: 500;
+    font-size: 18px;
     background-color: ${props=>props.theme.prettyDark};
     color: ${props => props.theme.white};
     .Names{

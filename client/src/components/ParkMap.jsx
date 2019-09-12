@@ -265,7 +265,7 @@ const styleSelector = {
 			elementType: "geometry",
 			stylers: [
 				{
-					color: "#2D333C"
+					color: "#9298a0"
 				}
 			]
 		}
@@ -308,7 +308,7 @@ const styleSelector = {
 			elementType: "geometry",
 			stylers: [
 				{
-					color: "#373737"
+					color: "#1f1e1e"
 				}
 			]
 		},
@@ -350,7 +350,7 @@ const styleSelector = {
 			featureType: "landscape",
 			stylers: [
 				{
-					color: "#222222"
+					color: "#151617"
 				},
 				{
 					visibility: "on"
@@ -362,7 +362,7 @@ const styleSelector = {
 			elementType: "geometry",
 			stylers: [
 				{
-					color: "#222222"
+					color: "#1b1c1d"
 				},
 				{
 					visibility: "off"
@@ -374,7 +374,7 @@ const styleSelector = {
 			elementType: "geometry.fill",
 			stylers: [
 				{
-					color: "#222222"
+					color: "#1f1e1e"
 				},
 				{
 					visibility: "simplified"
@@ -435,7 +435,7 @@ const styleSelector = {
 			elementType: "geometry",
 			stylers: [
 				{
-					color: "#174030"
+					color: "#1b2722"
 				},
 				{
 					visibility: "on"

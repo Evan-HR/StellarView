@@ -459,6 +459,7 @@ const ModalStyle = styled.div`
 		height: 100%;
 		overflow-y: auto;
 		background: ${props => props.theme.white};
+		
 
 
 .textContainer{
@@ -619,6 +620,7 @@ const ModalStyle = styled.div`
 					position: absolute;
 					width: 100%;
 					background-color: ${props => props.theme.cardLight};
+					border-radius: 20px;
 				}
 			}
 			.lightPolContainer {
@@ -639,6 +641,7 @@ const ModalStyle = styled.div`
 					position: absolute;
 					width: 100%;
 					background-color: ${props => props.theme.cardDark};
+					border-radius: 20px;
 					
 
 
@@ -661,6 +664,7 @@ const ModalStyle = styled.div`
 					position: absolute;
 					width: 100%;
 					background-color: ${props => props.theme.cardDark};
+					border-radius: 20px;
 				}
 
 				.MoonDisplayContainer {
@@ -685,6 +689,7 @@ const ModalStyle = styled.div`
 					position: absolute;
 					width: 100%;
 					background-color: ${props => props.theme.cardLight};
+					border-radius: 20px;
 				}
 			}
 		}

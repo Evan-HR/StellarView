@@ -13,6 +13,7 @@ import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
 import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import tempIcon from "./style/Media/cardIcons/temperature.svg";
 import { withRouter } from "react-router-dom";
+import TelescopeCircle from "./TelescopeCircle";
 
 function inRange(x, min, max) {
 	return (x - min) * (x - max) <= 0;
@@ -342,6 +343,7 @@ class BaseParksData extends Component {
 		return (
 			<LandingPageStyle>
 				{this.renderParkForm()}
+				<TelescopeCircle />
 				{/* {this.renderParkMap()} */}
 			</LandingPageStyle>
 		);
@@ -383,9 +385,21 @@ export default withRouter(ParksData);
 //////////////////////////////////////////
 
 const LandingPageStyle = styled.div`
+
+
 	.ParkFormStyle {
-		width: 85%;
+		width: 50vw;
+		margin: auto auto;
+		margin-top: 10vh;
+
+		@media screen and (max-width: 769px) {
+		width: 80vw;
+		margin: auto auto;
+		margin-top: 10vh;
 	}
+	}
+
+
 `;
 
 const ResultsPageStyle = styled.div`
@@ -425,7 +439,7 @@ const ResultsPageStyle = styled.div`
 	.MoonStyle {
 		/* height: 50%; */
 		/* background: ${props => props.theme.moonCard}; */
-		background: #242627;
+		background: none;
 	}
 
 	.helpCard{

@@ -658,7 +658,8 @@ export default withRouter(ParkForm);
 ////////////////////////////////////////////
 
 const SearchFormStyle = styled.div`
-	background-color: ${props => props.theme.mapBlue};
+background: none;
+	/* background-color: ${props => props.theme.mapBlue}; */
 	font-family: "Lato", sans-serif;
 	padding: 13px;
 	display: grid;
@@ -680,7 +681,7 @@ const SearchFormStyle = styled.div`
 		grid-area:advancedSearch;
 
 		.FormTitle {
-			color: whitesmoke;
+			color: ${props => props.theme.white};
 			font-weight: 600;
 		}
 	}
@@ -693,30 +694,32 @@ const SearchFormStyle = styled.div`
 		.nearMe {
 			all: unset;
 			cursor: pointer;
-			background-color: ${props => props.theme.prettyDark};
+			/* background-color: ${props => props.theme.prettyDark}; */
+			background: ${props => props.theme.yellow};
+			border-radius: 20px;
 			height: 36px;
 			width: 100%;
-			color: ${props => props.theme.white};
+			color: ${props => props.theme.prettyDark};
 			transition: color 0.1s ease;
 
 			font-size: 15px;
 			font-weight: 600;
 			
-			background-position: center;
-			transition: background 0.2s;
+
+			/* transition: background-color 0.2s; */
 		
 		:hover {
-			background: ${props => props.theme.prettyDark}
-				radial-gradient(circle, transparent 1%, rgba(0, 0, 0, .3) 1%)
-				center/15000%;
+
 				color: ${props => props.theme.colorBad};
 		
 		}
 		:active {
+		
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+
+			/* background-color: #fff3e5; */
 			
-			background-color: rgba(0, 0, 0, .3);
-			background-size: 100%;
-			transition: background 0s;
 		}
 		}
 		grid-area: myLocation;
@@ -778,7 +781,7 @@ const SearchFormStyle = styled.div`
 	}
 
 	.searchTerm:focus {
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 	}
 	/* .search {
 		width: 100%;
@@ -797,7 +800,7 @@ const SearchFormStyle = styled.div`
 		height: 36px;
 		/* border-radius: 5px 0 0 5px; */
 		outline: none;
-		color: whitesmoke;
+		color: ${props => props.theme.white};
 		border: none;
 		float: left;
 		:hover,

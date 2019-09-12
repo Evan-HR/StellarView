@@ -297,7 +297,7 @@ const customStyles = {
 
 const HeaderStyle = styled.div`
 	margin-left: 32%;
-	color: whitesmoke;
+	color: ${props => props.theme.white};
 `;
 
 const AlertStyle = styled.div`
