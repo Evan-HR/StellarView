@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { Transition, animated } from "react-spring/renderprops";
 import NoResultsModal from "./NoResultsModal";
 
-
 class ParkTable extends Component {
 	state = {};
 	/* Note [OUT OF DATE] - park object is:
@@ -110,8 +109,8 @@ class ParkTable extends Component {
 			return this.props.parkList.map(this.renderPark);
 		} else {
 			return (
-				<NoResultsModal/>
-				
+				<NoResultsModal moonPhase={this.props.moon} />
+
 				// <tr>
 				// 	<td colSpan={3}>
 				// 		<strong style={{ color: "red" }}>
@@ -126,7 +125,7 @@ class ParkTable extends Component {
 	renderLoading = () => {
 		return (
 			<div
-			className="spinner-grow text-primary"
+				className="spinner-grow text-primary"
 				style={{ width: "3rem", height: "3rem" }}
 			/>
 		);
