@@ -269,10 +269,10 @@ const CardStyle = styled.div`
 	grid-row-gap: 10px; */
 	grid-template-areas:
 		"ParkTitle   ParkTitle   ParkTitle    ParkTitle"
-		"WeatherInfo WeatherInfo WeatherInfo  ScoreLabel"
-		"WeatherIcons WeatherIcons WeatherIcons ParkScoreIcon"
+		"ScoreLabel WeatherInfo WeatherInfo WeatherInfo"
+		"ParkScoreIcon WeatherIcons WeatherIcons WeatherIcons"
 		/* "ParkHum     ParkCloud   ParkLightPol ParkScore" */
-		"StarRev    StarRev     StarRev      ParkScoreIcon";
+		"ParkScoreIcon StarRev    StarRev     StarRev";
 
 		font-family: 'Lato', sans-serif;
 	font-style: normal;

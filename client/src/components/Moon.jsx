@@ -18,6 +18,10 @@ function Moon(props) {
 							</span>
 							<span>{props.moonType.split(" ")[1]}</span>
 						</div>
+						<div className="stellarDataDisplay">
+							Nightfall:{" "}
+							{new Date(props.stellarData.night).toLocaleString()}
+						</div>
 					</React.Fragment>
 				) : (
 					""

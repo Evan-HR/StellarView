@@ -726,7 +726,8 @@ app.post("/api/getProfileParksWeather", async (req, res) => {
 		parks: parkData,
 		moonFraction: phaseInfo.fraction,
 		moonPhase: phaseInfo.phase,
-		moonType: moonType
+		moonType: moonType,
+		stellarData: {}
 	};
 
 	res.send(reply);
@@ -1215,12 +1216,23 @@ app.post("/api/getParkData", async (req, res) => {
 						moonType = "New Moon";
 					}
 
+					let sunTimeData = suncalc.getTimes(utime, parseFloat(lat), parseFloat(lng));
+					let moonTimeData = suncalc.getMoonTimes(utime, parseFloat(lat), parseFloat(lng));
+
 					//STEP 9: FORMAT RESPONSE JSON
 					let reply = {
 						parks: parkDataJSON,
 						moonFraction: phaseInfo.fraction,
 						moonPercent: phaseInfo.phase,
-						moonType: moonType
+						moonType: moonType,
+						stellarData: {
+							sunrise: sunTimeData.sunrise,
+							sunset: sunTimeData.sunset,
+							night: sunTimeData.night,
+							nightEnd: sunTimeData.nightEnd,
+							moonrise: moonTimeData.rise,
+							moonset: moonTimeData.set
+						}
 					};
 					//console.log("Response ", reply);
 
