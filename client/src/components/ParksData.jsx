@@ -76,6 +76,7 @@ class BaseParksData extends Component {
 		moonPhase: "",
 		moonFraction: "",
 		moonType: "",
+		stellarData: {},
 		isMapLoaded: false,
 		isFetchingParks: false,
 		hideForm: false,
@@ -141,6 +142,7 @@ class BaseParksData extends Component {
 				moonPhase: JSON.parse(localData).moonPercent,
 				moonFraction: JSON.parse(localData).moonFraction,
 				moonType: JSON.parse(localData).moonType,
+				stellarData: JSON.parse(localData).stellarData,
 
 				fetchReq: reqData,
 				isFetchingParks: false
@@ -166,6 +168,8 @@ class BaseParksData extends Component {
 						moonPhase: response.data.moonPercent,
 						moonFraction: response.data.moonfraction,
 						moonType: response.data.moonType,
+						stellarData: response.data.stellarData,
+
 						fetchReq: reqData,
 						isFetchingParks: false
 					});
@@ -287,6 +291,7 @@ class BaseParksData extends Component {
 							moonPhase={this.state.moonPhase}
 							parkList={this.state.parks}
 							moonType={this.state.moonType}
+							stellarData={this.state.stellarData}
 						/>
 					</div>
 
@@ -421,7 +426,7 @@ const ResultsPageStyle = styled.div`
 	.RightSideContainerFull {
 		z-index: 0;
 		grid-area: rightSide;
-		margin-bottom: -13px;
+		margin-bottom: -30px; /* Spacing between cards offset */
 		/* overflow-y: scroll;
 		overflow-x: hidden; */
 		/* background-color: ${props => props.theme.white}; */
