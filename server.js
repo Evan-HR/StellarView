@@ -21,6 +21,8 @@ var bcrypt = require("bcrypt");
 const saltRounds = 10;
 var cookieParser = require("cookie-parser");
 
+var sslRedirect = require("heroku-ssl-redirect");
+
 //env variables
 require("dotenv").config();
 const mapsKey1 = process.env.REACT_APP_DUSTINMAPKEY;
@@ -32,6 +34,9 @@ const cookieKey = process.env.SECRET;
 //set up simple express server
 const app = express();
 const port = process.env.PORT || 5000;
+
+// enable ssl redirect
+app.use(sslRedirect());
 
 //for dynamic html generation
 app.set("view engine", "ejs");
