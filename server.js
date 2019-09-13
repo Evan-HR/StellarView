@@ -15,11 +15,16 @@ const geolib = require("geolib");
 //authentication variables
 var session = require("express-session");
 var passport = require("passport");
+
+var PassportHerokuAddon = require("passport-heroku-addon");
+
 var LocalStrategy = require("passport-local").Strategy;
 var MySQLStore = require("express-mysql-session")(session);
 var bcrypt = require("bcrypt");
 const saltRounds = 10;
 var cookieParser = require("cookie-parser");
+
+var sslRedirect = require("heroku-ssl-redirect");
 
 //env variables
 require("dotenv").config();
@@ -33,6 +38,9 @@ const cookieKey = process.env.SECRET;
 const app = express();
 const port = process.env.PORT || 5000;
 
+// enable ssl redirect
+app.use(sslRedirect());
+
 //for dynamic html generation
 app.set("view engine", "ejs");
 //Serving css
@@ -41,7 +49,9 @@ app.use(express.static(path.join(__dirname, "client", "build")));
 
 // if (process.env.NODE_ENV === "production") {
 app.get(/^\/(?!api).*/, (req, res) => {
-	res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+	let redirectPath = path.join(__dirname, "client", "build", "index.html");
+	console.log("Redirecting to...", redirectPath);
+	res.sendFile(redirectPath);
 });
 // }
 
@@ -121,6 +131,7 @@ app.use(function(req, res, next) {
 //using passport to authenticate login
 //adjust usernameField to email because this middleware
 //mandates key word "username"
+/*
 passport.use(
 	new LocalStrategy(
 		{
@@ -155,6 +166,12 @@ passport.use(
 		}
 	)
 );
+*/
+passport.use(
+	new PassportHerokuAddon({
+		sso_salt: process.env.SSO_SALT
+	})
+);
 
 // app.get("/home", function(req, res) {
 // 	res.redirect("/");
@@ -177,12 +194,22 @@ app.get("/logout", function(req, res) {
 
 //local strategy cuz database is localhost
 //----------------------BEGIN LOGIN--------------------------------------//
+/*
 app.post(
 	"/api/login",
 	passport.authenticate("local", {
 		successRedirect: "/",
 		failureRedirect: "/api/login"
 	})
+);
+*/
+
+app.get(
+	"/heroku/resources/:id",
+	passport.authenticate("heroku-addon"),
+	function(request, response) {
+		response.redirect("/");
+	}
 );
 //----------------------END LOGIN--------------------------------------//
 app.get("/api/getUserFavSpots", function(req, res) {
