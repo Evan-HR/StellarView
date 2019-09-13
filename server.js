@@ -123,6 +123,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.enable("trust proxy");
+
 app.use(function(req, res, next) {
 	res.locals.isAuthenticated = req.isAuthenticated();
 	next();
@@ -169,7 +171,7 @@ passport.use(
 */
 passport.use(
 	new PassportHerokuAddon({
-		sso_salt: process.env.SSO_SALT
+		sso_salt: "salt"
 	})
 );
 
