@@ -46,7 +46,9 @@ app.use(express.static(path.join(__dirname, "client", "build")));
 
 // if (process.env.NODE_ENV === "production") {
 app.get(/^\/(?!api).*/, (req, res) => {
-	res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+	let redirectPath = path.join(__dirname, "client", "build", "index.html");
+	console.log("Redirecting to...", redirectPath);
+	res.sendFile(redirectPath);
 });
 // }
 
