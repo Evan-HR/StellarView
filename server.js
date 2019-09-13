@@ -414,10 +414,12 @@ app.get("/api/getUserInfo", (req, res) => {
 	console.log("SECOND: getuserinfO");
 	const nameQuery = "SELECT name from users WHERE id=?";
 	if (req.session.passport) {
+		console.log("Sending query");
 		connection.query(
 			nameQuery,
 			[req.session.passport.user],
 			(err, profileInfo) => {
+				console.log("Got query response");
 				if (err) {
 					console.log("failed" + err);
 					res.sendStatus(500);
@@ -438,7 +440,11 @@ app.get("/api/getUserInfo", (req, res) => {
 				}
 			}
 		);
+	} else {
+		console.log("Passport query didnt do anything");
+		res.sendStatus(500);
 	}
+	console.log("Shouldn't reach here");
 });
 
 app.get("/api/getUserReviews", (req, res) => {
