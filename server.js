@@ -345,7 +345,8 @@ app.post("/api/register", function(req, res) {
 					//proceed with INSERT query, no duplicate emails
 
 					const insertQuery =
-						"INSERT into users (name, email, password) VALUES (?,?,?); SELECT LAST_INSERT_ID() as user_id;";
+						"INSERT into users (name, email, password) VALUES (?,?,?);";
+					const getIDQuery = "SELECT LAST_INSERT_ID() as user_id;";
 
 					//wrap insert query with bcrypt
 					bcrypt.hash(password, saltRounds, function(err, hash) {
@@ -354,15 +355,32 @@ app.post("/api/register", function(req, res) {
 							[name, email, hash],
 							(err, results, fields) => {
 								if (err) {
-									console.log("failed " + err);
+									console.log("failed to insert", err);
 									res.sendStatus(500);
 									return;
 								} else {
-									const user_id = results[1][0].user_id;
-									req.login(user_id, function(err) {
-										//will return successfully registered user to homepage
-										res.redirect("/");
-									});
+									connection.query(
+										getIDQuery,
+										(err, results) => {
+											if (err) {
+												console.log(
+													"failed to getID",
+													err
+												);
+												res.sendStatus(500);
+												return;
+											} else {
+												const user_id =
+													results[1][0].user_id;
+												req.login(user_id, function(
+													err
+												) {
+													//will return successfully registered user to homepage
+													res.redirect("/");
+												});
+											}
+										}
+									);
 								}
 							}
 						);
