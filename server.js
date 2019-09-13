@@ -15,6 +15,9 @@ const geolib = require("geolib");
 //authentication variables
 var session = require("express-session");
 var passport = require("passport");
+
+var PassportHerokuAddon = require("passport-heroku-addon");
+
 var LocalStrategy = require("passport-local").Strategy;
 var MySQLStore = require("express-mysql-session")(session);
 var bcrypt = require("bcrypt");
@@ -128,6 +131,7 @@ app.use(function(req, res, next) {
 //using passport to authenticate login
 //adjust usernameField to email because this middleware
 //mandates key word "username"
+/*
 passport.use(
 	new LocalStrategy(
 		{
@@ -162,6 +166,12 @@ passport.use(
 		}
 	)
 );
+*/
+passport.use(
+	new PassportHerokuAddon({
+		sso_salt: process.env.SSO_SALT
+	})
+);
 
 // app.get("/home", function(req, res) {
 // 	res.redirect("/");
@@ -184,12 +194,22 @@ app.get("/logout", function(req, res) {
 
 //local strategy cuz database is localhost
 //----------------------BEGIN LOGIN--------------------------------------//
+/*
 app.post(
 	"/api/login",
 	passport.authenticate("local", {
 		successRedirect: "/",
 		failureRedirect: "/api/login"
 	})
+);
+*/
+
+app.get(
+	"/heroku/resources/:id",
+	passport.authenticate("heroku-addon"),
+	function(request, response) {
+		response.redirect("/");
+	}
 );
 //----------------------END LOGIN--------------------------------------//
 app.get("/api/getUserFavSpots", function(req, res) {
