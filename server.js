@@ -374,15 +374,18 @@ app.post("/api/register", function(req, res) {
 });
 
 //----------------------BEGIN AUTHENTICATION-----------------
-passport.serializeUser(function(user, done) {
-	done(null, user.id);
+passport.serializeUser(function(user_id, done) {
+	done(null, user_id);
 });
 //use this any time you want to GET info to a session
-passport.deserializeUser(function(id, done) {
-	User.findById(id, function(err, user) {
-		done(err, user);
-	});
+passport.deserializeUser(function(user_id, done) {
+	// console.log("Desrializing user...");
+	// User.findById(user_id, function(err, user_id) {
+	// 	console.log("Done!");
+	// 	done(null, user_id);
+	// });
 	//^ this line automatic in mongo, hopefully no issues with mySQL
+	done(null, user_id);
 });
 
 function authenticationMiddleware() {
@@ -412,7 +415,7 @@ app.get("/api/getUserAuth", (req, res) => {
 //post register user name: req.session.passport.user  (will give 81)
 //post login user name: req.session.passport.user  (will give 81)
 app.get("/api/getUserInfo", (req, res) => {
-	console.log("SECOND: getuserinfO");
+	console.log("SECOND: getuserinfO, req session is:", req.session);
 	const nameQuery = "SELECT name from users WHERE id=?";
 	if (req.session.passport) {
 		console.log("Sending query");
@@ -442,7 +445,7 @@ app.get("/api/getUserInfo", (req, res) => {
 			}
 		);
 	} else {
-		console.log("Passport query didnt do anything");
+		console.log("No req.session.passport detected");
 		res.sendStatus(500);
 	}
 });
