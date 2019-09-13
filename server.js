@@ -374,13 +374,13 @@ app.post("/api/register", function(req, res) {
 });
 
 //----------------------BEGIN AUTHENTICATION-----------------
-passport.serializeUser(function(user_id, done) {
-	done(null, user_id);
+passport.serializeUser(function(user, done) {
+	done(null, user.id);
 });
 //use this any time you want to GET info to a session
-passport.deserializeUser(function(user_id, done) {
-	User.findById(user_id, function(err, user_id) {
-		done(err, user_id);
+passport.deserializeUser(function(id, done) {
+	User.findById(id, function(err, user) {
+		done(err, user);
 	});
 	//^ this line automatic in mongo, hopefully no issues with mySQL
 });
