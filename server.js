@@ -379,9 +379,10 @@ passport.serializeUser(function(user_id, done) {
 });
 //use this any time you want to GET info to a session
 passport.deserializeUser(function(user_id, done) {
-	//User.findById(id, function (err, user) {
+	User.findById(user_id, function(err, user_id) {
+		done(err, user_id);
+	});
 	//^ this line automatic in mongo, hopefully no issues with mySQL
-	done(null, user_id);
 });
 
 function authenticationMiddleware() {
@@ -444,7 +445,6 @@ app.get("/api/getUserInfo", (req, res) => {
 		console.log("Passport query didnt do anything");
 		res.sendStatus(500);
 	}
-	console.log("Shouldn't reach here");
 });
 
 app.get("/api/getUserReviews", (req, res) => {
