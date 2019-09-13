@@ -36,7 +36,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // enable ssl redirect
-// app.use(sslRedirect());
+app.use(sslRedirect());
 
 //for dynamic html generation
 app.set("view engine", "ejs");
