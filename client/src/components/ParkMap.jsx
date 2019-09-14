@@ -489,7 +489,7 @@ const styleSelector = {
 			elementType: "geometry.fill",
 			stylers: [
 				{
-					color: "#2c2c2c"
+					color: "#111414"
 				}
 			]
 		},
@@ -525,7 +525,7 @@ const styleSelector = {
 			elementType: "geometry",
 			stylers: [
 				{
-					color: "#3c3c3c"
+					color: "##353535"
 				}
 			]
 		},
@@ -542,7 +542,8 @@ const styleSelector = {
 			featureType: "road.local",
 			stylers: [
 				{
-					visibility: "simplified"
+					visibility: "simplified",
+					color: "#1b2121"
 				}
 			]
 		},

@@ -617,7 +617,11 @@ const marksDist = [
 	{
 		value: 200,
 		label: "200"
-	}
+	},
+	{
+		value: 300,
+		label: "300"
+	},
 ];
 
 const marksLight = [
@@ -630,8 +634,15 @@ const marksLight = [
 		label: "Rural"
 	},
 	{
+		value: 1.75
+	
+	},
+	{
 		value: 3.0,
 		label: "Brighter Rural"
+	},
+	{
+		value: 4.5
 	},
 	{
 		value: 6.0,

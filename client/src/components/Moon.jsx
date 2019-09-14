@@ -19,7 +19,7 @@ function Moon(props) {
 							<span>{props.moonType.split(" ")[1]}</span>
 						</div>
 						<div className="stellarDataDisplay">
-							Nightfall:{" "}
+							<span className="Nightfall">Nightfall at</span>
 							{new Date(props.stellarData.night).toLocaleString()}
 						</div>
 					</React.Fragment>
@@ -39,10 +39,24 @@ const MoonStyle = styled.div`
 	font-family: "Lato", sans-serif;
 	font-weight: 600;
 	font-style: normal;
-	font-size: 30px;
+	font-size: 40px;
 	text-align: center;
 	text-transform: uppercase;
 
+	.stellarDataDisplay{
+		font-weight: 300;
+    font-family: monospace;
+    font-size: 18px;
+	padding: 15px 10px 20px 10px;
+	margin-bottom: 10px;
+	text-transform: none;
+	.Nightfall{
+		/* font-family: "Lato", sans-serif; */
+		padding-right: 12px;
+		font-weight: 400;
+		color: ${props => props.theme.yellow};
+	}
+	}
 	.moonDisplay {
 		height: 140px;
 		display: flex;

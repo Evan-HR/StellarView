@@ -350,7 +350,7 @@ const CardStyle = styled.div`
 
 		:active{
 	
-			background: ${props => props.theme.cardHeaderHover};
+			background: ${props => props.theme.cardHeader};
 		
     -webkit-transition: background-color 0.1s linear;
     -ms-transition: background-color 0.1s linear;

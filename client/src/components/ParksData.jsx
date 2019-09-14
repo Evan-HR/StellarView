@@ -313,7 +313,7 @@ class BaseParksData extends Component {
 
 					<div className="SortByContainer">
 						<div className="SortBy">
-							Sort by:{"  "}
+							Sort parks by:{"  "}
 							<button
 								onClick={this.sortParksDist}
 								disabled={this.state.sortedBy === "dist"}
@@ -533,7 +533,7 @@ const ResultsPageStyle = styled.div`
 			transition: color 0.2s ease;
 			button{	
 				all: unset;
-				color: ${props => props.theme.white};
+				color: ${props => props.theme.yellow};
 				font-weight: 600;
 				cursor: pointer;
 				margin: 0 0px 0 15px;
@@ -542,12 +542,15 @@ const ResultsPageStyle = styled.div`
 					transition: color 0.2s ease;
 				}
 				:active {
-					color: ${props => props.theme.white};
+					color: ${props => props.theme.yellow};
 					transition: color 0.2s ease;
+		-webkit-transform: scale(1.05);
+		transform: scale(1.05);
+
 				}
 			}
 			display: flex;
-			justify-content: flex-end;
+			justify-content: flex-start;
 		}
 	}
 
