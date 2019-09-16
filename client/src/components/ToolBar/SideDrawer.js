@@ -25,9 +25,12 @@ class SideDrawer extends Component {
 							if (x.isAuth === true) {
 								return (
 									<li>
-										<a onClick={this.props.close}>
-											<Link to="/profile">Favorites</Link>
-										</a>
+										<Link
+											to="/profile"
+											onClick={this.props.close}
+										>
+											Favorites
+										</Link>
 									</li>
 								);
 							}
@@ -38,39 +41,47 @@ class SideDrawer extends Component {
 							if (x.isAuth === true) {
 								return (
 									<li>
-										<a onClick={e => this.handleLogout(e)}>
-											<Link>Logout</Link>
-										</a>
+										<div
+											className="sidebarLink"
+											onClick={e => this.handleLogout(e)}
+										>
+											Logout
+										</div>
 									</li>
 								);
 							} else {
 								return (
 									<li>
-										<a onClick={this.props.close}>
+										<div
+											className="sidebarLink"
+											onClick={this.props.close}
+										>
 											<Login
-												onClick={this.props.close}
 												handleLogin={
 													this.props.handleLogin
 												}
 											/>
-										</a>
+										</div>
 									</li>
 								);
 							}
 						}}
 					</AuthConsumer>
 					<li>
-						<a onClick={this.props.close}>
-							<Register
-								onClick={this.props.close}
-								handleLogin={this.props.handleLogin}
-							/>
-						</a>
+						<div className="sidebarLink" onClick={this.props.close}>
+							<Register handleLogin={this.props.handleLogin} />
+						</div>
 					</li>
 					<li>
-						<a onClick={this.props.close}>
-							<Link to="/faq">FAQ</Link>
-						</a>
+						<Link
+							to="/faq"
+							onClick={this.props.close}
+							style={{ textDecoration: "none" }}
+						>
+							<div className="sidebarLink">
+								FAQ
+							</div>
+						</Link>
 					</li>
 				</ul>
 			</SideDrawerStyle>
@@ -105,7 +116,8 @@ const SideDrawerStyle = styled.nav`
 		text-align: left;
 	}
 
-	a {
+	.sidebarLink {
+		cursor: pointer;
 		color: black;
 		transition: color 0.2s ease;
 		text-decoration: none;
@@ -113,8 +125,8 @@ const SideDrawerStyle = styled.nav`
 		display: block;
 	}
 
-	a:hover,
-	a:active {
+	.sidebarLink:hover,
+	.sidebarLink:active {
 		color: ${props => props.theme.primaryLight};
 		transition: color 0.2s ease;
 	}
@@ -123,9 +135,5 @@ const SideDrawerStyle = styled.nav`
 		margin: 0.5rem 0;
 	}
 
-	${({ open }) =>
-		open &&
-		`
-    transform: translateX(0);
-  `}
+	${({ open }) => open && `transform: translateX(0);`}
 `;
