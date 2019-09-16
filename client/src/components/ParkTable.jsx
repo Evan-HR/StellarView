@@ -86,7 +86,7 @@ class ParkTable extends Component {
 	};
 
 	handleCardMouseOver = parkID => {
-		if (!this.isAnimating[parkID]) {
+		if (this.props.markers[parkID] && !this.isAnimating[parkID]) {
 			this.isAnimating[parkID] = true;
 			this.props.markers[parkID].setAnimation(
 				window.google.maps.Animation.BOUNCE
