@@ -323,7 +323,7 @@ app.post("/api/register", function(req, res) {
 		//check if same
 		var password = req.body.password1;
 
-		console.log("name email and password: " + name, email, password);
+		console.log("name email and password: " + name, email, "password");
 
 		const emailQuery = "SELECT * from users WHERE email=?";
 		connection.query(emailQuery, [email], (err, results, fields) => {
@@ -371,7 +371,7 @@ app.post("/api/register", function(req, res) {
 												return;
 											} else {
 												const user_id =
-													results[1][0].user_id;
+													results[0].user_id;
 												req.login(user_id, function(
 													err
 												) {

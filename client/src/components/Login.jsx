@@ -161,7 +161,13 @@ class BaseLogin extends Component {
 					</form>
 
 					<p className="text--center">
-						Not a member? <Register />
+						{this.props.hideLink ? (
+							""
+						) : (
+							<React.Fragment>
+								Not a member? <Register hideLink={true} />
+							</React.Fragment>
+						)}
 					</p>
 				</div>
 				{this.errorMsg()}
@@ -196,7 +202,6 @@ class BaseLogin extends Component {
 					) : (
 						<React.Fragment>Login</React.Fragment>
 					)}
-					{/* <Link>login</Link> */}
 				</a>
 
 				<Modal
