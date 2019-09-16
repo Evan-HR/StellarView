@@ -19,7 +19,7 @@ class BaseLogin extends Component {
 	};
 
 	openModal = () => {
-		this.setState({ ...this.state, modalIsOpen: true });
+		this.setState({ modalIsOpen: true });
 	};
 
 	afterOpenModal = () => {
@@ -29,7 +29,7 @@ class BaseLogin extends Component {
 	closeModal = () => {
 		console.log("Closing login modal");
 		this.props.refreshInfoModal();
-		this.setState({ ...this.state, modalIsOpen: false, errorDB: false });
+		this.setState({ modalIsOpen: false, errorDB: false });
 		document.body.style.overflow = "visible";
 	};
 
@@ -194,7 +194,7 @@ class BaseLogin extends Component {
 					{this.props.children ? (
 						<React.Fragment>{this.props.children}</React.Fragment>
 					) : (
-						<Link to="/">Login</Link>
+						<React.Fragment>Login</React.Fragment>
 					)}
 					{/* <Link>login</Link> */}
 				</a>

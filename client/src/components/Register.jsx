@@ -94,7 +94,7 @@ class Register extends Component {
 				<div className="grid">
 					<form onSubmit={this.onSubmit} className="form login">
 						<div className="form__field">
-							<label for="login__username">
+							<label htmlFor="login__username">
 								<svg className="icon">
 									<use
 										xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -114,7 +114,7 @@ class Register extends Component {
 							/>
 						</div>
 						<div className="form__field">
-							<label for="login__username">
+							<label htmlFor="login__username">
 								<svg className="icon">
 									<use
 										xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -135,7 +135,7 @@ class Register extends Component {
 						</div>
 
 						<div className="form__field">
-							<label for="login__password">
+							<label htmlFor="login__password">
 								<svg className="icon">
 									<use
 										xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -156,7 +156,7 @@ class Register extends Component {
 						</div>
 
 						<div className="form__field">
-							<label for="login__password">
+							<label htmlFor="login__password">
 								<svg className="icon">
 									<use
 										xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -242,9 +242,7 @@ class Register extends Component {
 	render() {
 		return (
 			<React.Fragment>
-				<a onClick={() => this.openModal()}>
-					<Link to="/">Register</Link>
-				</a>
+				<a onClick={() => this.openModal()}>Register</a>
 				<Modal
 					closeTimeoutMS={800}
 					className="modal-dialog"
@@ -259,7 +257,7 @@ class Register extends Component {
 						{this.renderNewRegisterFormStyle()}
 
 						{/* {this.errorMsg()} */}
-				</ModalStyle>
+					</ModalStyle>
 				</Modal>
 			</React.Fragment>
 		);
@@ -542,16 +540,14 @@ const NewLoginStyle = styled.div`
 `;
 
 const ModalStyle = styled.div`
-
-  position: relative;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  width: 100%;
-  pointer-events: auto;
-  background-clip: padding-box;
-  border-radius: 0.3rem;
-  outline: 0;
-
+	position: relative;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	width: 100%;
+	pointer-events: auto;
+	background-clip: padding-box;
+	border-radius: 0.3rem;
+	outline: 0;
 `;

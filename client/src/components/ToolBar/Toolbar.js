@@ -143,7 +143,6 @@ const ToolbarStyle = styled.header`
 		letter-spacing:0.08em;
 		transition: color 0.2s ease;
 		color: ${props => props.theme.white};
-		
 	}
 
 	.toolbar_navigation-items ul {
@@ -215,4 +214,5 @@ const ToolbarStyle = styled.header`
 		text-decoration: none;
 		color: ${props => props.theme.white};
 	}
+
 `;
