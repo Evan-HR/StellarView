@@ -172,7 +172,7 @@ passport.use(
 // 	res.redirect("/");
 // });
 
-app.get("/logout", function(req, res) {
+app.get("/api/logout", function(req, res) {
 	console.log("LOG OUT GOT HERE!???!?");
 	req.logout();
 	//destroys session from database

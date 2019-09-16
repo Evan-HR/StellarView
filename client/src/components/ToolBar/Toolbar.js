@@ -14,8 +14,9 @@ class Toolbar extends Component {
 	state = {};
 
 	handleLogout(e) {
+		console.log("Loggin out...");
 		e.preventDefault();
-		axios.get("/logout");
+		axios.get("/api/logout");
 		this.props.handleLogoutState();
 	}
 
@@ -59,15 +60,14 @@ class Toolbar extends Component {
 										if (x.isAuth === true) {
 											return (
 												<li>
-													<Link
+													<div
+														className="toolbarLink"
 														onClick={e =>
 															this.handleLogout(e)
 														}
 													>
-														<div className="toolbarLink">
-															LOGOUT
-														</div>
-													</Link>
+														LOGOUT
+													</div>
 												</li>
 											);
 										} else {
