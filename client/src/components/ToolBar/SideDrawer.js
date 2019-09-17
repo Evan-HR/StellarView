@@ -12,7 +12,7 @@ class SideDrawer extends Component {
 	state = {};
 	handleLogout(e) {
 		e.preventDefault();
-		axios.get("/logout");
+		axios.get("/api/logout");
 		this.props.handleLogoutState();
 	}
 

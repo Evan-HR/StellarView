@@ -75,13 +75,12 @@ class App extends Component {
 								handleLogin={this.props.handleLogin}
 							/>
 							{backdrop}
-							<AuthConsumer>
-								{authState => {
-									console.log(authState);
-									return (
-										<Route
-											path="/profile"
-											render={() => {
+							<Switch>
+								<Route
+									path="/profile"
+									render={() => (
+										<AuthConsumer>
+											{authState => {
 												console.log(authState);
 												if (authState.isAuth !== null) {
 													if (
@@ -95,11 +94,9 @@ class App extends Component {
 														);
 												}
 											}}
-										/>
-									);
-								}}
-							</AuthConsumer>
-							<Switch>
+										</AuthConsumer>
+									)}
+								/>
 								<Route
 									exact
 									path="/"
@@ -114,7 +111,12 @@ class App extends Component {
 								/>
 								<Route path="/faq" component={FAQ} />
 
-								<Route path="*" component={NotFoundPage} />
+								<Route
+									//Since /profile is outside the switch,
+									//make sure it's not getting picked up by *
+									path="*"
+									component={NotFoundPage}
+								/>
 							</Switch>
 						</Router>
 					</div>

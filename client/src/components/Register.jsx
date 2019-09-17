@@ -14,7 +14,8 @@ class Register extends Component {
 		regErrors: [],
 		errorDB: false,
 		registerSuccess: false,
-		modalIsOpen: false
+		modalIsOpen: false,
+		isRegistering: false
 	};
 
 	openModal = () => {
@@ -61,14 +62,23 @@ class Register extends Component {
 	};
 
 	errorMsg() {
+		console.log(this.state);
 		if (this.state.errorDB === true) {
-			return this.state.regErrors.map(errors => {
+			if (this.state.regErrors) {
+				return this.state.regErrors.map(errors => {
+					return (
+						<AlertStyle success={false}>
+							<div className="AlertText">{errors.msg}</div>
+						</AlertStyle>
+					);
+				});
+			} else {
 				return (
 					<AlertStyle success={false}>
-						<div className="AlertText">{errors.msg}</div>
+						<div className="AlertText">Unknown error.</div>
 					</AlertStyle>
 				);
-			});
+			}
 		}
 		if (this.state.registerSuccess) {
 			return (
@@ -79,6 +89,7 @@ class Register extends Component {
 			);
 		}
 	}
+
 	renderNewRegisterFormStyle = () => {
 		return (
 			<NewLoginStyle>
@@ -177,12 +188,22 @@ class Register extends Component {
 						</div>
 
 						<div className="form__field">
-							<input type="submit" value="Register" />
+							{this.state.isRegistering ? (
+								<button>Registering...</button>
+							) : (
+								<input type="submit" value="Register" />
+							)}
 						</div>
 					</form>
 
 					<p className="text--center">
-						Already a member? <Login />
+						{this.props.hideLink ? (
+							""
+						) : (
+							<React.Fragment>
+								Already a member? <Login hideLink={true} />
+							</React.Fragment>
+						)}
 					</p>
 				</div>
 				{this.errorMsg()}
@@ -208,7 +229,8 @@ class Register extends Component {
 		console.log("get here for some reason?");
 		this.setState({
 			registerSuccess: true,
-			modalIsOpen: false
+			modalIsOpen: false,
+			isRegistering: false
 		});
 		console.log("REG SUCCESS, GOING TO LOGIN NOW");
 		this.props.handleLogin();
@@ -216,6 +238,7 @@ class Register extends Component {
 
 	onSubmit = e => {
 		console.log("SUBMIT BUTTON PRESSED");
+		this.setState({ isRegistering: true });
 		e.preventDefault();
 		axios
 			.post("/api/register", {
@@ -232,7 +255,8 @@ class Register extends Component {
 				//console.error("ERROR OCCURRED!", err);
 				this.setState({
 					errorDB: true,
-					regErrors: err.response.data.errors
+					regErrors: err.response.data.errors,
+					isRegistering: false
 				});
 				//this.handleErrorAlert();
 				//.then(this.closemModal) is needed
@@ -242,7 +266,17 @@ class Register extends Component {
 	render() {
 		return (
 			<React.Fragment>
-				<a onClick={() => this.openModal()}>Register</a>
+				<a
+					onClick={() => {
+						this.openModal();
+					}}
+				>
+					{this.props.children ? (
+						<React.Fragment>{this.props.children}</React.Fragment>
+					) : (
+						<React.Fragment>Register</React.Fragment>
+					)}
+				</a>
 				<Modal
 					closeTimeoutMS={800}
 					className="modal-dialog"
