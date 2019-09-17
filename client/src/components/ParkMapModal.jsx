@@ -47,6 +47,7 @@ class ParkMapModal extends Component {
 	constructor(props) {
 		super(props);
 		this.park = { weather: {} };
+		this.userLocation = {};
 		this.toRemountReviews = false;
 	}
 
@@ -84,6 +85,7 @@ class ParkMapModal extends Component {
 			content = "No content.";
 		}
 		this.modalContent = content;
+		this.userLocation = content.userLocation;
 		this.park = content.park;
 		this.moonPhase = content.moonPhase;
 		this.moonType = content.moonType;
@@ -187,6 +189,12 @@ class ParkMapModal extends Component {
 
 						<span className="textContainer">
 							Tap a square for more info
+							<a
+								href={`https://www.google.com/maps?saddr=${this.userLocation.lat},${this.userLocation.lng}&daddr=${this.park.lat},${this.park.lng}`}
+								target="_blank"
+							>
+								Directions
+							</a>
 						</span>
 
 						<div className="weatherContainer">

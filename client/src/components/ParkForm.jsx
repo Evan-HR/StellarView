@@ -26,7 +26,8 @@ class BaseParkForm extends Component {
 		isGeocodingLocation: false,
 		isInvalidLocation: false,
 		formErrors: {},
-		advancedSearch: false
+		advancedSearch: false,
+		placesComplete: false
 	};
 
 	constructor(props) {
@@ -114,6 +115,7 @@ class BaseParkForm extends Component {
 				...this.state.reqData,
 				placeName: changeEvent.target.value
 			},
+			
 			isInvalidLocation: false
 		});
 	};
@@ -324,6 +326,9 @@ class BaseParkForm extends Component {
 					utime: d.getTime()
 				})
 			);
+		} else if (!this.state.placesComplete) {
+			console.log("Didn't use autocomplete!", this.state);
+			return;
 		} else {
 			this.setState({ ...this.state, formErrors: errors });
 		}
@@ -409,7 +414,7 @@ class BaseParkForm extends Component {
 			return (
 				<React.Fragment>
 					<span className="spinner-border spinner-border-sm" />
-					Locating
+					{"  "}Locating
 				</React.Fragment>
 			);
 		} else {
@@ -438,6 +443,7 @@ class BaseParkForm extends Component {
 	};
 
 	onPlaceChanged = () => {
+		console.log("Getting location from places");
 		let places = this.autoComplete.getPlaces();
 		if (places == 0) {
 			return;
@@ -458,7 +464,8 @@ class BaseParkForm extends Component {
 						placeName: place.formatted_address,
 						lat: location.lat,
 						lng: location.lng
-					}
+					},
+					placesComplete: true
 				}
 				// () => this.onSubmit()
 			);
@@ -496,6 +503,7 @@ class BaseParkForm extends Component {
 								this.state.isGeocodingLocation
 							}
 							onClick={e => {
+								console.log("Enter got here first");
 								this.onSubmit();
 								// this.onPlaceChanged();
 								// this.getPlaceCoordinates(e);

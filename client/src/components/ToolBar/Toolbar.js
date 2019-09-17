@@ -34,10 +34,11 @@ class Toolbar extends Component {
 
 						<div className="toolbar__logo">
 							<Link to="/home">
-								<SVG
+								{/* <SVG
 									src={logo}
 						
-								></SVG>
+								></SVG> */}
+								Stellargaze Logo
 								{/* <img
 									src={logo}
 									alt="Stellargaze"

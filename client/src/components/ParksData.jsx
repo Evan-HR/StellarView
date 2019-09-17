@@ -59,15 +59,21 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 		finalScore = 100;
 	}
 
-	console.log(
-		"Moon score, cloudscore, humidity, lightpolscore ",
-		moonScore,
-		cloudScore,
-		humidityScore,
-		lightPolScore
-	);
-	console.log("final score: ", finalScore);
-	return finalScore;
+	// console.log(
+	// 	"Moon score, cloudscore, humidity, lightpolscore ",
+	// 	moonScore,
+	// 	cloudScore,
+	// 	humidityScore,
+	// 	lightPolScore
+	// );
+	// console.log("final score: ", finalScore);
+	return {
+		finalScore: finalScore,
+		moonScore: moonScore,
+		cloudScore: cloudScore,
+		humidityScore: humidityScore,
+		lightPolScore: lightPolScore
+	};
 }
 
 class BaseParksData extends Component {
@@ -102,11 +108,16 @@ class BaseParksData extends Component {
 		// They're referenced in odd places and may update at weird times from the rest of doms
 		// Since they're google map things
 		this.markers = {};
+		this.noParksModalOpen = false;
 	}
 
 	handleMapLoaded = googleMapActual => {
 		this.googleMap = googleMapActual;
 		this.setState({ ...this.state, isMapLoaded: true });
+	};
+
+	handleCloseNoParksModal = () => {
+		this.noParksModalOpen = false;
 	};
 
 	//Request parks from server
@@ -124,6 +135,7 @@ class BaseParksData extends Component {
 		let storageKey = JSON.stringify(reqData);
 		let localData = sessionStorage.getItem(storageKey);
 
+		//Pull from local storage if possible
 		if (localData) {
 			//Check if it's expired
 			let data = JSON.parse(localData);
@@ -136,6 +148,7 @@ class BaseParksData extends Component {
 				sessionStorage.removeItem(storageKey);
 			}
 		}
+
 		if (localData) {
 			console.log("Loaded from storage:", JSON.parse(localData));
 			this.setState({
@@ -156,15 +169,17 @@ class BaseParksData extends Component {
 				.post("/api/getParkData", reqData)
 				.then(response => {
 					console.log(response.data);
-					if (!(response.status === 204)){
-						console.log("GOT HERE 204 204 MUMBAI NO EXIST!");
+					if (!(response.status === 204)) {
+						let maxScore = 0;
 						for (var i = 0; i < response.data.parks.length; i++) {
-							response.data.parks[i].score = parkScore(
+							let tempScore = parkScore(
 								response.data.moonFraction,
 								response.data.parks[i].weather.humidity / 100,
 								response.data.parks[i].weather.clouds / 100,
 								response.data.parks[i].light_pol / 100
 							);
+							response.data.parks[i].score = tempScore.finalScore;
+							response.data.parks[i].scoreBreakdown = tempScore;
 						}
 						this.setState({
 							parks: response.data.parks,
@@ -172,7 +187,6 @@ class BaseParksData extends Component {
 							moonFraction: response.data.moonfraction,
 							moonType: response.data.moonType,
 							stellarData: response.data.stellarData,
-	
 							fetchReq: reqData,
 							isFetchingParks: false
 						});
@@ -183,14 +197,15 @@ class BaseParksData extends Component {
 							JSON.stringify(response.data)
 						);
 						console.log("Saved to storage:", response.data);
-					}else{
-						return <NoResultsModal />
+					} else {
+						console.log("GOT HERE 204 204 MUMBAI NO EXIST!");
+						this.setState({ parks: [], isFetchingParks: false });
+						// return <NoResultsModal />;
 					}
-				
 				})
 				.catch(err => {
 					console.error(err);
-					this.setState({ isFetchingParks: false });
+					this.setState({ parks: [], isFetchingParks: false });
 				});
 		}
 	};
@@ -278,9 +293,42 @@ class BaseParksData extends Component {
 		this.setState({ parks: parksArray, sortedBy: "score" });
 	};
 
+	renderNoResults = () => {
+		if (!this.state.isFetchingParks && !this.noParksModalOpen) {
+			if (this.state.parks.length) {
+				if (
+					Math.max(...this.state.parks.map(park => park.score)) < 0.6
+				) {
+					this.noParksModalOpen = true;
+					return (
+						<NoResultsModal
+							noVis={true}
+							moonPhase={this.state.moonPhase}
+							scoreBreakdown={this.state.parks[0].scoreBreakdown}
+							handleCloseNoParksModal={
+								this.handleCloseNoParksModal
+							}
+						/>
+					);
+				} else {
+					return "";
+				}
+			} else {
+				console.log("Drawing noresultsmodal for no parks");
+				this.noParksModalOpen = true;
+				return (
+					<NoResultsModal
+						handleCloseNoParksModal={this.handleCloseNoParksModal}
+					/>
+				);
+			}
+		}
+	};
+
 	renderResults = () => {
 		return (
 			<ResultsPageStyle>
+				{this.renderNoResults()}
 				{/* {this.renderParkMap()} */}
 				<div className="RightSideContainerFull">
 					{/* <button
@@ -301,22 +349,6 @@ class BaseParksData extends Component {
 							stellarData={this.state.stellarData}
 						/>
 					</div>
-
-					{/* <div className="helpCard">
-					<span className="help">Icon Info</span>
-					<img className="iconA" src={humidityIcon} />
-					<img className="iconB" src={lightPolIcon} />
-					<img className="iconE" src={tempIcon} />
-					<img className="iconD" src={cloudBadIcon} />
-					<i className="far fa-eye iconC"></i>
-					<span className="descA">Humidity</span>
-					<span className="descB">Light Pollution</span>
-					<span className="descE">Temperature</span>
-					<span className="descD">Cloud Coverage</span>
-					<span className="descC">Overall Visibility</span>
-			
-					</div> */}
-					{/* </div> */}
 
 					<div className="SortByContainer">
 						<div className="SortBy">
@@ -397,21 +429,17 @@ export default withRouter(ParksData);
 //////////////////////////////////////////
 
 const LandingPageStyle = styled.div`
-
-
 	.ParkFormStyle {
 		width: 50vw;
 		margin: auto auto;
 		margin-top: 10vh;
 
 		@media screen and (max-width: 769px) {
-		width: 80vw;
-		margin: auto auto;
-		margin-top: 10vh;
+			width: 80vw;
+			margin: auto auto;
+			margin-top: 10vh;
+		}
 	}
-	}
-
-
 `;
 
 const ResultsPageStyle = styled.div`
@@ -621,5 +649,3 @@ const MainContentWrapper = styled.div`
 		}
 	}
 `;
-
-

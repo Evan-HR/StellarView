@@ -134,7 +134,8 @@ class ParkMap extends Component {
 				let modalContent = {
 					park: park,
 					moonPhase: this.props.moonPhase,
-					moonType: this.props.moonType
+					moonType: this.props.moonType,
+					userLocation: this.props.location
 				};
 				this.openModal(modalContent);
 			});
