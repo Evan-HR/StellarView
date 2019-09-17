@@ -468,7 +468,10 @@ class BaseParkForm extends Component {
 	render() {
 		//console.log("Fetching parks?", this.props.isFetchingParks);
 		return (
-			<SearchFormStyle advancedSearch={this.state.advancedSearch}>
+			<SearchFormStyle
+				advancedSearch={this.state.advancedSearch}
+				isInvalidLocation={this.state.isInvalidLocation}
+			>
 				<div className="citySearch">
 					<form
 						onSubmit={e => {
@@ -486,12 +489,7 @@ class BaseParkForm extends Component {
 						/>
 
 						<button
-							className={
-								"searchButton"
-								// (this.state.isInvalidLocation
-								// 	? " btn-danger"
-								// 	: " btn-primary")
-							}
+							className={"searchButton"}
 							type="submit"
 							disabled={
 								this.state.reqData.placeName === "" ||
@@ -516,10 +514,10 @@ class BaseParkForm extends Component {
 						disabled={this.state.isLoadingLocation}
 						onClick={this.getMyLocation}
 					>
-						<span>NEAR ME</span>
+						{/* <span>NEAR ME</span> */}
 
 						{/* <img src={nearMeButton} /> */}
-						{/* <strong>{this.renderLocationSpinner()}</strong> */}
+						<strong>{this.renderLocationSpinner()}</strong>
 					</button>
 				</div>
 
@@ -621,7 +619,7 @@ const marksDist = [
 	{
 		value: 300,
 		label: "300"
-	},
+	}
 ];
 
 const marksLight = [
@@ -635,7 +633,6 @@ const marksLight = [
 	},
 	{
 		value: 1.75
-	
 	},
 	{
 		value: 3.0,
@@ -710,26 +707,20 @@ background: none;
 			width: 100%;
 			color: ${props => props.theme.prettyDark};
 			transition: color 0.1s ease;
-
 			font-size: 15px;
 			font-weight: 600;
 			
-
-			/* transition: background-color 0.2s; */
-		
-		:hover {
-
+			:disabled {
+				background: gray;
+			}
+			:hover:enabled {
 				color: ${props => props.theme.colorBad};
-		
-		}
-		:active {
-		
-    -webkit-transform: scale(1.05);
-    transform: scale(1.05);
-
-			/* background-color: #fff3e5; */
-			
-		}
+			}
+			:active:enabled {
+				-webkit-transform: scale(1.05);
+				transform: scale(1.05);
+				/* background-color: #fff3e5; */
+			}
 		}
 		grid-area: myLocation;
 	}
@@ -758,29 +749,30 @@ background: none;
 		width: 40px;
 		height: 36px;
 		/* border: 1px solid #00b4cc; */
-		background: ${props => props.theme.prettyDark};
+		background: ${(props, isInvalidLocation) =>
+			isInvalidLocation ? props.theme.colorBad : props.theme.prettyDark};
 		text-align: center;
 
 		color: ${props => props.theme.white};
 		/* border-radius: 0 5px 5px 0; */
 		cursor: pointer;
 		font-size: 20px;
+		border: none;
+		float: left;
+		background-position: center;
+		transition: background 0.2s, color 0.1s ease;
+
 		:focus {
 			outline: 0;
 		}
-		border: none;
-		float: left;
-		transition: color 0.1s ease;
-		background-position: center;
-			transition: background 0.2s;
-		
+
 		:hover {
 			background: ${props => props.theme.prettyDark}
 				radial-gradient(circle, transparent 1%, rgba(0, 0, 0, .3) 1%)
 				center/15000%;
-				color: ${props => props.theme.colorBad};
-		
+			color: ${props => props.theme.colorBad};
 		}
+
 		:active {
 			
 			background-color: rgba(0, 0, 0, .3);

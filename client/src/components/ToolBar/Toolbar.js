@@ -14,8 +14,9 @@ class Toolbar extends Component {
 	state = {};
 
 	handleLogout(e) {
+		console.log("Loggin out...");
 		e.preventDefault();
-		axios.get("/logout");
+		axios.get("/api/logout");
 		this.props.handleLogoutState();
 	}
 
@@ -45,7 +46,9 @@ class Toolbar extends Component {
 											return (
 												<li>
 													<Link to="/profile">
-														favorites
+														<div className="toolbarLink">
+															FAVORITES
+														</div>
 													</Link>
 												</li>
 											);
@@ -57,13 +60,14 @@ class Toolbar extends Component {
 										if (x.isAuth === true) {
 											return (
 												<li>
-													<Link
+													<div
+														className="toolbarLink"
 														onClick={e =>
 															this.handleLogout(e)
 														}
 													>
-														logout
-													</Link>
+														LOGOUT
+													</div>
 												</li>
 											);
 										} else {
@@ -74,7 +78,11 @@ class Toolbar extends Component {
 															this.props
 																.handleLogin
 														}
-													/>
+													>
+														<div className="toolbarLink">
+															LOGIN
+														</div>
+													</Login>
 												</li>
 											);
 										}
@@ -83,10 +91,16 @@ class Toolbar extends Component {
 								<li>
 									<Register
 										handleLogin={this.props.handleLogin}
-									/>
+									>
+										<div className="toolbarLink">
+											REGISTER
+										</div>
+									</Register>
 								</li>
 								<li>
-									<Link to="/faq">faq</Link>
+									<Link to="/faq">
+										<div className="toolbarLink">FAQ</div>
+									</Link>
 								</li>
 							</ul>
 						</div>
@@ -135,6 +149,7 @@ const ToolbarStyle = styled.header`
 		margin-top: 1%;
 	}
 
+
 	.toolbar_navigation-items a {
 		/* font-family: IBM Plex Sans; */
 		font-family: 'Lato', sans-serif;
@@ -143,7 +158,6 @@ const ToolbarStyle = styled.header`
 		letter-spacing:0.08em;
 		transition: color 0.2s ease;
 		color: ${props => props.theme.white};
-		
 	}
 
 	.toolbar_navigation-items ul {
@@ -215,4 +229,20 @@ const ToolbarStyle = styled.header`
 		text-decoration: none;
 		color: ${props => props.theme.white};
 	}
+	
+	.toolbarLink {
+		cursor: pointer;
+		font-family: 'Lato', sans-serif;
+		font-weight:600;
+		text-decoration: none;
+		letter-spacing:0.08em;
+		transition: color 0.2s ease;
+		color: ${props => props.theme.white};
+	}
+
+	.toolbarLink:hover, .toolbarLink:active {
+		transition: color 0.2s ease;
+  		color: ${props => props.theme.colorBad};
+	}
+
 `;

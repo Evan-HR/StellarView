@@ -172,7 +172,7 @@ passport.use(
 // 	res.redirect("/");
 // });
 
-app.get("/logout", function(req, res) {
+app.get("/api/logout", function(req, res) {
 	console.log("LOG OUT GOT HERE!???!?");
 	req.logout();
 	//destroys session from database
@@ -323,7 +323,7 @@ app.post("/api/register", function(req, res) {
 		//check if same
 		var password = req.body.password1;
 
-		console.log("name email and password: " + name, email, password);
+		console.log("name email and password: " + name, email, "password");
 
 		const emailQuery = "SELECT * from users WHERE email=?";
 		connection.query(emailQuery, [email], (err, results, fields) => {
@@ -371,7 +371,7 @@ app.post("/api/register", function(req, res) {
 												return;
 											} else {
 												const user_id =
-													results[1][0].user_id;
+													results[0].user_id;
 												req.login(user_id, function(
 													err
 												) {
@@ -765,7 +765,7 @@ app.post("/api/getProfileParksWeather", async (req, res) => {
 		moonType: moonType,
 		stellarData: {}
 	};
-
+	console.log("Sending weather reply: ", reply);
 	res.send(reply);
 });
 
@@ -775,7 +775,7 @@ async function getParkWeatherAxios(park, userTime) {
 
 	var times = suncalc.getTimes(utime, park.lat, park.lng);
 
-	console.log("Sun data:", times);
+	// console.log("Sun data:", times);
 
 	var nightTime = new Date(times.night);
 	var dawnTime = new Date(times.dawn);
@@ -859,7 +859,6 @@ async function getParkWeatherAxios(park, userTime) {
 					response.list[succInst]
 				);
 				weatherInstance = response.list[succInst];
-				break;
 			}
 
 			park.weather = {
@@ -885,8 +884,12 @@ async function getParkWeatherAxios(park, userTime) {
 						}
 					) / 1000
 			};
+
+			break;
 		}
 	}
+
+	console.log("Got weather for park: ", park);
 
 	return park;
 }
