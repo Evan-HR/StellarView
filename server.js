@@ -765,7 +765,7 @@ app.post("/api/getProfileParksWeather", async (req, res) => {
 		moonType: moonType,
 		stellarData: {}
 	};
-
+	console.log("Sending weather reply: ", reply);
 	res.send(reply);
 });
 
@@ -775,7 +775,7 @@ async function getParkWeatherAxios(park, userTime) {
 
 	var times = suncalc.getTimes(utime, park.lat, park.lng);
 
-	console.log("Sun data:", times);
+	// console.log("Sun data:", times);
 
 	var nightTime = new Date(times.night);
 	var dawnTime = new Date(times.dawn);
@@ -859,7 +859,6 @@ async function getParkWeatherAxios(park, userTime) {
 					response.list[succInst]
 				);
 				weatherInstance = response.list[succInst];
-				break;
 			}
 
 			park.weather = {
@@ -885,8 +884,12 @@ async function getParkWeatherAxios(park, userTime) {
 						}
 					) / 1000
 			};
+
+			break;
 		}
 	}
+
+	console.log("Got weather for park: ", park);
 
 	return park;
 }
