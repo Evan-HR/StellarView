@@ -7,7 +7,8 @@ import Login from "../Login";
 import axios from "axios";
 import Register from "../Register";
 import FAQ from "../FAQ";
-// import logo from "../style/Media/LogoBlueGrey.svg";
+import logo from "../style/Media/StellarStarLogo2.svg";
+import SVG from "react-inlinesvg";
 // import logo2 from "../style/Media/telescopeLogo2.svg";
 
 class Toolbar extends Component {
@@ -33,8 +34,18 @@ class Toolbar extends Component {
 
 						<div className="toolbar__logo">
 							<Link to="/home">
-								<span className="Stellar">STELLAR</span>
-								<span className="Gaze">GAZE</span>
+								<SVG
+									src={logo}
+						
+								></SVG>
+								{/* <img
+									src={logo}
+									alt="Stellargaze"
+									title="Stellargaze"
+								/> */}
+
+								{/* <span className="Stellar">STELLAR</span>
+								<span className="Gaze">GAZE</span> */}
 							</Link>
 						</div>
 						<div className="spacer" />
@@ -183,10 +194,7 @@ const ToolbarStyle = styled.header`
 		}
 		height: 60px;
 		.toolbar__logo{
-			padding-top: 10px;
-			a{
-				font-size: 50px;
-			}
+
 		}
 	}
 
@@ -208,7 +216,7 @@ const ToolbarStyle = styled.header`
   		color: ${props => props.theme.colorBad};		
 	}
 
-	.toolbar__logo{	
+	/* .toolbar__logo{	
 		font-weight: 400;
 		font-size: 60px;
 		font-family: 'Lato', sans-serif;
@@ -221,14 +229,16 @@ const ToolbarStyle = styled.header`
 		
 	}
 
+	.toolbar__logo a{
+		text-decoration: none;
+		color: ${props => props.theme.white};
+	} */
+
 	.Link{
 		text-decoration:none;
 	}
 
-	.toolbar__logo a{
-		text-decoration: none;
-		color: ${props => props.theme.white};
-	}
+
 	
 	.toolbarLink {
 		cursor: pointer;

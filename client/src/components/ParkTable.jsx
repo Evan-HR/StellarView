@@ -1,7 +1,6 @@
 //Displays park table
 import React, { Component } from "react";
 import ParkCard from "./ParkCard";
-import styled from "styled-components";
 import { Transition, animated } from "react-spring/renderprops";
 import NoResultsModal from "./NoResultsModal";
 
@@ -31,7 +30,7 @@ class ParkTable extends Component {
 	renderParkCardList = () => {
 		if (this.props.parkList.length > 0) {
 			return (
-				<ParkCardListStyle>
+				
 					<Transition
 						native
 						items={this.props.parkList}
@@ -59,7 +58,7 @@ class ParkTable extends Component {
 							</animated.div>
 						)}
 					</Transition>
-				</ParkCardListStyle>
+				
 			);
 			// return <div>{this.props.parkList.map(this.renderParkCard)}</div>;
 		} else {
@@ -147,30 +146,3 @@ class ParkTable extends Component {
 
 export default ParkTable;
 
-///////////////////////////////////////////////////////////////
-
-//OOF
-const ParkCardListStyle = styled.div`
-	.cardAnimationContainer .card {
-		padding-bottom: 15px;
-		margin-bottom: 30px;
-		border-radius: 20px;
-
-		@media screen and (min-width: 567px) {
-			padding-left: 25px;
-			padding-right: 25px;
-		}
-		
-		@media screen and (min-width: 696px) {
-			padding-left: 35px;
-			padding-right: 35px;
-		}
-	}
-	.cardAnimationContainer:nth-of-type(even) .card {
-		background-color: ${props => props.theme.cardDark};
-	}
-
-	.cardAnimationContainer:nth-of-type(odd) .card {
-		background-color: ${props => props.theme.cardLight};
-	}
-`;

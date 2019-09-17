@@ -6,6 +6,12 @@ import { useSpring, animated as a } from "react-spring";
 function Moon(props) {
 	const springStyle = useSpring({ opacity: props.moonPhase ? 1 : 0 });
 
+	function prettyDate(time) {
+		var date = new Date(time);
+		var localeSpecificTime = date.toLocaleTimeString();
+		return localeSpecificTime.replace(/:\d+ /, " ");
+	}
+
 	return (
 		<a.div style={springStyle}>
 			<MoonStyle>
@@ -19,26 +25,29 @@ function Moon(props) {
 							<span>{props.moonType.split(" ")[1]}</span>
 						</div>
 						<div className="stellarDataDisplay">
-							<span className="Nightfall">Sunset at</span>
-							{new Date(
+							<span className="Sunset">Sunset</span>
+							<span className="SunsetTime">
+								{prettyDate(props.stellarData.sunset)}
+
+								{/* {new Date(
 								props.stellarData.sunset
-							).toLocaleTimeString()}
-							<br />
-							<span className="Nightfall">Nightfall at</span>
-							{new Date(
-								props.stellarData.night
-							).toLocaleTimeString()}
-							<br />
-							<br />
-							<span className="Nightfall">Moonrise at</span>
-							{new Date(
-								props.stellarData.moonrise
-							).toLocaleTimeString()}
-							<br />
-							<span className="Nightfall">Moonset at</span>
-							{new Date(
-								props.stellarData.moonset
-							).toLocaleTimeString()}
+							).toLocaleTimeString()} */}
+							</span>
+
+							<span className="Nightfall">Nightfall</span>
+							<span className="NightfallTime">
+								{prettyDate(props.stellarData.night)}
+							</span>
+
+							<span className="Moonrise">Moonrise</span>
+							<span className="MoonriseTime">
+								{prettyDate(props.stellarData.moonrise)}
+							</span>
+
+							<span className="Moonset">Moonset</span>
+							<span className="MoonsetTime">
+								{prettyDate(props.stellarData.moonset)}
+							</span>
 						</div>
 					</React.Fragment>
 				) : (
@@ -57,22 +66,70 @@ const MoonStyle = styled.div`
 	font-family: "Lato", sans-serif;
 	font-weight: 600;
 	font-style: normal;
-	font-size: 40px;
+	font-size: 35px;
 	text-align: center;
 	text-transform: uppercase;
 
+	@media screen and (max-width: 569px) {
+		font-size: 23px;
+	}
+
 	.stellarDataDisplay {
+
 		font-weight: 300;
-		font-family: monospace;
-		font-size: 18px;
+		font-size: 16px;
 		padding: 15px 10px 20px 10px;
 		margin-bottom: 10px;
 		text-transform: none;
+		display: grid;
+
+		grid-template-columns: 1fr 1fr 1fr 1fr;
+		grid-template-rows: 1fr 1fr;
+		grid-gap: 0px;
+		grid-template-areas:
+			"Sunset    Nightfall    Moonrise Moonset"
+			"SunsetTime NightfallTime MoonriseTime  MoonsetTime";
+		
+
 		.Nightfall {
 			/* font-family: "Lato", sans-serif; */
-			padding-right: 12px;
+			grid-area: Nightfall;
 			font-weight: 400;
 			color: ${props => props.theme.yellow};
+		}
+
+		.NightfallTime {
+			grid-area: NightfallTime;
+		}
+		.Moonrise {
+			/* font-family: "Lato", sans-serif; */
+			grid-area: Moonrise;
+			font-weight: 400;
+			color: ${props => props.theme.yellow};
+		}
+		.MoonriseTime {
+			grid-area: MoonriseTime;
+		}
+		.Moonset {
+			/* font-family: "Lato", sans-serif; */
+			grid-area: Moonset;
+			font-weight: 400;
+			color: ${props => props.theme.yellow};
+		}
+
+		.MoonsetTime {
+			grid-area: MoonsetTime;
+		}
+		.Sunset {
+			/* font-family: "Lato", sans-serif; */
+			grid-area: Sunset;
+
+			font-weight: 400;
+			color: ${props => props.theme.yellow};
+		}
+
+		.SunsetTime {
+			grid-area: SunsetTime;
 		}
 	}
 	.moonDisplay {
