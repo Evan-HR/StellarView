@@ -407,7 +407,8 @@ const ModalStyle = styled.div`
 		font-weight: normal;
 		color: ${props => props.theme.white};
 		font-size: 30px;
-		padding: 2rem 1rem;
+		text-align: left;
+		padding: 1rem 2.5rem 2rem 1rem;
 		background: ${props => props.theme.mapBlue};
 		border: none;
 		border-radius: 0rem;
