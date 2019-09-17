@@ -152,8 +152,19 @@ export default ParkTable;
 //OOF
 const ParkCardListStyle = styled.div`
 	.cardAnimationContainer .card {
+		padding-bottom: 15px;
 		margin-bottom: 30px;
 		border-radius: 20px;
+
+		@media screen and (min-width: 567px) {
+			padding-left: 25px;
+			padding-right: 25px;
+		}
+		
+		@media screen and (min-width: 696px) {
+			padding-left: 35px;
+			padding-right: 35px;
+		}
 	}
 	.cardAnimationContainer:nth-of-type(even) .card {
 		background-color: ${props => props.theme.cardDark};

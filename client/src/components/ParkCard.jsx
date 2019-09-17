@@ -143,7 +143,7 @@ class ParkCard extends Component {
 						</span>
 
 						<div className="CloudIcon">
-							{this.props.park.weather.clouds < 40 ? (
+							{this.props.park.weather.clouds < 35 ? (
 								<img
 									src={cloudGoodIcon}
 									alt="Cloud Coverage"
@@ -282,19 +282,21 @@ const CardStyle = styled.div`
 		display: flex;
 		grid-area: ScoreDesc;
 		font-size: 14px;
-		margin: auto auto 0 auto;
+		margin: auto auto 0 20px;
 		font-weight: 400;
 	}
 
 	.Score {
 		display: flex;
-	
-		margin: auto auto;
+		align-items: center;
+/* margin: auto auto auto 15px; */
 		grid-area: Score;
 		font-size: 80px;
+		padding-left: 15px;
 		font-weight: 600;
 		.Percentage {
 			display: inline-block;
+			padding-top: 42px;
 			font-size: 25px;
 		}
 	}
@@ -302,7 +304,7 @@ const CardStyle = styled.div`
 	.ParkHeader {
 		display: grid;
 		grid-area: ParkHeader;
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+		grid-template-columns: repeat(6,1fr);
 		grid-template-rows: auto auto;
 
 		grid-template-areas:
@@ -349,7 +351,7 @@ const CardStyle = styled.div`
 			display: flex;
 			grid-area: CarIcon;
 			margin: auto auto 0 auto;
-			font-size: 32px;
+			font-size: 25px;
 		}
 
 		.CarIconDesc {
@@ -369,23 +371,23 @@ const CardStyle = styled.div`
 
 			/* margin: auto 10px auto 10px; */
 			.visibleGoodIcon {
-				font-size: 32px;
+				font-size: 25px;
 				color: ${props => props.theme.parkMapGreen};
 			}
 
 			.visiblePartlyIcon {
-				font-size: 32px;
+				font-size: 25px;
 				color: #92704f;
 			}
 			.invisibleIcon {
-				font-size: 32px;
+				font-size: 25px;
 			}
 		}
 
 		.VisibleIconDesc {
 			display: flex;
 			grid-area: VisibleIconDesc;
-			font-size: 14px;
+			font-size: 13px;
 			margin: 0 auto auto auto;
 		}
 	}
@@ -395,7 +397,7 @@ const CardStyle = styled.div`
 
 		grid-area: WeatherInfo;
 		font-weight: 400;
-		font-size: 14px;
+		font-size: 13px;
 		margin: auto auto 0 auto;
 	}
 	.HumidityIcon {
@@ -457,7 +459,7 @@ const CardStyle = styled.div`
 		cursor: pointer;
 		display: flex;
 		float: left;
-		margin: 0 auto auto 20px;
+		margin: 10px auto auto 20px;
 
 		.StarScore {
 			display: flex;
@@ -478,7 +480,7 @@ const CardStyle = styled.div`
 		display: flex;
 		grid-area: MoreInfoDesc;
 		font-size: 14px;
-		margin: 4px 20px auto auto;
+		margin: 14px 20px auto auto;
 	}
 `;
 
