@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 class Footer extends Component {
 	render() {
-		return <FooterStyle><span>MADE WITH 🌌 <br></br> <span className="Names">Vlad Falach x Dustin Jurkaulionis</span></span></FooterStyle>;
+		return <FooterStyle>© Vlad Falach x Dustin Jurkaulionis x Evan Reaume</FooterStyle>;
 	}
 }
 
@@ -20,12 +20,12 @@ const FooterStyle = styled.div`
     height: 150px;
     /* font-family: monospace; */
     font-weight: 500;
-    font-size: 18px;
+    font-size: 14px;
+    letter-spacing: 0.2em;
     background-color: ${props=>props.theme.prettyDark};
-    color: ${props => props.theme.white};
-    .Names{
-        font-family: monospace;
+    color: ${props => props.theme.cardLight};
+   
         font-weight: 400;
         font-size: 13px;
-    }
+  
 `;

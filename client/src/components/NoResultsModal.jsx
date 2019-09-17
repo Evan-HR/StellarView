@@ -23,6 +23,7 @@ class NoResultsModal extends Component {
 	};
 
 	renderNoParks = () => {
+		console.log(this.props.moonPhase);
 		return (
 			<NoResultsStyle>
 				<button
@@ -35,7 +36,7 @@ class NoResultsModal extends Component {
 				</button>
 				<span>
 					Sorry, we couldn't find any parks in this area!{" "}
-					{this.props.moonPhase}
+					
 				</span>
 			</NoResultsStyle>
 		);

@@ -14,6 +14,7 @@ import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import tempIcon from "./style/Media/cardIcons/temperature.svg";
 import { withRouter } from "react-router-dom";
 import TelescopeCircle from "./TelescopeCircle";
+import NoResultsModal from "./NoResultsModal";
 
 function inRange(x, min, max) {
 	return (x - min) * (x - max) <= 0;
@@ -155,31 +156,37 @@ class BaseParksData extends Component {
 				.post("/api/getParkData", reqData)
 				.then(response => {
 					console.log(response.data);
-					for (var i = 0; i < response.data.parks.length; i++) {
-						response.data.parks[i].score = parkScore(
-							response.data.moonFraction,
-							response.data.parks[i].weather.humidity / 100,
-							response.data.parks[i].weather.clouds / 100,
-							response.data.parks[i].light_pol / 100
+					if (!(response.status === 204)){
+						console.log("GOT HERE 204 204 MUMBAI NO EXIST!");
+						for (var i = 0; i < response.data.parks.length; i++) {
+							response.data.parks[i].score = parkScore(
+								response.data.moonFraction,
+								response.data.parks[i].weather.humidity / 100,
+								response.data.parks[i].weather.clouds / 100,
+								response.data.parks[i].light_pol / 100
+							);
+						}
+						this.setState({
+							parks: response.data.parks,
+							moonPhase: response.data.moonPercent,
+							moonFraction: response.data.moonfraction,
+							moonType: response.data.moonType,
+							stellarData: response.data.stellarData,
+	
+							fetchReq: reqData,
+							isFetchingParks: false
+						});
+						let d = new Date();
+						response.data.timestamp = d.getTime();
+						sessionStorage.setItem(
+							JSON.stringify(reqData),
+							JSON.stringify(response.data)
 						);
+						console.log("Saved to storage:", response.data);
+					}else{
+						return <NoResultsModal />
 					}
-					this.setState({
-						parks: response.data.parks,
-						moonPhase: response.data.moonPercent,
-						moonFraction: response.data.moonfraction,
-						moonType: response.data.moonType,
-						stellarData: response.data.stellarData,
-
-						fetchReq: reqData,
-						isFetchingParks: false
-					});
-					let d = new Date();
-					response.data.timestamp = d.getTime();
-					sessionStorage.setItem(
-						JSON.stringify(reqData),
-						JSON.stringify(response.data)
-					);
-					console.log("Saved to storage:", response.data);
+				
 				})
 				.catch(err => {
 					console.error(err);
@@ -561,7 +568,8 @@ const ResultsPageStyle = styled.div`
 		}} */
 	}
 
-	@media screen and (max-width: 769px) {
+	/* formerly min-width: 769px*/
+	@media screen and (max-width: 989px) {
 		margin-top: 4rem;
 		width: 100%;
 		grid-template-columns: 1fr;
@@ -577,14 +585,15 @@ const ResultsPageStyle = styled.div`
 			display: ${props => (props.hideMap ? "none" : "fixed")};
 		}
 	}
-	@media screen and (min-width: 769px) and (max-width: 1300px) {
+	
+	@media screen and (min-width: 990px) and (max-width: 1300px) {
 		/* width: 90%; */
 		/* margin-top: 0rem; */
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: auto auto;
 		grid-template-areas:
-			"map rightSide"
-			"map rightSide";
+			". rightSide"
+			". rightSide";
 		.ParkFormStyle {
 			grid-area: form;
 			${({ active }) => active && `display: none;`}
@@ -606,9 +615,11 @@ const MainContentWrapper = styled.div`
 		background-color: gray;
 		display: ${props => (props.pathname === "/home" ? "none" : "fixed")};
 	}
-	@media screen and (max-width: 769px) {
+	@media screen and (max-width: 989px) {
 		.ParkMapStyle {
 			display: ${props => (props.hideMap ? "none" : "fixed")};
 		}
 	}
 `;
+
+
