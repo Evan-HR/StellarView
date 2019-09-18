@@ -115,7 +115,7 @@ class BaseParkForm extends Component {
 				...this.state.reqData,
 				placeName: changeEvent.target.value
 			},
-			
+
 			isInvalidLocation: false
 		});
 	};
@@ -690,6 +690,18 @@ background: none;
 			props.advancedSearch
 				? `"advancedSearch advancedSearch advancedSearch"`
 				: ``};
+
+
+	@media screen and (max-width: 420px) {
+		grid-template-areas:
+		"searchBar searchBar searchBar"
+		"advancedSearchToggle advancedSearchToggle myLocation"
+		${props =>
+			props.advancedSearch
+				? `"advancedSearch advancedSearch advancedSearch"`
+				: ``};
+	}
+
 	.AdvancedSearch {
 		${props => (props.advancedSearch ? `` : `display: none`)}
 		grid-area:advancedSearch;

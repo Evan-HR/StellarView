@@ -20,7 +20,7 @@ class NoResultsModal extends Component {
 	closeModal = () => {
 		this.setState({ ...this.state, modalIsOpen: false });
 		document.body.style.overflow = "visible";
-		this.props.handleCloseNoParksModal();
+		// this.props.handleCloseNoParksModal();
 	};
 
 	renderNoParks = () => {

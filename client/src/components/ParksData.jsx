@@ -294,7 +294,9 @@ class BaseParksData extends Component {
 	};
 
 	renderNoResults = () => {
-		if (!this.state.isFetchingParks && !this.noParksModalOpen) {
+		if (!this.state.isFetchingParks 
+			// && !this.noParksModalOpen
+			) {
 			if (this.state.parks.length) {
 				if (
 					Math.max(...this.state.parks.map(park => park.score)) < 0.6
@@ -430,15 +432,30 @@ export default withRouter(ParksData);
 
 const LandingPageStyle = styled.div`
 	.ParkFormStyle {
-		width: 50vw;
+		width: 95%;
 		margin: auto auto;
 		margin-top: 10vh;
 
-		@media screen and (max-width: 769px) {
-			width: 80vw;
+		@media screen and (min-width: 320px) {
+			width: 95%;
 			margin: auto auto;
 			margin-top: 10vh;
 		}
+
+		@media screen and (min-width: 420px) {
+			width: 90%;
+			margin: auto auto;
+			margin-top: 10vh;
+		}
+
+		@media screen and (min-width: 769px) {
+			width: 50%;
+		
+			margin: auto auto;
+			margin-top: 10vh;
+		}
+
+
 	}
 `;
 
@@ -630,7 +647,7 @@ const ResultsPageStyle = styled.div`
 `;
 
 const MainContentWrapper = styled.div`
-	width: 90%;
+	width: 90vw;
 	margin: 0 auto 0 auto;
 	.ParkMapStyle {
 		/* grid-area: map; */
