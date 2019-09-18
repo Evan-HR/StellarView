@@ -20,10 +20,10 @@ class NoResultsModal extends Component {
 	closeModal = () => {
 		this.setState({ ...this.state, modalIsOpen: false });
 		document.body.style.overflow = "visible";
+		// this.props.handleCloseNoParksModal();
 	};
 
 	renderNoParks = () => {
-		console.log(this.props.moonPhase);
 		return (
 			<NoResultsStyle>
 				<button
@@ -34,10 +34,17 @@ class NoResultsModal extends Component {
 				>
 					<i className="fas fa-window-close" />
 				</button>
-				<span>
-					Sorry, we couldn't find any parks in this area!{" "}
-					
-				</span>
+				{this.props.noVis ? (
+					<span>
+						No parks have good visibility! Try again later!{" "}
+						{this.props.moonPhase}
+						{JSON.stringify(this.props.scoreBreakdown)}
+					</span>
+				) : (
+					<span>
+						Sorry, we couldn't find any parks in this area!{" "}
+					</span>
+				)}
 			</NoResultsStyle>
 		);
 	};
@@ -71,6 +78,10 @@ class NoResultsModal extends Component {
 }
 
 export default NoResultsModal;
+
+NoResultsModal.defaultProps = {
+	handleCloseNoParksModal: () => {}
+};
 
 /////////////////////////////////
 
