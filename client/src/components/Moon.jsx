@@ -64,7 +64,7 @@ const MoonStyle = styled.div`
 	color: ${props => props.theme.white};
 	/* font-family: IBM Plex Sans; */
 	font-family: "Lato", sans-serif;
-	font-weight: 600;
+	font-weight: 400;
 	font-style: normal;
 	font-size: 35px;
 	text-align: center;

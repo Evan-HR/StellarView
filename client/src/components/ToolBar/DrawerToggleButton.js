@@ -17,15 +17,15 @@ const Hamburger = styled.button`
 	display: block;
 	cursor: pointer;
 
-	margin-right: 1em;
-	margin-top: 0.8em;
+	/* margin-right: 1em;
+	margin-top: 0.8em; */
 
 	img {
 		pointer-events: none;
 	}
 
 	/* On screens that are 768px or more*/
-	@media screen and (min-width: 768px) {
+	@media screen and (min-width: 600px) {
 		display: none;
 	}
 `;
