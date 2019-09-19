@@ -312,11 +312,8 @@ class BaseParkForm extends Component {
 		const errors = this.validate(this.state.reqData);
 		if (errors.length === 0) {
 			var d = new Date();
-
 			this.setState({
-				...this.state,
 				formErrors: [],
-
 				reqData: { ...this.state.reqData, utime: d.getTime() }
 			});
 			this.updateHistoryQuery(this.state.reqData);
@@ -326,11 +323,8 @@ class BaseParkForm extends Component {
 					utime: d.getTime()
 				})
 			);
-		} else if (!this.state.placesComplete) {
-			console.log("Didn't use autocomplete!", this.state);
-			return;
 		} else {
-			this.setState({ ...this.state, formErrors: errors });
+			this.setState({ formErrors: errors });
 		}
 		//getParkData(reqdata) of parent
 	};
@@ -435,9 +429,9 @@ class BaseParkForm extends Component {
 	};
 
 	loadAutoComplete = () => {
-		this.autoComplete = new window.google.maps.places.SearchBox(
-			document.getElementById("autoComplete")
-		);
+		const field = document.getElementById("address-field");
+		this.autoComplete = new window.google.maps.places.SearchBox(field);
+		// this.enableEnterKey(field);
 		this.autoComplete.addListener("places_changed", this.onPlaceChanged);
 		// this.autoCompleteLoaded = true;
 	};
@@ -450,7 +444,7 @@ class BaseParkForm extends Component {
 		}
 
 		var place = places[0];
-		console.log(place);
+		console.log("Valid place:", place);
 		if (place.geometry && place.geometry.location) {
 			let location = place.geometry.location.toJSON();
 			console.log(location);
@@ -486,7 +480,7 @@ class BaseParkForm extends Component {
 						}}
 					>
 						<input
-							id="autoComplete"
+							id="address-field"
 							className="searchTerm"
 							type="text"
 							name="placeName"
@@ -504,7 +498,18 @@ class BaseParkForm extends Component {
 							}
 							onClick={e => {
 								console.log("Enter got here first");
-								this.onSubmit();
+								if (this.state.placesComplete) {
+									this.setState(
+										{ placesComplete: false },
+										this.onSubmit
+									);
+								} else {
+									console.log(
+										"Didn't use autocomplete yet!",
+										this.state
+									);
+								}
+								// this.onSubmit();
 								// this.onPlaceChanged();
 								// this.getPlaceCoordinates(e);
 							}}
@@ -522,9 +527,6 @@ class BaseParkForm extends Component {
 						disabled={this.state.isLoadingLocation}
 						onClick={this.getMyLocation}
 					>
-						{/* <span>NEAR ME</span> */}
-
-						{/* <img src={nearMeButton} /> */}
 						<strong>{this.renderLocationSpinner()}</strong>
 					</button>
 				</div>

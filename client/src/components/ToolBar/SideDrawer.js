@@ -28,8 +28,11 @@ class SideDrawer extends Component {
 										<Link
 											to="/profile"
 											onClick={this.props.close}
+											style={{ textDecoration: "none" }}
 										>
-											Favorites
+											<div className="sidebarLink">
+												Favorites
+											</div>
 										</Link>
 									</li>
 								);
@@ -43,7 +46,10 @@ class SideDrawer extends Component {
 									<li>
 										<div
 											className="sidebarLink"
-											onClick={e => this.handleLogout(e)}
+											onClick={e => {
+												this.handleLogout(e);
+												this.props.close();
+											}}
 										>
 											Logout
 										</div>
@@ -78,9 +84,7 @@ class SideDrawer extends Component {
 							onClick={this.props.close}
 							style={{ textDecoration: "none" }}
 						>
-							<div className="sidebarLink">
-								FAQ
-							</div>
+							<div className="sidebarLink">FAQ</div>
 						</Link>
 					</li>
 				</ul>
