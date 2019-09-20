@@ -18,11 +18,11 @@ function Moon(props) {
 				{props.moonPhase ? (
 					<React.Fragment>
 						<div className="moonDisplay">
-							<span>{props.moonType.split(" ")[0]}</span>
+							<span className="moonTypeLeftWord">{props.moonType.split(" ")[0]}</span>
 							<span className="moonImage">
 								<MoonDisplay phase={props.moonPhase} />
 							</span>
-							<span>{props.moonType.split(" ")[1]}</span>
+							<span className="moonTypeRightWord">{props.moonType.split(" ")[1]}</span>
 						</div>
 						<div className="stellarDataDisplay">
 							<span className="Sunset">Sunset</span>
@@ -74,6 +74,9 @@ const MoonStyle = styled.div`
 		font-size: 21px;
 	}
 
+	@media screen and (min-width: 480px) {
+		font-size: 30px;
+	}
 
 	@media screen and (min-width: 600px) {
 		font-size: 35px;
