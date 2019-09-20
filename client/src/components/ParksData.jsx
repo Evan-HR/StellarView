@@ -132,14 +132,14 @@ class BaseParksData extends Component {
 			let expiration = new Date(data.timestamp);
 			expiration.setMinutes(expiration.getMinutes() + 60);
 			if (!data.timestamp || now.getTime() > expiration.getTime()) {
-				console.log("Removing expired data from storage:", data);
+				// console.log("Removing expired data from storage:", data);
 				localData = false;
 				sessionStorage.removeItem(storageKey);
 			}
 		}
 
 		if (localData) {
-			console.log("Loaded from storage:", JSON.parse(localData));
+			// console.log("Loaded from storage:", JSON.parse(localData));
 			this.setState({
 				parks: JSON.parse(localData).parks,
 				moonPhase: JSON.parse(localData).moonPercent,
@@ -154,7 +154,7 @@ class BaseParksData extends Component {
 			axios
 				.post("/api/getParkData", reqData)
 				.then(response => {
-					console.log(response.data);
+					// console.log(response.data);
 					if (!(response.status === 204)) {
 						let maxScore = 0;
 						for (var i = 0; i < response.data.parks.length; i++) {
@@ -182,9 +182,8 @@ class BaseParksData extends Component {
 							JSON.stringify(reqData),
 							JSON.stringify(response.data)
 						);
-						console.log("Saved to storage:", response.data);
+						// console.log("Saved to storage:", response.data);
 					} else {
-						console.log("GOT HERE 204 204 MUMBAI NO EXIST!");
 						this.setState({ parks: [], isFetchingParks: false });
 						// return <NoResultsModal />;
 					}
@@ -478,8 +477,11 @@ const ResultsPageStyle = styled.div`
 	}
 
 	.formMoonSort {
+		width: 95%;
+		margin: auto auto;
 		display: grid;
 		grid-area: formMoonSort;
+
 		grid-template-areas:
 			"form"
 			"moonContainer"
@@ -488,18 +490,21 @@ const ResultsPageStyle = styled.div`
 		.parkFormStyle {
 			grid-area: form;
 			width: 100%;
+			margin: 1.3rem 0 0.5rem 0;
 			${({ active }) => active && `display: none;`}
 		}
 
 		.moonStyle {
 			background: none;
 			grid-area: moonContainer;
+			margin-bottom: 2rem;
 		}
 
 		.sortByContainer {
 			font-family: "Lato", sans-serif;
 			grid-area: sort;
-			padding: 13px 0.8rem;
+			margin-bottom: 0.7rem;
+			/* padding: 13px 0.8rem; */
 
 			.sortBy {
 				color: ${props => props.theme.white};

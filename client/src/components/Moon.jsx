@@ -19,7 +19,7 @@ function Moon(props) {
 					<React.Fragment>
 						<div className="moonDisplay">
 							<span>{props.moonType.split(" ")[0]}</span>
-							<span className="MoonDisplayContainer">
+							<span className="moonImage">
 								<MoonDisplay phase={props.moonPhase} />
 							</span>
 							<span>{props.moonType.split(" ")[1]}</span>
@@ -66,20 +66,24 @@ const MoonStyle = styled.div`
 	font-family: "Lato", sans-serif;
 	font-weight: 400;
 	font-style: normal;
-	font-size: 35px;
+	font-size: 21px;
 	text-align: center;
 	text-transform: uppercase;
 
-	@media screen and (max-width: 569px) {
-		font-size: 23px;
+	@media screen and (min-width: 320px) {
+		font-size: 21px;
+	}
+
+
+	@media screen and (min-width: 600px) {
+		font-size: 35px;
 	}
 
 	.stellarDataDisplay {
-
 		font-weight: 300;
 		font-size: 16px;
-		padding: 15px 10px 20px 10px;
-		margin-bottom: 10px;
+		/* padding: 15px 0.8rem 20px 0.8rem;
+		margin-bottom: 10px; */
 		text-transform: none;
 		display: grid;
 
@@ -89,7 +93,6 @@ const MoonStyle = styled.div`
 		grid-template-areas:
 			"Sunset    Nightfall    Moonrise Moonset"
 			"SunsetTime NightfallTime MoonriseTime  MoonsetTime";
-		
 
 		.Nightfall {
 			/* font-family: "Lato", sans-serif; */
@@ -139,10 +142,14 @@ const MoonStyle = styled.div`
 		justify-content: space-evenly;
 		align-content: space-between;
 
-		.MoonDisplayContainer {
+		.moonImage {
 			border-radius: 100px;
 			box-shadow: 0 0 20px #485261;
-			width: 90px;
+			width: 80px;
+
+			@media screen and (min-width: 480px) {
+				width: 90px;
+			}
 		}
 	}
 `;

@@ -408,7 +408,7 @@ class BaseParkForm extends Component {
 			return (
 				<React.Fragment>
 					<span className="spinner-border spinner-border-sm" />
-					{"  "}Locating
+					{/* {"  "}Locating */}
 				</React.Fragment>
 			);
 		} else {
@@ -423,7 +423,7 @@ class BaseParkForm extends Component {
 					<b className="text-danger">
 						{this.state.formErrors.join(", ")}
 					</b>
-					</ErrorStyle>
+				</ErrorStyle>
 			);
 		}
 	};
@@ -653,11 +653,6 @@ const marksLight = [
 	{
 		value: 4.0
 	}
-	
-	// {
-	// 	value: 6,
-	// 	label: "6"
-	// }
 ];
 
 const ParkForm = parkFormProps => (
@@ -670,53 +665,48 @@ const ParkForm = parkFormProps => (
 
 export default withRouter(ParkForm);
 
-////////////////////////////////////////////
-
 const SearchFormStyle = styled.div`
-background: none;
-	/* background-color: ${props => props.theme.mapBlue}; */
+	background: none;
+
 	font-family: "Lato", sans-serif;
-	padding: 13px;
+
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-template-rows: ${props =>
-		props.advancedSearch
-			? `auto auto auto`
-			: `auto auto`}; /* Three rows, two with explicit widths */
+		props.advancedSearch ? `auto auto auto` : `auto auto`};
 	grid-gap: 10px;
 	grid-template-areas:
-	"searchBar searchBar searchBar"
+		"searchBar searchBar searchBar"
 		"advancedSearchToggle advancedSearchToggle myLocation"
 		${props =>
 			props.advancedSearch
 				? `"advancedSearch advancedSearch advancedSearch"`
 				: ``};
 
-
 	@media screen and (min-width: 320) {
 		grid-template-areas:
-		"searchBar searchBar myLocation"
-		"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
-		${props =>
-			props.advancedSearch
-				? `"advancedSearch advancedSearch advancedSearch"`
-				: ``};
+			"searchBar searchBar myLocation"
+			"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
+			${props =>
+				props.advancedSearch
+					? `"advancedSearch advancedSearch advancedSearch"`
+					: ``};
 	}
 
-	
 	@media screen and (min-width: 480px) {
 		grid-template-areas:
-		"searchBar searchBar myLocation"
-		"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
-		${props =>
-			props.advancedSearch
-				? `"advancedSearch advancedSearch advancedSearch"`
-				: ``};
+			"searchBar searchBar myLocation"
+			"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
+			${props =>
+				props.advancedSearch
+					? `"advancedSearch advancedSearch advancedSearch"`
+					: ``};
 	}
 
-
-
 	.AdvancedSearch {
+
+		width: 90%;
+		margin: auto auto;
 		${props => (props.advancedSearch ? `` : `display: none`)}
 		grid-area:advancedSearch;
 
@@ -730,11 +720,10 @@ background: none;
 		color: ${props => props.theme.white};
 		font-size: 13px;
 
-
 		.nearMe {
 			all: unset;
 			cursor: pointer;
-			/* background-color: ${props => props.theme.prettyDark}; */
+
 			background: ${props => props.theme.yellow};
 			border-radius: 20px;
 			height: 36px;
@@ -743,7 +732,7 @@ background: none;
 			transition: color 0.1s ease;
 			font-size: 15px;
 			font-weight: 600;
-			
+
 			:disabled {
 				background: gray;
 			}
@@ -753,7 +742,6 @@ background: none;
 			:active:enabled {
 				-webkit-transform: scale(1.05);
 				transform: scale(1.05);
-				/* background-color: #fff3e5; */
 			}
 		}
 		grid-area: myLocation;
@@ -762,7 +750,7 @@ background: none;
 	.advancedSearchToggle {
 		grid-area: advancedSearchToggle;
 		margin: auto 0;
-		span{
+		span {
 			font-weight: 500;
 		}
 
@@ -783,13 +771,13 @@ background: none;
 	.searchButton {
 		width: 40px;
 		height: 36px;
-		/* border: 1px solid #00b4cc; */
+
 		background: ${(props, isInvalidLocation) =>
 			isInvalidLocation ? props.theme.colorBad : props.theme.prettyDark};
 		text-align: center;
 
 		color: ${props => props.theme.white};
-		/* border-radius: 0 5px 5px 0; */
+
 		cursor: pointer;
 		font-size: 20px;
 		border: none;
@@ -803,14 +791,13 @@ background: none;
 
 		:hover {
 			background: ${props => props.theme.prettyDark}
-				radial-gradient(circle, transparent 1%, rgba(0, 0, 0, .3) 1%)
+				radial-gradient(circle, transparent 1%, rgba(0, 0, 0, 0.3) 1%)
 				center/15000%;
 			color: ${props => props.theme.colorBad};
 		}
 
 		:active {
-			
-			background-color: rgba(0, 0, 0, .3);
+			background-color: rgba(0, 0, 0, 0.3);
 			background-size: 100%;
 			transition: background 0s;
 		}
@@ -819,22 +806,15 @@ background: none;
 	.searchTerm:focus {
 		color: ${props => props.theme.white};
 	}
-	/* .search {
-		width: 100%;
-		position: relative;
-		display: flex;
-		grid-area: searchBar;
-	} */
 
 	.searchTerm {
 		width: calc(100% - 40px);
 		background-color: ${props => props.theme.darkAccent};
 		transition: background-color 0.1s ease;
-		/* border: 3px solid #00b4cc; */
-		/* border-right: none; */
+
 		padding: 5px;
 		height: 36px;
-		/* border-radius: 5px 0 0 5px; */
+
 		outline: none;
 		color: ${props => props.theme.white};
 		border: none;
@@ -844,12 +824,11 @@ background: none;
 			background-color: ${props => props.theme.moonBackground};
 			transition: background-color 0.1s ease;
 		}
-		
-::placeholder {
 
- font-weight: 300;
- opacity: 0.3;
-}
+		::placeholder {
+			font-weight: 300;
+			opacity: 0.3;
+		}
 	}
 
 	.ToggleAdvancedSearch {
@@ -861,17 +840,8 @@ background: none;
 			color: ${props => props.theme.colorBad};
 			transition: color 0.2s ease;
 		}
-
-		/* margin-top: 5px; */
 	}
 `;
-
-// const muiTheme = getMuiTheme({
-// 	slider: {
-// 	  trackColor: 'yellow',
-// 	  selectionColor: 'green'
-// 	},
-//   });
 
 const SliderStyle = styled.div`
 	.MuiSlider-root {

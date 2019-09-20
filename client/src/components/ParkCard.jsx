@@ -31,13 +31,12 @@ class ParkCard extends Component {
 		return localeSpecificTime.replace(/:\d+ /, " ");
 	}
 
-
 	renderReviewScore(reviewScore) {
 		if (reviewScore) {
 			return (
 				<div>
 					<StarReviewsStatic
-						starSize={"18px"}
+						starSize={"14px"}
 						avgScore={reviewScore}
 					/>
 				</div>
@@ -45,7 +44,7 @@ class ParkCard extends Component {
 		} else {
 			return (
 				<div>
-					<StarReviewsStatic starSize={"18px"} avgScore={0} />
+					<StarReviewsStatic starSize={"14px"} avgScore={0} />
 				</div>
 			);
 		}
@@ -78,36 +77,18 @@ class ParkCard extends Component {
 
 						<div className="CarIcon">
 							<i className="fas fa-car"></i>
-						</div>
-						<div className="CarIconDesc">
-							<span className="DistCharacteristic">
+							<div className="CarIconDesc">
 								{this.props.park.distance < 9000 ? (
 									<React.Fragment>
 										{Math.trunc(
 											parseFloat(this.props.park.distance)
 										)}
+										{" km"}
 									</React.Fragment>
 								) : (
-									<React.Fragment>?</React.Fragment>
+									<React.Fragment>n/a</React.Fragment>
 								)}
-							</span>
-							<span className="DistMantissa">
-								{this.props.park.distance < 9000 ? (
-									<React.Fragment>
-										.
-										{Math.trunc(
-											(parseFloat(
-												this.props.park.distance
-											) *
-												100) %
-												100
-										)}
-									</React.Fragment>
-								) : (
-									<React.Fragment>??</React.Fragment>
-								)}
-								{" km"}
-							</span>
+							</div>
 						</div>
 
 						<div className="VisibleIcon">
@@ -214,14 +195,17 @@ class ParkCard extends Component {
 						>
 							{({ countUpRef }) => (
 								<React.Fragment>
-									<span ref={countUpRef} />
-									<span className="Percentage">%</span>
+									<div
+										className="ScoreNumber"
+										ref={countUpRef}
+									/>
+									<div className="Percentage">%</div>
 								</React.Fragment>
 							)}
 						</CountUp>
 					</div>
 
-					<div className="MoreInfoDesc">Tap for more info</div>
+					<div className="MoreInfoDesc">Tap for more</div>
 
 					<div
 						className="StarRev"
@@ -256,7 +240,7 @@ const CardStyle = styled.div`
 	/* max-width: 100vw; */
 	display: grid;
 	grid-template-columns: repeat(6, 1fr);
-	grid-template-rows: repeat(6, 1fr);
+	grid-template-rows: 1fr 1fr 1fr 1fr 0.5fr 1fr;
 	/* grid-gap: 1em; */
 
 	grid-template-areas:
@@ -279,94 +263,116 @@ const CardStyle = styled.div`
 		display: flex;
 		grid-area: ScoreDesc;
 		font-size: 14px;
-		margin: auto auto 0 20px;
+		margin: auto auto 0 0px;
 		font-weight: 400;
 	}
 
 	.Score {
 		display: flex;
-		align-items: center;
-		/* margin: auto auto auto 15px; */
 		grid-area: Score;
-		font-size: 80px;
-		padding-left: 15px;
+		font-size: 60px;
 		font-weight: 600;
+		padding-top: 22px;
+		align-items: baseline;
+		margin: auto 0;
 		.Percentage {
 			display: inline-block;
-			padding-top: 42px;
 			font-size: 25px;
+		}
+
+		@media screen and (min-width: 320px) {
+			font-size: 60px;
+			padding-top: 20px;
+		}
+
+		@media screen and (min-width: 480px) {
+			font-size: 80px;
 		}
 	}
 
 	.ParkHeader {
 		display: grid;
 		grid-area: ParkHeader;
-		grid-template-columns: repeat(6, 1fr);
-		grid-template-rows: auto auto;
-
-		grid-template-areas:
-			"ParkTitle   ParkTitle   ParkTitle   	  ParkTitle 	VisibleIcon 	  CarIcon"
-			"ParkTitle   ParkTitle   ParkTitle    	  ParkTitle		VisibleIconDesc   CarIconDesc";
-
-		min-height: 10vh;
+		grid-template-columns: 1fr 0.2fr;
+		grid-template-areas: "ParkTitle CarIcon";
+		min-height: 13vh;
+		background: ${props => props.theme.cardHeader};
+		padding: 0 0.7rem;
+		:hover,
+		:active {
+			background: ${props => props.theme.cardHeaderHover};
+		}
+		@media screen and (min-width: 320px) {
+			padding: 0 0.7rem;
+		}
+		@media screen and (min-width: 480px) {
+			padding: 0 0.8rem;
+		}
 
 		.ParkTitle {
 			display: flex;
 			grid-area: ParkTitle;
+
 			color: ${props => props.theme.prettyDark};
 			font-weight: 500;
-			font-size: 25px;
+			font-size: 22px;
 			text-align: left;
-			margin: auto auto auto 20px;
-			/* padding-left: 20px;
-			padding-right: 20px; */
+			margin: auto auto auto 0px;
 			line-height: 30px;
+			/* padding-left: 1rem; */
+
+			@media screen and (min-width: 320px) {
+				margin: auto auto auto 0px;
+				/* padding-left: 1rem; */
+			}
+			@media screen and (min-width: 480px) {
+				margin: auto auto auto 20px;
+				font-size: 25px;
+			}
 		}
 
 		.CarIcon {
-			display: flex;
 			grid-area: CarIcon;
-			margin: auto auto 0 auto;
-			font-size: 25px;
-		}
-
-		.CarIconDesc {
-			display: flex;
-			grid-area: CarIconDesc;
-			margin: 0 auto auto auto;
-			font-size: 14px;
-			.DistMantissa {
+			margin: auto 0 auto auto;
+			font-size: 22px;
+			/* padding-right: 1rem; */
+			.CarIconDesc {
+				margin: auto auto;
 				font-size: 14px;
 			}
 		}
 
 		.VisibleIcon {
 			display: flex;
+			display: none;
 			grid-area: VisibleIcon;
-			margin: auto auto 0 auto;
+			margin: auto auto;
 
 			/* margin: auto 10px auto 10px; */
 			.visibleGoodIcon {
-				font-size: 25px;
+				font-size: 20px;
 				color: ${props => props.theme.parkMapGreen};
 			}
 
 			.visiblePartlyIcon {
-				font-size: 25px;
+				font-size: 20px;
 				color: #92704f;
 			}
 			.invisibleIcon {
-				font-size: 25px;
+				font-size: 20px;
 			}
 		}
 
 		.VisibleIconDesc {
 			display: flex;
+			display: none;
 			grid-area: VisibleIconDesc;
 			font-size: 13px;
-			margin: 0 auto auto auto;
+			margin: auto auto;
 		}
 	}
+
+
 
 	.WeatherInfo {
 		display: flex;
@@ -387,7 +393,7 @@ const CardStyle = styled.div`
 
 		grid-area: HumidityIconDesc;
 		font-size: 14px;
-		margin: auto auto;
+		margin: 0 auto;
 	}
 	.CloudIcon {
 		display: flex;
@@ -400,7 +406,7 @@ const CardStyle = styled.div`
 
 		grid-area: CloudIconDesc;
 		font-size: 14px;
-		margin: auto auto;
+		margin: 0 auto;
 	}
 	.LightPolIcon {
 		display: flex;
@@ -413,7 +419,7 @@ const CardStyle = styled.div`
 
 		grid-area: LightPolIconDesc;
 		font-size: 14px;
-		margin: auto auto;
+		margin: 0 auto;
 	}
 
 	.TempIcon {
@@ -427,23 +433,29 @@ const CardStyle = styled.div`
 		grid-area: TempIconDesc;
 		font-size: 14px;
 
-		margin: auto auto;
+		/* margin: auto auto; */
+		margin: 0 auto;
 	}
 
 	.StarRev {
 		grid-area: StarRev;
 		cursor: pointer;
 		display: flex;
-		float: left;
-		margin: 10px auto auto 20px;
+		/* float: left; */
+		margin: 10px auto auto 0px;
 
 		.StarScore {
 			display: flex;
+			.widget-svg {
+				height: 11px;
+				width: 11px;
+			}
 		}
 		.StarNumRev {
 			display: flex;
-			font-size: 14px;
-			margin: 4px 0 0 14px;
+			font-size: 12px;
+			padding-top: 5px;
+			margin: 0px 0px 0px 14px;
 			:hover,
 			:active {
 				color: ${props => props.theme.colorBad};
@@ -455,40 +467,48 @@ const CardStyle = styled.div`
 	.MoreInfoDesc {
 		display: flex;
 		grid-area: MoreInfoDesc;
-		font-size: 14px;
-		margin: 14px 20px auto auto;
+		font-size: 12px;
+		padding-top: 0px;
+		margin: 14px 0px auto auto;
 	}
 `;
 
 const ParkCardWrapper = styled.div`
 	background: ${props => props.theme.cardDark};
-	background: linear-gradient(
-		0deg,
-		${props => props.theme.cardDark} 70%,
-		${props => props.theme.cardHeader} 70%
-	);
-	padding-bottom: 15px;
-	margin-bottom: 30px;
+	padding-bottom: 10px;
+	margin-bottom: 1rem;
 	position: relative;
-	border-radius: 20px;
-	min-width: 379px;
+
+	/* min-width: 320px; */
 	cursor: pointer;
 
 	:hover {
 		background: ${props => props.theme.cardLight};
-		background: linear-gradient(
+		/* background: linear-gradient(
 			0deg,
 			${props => props.theme.cardLight} 70%,
 			${props => props.theme.cardHeaderHover} 70%
-		);
+		); */
 	}
 	:active {
 		background: ${props => props.theme.cardDark};
-		background: linear-gradient(
+		/* background: linear-gradient(
 			0deg,
 			${props => props.theme.cardDark} 70%,
 			${props => props.theme.cardHeader} 70%
-		);
+		); */
+	}
+
+	@media screen and (min-width: 320px) {
+		padding-bottom: 10px;
+	}
+
+	@media screen and (min-width: 480px) {
+		padding-bottom: 15px;
+	}
+
+	@media screen and (min-width: 600px) {
+		border-radius: 20px;
 	}
 
 	@media screen and (min-width: 567px) {

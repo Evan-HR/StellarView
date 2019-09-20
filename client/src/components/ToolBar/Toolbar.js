@@ -116,9 +116,14 @@ export default withRouter(Toolbar);
 
 const ToolbarStyle = styled.header`
 	width: 100%;
-	margin: 20px 0px 0px 0px;
+	margin: 0.3rem 0px 0px 0px;
 	top: 0;
 	left: 0;
+
+
+	@media screen and (min-width: 480px) {
+		margin: 20px 0px 0px 0px;
+	}
 
 	@media screen and (min-width: 801px) {
 		margin: 30px 0px 0px 0px;
@@ -126,19 +131,30 @@ const ToolbarStyle = styled.header`
 
 	.toolbar__center {
 		display: block;
-		width: 85%;
+		/* width: 85%; */
 		height: 100%;
-		margin: 0 auto 0 auto;
+		margin: 0.5rem auto 0 auto;
 
-		/* @media screen and (max-width: 767.999px) {
-			width: 95%;
-		} */
+		@media screen and (min-width: 320px) {
+			width: 100%;
+			margin: 0.5rem auto 0 auto;
+		}
+
+		
+		@media screen and (min-width: 480px) {
+			width: 85%;
+			margin: 0rem auto 0 auto;
+		}
 	}
 
 	.toolbarLogo {
 		svg {
 			width: 80%;
 			margin: 0 10% 0 0px;
+			@media screen and (min-width: 320px) {
+				max-width: 300px;
+				
+			}
 
 			@media screen and (min-width: 480px) {
 				width: 60%;

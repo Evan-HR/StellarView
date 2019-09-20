@@ -6,7 +6,7 @@ class Footer extends Component {
 		return (
 			<FooterStyle>
 				© Vlad Falach x{" "}
-				<a target="_blank" href="http://dustinjurkaulionis.com">
+				<a target="_blank" rel="noopener noreferrer" href="http://dustinjurkaulionis.com">
 					Dustin Jurkaulionis
 				</a>{" "}
 				x Evan Reaume
