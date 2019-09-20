@@ -421,10 +421,8 @@ export default withRouter(ParksData);
 const LandingPageStyle = styled.div`
 	.parkFormStyle {
 		width: 95%;
-	
 		margin-top: 10vh;
-	    max-width: 530px;
-
+		max-width: 530px;
 
 		@media screen and (min-width: 320px) {
 			width: 95%;
@@ -435,7 +433,7 @@ const LandingPageStyle = styled.div`
 		@media screen and (min-width: 480px) {
 			width: 95%;
 			margin: auto auto;
-			margin-top:  10vh;
+			margin-top: 10vh;
 		}
 
 		@media screen and (min-width: 600px) {
@@ -453,15 +451,9 @@ const LandingPageStyle = styled.div`
 `;
 
 const ResultsPageStyle = styled.div`
-	display: grid;
 	margin: 0 auto 0 auto;
 	margin-top: -80vh;
 	overflow: none;
-
-	grid-template-columns: 1fr 1fr;
-	grid-column-gap: 10px;
-	grid-row-gap: 10px;
-	grid-template-areas: ". formMoonCards";
 
 	.formMoonCards {
 		z-index: 0;
@@ -492,7 +484,10 @@ const ResultsPageStyle = styled.div`
 		.parkFormStyle {
 			grid-area: form;
 			width: 100%;
-			margin: 1.3rem 0 0.5rem 0;
+			margin: 0rem 0 0.5rem 0;
+			@media screen and (min-width: 1025px) {
+
+			}
 			${({ active }) => active && `display: none;`}
 		}
 
@@ -506,7 +501,6 @@ const ResultsPageStyle = styled.div`
 			font-family: "Lato", sans-serif;
 			grid-area: sort;
 			margin-bottom: 0.7rem;
-			/* padding: 13px 0.8rem; */
 
 			.sortBy {
 				color: ${props => props.theme.white};
@@ -571,12 +565,10 @@ const ResultsPageStyle = styled.div`
 		margin-top: 2vh;
 		width: 95%;
 		grid-template-columns: 1fr;
-		grid-template-rows: ${props =>
-			props.hideMap ? "0px auto" : "50% auto"};
 		grid-template-areas: "formMoonCards";
+
 		.formMoonCards {
 			overflow: none;
-			
 		}
 
 		.parkMapStyle {
@@ -584,31 +576,22 @@ const ResultsPageStyle = styled.div`
 		}
 	}
 
-	@media screen and (min-width: 500px){
+	@media screen and (min-width: 500px) {
 		.formMoonCards {
-			max-width:530px;
+			max-width: 530px;
 			margin: 0 auto;
 		}
-		
 	}
 
-	@media screen and (min-width: 600px){
+	@media screen and (min-width: 600px) {
 		.formMoonCards {
-			max-width:530px;
+			max-width: 530px;
 			margin: 0 auto;
 		}
-		
 	}
 
-
-	@media screen and (min-width: 1025px){
-
-	
-		grid-template-columns: 1fr 1fr;
-		grid-template-rows: auto auto;
-		grid-template-areas:
-			". formMoonCards"
-			". formMoonCards";
+	@media screen and (min-width: 1025px) {
+		margin-top:3%;
 		.parkFormStyle {
 			grid-area: form;
 			${({ active }) => active && `display: none;`}
@@ -616,21 +599,36 @@ const ResultsPageStyle = styled.div`
 	}
 `;
 
+//where both map and FormMoonCards located
 const MainContentWrapper = styled.div`
-	/* width: 90vw; */
 	margin: 0 auto 0 auto;
+	/* display: block; */
+
 	.parkMapStyle {
-		position: -webkit-sticky;
-		position: sticky;
+		/* height: 80vh; */
+		width: 95%;
 		height: 80vh;
-		width: 42.5vw;
-		top: 10vh;
+		top: 10%;
 		background-color: gray;
-		display: ${props => (props.pathname === "/home" ? "none" : "fixed")};
+		display: none;
+		margin: 0 auto;
 	}
-	@media screen and (max-width: 1024.99px) {
+
+	@media screen and (min-width: 1025px) {
+		margin: 0 5%;
+		display: ${props => (props.pathname === "/home" ? "block" : "grid")};
+		/* display: grid; */
+		grid-template-columns: minmax(470px, 0.5fr) 1fr;
+		grid-template-areas: "formMoonCards map";
+
+		.formMoonCards {
+			grid-area: formMoonCards;
+		}
 		.parkMapStyle {
-			display: ${props => (props.hideMap ? "none" : "fixed")};
+			display: ${props =>
+				props.pathname === "/home" ? "none" : "fixed"};
+			grid-area: map;
+			position: sticky;
 		}
 	}
 `;

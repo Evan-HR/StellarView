@@ -271,6 +271,12 @@ const ParkCardWrapper = styled.div`
 		padding-bottom: 10px;
 	}
 
+	@media screen and (min-width: 375px) {
+		border-radius: 20px;
+		margin: 0 5px 15px 5px;
+	}
+
+
 	@media screen and (min-width: 480px) {
 		padding-bottom: 15px;
 	}
@@ -357,6 +363,12 @@ const CardStyle = styled.div`
 		@media screen and (min-width: 320px) {
 			padding: 13px 10px;
 		}
+
+		@media screen and (min-width: 375px) {
+			border-top-left-radius: 20px;
+			border-top-right-radius: 20px;
+	
+	}
 		@media screen and (min-width: 430px) {
 			padding: 13px 30px;
 		}
@@ -364,8 +376,7 @@ const CardStyle = styled.div`
 			padding: 10px 30px;
 		}
 		@media screen and (min-width: 525px) {
-			border-top-left-radius: 20px;
-			border-top-right-radius: 20px;
+			
 			padding: 10px 30px;
 		}
 		@media screen and (min-width: 685px) {
@@ -388,10 +399,10 @@ const CardStyle = styled.div`
 		}
 
 		@media screen and (min-width: 1060px) {
-			padding-left: 1vw;
-			padding-right: 1vw;
+			/* padding-left: 3vw;
+			padding-right: 3vw; */
 		}
-		@media screen and (min-width: 1292px) {
+		/* @media screen and (min-width: 1292px) {
 			padding-left: 2.5vw;
 			padding-right: 2.5vw;
 		}
@@ -399,11 +410,11 @@ const CardStyle = styled.div`
 		@media screen and (min-width: 1460px) {
 			padding-left: 5vw;
 			padding-right: 5vw;
-		}
+		} */
 
 		@media screen and (min-width: 1600px) {
-			padding-left: 6vw;
-			padding-right: 6vw;
+			/* padding-left: 6vw;
+			padding-right: 6vw; */
 		}
 
 		.ParkTitle {
@@ -513,27 +524,27 @@ const CardStyle = styled.div`
 		}
 
 		@media screen and (min-width: 989px) {
-			padding-left: 0vw;
-			padding-right: 0vw;
+			/* padding-left: 0vw;
+			padding-right: 0vw; */
 		}
 
 		@media screen and (min-width: 1060px) {
-			padding-left: 1vw;
-			padding-right: 1vw;
+			/* padding-left: 3vw;
+			padding-right: 3vw; */
 		}
 		@media screen and (min-width: 1292px) {
-			padding-left: 2.5vw;
-			padding-right: 2.5vw;
+			/* padding-left: 2.5vw;
+			padding-right: 2.5vw; */
 		}
 
 		@media screen and (min-width: 1460px) {
-			padding-left: 5vw;
-			padding-right: 5vw;
+			/* padding-left: 5vw;
+			padding-right: 5vw; */
 		}
 
 		@media screen and (min-width: 1600px) {
-			padding-left: 6vw;
-			padding-right: 6vw;
+			/* padding-left: 6vw;
+			padding-right: 6vw; */
 		}
 
 		.WeatherInfo {

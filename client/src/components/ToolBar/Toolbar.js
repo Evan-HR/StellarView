@@ -134,7 +134,7 @@ const ToolbarStyle = styled.header`
 		/* width: 85%; */
 		height: 100%;
 		margin: 0.5rem auto 0 auto;
-		max-width: 1467px;
+		/* max-width: 1467px; */
 
 		@media screen and (min-width: 320px) {
 			width: 100%;
@@ -148,7 +148,13 @@ const ToolbarStyle = styled.header`
 		}
 
 		@media screen and (min-width: 600px) {
-			padding: 0px 8%;
+			padding: 0px 6.5% 10px 6.5%;
+			margin: 2rem auto 0 auto;
+		}
+
+		@media screen and (min-width: 1025px) {
+			padding: 0px 6.5% 30px 6.5%;
+			margin: 2rem auto 0 auto;
 		}
 
 		
