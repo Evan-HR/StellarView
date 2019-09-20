@@ -601,7 +601,7 @@ const ResultsPageStyle = styled.div`
 	}
 
 
-	@media screen and (min-width: 990px) and (max-width: 1300px) {
+	@media screen and (min-width: 1025px){
 
 	
 		grid-template-columns: 1fr 1fr;
@@ -628,7 +628,7 @@ const MainContentWrapper = styled.div`
 		background-color: gray;
 		display: ${props => (props.pathname === "/home" ? "none" : "fixed")};
 	}
-	@media screen and (max-width: 989px) {
+	@media screen and (max-width: 1024.99px) {
 		.parkMapStyle {
 			display: ${props => (props.hideMap ? "none" : "fixed")};
 		}
