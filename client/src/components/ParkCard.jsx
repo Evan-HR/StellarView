@@ -241,6 +241,84 @@ ParkCard.defaultProps = {
 
 export default ParkCard;
 
+const ParkCardWrapper = styled.div`
+	background: ${props => props.theme.cardDark};
+	padding-bottom: 10px;
+	margin-bottom: 1rem;
+	position: relative;
+
+	/* min-width: 320px; */
+	cursor: pointer;
+
+	:hover {
+		background: ${props => props.theme.cardLight};
+		/* background: linear-gradient(
+			0deg,
+			${props => props.theme.cardLight} 70%,
+			${props => props.theme.cardHeaderHover} 70%
+		); */
+	}
+	:active {
+		background: ${props => props.theme.cardDark};
+		/* background: linear-gradient(
+			0deg,
+			${props => props.theme.cardDark} 70%,
+			${props => props.theme.cardHeader} 70%
+		); */
+	}
+
+	@media screen and (min-width: 320px) {
+		padding-bottom: 10px;
+	}
+
+	@media screen and (min-width: 480px) {
+		padding-bottom: 15px;
+	}
+
+	@media screen and (min-width: 525px) {
+		border-radius: 20px;
+	}
+
+	
+	/* @media screen and (min-width: 685px) {
+		padding-left: 7vw;
+		padding-right: 7vw;
+	}
+	@media screen and (min-width: 830px) {
+		padding-left: 9vw;
+		padding-right: 9vw;
+	}
+
+	@media screen and (min-width: 900px) {
+		padding-left: 11vw;
+		padding-right: 11vw;
+	}
+
+	@media screen and (min-width: 989px) {
+		padding-left: 0vw;
+		padding-right: 0vw;
+	}
+
+	@media screen and (min-width: 1060px) {
+		padding-left: 1vw;
+		padding-right: 1vw;
+	}
+	@media screen and (min-width: 1292px) {
+		padding-left: 2.5vw;
+		padding-right: 2.5vw;
+	}
+
+	@media screen and (min-width: 1460px) {
+		padding-left: 5vw;
+		padding-right: 5vw;
+	}
+
+	@media screen and (min-width: 1600px) {
+		padding-left: 6vw;
+		padding-right: 6vw;
+	} */
+`;
+
 const CardStyle = styled.div`
 	font-family: "Lato", sans-serif;
 	font-style: normal;
@@ -251,7 +329,7 @@ const CardStyle = styled.div`
 	min-height: 30vh;
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	grid-template-rows: 1/3fr 2/3fr;
+	grid-template-rows: 1/6fr 2/3fr;
 	/* grid-gap: 1em; */
 
 	grid-template-areas:
@@ -260,10 +338,8 @@ const CardStyle = styled.div`
 
 	@media screen and (min-width: 320px) {
 		grid-template-rows: 1/3fr 2/3fr;
-	
 	}
 	@media screen and (min-width: 480px) {
-	
 	}
 
 	.ParkHeader {
@@ -271,18 +347,63 @@ const CardStyle = styled.div`
 		grid-area: ParkHeader;
 		grid-template-columns: 1fr 0.2fr;
 		grid-template-areas: "ParkTitle CarIcon";
-		min-height: 13vh;
+		/* min-height: 13vh; */
 		background: ${props => props.theme.cardHeader};
-		padding: 0 0.7rem;
+		padding: 13px 10px;
 		:hover,
 		:active {
 			background: ${props => props.theme.cardHeaderHover};
 		}
 		@media screen and (min-width: 320px) {
-			padding: 0 0.7rem;
+			padding: 13px 10px;
+		}
+		@media screen and (min-width: 430px) {
+			padding: 13px 30px;
 		}
 		@media screen and (min-width: 480px) {
-			padding: 0 0.8rem;
+			padding: 10px 30px;
+		}
+		@media screen and (min-width: 525px) {
+			border-top-left-radius: 20px;
+			border-top-right-radius: 20px;
+			padding: 10px 30px;
+		}
+		@media screen and (min-width: 685px) {
+			/* padding-left: 7vw;
+			padding-right: 7vw; */
+		}
+		@media screen and (min-width: 830px) {
+			/* padding-left: 9vw;
+			padding-right: 9vw; */
+		}
+
+		@media screen and (min-width: 900px) {
+			/* padding-left: 11vw;
+			padding-right: 11vw; */
+		}
+
+		@media screen and (min-width: 989px) {
+			/* padding-left: 0vw;
+			padding-right: 0vw; */
+		}
+
+		@media screen and (min-width: 1060px) {
+			padding-left: 1vw;
+			padding-right: 1vw;
+		}
+		@media screen and (min-width: 1292px) {
+			padding-left: 2.5vw;
+			padding-right: 2.5vw;
+		}
+
+		@media screen and (min-width: 1460px) {
+			padding-left: 5vw;
+			padding-right: 5vw;
+		}
+
+		@media screen and (min-width: 1600px) {
+			padding-left: 6vw;
+			padding-right: 6vw;
 		}
 
 		.ParkTitle {
@@ -302,7 +423,7 @@ const CardStyle = styled.div`
 				/* padding-left: 1rem; */
 			}
 			@media screen and (min-width: 480px) {
-				margin: auto auto auto 20px;
+				margin: auto auto auto 0px;
 				font-size: 25px;
 			}
 		}
@@ -366,7 +487,53 @@ const CardStyle = styled.div`
 			grid-template-rows: 1fr 1fr 0.5fr 1fr;
 		}
 
+		@media screen and (min-width: 430px) {
+			padding: 10px 30px;
+			.WeatherInfo {
+				padding-bottom: 10px;
+			}
+		}
+
 		@media screen and (min-width: 480px) {
+			padding: 10px 30px;
+		}
+
+		@media screen and (min-width: 685px) {
+			/* padding-left: 7vw;
+			padding-right: 7vw; */
+		}
+		@media screen and (min-width: 830px) {
+			/* padding-left: 9vw;
+			padding-right: 9vw; */
+		}
+
+		@media screen and (min-width: 900px) {
+			/* padding-left: 11vw;
+			padding-right: 11vw; */
+		}
+
+		@media screen and (min-width: 989px) {
+			padding-left: 0vw;
+			padding-right: 0vw;
+		}
+
+		@media screen and (min-width: 1060px) {
+			padding-left: 1vw;
+			padding-right: 1vw;
+		}
+		@media screen and (min-width: 1292px) {
+			padding-left: 2.5vw;
+			padding-right: 2.5vw;
+		}
+
+		@media screen and (min-width: 1460px) {
+			padding-left: 5vw;
+			padding-right: 5vw;
+		}
+
+		@media screen and (min-width: 1600px) {
+			padding-left: 6vw;
+			padding-right: 6vw;
 		}
 
 		.WeatherInfo {
@@ -456,6 +623,10 @@ const CardStyle = styled.div`
 					color: ${props => props.theme.colorBad};
 					transition: color 0.2s ease;
 				}
+
+				@media screen and (min-width: 480px) {
+					font-size: 13px;
+				}
 			}
 		}
 
@@ -465,22 +636,27 @@ const CardStyle = styled.div`
 			font-size: 12px;
 			padding-top: 0px;
 			margin: 14px 0px auto auto;
+
+			@media screen and (min-width: 480px) {
+				font-size: 13px;
+			}
 		}
 
 		.ScoreDesc {
 			display: flex;
 			grid-area: ScoreDesc;
-			font-size: 14px;
-			
+			font-size: 13px;
+
 			margin: auto auto 0 0px;
 			font-weight: 400;
-			padding-bottom: 2px;
+			/* padding-bottom: 2px; */
 			@media screen and (min-width: 320px) {
-				padding-bottom: 2px;
+				padding-bottom: 0px;
 			}
 
 			@media screen and (min-width: 480px) {
-			
+				font-size: 14px;
+				padding-bottom: 10px;
 			}
 		}
 
@@ -504,93 +680,10 @@ const CardStyle = styled.div`
 
 			@media screen and (min-width: 480px) {
 				font-size: 80px;
+				.Percentage {
+					font-size: 30px;
+				}
 			}
 		}
-	}
-`;
-
-const ParkCardWrapper = styled.div`
-	background: ${props => props.theme.cardDark};
-	padding-bottom: 10px;
-	margin-bottom: 1rem;
-	position: relative;
-
-	/* min-width: 320px; */
-	cursor: pointer;
-
-	:hover {
-		background: ${props => props.theme.cardLight};
-		/* background: linear-gradient(
-			0deg,
-			${props => props.theme.cardLight} 70%,
-			${props => props.theme.cardHeaderHover} 70%
-		); */
-	}
-	:active {
-		background: ${props => props.theme.cardDark};
-		/* background: linear-gradient(
-			0deg,
-			${props => props.theme.cardDark} 70%,
-			${props => props.theme.cardHeader} 70%
-		); */
-	}
-
-	@media screen and (min-width: 320px) {
-		padding-bottom: 10px;
-	}
-
-	@media screen and (min-width: 480px) {
-		padding-bottom: 15px;
-	}
-
-	@media screen and (min-width: 600px) {
-		border-radius: 20px;
-	}
-
-	@media screen and (min-width: 567px) {
-		padding-left: 0vw;
-		padding-right: 0vw;
-	}
-
-	@media screen and (min-width: 600px) {
-		padding-left: 5vw;
-		padding-right: 5vw;
-	}
-	@media screen and (min-width: 685px) {
-		padding-left: 7vw;
-		padding-right: 7vw;
-	}
-	@media screen and (min-width: 830px) {
-		padding-left: 9vw;
-		padding-right: 9vw;
-	}
-
-	@media screen and (min-width: 900px) {
-		padding-left: 11vw;
-		padding-right: 11vw;
-	}
-
-	@media screen and (min-width: 989px) {
-		padding-left: 0vw;
-		padding-right: 0vw;
-	}
-
-	@media screen and (min-width: 1060px) {
-		padding-left: 1vw;
-		padding-right: 1vw;
-	}
-	@media screen and (min-width: 1292px) {
-		padding-left: 2.5vw;
-		padding-right: 2.5vw;
-	}
-
-	@media screen and (min-width: 1460px) {
-		padding-left: 5vw;
-		padding-right: 5vw;
-	}
-
-	@media screen and (min-width: 1600px) {
-		padding-left: 6vw;
-		padding-right: 6vw;
 	}
 `;

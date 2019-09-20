@@ -421,19 +421,21 @@ export default withRouter(ParksData);
 const LandingPageStyle = styled.div`
 	.parkFormStyle {
 		width: 95%;
-		margin: auto auto;
-		margin-top: 5vh;
+	
+		margin-top: 10vh;
+	    max-width: 530px;
+
 
 		@media screen and (min-width: 320px) {
-			width: 100%;
+			width: 95%;
 			margin: auto auto;
-			margin-top: 2vh;
+			margin-top: 10vh;
 		}
 
 		@media screen and (min-width: 480px) {
-			width: 90%;
+			width: 95%;
 			margin: auto auto;
-			margin-top: 3vh;
+			margin-top:  10vh;
 		}
 
 		@media screen and (min-width: 600px) {
@@ -497,7 +499,7 @@ const ResultsPageStyle = styled.div`
 		.moonStyle {
 			background: none;
 			grid-area: moonContainer;
-			margin-bottom: 2rem;
+			margin-bottom: 3rem;
 		}
 
 		.sortByContainer {
@@ -574,6 +576,7 @@ const ResultsPageStyle = styled.div`
 		grid-template-areas: "formMoonCards";
 		.formMoonCards {
 			overflow: none;
+			
 		}
 
 		.parkMapStyle {
@@ -581,7 +584,26 @@ const ResultsPageStyle = styled.div`
 		}
 	}
 
+	@media screen and (min-width: 500px){
+		.formMoonCards {
+			max-width:530px;
+			margin: 0 auto;
+		}
+		
+	}
+
+	@media screen and (min-width: 600px){
+		.formMoonCards {
+			max-width:530px;
+			margin: 0 auto;
+		}
+		
+	}
+
+
 	@media screen and (min-width: 990px) and (max-width: 1300px) {
+
+	
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: auto auto;
 		grid-template-areas:

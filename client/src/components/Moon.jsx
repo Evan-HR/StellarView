@@ -148,19 +148,37 @@ const MoonStyle = styled.div`
 		}
 	}
 	.moonDisplay {
-		height: 140px;
-		display: flex;
-		align-items: center;
+		/* height: 140px; */
+		display: grid;
+		/* align-items: center;
 		justify-content: space-evenly;
-		align-content: space-between;
+		align-content: space-between; */
+		margin: 25px 0px;
+		grid-template-columns: 1fr minmax(80px, 100px) 1fr;
+
+		grid-template-areas:
+			"moonTypeLeftWord moonImage moonTypeRightWord";
+
+			.moonTypeLeftWord{
+				display: inline-block;
+				margin: auto auto auto 20%;
+				grid-area: moonTypeLeftWord;
+			}
+			.moonTypeRightWord{
+				display: inline-block;
+				margin: auto 20% auto auto;
+				grid-area: moonTypeRightWord;
+			}
 
 		.moonImage {
+			
 			border-radius: 100px;
-			box-shadow: 0 0 20px #485261;
-			width: 80px;
+			/* box-shadow: 0 0 20px #485261; */
+			/* width: 80px; */
+			grid-area: moonImage;
 
 			@media screen and (min-width: 480px) {
-				width: 90px;
+				/* width: 90px; */
 			}
 		}
 	}

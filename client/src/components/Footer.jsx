@@ -5,11 +5,11 @@ class Footer extends Component {
 	render() {
 		return (
 			<FooterStyle>
-				© Vlad Falach x{" "}
+				© Vlad Falach {" | "} 
 				<a target="_blank" rel="noopener noreferrer" href="http://dustinjurkaulionis.com">
 					Dustin Jurkaulionis
-				</a>{" "}
-				x Evan Reaume
+				</a>{" | "}
+				 Evan Reaume
 			</FooterStyle>
 		);
 	}
