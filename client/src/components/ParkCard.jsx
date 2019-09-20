@@ -110,114 +110,121 @@ class ParkCard extends Component {
 						</span>
 					</div>
 
-					<div className="HumidityIcon">
-						<img
-							src={humidityIcon}
-							alt="Humidity"
-							title="Humidity Level"
-						/>
-					</div>
-					<span className="HumidityIconDesc">
-						{this.props.park.weather.humidity < 40
-							? "Great"
-							: this.props.park.weather.humidity < 70
-							? "Okay"
-							: "Poor"}
-					</span>
-
-					<div className="CloudIcon">
-						{this.props.park.weather.clouds < 35 ? (
+					<div className="cardContent">
+						<div className="HumidityIcon">
 							<img
-								src={cloudGoodIcon}
-								alt="Cloud Coverage"
-								title="Low Cloud Coverage"
+								src={humidityIcon}
+								alt="Humidity"
+								title="Humidity Level"
 							/>
-						) : (
+						</div>
+						<span className="HumidityIconDesc">
+							{this.props.park.weather.humidity < 40
+								? "Great"
+								: this.props.park.weather.humidity < 70
+								? "Okay"
+								: "Poor"}
+						</span>
+
+						<div className="CloudIcon">
+							{this.props.park.weather.clouds < 35 ? (
+								<img
+									src={cloudGoodIcon}
+									alt="Cloud Coverage"
+									title="Low Cloud Coverage"
+								/>
+							) : (
+								<img
+									src={cloudBadIcon}
+									alt="Cloud Coverage"
+									title="High Cloud Coverage"
+								/>
+							)}
+						</div>
+
+						<span className="CloudIconDesc">
+							{this.props.park.weather.clouds < 20
+								? "Great"
+								: this.props.park.weather.clouds < 35
+								? "Okay"
+								: "Poor"}
+						</span>
+
+						<div className="LightPolIcon">
 							<img
-								src={cloudBadIcon}
-								alt="Cloud Coverage"
-								title="High Cloud Coverage"
+								src={lightPolIcon}
+								alt="Light Pollution"
+								title="Light Pollution"
 							/>
-						)}
-					</div>
+						</div>
+						<span className="LightPolIconDesc">
+							{this.props.park.light_pol < 1
+								? "Great"
+								: this.props.park.light_pol < 3
+								? "Okay"
+								: "Poor"}
+						</span>
 
-					<span className="CloudIconDesc">
-						{this.props.park.weather.clouds < 20
-							? "Great"
-							: this.props.park.weather.clouds < 35
-							? "Okay"
-							: "Poor"}
-					</span>
+						<div className="TempIcon">
+							<img
+								src={tempIcon}
+								alt="Temperature"
+								title="Temperature"
+							/>
+						</div>
+						<span className="TempIconDesc">
+							{Math.round(this.props.park.weather.temp)}° C
+						</span>
 
-					<div className="LightPolIcon">
-						<img
-							src={lightPolIcon}
-							alt="Light Pollution"
-							title="Light Pollution"
-						/>
-					</div>
-					<span className="LightPolIconDesc">
-						{this.props.park.light_pol < 1
-							? "Great"
-							: this.props.park.light_pol < 3
-							? "Okay"
-							: "Poor"}
-					</span>
-
-					<div className="TempIcon">
-						<img
-							src={tempIcon}
-							alt="Temperature"
-							title="Temperature"
-						/>
-					</div>
-					<span className="TempIconDesc">
-						{Math.round(this.props.park.weather.temp)}° C
-					</span>
-
-					<div className="WeatherInfo">
-						<span>
-							<b>{this.props.park.weather.city}</b> forecast for{" "}
-							{this.prettyDate(this.props.park.weather.time)}
-							{/* {new Date(
+						<div className="WeatherInfo">
+							<span>
+								<b>{this.props.park.weather.city}</b> forecast
+								for{" "}
+								{this.prettyDate(this.props.park.weather.time)}
+								{/* {new Date(
 								this.props.park.weather.time
 							).toLocaleString()} */}
-						</span>
-					</div>
-
-					<span className="ScoreDesc">Visibility Score</span>
-
-					<div className="Score">
-						<CountUp
-							start={0}
-							end={Math.round(this.props.park.score * 100)}
-							delay={0}
-						>
-							{({ countUpRef }) => (
-								<React.Fragment>
-									<div
-										className="ScoreNumber"
-										ref={countUpRef}
-									/>
-									<div className="Percentage">%</div>
-								</React.Fragment>
-							)}
-						</CountUp>
-					</div>
-
-					<div className="MoreInfoDesc">Tap for more</div>
-
-					<div
-						className="StarRev"
-						onClick={() => {
-							this.props.handleMouseClick(this.props.park.id);
-						}}
-					>
-						<div className="StarScore">
-							{this.renderReviewScore(this.props.park.avgScore)}
+							</span>
 						</div>
-						<div className="StarNumRev">
-							{this.renderNumReviews(this.props.park.numReviews)}
+
+						<span className="ScoreDesc">Visibility Score</span>
+
+						<div className="Score">
+							<CountUp
+								start={0}
+								end={Math.round(this.props.park.score * 100)}
+								delay={0}
+							>
+								{({ countUpRef }) => (
+									<React.Fragment>
+										<div
+											className="ScoreNumber"
+											ref={countUpRef}
+										/>
+										<div className="Percentage">%</div>
+									</React.Fragment>
+								)}
+							</CountUp>
+						</div>
+
+						<div className="MoreInfoDesc">Tap for more</div>
+
+						<div
+							className="StarRev"
+							onClick={() => {
+								this.props.handleMouseClick(this.props.park.id);
+							}}
+						>
+							<div className="StarScore">
+								{this.renderReviewScore(
+									this.props.park.avgScore
+								)}
+							</div>
+							<div className="StarNumRev">
+								{this.renderNumReviews(
+									this.props.park.numReviews
+								)}
+							</div>
 						</div>
 					</div>
 				</CardStyle>
@@ -235,59 +242,28 @@ ParkCard.defaultProps = {
 export default ParkCard;
 
 const CardStyle = styled.div`
-	min-height: 30vh;
-	/* background: red; */
-	/* max-width: 100vw; */
-	display: grid;
-	grid-template-columns: repeat(6, 1fr);
-	grid-template-rows: 1fr 1fr 1fr 1fr 0.5fr 1fr;
-	/* grid-gap: 1em; */
-
-	grid-template-areas:
-		"ParkHeader   ParkHeader   ParkHeader     ParkHeader 	ParkHeader 	  	  ParkHeader"
-		"ParkHeader   ParkHeader   ParkHeader     ParkHeader    ParkHeader   	  ParkHeader"
-		"ScoreDesc   ScoreDesc    WeatherInfo  	  WeatherInfo 	WeatherInfo 	  WeatherInfo"
-		"Score 		 Score 		 HumidityIcon 	  CloudIcon 	LightPolIcon 	  TempIcon "
-		"Score 		 Score 		 HumidityIconDesc CloudIconDesc LightPolIconDesc  TempIconDesc "
-		"StarRev 	 StarRev 	 StarRev 	  	  StarRev  MoreInfoDesc 	  MoreInfoDesc";
-
 	font-family: "Lato", sans-serif;
 	font-style: normal;
 	font-weight: 400;
 	font-size: 18px;
 	line-height: 23px;
-
 	color: ${props => props.theme.fontDark};
+	min-height: 30vh;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: 1/3fr 2/3fr;
+	/* grid-gap: 1em; */
 
-	.ScoreDesc {
-		display: flex;
-		grid-area: ScoreDesc;
-		font-size: 14px;
-		margin: auto auto 0 0px;
-		font-weight: 400;
+	grid-template-areas:
+		"ParkHeader   ParkHeader   ParkHeader    ParkHeader 	ParkHeader 	  ParkHeader"
+		"cardContent  cardContent cardContent 	 cardContent  	cardContent   cardContent";
+
+	@media screen and (min-width: 320px) {
+		grid-template-rows: 1/3fr 2/3fr;
+	
 	}
-
-	.Score {
-		display: flex;
-		grid-area: Score;
-		font-size: 60px;
-		font-weight: 600;
-		padding-top: 22px;
-		align-items: baseline;
-		margin: auto 0;
-		.Percentage {
-			display: inline-block;
-			font-size: 25px;
-		}
-
-		@media screen and (min-width: 320px) {
-			font-size: 60px;
-			padding-top: 20px;
-		}
-
-		@media screen and (min-width: 480px) {
-			font-size: 80px;
-		}
+	@media screen and (min-width: 480px) {
+	
 	}
 
 	.ParkHeader {
@@ -372,104 +348,164 @@ const CardStyle = styled.div`
 		}
 	}
 
+	.cardContent {
+		display: grid;
+		grid-area: cardContent;
+		grid-template-columns: repeat(6, 1fr);
+		grid-template-rows: 1fr 1fr 0.5fr 1fr;
+		/* grid-gap: 1em; */
 
+		grid-template-areas:
+			"ScoreDesc   ScoreDesc    WeatherInfo  	  WeatherInfo 	WeatherInfo 	  WeatherInfo"
+			"Score 		 Score 		 HumidityIcon 	  CloudIcon 	LightPolIcon 	  TempIcon "
+			"Score 		 Score 		 HumidityIconDesc CloudIconDesc LightPolIconDesc  TempIconDesc "
+			"StarRev 	 StarRev 	 StarRev 	  	  StarRev  		MoreInfoDesc 	  MoreInfoDesc";
 
-	.WeatherInfo {
-		display: flex;
+		@media screen and (min-width: 320px) {
+			padding: 10px 10px;
+			grid-template-rows: 1fr 1fr 0.5fr 1fr;
+		}
 
-		grid-area: WeatherInfo;
-		font-weight: 400;
-		font-size: 13px;
-		margin: auto auto 0 auto;
-	}
-	.HumidityIcon {
-		display: flex;
+		@media screen and (min-width: 480px) {
+		}
 
-		grid-area: HumidityIcon;
-		margin: auto auto 0 auto;
-	}
-	.HumidityIconDesc {
-		display: flex;
-
-		grid-area: HumidityIconDesc;
-		font-size: 14px;
-		margin: 0 auto;
-	}
-	.CloudIcon {
-		display: flex;
-
-		grid-area: CloudIcon;
-		margin: auto auto 0 auto;
-	}
-	.CloudIconDesc {
-		display: flex;
-
-		grid-area: CloudIconDesc;
-		font-size: 14px;
-		margin: 0 auto;
-	}
-	.LightPolIcon {
-		display: flex;
-
-		grid-area: LightPolIcon;
-		margin: auto auto 0 auto;
-	}
-	.LightPolIconDesc {
-		display: flex;
-
-		grid-area: LightPolIconDesc;
-		font-size: 14px;
-		margin: 0 auto;
-	}
-
-	.TempIcon {
-		display: flex;
-		grid-area: TempIcon;
-
-		margin: auto auto 0 auto;
-	}
-	.TempIconDesc {
-		display: flex;
-		grid-area: TempIconDesc;
-		font-size: 14px;
-
-		/* margin: auto auto; */
-		margin: 0 auto;
-	}
-
-	.StarRev {
-		grid-area: StarRev;
-		cursor: pointer;
-		display: flex;
-		/* float: left; */
-		margin: 10px auto auto 0px;
-
-		.StarScore {
+		.WeatherInfo {
 			display: flex;
-			.widget-svg {
-				height: 11px;
-				width: 11px;
+
+			grid-area: WeatherInfo;
+			font-weight: 400;
+			font-size: 13px;
+			margin: auto auto 0 auto;
+		}
+		.HumidityIcon {
+			display: flex;
+
+			grid-area: HumidityIcon;
+			margin: auto auto 0 auto;
+		}
+		.HumidityIconDesc {
+			display: flex;
+
+			grid-area: HumidityIconDesc;
+			font-size: 14px;
+			margin: 0 auto;
+		}
+		.CloudIcon {
+			display: flex;
+
+			grid-area: CloudIcon;
+			margin: auto auto 0 auto;
+		}
+		.CloudIconDesc {
+			display: flex;
+
+			grid-area: CloudIconDesc;
+			font-size: 14px;
+			margin: 0 auto;
+		}
+		.LightPolIcon {
+			display: flex;
+
+			grid-area: LightPolIcon;
+			margin: auto auto 0 auto;
+		}
+		.LightPolIconDesc {
+			display: flex;
+
+			grid-area: LightPolIconDesc;
+			font-size: 14px;
+			margin: 0 auto;
+		}
+
+		.TempIcon {
+			display: flex;
+			grid-area: TempIcon;
+
+			margin: auto auto 0 auto;
+		}
+		.TempIconDesc {
+			display: flex;
+			grid-area: TempIconDesc;
+			font-size: 14px;
+
+			/* margin: auto auto; */
+			margin: 0 auto;
+		}
+
+		.StarRev {
+			grid-area: StarRev;
+			cursor: pointer;
+			display: flex;
+			/* float: left; */
+			margin: 10px auto auto 0px;
+
+			.StarScore {
+				display: flex;
+				.widget-svg {
+					height: 11px;
+					width: 11px;
+				}
+			}
+			.StarNumRev {
+				display: flex;
+				font-size: 12px;
+				padding-top: 5px;
+				margin: 0px 0px 0px 14px;
+				:hover,
+				:active {
+					color: ${props => props.theme.colorBad};
+					transition: color 0.2s ease;
+				}
 			}
 		}
-		.StarNumRev {
+
+		.MoreInfoDesc {
 			display: flex;
+			grid-area: MoreInfoDesc;
 			font-size: 12px;
-			padding-top: 5px;
-			margin: 0px 0px 0px 14px;
-			:hover,
-			:active {
-				color: ${props => props.theme.colorBad};
-				transition: color 0.2s ease;
+			padding-top: 0px;
+			margin: 14px 0px auto auto;
+		}
+
+		.ScoreDesc {
+			display: flex;
+			grid-area: ScoreDesc;
+			font-size: 14px;
+			
+			margin: auto auto 0 0px;
+			font-weight: 400;
+			padding-bottom: 2px;
+			@media screen and (min-width: 320px) {
+				padding-bottom: 2px;
+			}
+
+			@media screen and (min-width: 480px) {
+			
 			}
 		}
-	}
 
-	.MoreInfoDesc {
-		display: flex;
-		grid-area: MoreInfoDesc;
-		font-size: 12px;
-		padding-top: 0px;
-		margin: 14px 0px auto auto;
+		.Score {
+			display: flex;
+			grid-area: Score;
+			font-size: 60px;
+			font-weight: 600;
+			padding-top: 15px;
+			align-items: baseline;
+			margin: auto 0;
+			.Percentage {
+				display: inline-block;
+				font-size: 25px;
+			}
+
+			@media screen and (min-width: 320px) {
+				font-size: 60px;
+				padding-top: 15px;
+			}
+
+			@media screen and (min-width: 480px) {
+				font-size: 80px;
+			}
+		}
 	}
 `;
 

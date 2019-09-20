@@ -81,7 +81,7 @@ const MoonStyle = styled.div`
 
 	.stellarDataDisplay {
 		font-weight: 300;
-		font-size: 16px;
+		font-size: 14px;
 		/* padding: 15px 0.8rem 20px 0.8rem;
 		margin-bottom: 10px; */
 		text-transform: none;
@@ -93,6 +93,15 @@ const MoonStyle = styled.div`
 		grid-template-areas:
 			"Sunset    Nightfall    Moonrise Moonset"
 			"SunsetTime NightfallTime MoonriseTime  MoonsetTime";
+
+
+			@media screen and (min-width: 320px) {
+				font-size: 14px;
+			}
+			
+			@media screen and (min-width: 480px) {
+				font-size: 15px;
+			}
 
 		.Nightfall {
 			/* font-family: "Lato", sans-serif; */
