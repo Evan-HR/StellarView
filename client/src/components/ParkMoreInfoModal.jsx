@@ -147,23 +147,6 @@ class ParkMoreInfoModal extends Component {
 								<div className="favParkText">Save</div>
 							</div>
 
-							<div className="VisibleIcon">
-								{this.park.score > 0.8 ? (
-									<i className="far fa-eye visibleGoodIcon"></i>
-								) : this.park.score > 0.6 ? (
-									<i className="far fa-eye visiblePartlyIcon"></i>
-								) : (
-									<i className="fas fa-eye-slash invisibleIcon"></i>
-								)}
-							</div>
-							<div className="VisibleIconDesc">
-								{this.park.score > 0.8
-									? "Visible"
-									: this.park.score > 0.6
-									? "Partly Visible"
-									: "Not Visible"}
-							</div>
-
 							<div className="reportPark">
 								<ReportPark parkID={this.park.id} />
 
@@ -183,27 +166,6 @@ class ParkMoreInfoModal extends Component {
 								)}
 								<div className="directionsText">Directions</div>
 							</div>
-
-							<div className="ParkScoreHeading">
-								Visibility Score
-							</div>
-							<div className="Score">
-								<CountUp
-									start={0}
-									end={Math.round(this.park.score * 100)}
-									delay={0}
-								>
-									{({ countUpRef }) => (
-										<React.Fragment>
-											<div
-												className="ScoreNumber"
-												ref={countUpRef}
-											/>
-											<div className="Percentage">%</div>
-										</React.Fragment>
-									)}
-								</CountUp>
-							</div>
 						</div>
 
 						<span className="textContainer">
@@ -211,6 +173,104 @@ class ParkMoreInfoModal extends Component {
 						</span>
 
 						<div className="weatherContainer">
+							<div className="visibilityContainer">
+								<Card
+									cardName="visibilityCard"
+									front={
+										<React.Fragment>
+											<WeatherWrapper>
+												<div className="Heading">
+													<span>Star Visibility</span>
+												</div>
+												<div className="VisibleIcon">
+													{this.park.score > 0.8 ? (
+														<i className="far fa-eye visibleGoodIcon"></i>
+													) : this.park.score >
+													  0.6 ? (
+														<i className="far fa-eye visiblePartlyIcon"></i>
+													) : (
+														<i className="fas fa-eye-slash invisibleIcon"></i>
+													)}
+												</div>
+												<div className="Value">
+													{this.park.score > 0.8
+														? "Visible"
+														: this.park.score > 0.6
+														? "Partly Visible"
+														: "Not Visible"}
+												</div>
+											</WeatherWrapper>
+										</React.Fragment>
+									}
+									back={
+										<React.Fragment>
+											<span className="MoreInfoDesc">
+												Cloud Coverage is the % of the
+												sky that is covered by clouds.
+												Under 25% is considered good.
+											</span>
+										</React.Fragment>
+									}
+								/>
+							</div>
+
+							<div className="scoreContainer">
+								<Card
+									cardName="scoreCard"
+									front={
+										<React.Fragment>
+											<WeatherWrapper>
+												<div className="Heading">
+													<span>
+														Visibility Score
+													</span>
+												</div>
+												<div className="Score">
+													<CountUp
+														start={0}
+														end={Math.round(
+															this.park.score *
+																100
+														)}
+														delay={0}
+													>
+														{({ countUpRef }) => (
+															<React.Fragment>
+																<div
+																	className="ScoreNumber"
+																	ref={
+																		countUpRef
+																	}
+																/>
+																<div className="Percentage">
+																	%
+																</div>
+															</React.Fragment>
+														)}
+													</CountUp>
+												</div>
+												<div className="Value">
+													{this.park.score > 0.8
+														? "Great"
+														: this.park.score > 0.6
+														? "Poor"
+														: "Very poor"}
+												</div>
+											</WeatherWrapper>
+										</React.Fragment>
+									}
+									back={
+										<React.Fragment>
+											<span className="MoreInfoDesc">
+												Cloud Coverage is the % of the
+												sky that is covered by clouds.
+												Under 25% is considered good.
+											</span>
+										</React.Fragment>
+									}
+								/>
+							</div>
+
 							<div className="cloudContainer">
 								<Card
 									cardName="cloudCard"
@@ -249,6 +309,7 @@ class ParkMoreInfoModal extends Component {
 									}
 								/>
 							</div>
+
 							<div className="lightPolContainer">
 								<Card
 									cardName="lightPolCard"
@@ -481,59 +542,17 @@ const ModalStyle = styled.div`
 		.HeaderGrid {
 			display: grid;
 			grid-area: HeaderGrid;
-			grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-			grid-template-rows: 50px 0.3fr 1fr;
+			grid-template-columns: 1fr 1fr 1fr;
+			grid-template-rows: 1fr 0.2fr;
 
 			grid-template-areas:
-				"ParkScore 			ParkScore 	 		.		. VisibleIcon     VisibleIcon        "
-				"ParkScoreHeading 	ParkScoreHeading . . VisibleIconDesc VisibleIconDesc   "
-				"directions  		directions			favPark			 favPark		 reportPark			reportPark"
-				"directionsText		directionsText		favParkText	 	 favParkText	 reportParkText 	reportParkText";
+				"directions  				favPark			 		 reportPark	"
+				"directionsText				favParkText	 	 	 reportParkText ";
 
 			.ParkScoreHeading {
 				grid-area: ParkScoreHeading;
 				font-size: 18px;
 				margin-bottom: 20px;
-			}
-
-			.Score {
-				display: flex;
-				grid-area: ParkScore;
-				font-size: 40px;
-				font-weight: 600;
-				align-items: baseline;
-				margin: auto auto 0 auto;
-				.Percentage {
-					display: inline-block;
-					font-size: 25px;
-				}
-			}
-
-			.VisibleIcon {
-				grid-area: VisibleIcon;
-				margin: auto auto 0 auto;
-
-				/* margin: auto 10px auto 10px; */
-				.visibleGoodIcon {
-					font-size: 37px;
-					color: ${props => props.theme.parkMapGreen};
-				}
-
-				.visiblePartlyIcon {
-					font-size: 37px;
-					color: ${props => props.theme.fontDark};
-				}
-				.invisibleIcon {
-					font-size: 37px;
-					color: ${props => props.theme.fontDark};
-				}
-			}
-
-			.VisibleIconDesc {
-				grid-area: VisibleIconDesc;
-				font-size: 18px;
-				font-weight: 400;
-				/* margin: auto auto; */
 			}
 
 			.directions {
@@ -558,7 +577,7 @@ const ModalStyle = styled.div`
 
 				.directionsText {
 					grid-area: directionsText;
-					font-size: 18px;
+					font-size: 16px;
 					font-weight: 400;
 					font-family: Lato;
 				}
@@ -577,7 +596,7 @@ const ModalStyle = styled.div`
 
 				.favParkText {
 					grid-area: favParkText;
-					font-size: 18px;
+					font-size: 16px;
 					font-weight: 400;
 				}
 			}
@@ -590,7 +609,7 @@ const ModalStyle = styled.div`
 
 				.reportParkText {
 					grid-area: reportParkText;
-					font-size: 18px;
+					font-size: 16px;
 					font-weight: 400;
 				}
 			}
@@ -629,12 +648,68 @@ const ModalStyle = styled.div`
 			grid-area: weatherContainer;
 			display: grid;
 			grid-template-columns: 1fr 1fr;
-			grid-template-rows: 1fr 1fr;
+			grid-template-rows: 1fr 1fr 1fr;
 			grid-row-gap: 20px;
 			grid-column-gap: 20px;
 			grid-template-areas:
+				"scoreContainer    visibilityContainer"
 				"cloudContainer    lightPolContainer"
 				"moonContainer     humidityContainer";
+
+			.scoreContainer {
+				height: 157px;
+				grid-area: scoreContainer;
+				position: relative;
+				cursor: pointer;
+				transition: transform 0.4s ease;
+				&:hover {
+					transition: transform 0.4s ease;
+					transform: translate3d(0px, -3px, 0px) scale(1.03);
+				}
+
+				.scoreCard {
+					height: 157px;
+					position: absolute;
+					width: 100%;
+					background-color: ${props => props.theme.cardDark};
+					border-radius: 20px;
+
+					.Score {
+						display: flex;
+						font-size: 40px;
+						font-weight: 600;
+						align-items: baseline;
+						margin: auto auto 0 auto;
+						.Percentage {
+							display: inline-block;
+							font-size: 25px;
+						}
+					}
+				}
+			}
+
+			.visibilityContainer {
+				height: 157px;
+				grid-area: visibilityContainer;
+				position: relative;
+				cursor: pointer;
+				transition: transform 0.4s ease;
+				&:hover {
+					transition: transform 0.4s ease;
+					transform: translate3d(0px, -3px, 0px) scale(1.03);
+				}
+
+				.visibilityCard {
+					height: 157px;
+					position: absolute;
+					width: 100%;
+					background-color: ${props => props.theme.cardLight};
+					border-radius: 20px;
+				}
+			}
+
+
+
 
 			.cloudContainer {
 				height: 157px;
@@ -725,7 +800,6 @@ const ModalStyle = styled.div`
 		}
 	}
 `;
-
 
 const WeatherWrapper = styled.div`
 	display: flex;

@@ -265,7 +265,7 @@ class BaseReviews extends Component {
 			return (
 				<AlertStyle>
 					<div className="AlertText">
-						No reviews yet - be the first.
+						This park currently has no reviews. 
 					</div>
 				</AlertStyle>
 			);
