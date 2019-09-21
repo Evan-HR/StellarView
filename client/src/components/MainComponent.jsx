@@ -76,7 +76,7 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 	};
 }
 
-class BaseParksData extends Component {
+class BaseMainComponent extends Component {
 	state = {
 		parks: [],
 		fetchReq: [],
@@ -385,7 +385,7 @@ class BaseParksData extends Component {
 	};
 
 	render() {
-		// console.log("ParksData - rendered");
+		// console.log("MainComponent - rendered");
 		// console.log("Current location: ", window.location.pathname);
 		return (
 			<MainContentWrapper
@@ -402,19 +402,19 @@ class BaseParksData extends Component {
 	}
 }
 
-const ParksData = parkProps => (
+const MainComponent = parkProps => (
 	<Router>
 		<Route
 			path={["/home", "/search"]}
 			render={routerProps => (
 				//Combine props passed to parkForm with router props
-				<BaseParksData {...{ ...parkProps, ...routerProps }} />
+				<BaseMainComponent {...{ ...parkProps, ...routerProps }} />
 			)}
 		/>
 	</Router>
 );
 
-export default withRouter(ParksData);
+export default withRouter(MainComponent);
 
 //////////////////////////////////////////
 

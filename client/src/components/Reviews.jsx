@@ -276,14 +276,14 @@ class BaseReviews extends Component {
 		return (
 			<AlertStyle>
 				<div className="AlertText">
-					You must be{" "}
+					
 					<Login refreshInfoModal={this.props.refreshInfoModal}>
 						<span>
 							{/* <span onClick={() => this.props.closeInfoModal()}> */}
-							<b>logged-in</b>
+							<b>Log-in</b>
 						</span>
 					</Login>{" "}
-					to submit a review!
+					to submit a review
 				</div>
 			</AlertStyle>
 		);
@@ -418,7 +418,7 @@ const ReviewStyle = styled.div`
 	font-weight: 400;
 	font-size: 14px;
 	margin: 25px 0px 25px 0px;
-	font-family: monospace;
+	
 
 	grid-template-areas:
 		"ReviewReview ReviewReview ReviewReview"

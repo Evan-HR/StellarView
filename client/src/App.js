@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { AuthProvider, AuthConsumer } from "./components/AuthContext";
-import ParksData from "./components/ParksData";
+import MainComponent from "./components/MainComponent";
 import {
 	Link,
 	NavLink,
@@ -107,7 +107,7 @@ class App extends Component {
 
 								<Route
 									path={["/home", "/search"]}
-									component={ParksData}
+									component={MainComponent}
 								/>
 								<Route path="/faq" component={FAQ} />
 

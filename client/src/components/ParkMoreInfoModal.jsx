@@ -39,7 +39,7 @@ const modalStyle = {
 	}
 };
 
-class ParkMapModal extends Component {
+class ParkMoreInfoModal extends Component {
 	state = {
 		modalIsOpen: false
 	};
@@ -147,58 +147,71 @@ class ParkMapModal extends Component {
 								<div className="favParkText">Save</div>
 							</div>
 
+							<div className="VisibleIcon">
+								{this.park.score > 0.8 ? (
+									<i className="far fa-eye visibleGoodIcon"></i>
+								) : this.park.score > 0.6 ? (
+									<i className="far fa-eye visiblePartlyIcon"></i>
+								) : (
+									<i className="fas fa-eye-slash invisibleIcon"></i>
+								)}
+									<div className="VisibleIconDesc">
+								{this.park.score > 0.8
+									? "Visible"
+									: this.park.score > 0.6
+									? "Partly Visible"
+									: "Not Visible"}
+							</div>
+							</div>
+
+						
+
 							<div className="reportPark">
 								<ReportPark parkID={this.park.id} />
 
 								<div className="reportParkText">Report</div>
 							</div>
 
-							<ScoreWrapper>
-								<div className="ParkScore">
-									<div className="Heading">
-										<span>SCORE</span>
-									</div>
-									<span className="ScoreNumerator">
-										<CountUp
-											start={0}
-											end={Math.round(
-												this.park.score * 100
-											)}
-											delay={0}
-										>
-											{({ countUpRef }) => (
-												<div className="Score">
-													<span ref={countUpRef} />
-													<span className="Percentage">
-														%
-													</span>
-												</div>
-											)}
-										</CountUp>
-									</span>
-									<span className="Value">
-										{this.park.score > 0.8
-											? "Visible"
-											: this.park.score > 0.6
-											? "Partly Visible"
-											: "Not Visible"}
-									</span>
-								</div>
-							</ScoreWrapper>
+							<div className="directions">
+								{this.userLocation ? (
+									<a
+										href={`https://www.google.com/maps?saddr=${this.userLocation.lat},${this.userLocation.lng}&daddr=${this.park.lat},${this.park.lng}`}
+										target="_blank"
+									>
+										<i className="fas fa-car"></i>
+									</a>
+								) : (
+									""
+								)}
+								<div className="directionsText">Directions</div>
+							</div>
+							
+
+							<div className="ParkScoreHeading">
+								Visibility Score
+							</div>
+							<div className="ParkScore">
+								<span className="ScoreNumerator">
+									<CountUp
+										start={0}
+										end={Math.round(this.park.score * 100)}
+										delay={0}
+									>
+										{({ countUpRef }) => (
+											<div className="Score">
+												<span ref={countUpRef} />
+												<span className="Percentage">
+													%
+												</span>
+											</div>
+										)}
+									</CountUp>
+								</span>
+							</div>
 						</div>
 
 						<span className="textContainer">
 							Tap a square for more info
-							{this.userLocation ? (
-								<a
-									href={`https://www.google.com/maps?saddr=${this.userLocation.lat},${this.userLocation.lng}&daddr=${this.park.lat},${this.park.lng}`}
-									target="_blank"
-								>
-									Directions
-								</a>
-							) : (
-								""
-							)}
 						</span>
 
 						<div className="weatherContainer">
@@ -352,10 +365,6 @@ class ParkMapModal extends Component {
 									parkID={this.park.id}
 								/>
 							)}
-							{/* <Reviews
-								refreshInfoModal={this.refreshModal}
-								parkID={this.park.id}
-							/> */}
 						</div>
 					</div>
 				</ModalStyle>
@@ -399,22 +408,20 @@ function Card(props) {
 	);
 }
 
-export default ParkMapModal;
+export default ParkMoreInfoModal;
 
 const ModalStyle = styled.div`
-	/* max-height: 100vh;
-	max-width: 100vw; */
 	display: flex;
 	flex-direction: column;
 	width: 452px;
 	height: 95vh;
-	font-family: 'Lato', sans-serif;
+	font-family: "Lato", sans-serif;
 	border: none;
 	color: ${props => props.theme.fontDark};
-	background:black;
+	background: black;
 
 	.modal-header {
-		font-family: 'Lato', sans-serif;
+		font-family: "Lato", sans-serif;
 		font-style: normal;
 		font-weight: normal;
 		color: ${props => props.theme.white};
@@ -424,38 +431,34 @@ const ModalStyle = styled.div`
 		background: ${props => props.theme.mapBlue};
 		border: none;
 		border-radius: 0rem;
-		/* border-bottom: 2px solid #9ea6ad; */
 		.close {
-		position: absolute;
-		top: 0px;
-		right: 0px;
-		float: right;
-		font-size: 2.5rem;
-		font-weight: 700;
-		line-height: 1;
-		color: ${props => props.theme.white};
-		outline: none;
-		text-shadow: none;
-		opacity: 0.5;
+			position: absolute;
+			top: 0px;
+			right: 0px;
+			float: right;
+			font-size: 2.5rem;
+			font-weight: 700;
+			line-height: 1;
+			color: ${props => props.theme.white};
+			outline: none;
+			text-shadow: none;
+			opacity: 0.5;
+		}
+
+		.close:hover {
+			color: ${props => props.theme.colorBad};
+			text-decoration: none;
+		}
+
+		.close:active {
+			color: ${props => props.theme.white};
+		}
+
+		.close:not(:disabled):not(.disabled):hover,
+		.close:not(:disabled):not(.disabled):focus {
+			opacity: 0.75;
+		}
 	}
-
-	.close:hover {
-		color: ${props => props.theme.colorBad};
-		text-decoration: none;
-	}
-
-	.close:active {
-		color: ${props => props.theme.white};
-	}
-
-	.close:not(:disabled):not(.disabled):hover,
-	.close:not(:disabled):not(.disabled):focus {
-		opacity: 0.75;
-	}
-
-	}
-
-
 
 	.ContentGrid {
 		display: grid;
@@ -472,103 +475,132 @@ const ModalStyle = styled.div`
 		height: 100%;
 		overflow-y: auto;
 		background: ${props => props.theme.white};
-		
 
+		.textContainer {
+			grid-area: infoText;
 
-.textContainer{
-	grid-area: infoText;
-	font-family: monospace;
-    font-size: 15px;
-}
+			font-size: 15px;
+		}
 
-.HeaderGrid{
-		display: grid;
-		grid-area: HeaderGrid;
-		grid-template-columns: 1fr 1fr 1fr;
-		grid-template-rows: auto auto;
-		grid-template-areas:
-		"favPark 	 ParkScore reportPark"
-		"favParkText ParkScore reportParkText";
+		.HeaderGrid {
+			display: grid;
+			grid-area: HeaderGrid;
+			grid-template-columns: 1fr 1fr 1fr 1fr;
+			grid-template-rows: auto auto;
+			/* grid-template-areas:
+				"directions  	ParkScoreHeading   VisibleIcon"
+				"directionsText	ParkScoreHeading   VisibleIconDesc"
+				"favPark 	 	ParkScore 		   reportPark"
+				"favParkText 	ParkScore 		   reportParkText"; */
 
-		.ParkScore {
-			grid-area: ParkScore;
-			display: inline-block;
-			vertical-align: middle;
-			text-align: center;
-			margin: auto auto;
-			display: flex;
-			flex-direction: column;
+			grid-template-areas:
+				"ParkScoreHeading 	ParkScoreHeading 	 VisibleIcon 	  VisibleIcon"
+				"ParkScore 			ParkScore 	  		 VisibleIconDesc  VisibleIconDesc"
+				"directions  		favPark   	 		 reportPark ."
+				"directionsText		favParkText   		 reportParkText .";
 
-			.Heading{
-				font-size: 30px;
+			.ParkScoreHeading {
+				grid-area: ParkScoreHeading;
+				font-size: 20px;
 			}
+			.ParkScore {
+				grid-area: ParkScore;
+				margin: auto auto;
 
-	
-			
+				.ScoreNumerator {
+					font-weight: 600;
+					font-size: 64px;
+					.Percentage {
+						font-size: 24px;
+					}
+				}
 
-			.ScoreNumerator {
-				/* font-family: Barlow; */
-				font-weight: 600;
-				font-size: 64px;
-				.Percentage {
+				.ScoreDenominator {
+					font-weight: 500;
+
 					font-size: 24px;
 				}
 			}
 
-			.ScoreDenominator {
-				/* font-family: Barlow; */
-				font-weight: 500;
+			.VisibleIcon {
+				grid-area: VisibleIcon;
+				margin: auto 0;
 
-				font-size: 24px;
+				/* margin: auto 10px auto 10px; */
+				.visibleGoodIcon {
+					font-size: 37px;
+					color: ${props => props.theme.parkMapGreen};
+				}
+
+				.visiblePartlyIcon {
+					font-size: 37px;
+					color: #92704f;
+				}
+				.invisibleIcon {
+					font-size: 37px;
+				}
+
+				.VisibleIconDesc {
+					grid-area: VisibleIconDesc;
+					font-size: 20px;
+					font-weight: 400;
+					/* margin: auto auto; */
+				}
+			}
+
+			.directions {
+				margin: auto 0;
+				grid-area: directions;
+				font-size: 20px;
+
+				font-weight: 400;
+				a {
+					outline: none;
+					text-decoration: none;
+				}
+				i {
+					color: ${props => props.theme.fontDark};
+				}
+
+				.directionsText {
+					grid-area: directionsText;
+					font-size: 20px;
+					font-weight: 400;
+					font-family: Lato;
+				}
+			}
+
+			i {
+				font-size: 40px;
+			}
+
+			.favPark {
+				margin: auto 0;
+				grid-area: favPark;
+				button:focus {
+					outline: 0;
+				}
+
+				.favParkText {
+					grid-area: favParkText;
+					font-size: 20px;
+					font-weight: 400;
+				}
+			}
+			.reportPark {
+				margin: auto 0;
+				grid-area: reportPark;
+				button {
+					outline: none;
+				}
+
+				.reportParkText {
+					grid-area: reportParkText;
+					font-size: 20px;
+					font-weight: 400;
+				}
 			}
 		}
-
-				/* .shareIcon {
-					color: ${props => props.theme.fontDark};
-					grid-area: shareIcon;
-				}
-				.faqIcon {
-					color: ${props => props.theme.fontDark};
-					grid-area: faqIcon;
-				} */
-				i{
-						font-size: 40px;
-					}
-
-					
-				.favPark {
-					margin: auto 0;
-					grid-area: favPark;
-					button:focus {outline:0;}
-					
-				
-					
-					.favParkText{
-						grid-area: favParkText;
-						font-size: 20px;
-						font-weight: 400;
-					}
-
-				}
-				.reportPark {
-					margin: auto 0;
-					grid-area: reportPark;
-					button{
-						outline: none;
-					}
-				
-					.reportParkText{
-						grid-area: reportParkText;
-						font-size: 20px;
-						font-weight: 400;
-					}
-				}
-				
-			
-			
-		
-	}
-
 
 		.Heading,
 		.Value {
@@ -576,8 +608,8 @@ const ModalStyle = styled.div`
 			font-weight: 600;
 			font-size: 18px;
 			display: flex;
-			justify-content: center; /* align horizontal */
-			align-items: center; /* align vertical */
+			justify-content: center;
+			align-items: center;
 
 			span {
 				display: inline-block;
@@ -593,11 +625,8 @@ const ModalStyle = styled.div`
 			font-weight: 500;
 		}
 
-
-
 		.weatherContainer {
 			img {
-				/* width: 100%; */
 				width: 70px;
 				margin-left: auto;
 				margin-right: auto;
@@ -613,20 +642,17 @@ const ModalStyle = styled.div`
 				"cloudContainer    lightPolContainer"
 				"moonContainer     humidityContainer";
 
-
 			.cloudContainer {
 				height: 157px;
 				grid-area: cloudContainer;
 				position: relative;
 				cursor: pointer;
-	
-  transition: transform 0.4s ease;
-  &:hover {
 
-    transition: transform 0.4s ease;
-    transform: translate3d(0px, -3px, 0px) scale(1.03);
-  }
-				
+				transition: transform 0.4s ease;
+				&:hover {
+					transition: transform 0.4s ease;
+					transform: translate3d(0px, -3px, 0px) scale(1.03);
+				}
 
 				.cloudCard {
 					height: 157px;
@@ -642,12 +668,10 @@ const ModalStyle = styled.div`
 				position: relative;
 				cursor: pointer;
 				transition: transform 0.4s ease;
-  &:hover {
-
-    transition: transform 0.4s ease;
-    transform: translate3d(0px, -3px, 0px) scale(1.03);
-  }
-				
+				&:hover {
+					transition: transform 0.4s ease;
+					transform: translate3d(0px, -3px, 0px) scale(1.03);
+				}
 
 				.lightPolCard {
 					height: 157px;
@@ -655,18 +679,14 @@ const ModalStyle = styled.div`
 					width: 100%;
 					background-color: ${props => props.theme.cardDark};
 					border-radius: 20px;
-					
-
-
 				}
 			}
 			.moonContainer {
 				transition: transform 0.4s ease;
-  &:hover {
-
-    transition: transform 0.4s ease;
-    transform: translate3d(0px, -3px, 0px) scale(1.03);
-  }
+				&:hover {
+					transition: transform 0.4s ease;
+					transform: translate3d(0px, -3px, 0px) scale(1.03);
+				}
 				height: 157px;
 				grid-area: moonContainer;
 				position: relative;
@@ -687,11 +707,10 @@ const ModalStyle = styled.div`
 			}
 			.humidityContainer {
 				transition: transform 0.4s ease;
-  &:hover {
-
-    transition: transform 0.4s ease;
-    transform: translate3d(0px, -3px, 0px) scale(1.03);
-  }
+				&:hover {
+					transition: transform 0.4s ease;
+					transform: translate3d(0px, -3px, 0px) scale(1.03);
+				}
 				height: 157px;
 				grid-area: humidityContainer;
 				position: relative;
@@ -709,7 +728,6 @@ const ModalStyle = styled.div`
 
 		.reviewsContainer {
 			grid-area: reviewsContainer;
-			/* background-color: purple; */
 		}
 	}
 `;
@@ -728,9 +746,4 @@ const WeatherWrapper = styled.div`
 	height: 100%;
 	padding: 10px 0px 10px 0px;
 	justify-content: space-between;
-`;
-
-const ScoreWrapper = styled.div`
-	display: flex;
-	flex-direction: column;
 `;
