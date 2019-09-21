@@ -7,9 +7,8 @@ import Login from "../Login";
 import axios from "axios";
 import Register from "../Register";
 import FAQ from "../FAQ";
-import logo from "../style/Media/StellarStarLogo2.svg";
+import logo from "../style/Media/StellarStarLogo.svg";
 import SVG from "react-inlinesvg";
-// import logo2 from "../style/Media/telescopeLogo2.svg";
 
 class Toolbar extends Component {
 	state = {};
@@ -32,21 +31,9 @@ class Toolbar extends Component {
 							/>
 						</div>
 
-						<div className="toolbar__logo">
+						<div className="toolbarLogo">
 							<Link to="/home">
-								{/* <SVG
-									src={logo}
-						
-								></SVG> */}
-								Stellargaze Logo
-								{/* <img
-									src={logo}
-									alt="Stellargaze"
-									title="Stellargaze"
-								/> */}
-
-								{/* <span className="Stellar">STELLAR</span>
-								<span className="Gaze">GAZE</span> */}
+								<SVG src={logo}></SVG>
 							</Link>
 						</div>
 						<div className="spacer" />
@@ -129,23 +116,69 @@ export default withRouter(Toolbar);
 
 const ToolbarStyle = styled.header`
 	width: 100%;
-	/* background: ${props => props.theme.darkBlue3}; */
-	height: 120px;
-	top: 0;
+	margin: 0.3rem 0px 0px 0px;
 	left: 0;
-	/* z-index: 100; */
 	
-	@media screen and (max-width: 767.999px) {
+
+
+	@media screen and (min-width: 480px) {
+		margin: 0.3rem 0px 0px 0px;
+	}
+
+	@media screen and (min-width: 801px) {
+		/* margin: 30px 0px 0px 0px; */
+	}
+
+	.toolbar__center {
+		display: block;
+		/* width: 85%; */
+		height: 100%;
+		margin: 0.5rem auto 0 auto;
+		/* max-width: 1467px; */
+
+		@media screen and (min-width: 320px) {
+			width: 100%;
+			margin: 0.5rem auto 0 auto;
+		}
+
+		
+		@media screen and (min-width: 480px) {
+			width: 100%;
+			margin: 0.5rem auto 0 auto;
+		}
+
+		@media screen and (min-width: 600px) {
+			padding: 0px 6.5% 10px 6.5%;
+			margin: 2rem auto 0 auto;
+		}
+
+		@media screen and (min-width: 1025px) {
+			padding: 0px 6.5% 30px 6.5%;
+			margin: 2rem auto 0 auto;
+		}
+
 		
 	}
 
-	.toolbar__center{
-		display: block;
-		width:85%;
-		height: 100%;
-		margin: 0 auto 0 auto;
-		@media screen and (max-width: 767.999px) {
-			width: 95%;
+	.toolbarLogo {
+		svg {
+			width: 80%;
+			margin: 0 10% 0 0px;
+			@media screen and (min-width: 320px) {
+				max-width: 300px;
+				
+			}
+
+			@media screen and (min-width: 480px) {
+				width: 80%;
+				margin: 0 10% 0 0px;
+				max-width: 360px;
+			}
+
+			@media screen and (min-width: 600px) {
+				width: 80%;
+				margin: 0 35% 0 0px;
+			}
 		}
 	}
 
@@ -154,106 +187,72 @@ const ToolbarStyle = styled.header`
 		align-items: center;
 		height: 100%;
 		bottom: 0;
-		/* border-bottom: 2px solid #7C6E7E; */
 	}
 
-	.toolbar_navigation-items{
+	.toolbar_navigation-items {
 		margin-top: 1%;
+
+		a {
+			font-family: "Lato", sans-serif;
+			font-weight: 600;
+			text-decoration: none;
+			letter-spacing: 0.08em;
+			transition: color 0.2s ease;
+			color: ${props => props.theme.white};
+			:hover,
+			:active {
+				transition: color 0.2s ease;
+				color: ${props => props.theme.colorBad};
+			}
+		}
+
+		ul {
+			text-transform: uppercase;
+			list-style: none;
+			padding: 0;
+			display: flex;
+		}
+
+		li {
+			padding: 0 0.5rem;
+			:last-child {
+				padding: 0 0 0 0.5rem;
+			}
+		}
 	}
 
-
-	.toolbar_navigation-items a {
-		/* font-family: IBM Plex Sans; */
-		font-family: 'Lato', sans-serif;
-		font-weight:600;
+	.toolbarLink {
+		cursor: pointer;
+		font-family: "Lato", sans-serif;
+		font-weight: 600;
 		text-decoration: none;
-		letter-spacing:0.08em;
+		letter-spacing: 0.08em;
 		transition: color 0.2s ease;
 		color: ${props => props.theme.white};
+		:hover,
+		:active {
+			transition: color 0.2s ease;
+			color: ${props => props.theme.colorBad};
+		}
 	}
 
-	.toolbar_navigation-items ul {
-		text-transform: uppercase;
-		list-style: none;
-		padding: 0;
-		display: flex;	
-	}
-
-	.toolbar_navigation-items li {
-		padding: 0 0.5rem;
-	}
-
-	.toolbar_navigation-items li:last-child {
-		padding: 0 0 0 0.5rem;
-	}
-
-	/* On screens that are 768px or less*/
-	@media screen and (max-width: 767.999px) {
+	@media screen and (max-width: 320px) {
 		.toolbar_navigation-items {
 			display: none;
-			height: 60px;
-		}
-		height: 60px;
-		.toolbar__logo{
-
 		}
 	}
-
-	@media screen and (min-width: 769px) and (max-width: 1300px) {
-		.toolbar__center{
-			width: 90%;
+	@media screen and (min-width: 320px) {
+		.toolbar_navigation-items {
+			display: none;
+		}
+	}
+	@media screen and (min-width: 600px) {
+		.toolbar_navigation-items {
+			display: flex;
 		}
 	}
 
 	.spacer {
 		flex: 1;
 	}
-
-	.toolbar_navigation-items a:hover,
-	.toolbar_navigation-items a:active {
-		/* padding-bottom: 2.05em;
-		border-bottom: 3px solid ${props => props.theme.gold}; */
-		transition: color 0.2s ease;
-  		color: ${props => props.theme.colorBad};		
-	}
-
-	/* .toolbar__logo{	
-		font-weight: 400;
-		font-size: 60px;
-		font-family: 'Lato', sans-serif;
-		.Stellar{
-			font-weight: 600;
-		}
-		.Gaze{
-			font-weight: 300;
-		}
-		
-	}
-
-	.toolbar__logo a{
-		text-decoration: none;
-		color: ${props => props.theme.white};
-	} */
-
-	.Link{
-		text-decoration:none;
-	}
-
-
-	
-	.toolbarLink {
-		cursor: pointer;
-		font-family: 'Lato', sans-serif;
-		font-weight:600;
-		text-decoration: none;
-		letter-spacing:0.08em;
-		transition: color 0.2s ease;
-		color: ${props => props.theme.white};
-	}
-
-	.toolbarLink:hover, .toolbarLink:active {
-		transition: color 0.2s ease;
-  		color: ${props => props.theme.colorBad};
-	}
-
 `;

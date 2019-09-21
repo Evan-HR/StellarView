@@ -312,11 +312,8 @@ class BaseParkForm extends Component {
 		const errors = this.validate(this.state.reqData);
 		if (errors.length === 0) {
 			var d = new Date();
-
 			this.setState({
-				...this.state,
 				formErrors: [],
-
 				reqData: { ...this.state.reqData, utime: d.getTime() }
 			});
 			this.updateHistoryQuery(this.state.reqData);
@@ -326,11 +323,8 @@ class BaseParkForm extends Component {
 					utime: d.getTime()
 				})
 			);
-		} else if (!this.state.placesComplete) {
-			console.log("Didn't use autocomplete!", this.state);
-			return;
 		} else {
-			this.setState({ ...this.state, formErrors: errors });
+			this.setState({ formErrors: errors });
 		}
 		//getParkData(reqdata) of parent
 	};
@@ -414,7 +408,7 @@ class BaseParkForm extends Component {
 			return (
 				<React.Fragment>
 					<span className="spinner-border spinner-border-sm" />
-					{"  "}Locating
+					{/* {"  "}Locating */}
 				</React.Fragment>
 			);
 		} else {
@@ -425,19 +419,19 @@ class BaseParkForm extends Component {
 	renderFormErrors = () => {
 		if (Object.keys(this.state.formErrors).length > 0) {
 			return (
-				<React.Fragment>
+				<ErrorStyle>
 					<b className="text-danger">
 						{this.state.formErrors.join(", ")}
 					</b>
-				</React.Fragment>
+				</ErrorStyle>
 			);
 		}
 	};
 
 	loadAutoComplete = () => {
-		this.autoComplete = new window.google.maps.places.SearchBox(
-			document.getElementById("autoComplete")
-		);
+		const field = document.getElementById("address-field");
+		this.autoComplete = new window.google.maps.places.SearchBox(field);
+		// this.enableEnterKey(field);
 		this.autoComplete.addListener("places_changed", this.onPlaceChanged);
 		// this.autoCompleteLoaded = true;
 	};
@@ -450,7 +444,7 @@ class BaseParkForm extends Component {
 		}
 
 		var place = places[0];
-		console.log(place);
+		console.log("Valid place:", place);
 		if (place.geometry && place.geometry.location) {
 			let location = place.geometry.location.toJSON();
 			console.log(location);
@@ -486,11 +480,11 @@ class BaseParkForm extends Component {
 						}}
 					>
 						<input
-							id="autoComplete"
+							id="address-field"
 							className="searchTerm"
 							type="text"
 							name="placeName"
-							placeholder="Enter your city e.g. London, ON"
+							placeholder="Enter your location"
 							value={this.state.reqData.placeName || ""}
 							onChange={this.handlePlaceChange}
 						/>
@@ -504,7 +498,18 @@ class BaseParkForm extends Component {
 							}
 							onClick={e => {
 								console.log("Enter got here first");
-								this.onSubmit();
+								if (this.state.placesComplete) {
+									this.setState(
+										{ placesComplete: false },
+										this.onSubmit
+									);
+								} else {
+									console.log(
+										"Didn't use autocomplete yet!",
+										this.state
+									);
+								}
+								// this.onSubmit();
 								// this.onPlaceChanged();
 								// this.getPlaceCoordinates(e);
 							}}
@@ -522,9 +527,6 @@ class BaseParkForm extends Component {
 						disabled={this.state.isLoadingLocation}
 						onClick={this.getMyLocation}
 					>
-						{/* <span>NEAR ME</span> */}
-
-						{/* <img src={nearMeButton} /> */}
 						<strong>{this.renderLocationSpinner()}</strong>
 					</button>
 				</div>
@@ -578,8 +580,8 @@ class BaseParkForm extends Component {
 						<SliderStyle>
 							<MuiSlider
 								aria-labelledby="discrete-slider-custom"
-								min={0}
-								max={6.5}
+								min={0.4}
+								max={4.0}
 								step={null}
 								valueLabelDisplay="auto"
 								marks={marksLight}
@@ -609,8 +611,7 @@ const marksDist = [
 		label: "5"
 	},
 	{
-		value: 25,
-		label: "25"
+		value: 25
 	},
 	{
 		value: 50,
@@ -636,27 +637,22 @@ const marksLight = [
 		label: "Dark"
 	},
 	{
-		value: 1.0,
+		value: 1.0
+	},
+	{
+		value: 1.75,
 		label: "Rural"
 	},
 	{
-		value: 1.75
-	},
-	{
 		value: 3.0,
-		label: "Brighter Rural"
+		label: "Rural/Suburban"
 	},
 	{
-		value: 4.5
+		value: 3.5
 	},
 	{
-		value: 6.0,
-		label: "Suburban"
+		value: 4.0
 	}
-	// {
-	// 	value: 6,
-	// 	label: "6"
-	// }
 ];
 
 const ParkForm = parkFormProps => (
@@ -669,40 +665,48 @@ const ParkForm = parkFormProps => (
 
 export default withRouter(ParkForm);
 
-////////////////////////////////////////////
-
 const SearchFormStyle = styled.div`
-background: none;
-	/* background-color: ${props => props.theme.mapBlue}; */
+	background: none;
+
 	font-family: "Lato", sans-serif;
-	padding: 13px;
+
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-template-rows: ${props =>
-		props.advancedSearch
-			? `auto auto auto`
-			: `auto auto`}; /* Three rows, two with explicit widths */
+		props.advancedSearch ? `auto auto auto` : `auto auto`};
 	grid-gap: 10px;
 	grid-template-areas:
-		"searchBar searchBar myLocation"
-		"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
-		${props =>
-			props.advancedSearch
-				? `"advancedSearch advancedSearch advancedSearch"`
-				: ``};
-
-
-	@media screen and (max-width: 420px) {
-		grid-template-areas:
 		"searchBar searchBar searchBar"
 		"advancedSearchToggle advancedSearchToggle myLocation"
 		${props =>
 			props.advancedSearch
 				? `"advancedSearch advancedSearch advancedSearch"`
 				: ``};
+
+	@media screen and (min-width: 320) {
+		grid-template-areas:
+			"searchBar searchBar myLocation"
+			"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
+			${props =>
+				props.advancedSearch
+					? `"advancedSearch advancedSearch advancedSearch"`
+					: ``};
+	}
+
+	@media screen and (min-width: 480px) {
+		grid-template-areas:
+			"searchBar searchBar myLocation"
+			"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
+			${props =>
+				props.advancedSearch
+					? `"advancedSearch advancedSearch advancedSearch"`
+					: ``};
 	}
 
 	.AdvancedSearch {
+
+		width: 90%;
+		margin: auto auto;
 		${props => (props.advancedSearch ? `` : `display: none`)}
 		grid-area:advancedSearch;
 
@@ -716,11 +720,10 @@ background: none;
 		color: ${props => props.theme.white};
 		font-size: 13px;
 
-
 		.nearMe {
 			all: unset;
 			cursor: pointer;
-			/* background-color: ${props => props.theme.prettyDark}; */
+
 			background: ${props => props.theme.yellow};
 			border-radius: 20px;
 			height: 36px;
@@ -729,7 +732,7 @@ background: none;
 			transition: color 0.1s ease;
 			font-size: 15px;
 			font-weight: 600;
-			
+
 			:disabled {
 				background: gray;
 			}
@@ -739,7 +742,6 @@ background: none;
 			:active:enabled {
 				-webkit-transform: scale(1.05);
 				transform: scale(1.05);
-				/* background-color: #fff3e5; */
 			}
 		}
 		grid-area: myLocation;
@@ -747,7 +749,8 @@ background: none;
 
 	.advancedSearchToggle {
 		grid-area: advancedSearchToggle;
-		span{
+		margin: auto 0;
+		span {
 			font-weight: 500;
 		}
 
@@ -768,13 +771,13 @@ background: none;
 	.searchButton {
 		width: 40px;
 		height: 36px;
-		/* border: 1px solid #00b4cc; */
+
 		background: ${(props, isInvalidLocation) =>
 			isInvalidLocation ? props.theme.colorBad : props.theme.prettyDark};
 		text-align: center;
 
 		color: ${props => props.theme.white};
-		/* border-radius: 0 5px 5px 0; */
+
 		cursor: pointer;
 		font-size: 20px;
 		border: none;
@@ -788,14 +791,13 @@ background: none;
 
 		:hover {
 			background: ${props => props.theme.prettyDark}
-				radial-gradient(circle, transparent 1%, rgba(0, 0, 0, .3) 1%)
+				radial-gradient(circle, transparent 1%, rgba(0, 0, 0, 0.3) 1%)
 				center/15000%;
 			color: ${props => props.theme.colorBad};
 		}
 
 		:active {
-			
-			background-color: rgba(0, 0, 0, .3);
+			background-color: rgba(0, 0, 0, 0.3);
 			background-size: 100%;
 			transition: background 0s;
 		}
@@ -804,22 +806,15 @@ background: none;
 	.searchTerm:focus {
 		color: ${props => props.theme.white};
 	}
-	/* .search {
-		width: 100%;
-		position: relative;
-		display: flex;
-		grid-area: searchBar;
-	} */
 
 	.searchTerm {
 		width: calc(100% - 40px);
 		background-color: ${props => props.theme.darkAccent};
 		transition: background-color 0.1s ease;
-		/* border: 3px solid #00b4cc; */
-		/* border-right: none; */
+
 		padding: 5px;
 		height: 36px;
-		/* border-radius: 5px 0 0 5px; */
+
 		outline: none;
 		color: ${props => props.theme.white};
 		border: none;
@@ -829,12 +824,11 @@ background: none;
 			background-color: ${props => props.theme.moonBackground};
 			transition: background-color 0.1s ease;
 		}
-		
-::placeholder {
 
- font-weight: 300;
- opacity: 0.3;
-}
+		::placeholder {
+			font-weight: 300;
+			opacity: 0.3;
+		}
 	}
 
 	.ToggleAdvancedSearch {
@@ -846,17 +840,8 @@ background: none;
 			color: ${props => props.theme.colorBad};
 			transition: color 0.2s ease;
 		}
-
-		/* margin-top: 5px; */
 	}
 `;
-
-// const muiTheme = getMuiTheme({
-// 	slider: {
-// 	  trackColor: 'yellow',
-// 	  selectionColor: 'green'
-// 	},
-//   });
 
 const SliderStyle = styled.div`
 	.MuiSlider-root {
@@ -869,4 +854,8 @@ const SliderStyle = styled.div`
 	.MuiSlider-markLabelActive {
 		color: ${props => props.theme.colorBad};
 	}
+`;
+
+const ErrorStyle = styled.div`
+	color: ${props => props.theme.colorBad};
 `;

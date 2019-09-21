@@ -28,8 +28,11 @@ class SideDrawer extends Component {
 										<Link
 											to="/profile"
 											onClick={this.props.close}
+											style={{ textDecoration: "none" }}
 										>
-											Favorites
+											<div className="sidebarLink">
+												Favorites
+											</div>
 										</Link>
 									</li>
 								);
@@ -43,7 +46,10 @@ class SideDrawer extends Component {
 									<li>
 										<div
 											className="sidebarLink"
-											onClick={e => this.handleLogout(e)}
+											onClick={e => {
+												this.handleLogout(e);
+												this.props.close();
+											}}
 										>
 											Logout
 										</div>
@@ -78,9 +84,7 @@ class SideDrawer extends Component {
 							onClick={this.props.close}
 							style={{ textDecoration: "none" }}
 						>
-							<div className="sidebarLink">
-								FAQ
-							</div>
+							<div className="sidebarLink">FAQ</div>
 						</Link>
 					</li>
 				</ul>
@@ -95,7 +99,7 @@ export default SideDrawer;
 
 const SideDrawerStyle = styled.nav`
 	height: 100%;
-	background: ${props => props.theme.background3};
+	background: ${props => props.theme.white};
 	box-shadow: 1px 0px 7px rgba(0, 0, 0, 0.5);
 	position: fixed;
 	top: 0;
@@ -118,18 +122,19 @@ const SideDrawerStyle = styled.nav`
 
 	.sidebarLink {
 		cursor: pointer;
-		color: black;
+		color: ${props => props.theme.prettyDark};;
 		transition: color 0.2s ease;
 		text-decoration: none;
 		font-size: 1.5rem;
 		display: block;
-	}
 
-	.sidebarLink:hover,
-	.sidebarLink:active {
-		color: ${props => props.theme.primaryLight};
+		:hover,:active {
+		color: ${props => props.theme.colorBad};
 		transition: color 0.2s ease;
 	}
+	}
+
+
 
 	li {
 		margin: 0.5rem 0;

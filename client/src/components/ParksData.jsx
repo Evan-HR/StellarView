@@ -104,9 +104,6 @@ class BaseParksData extends Component {
 	constructor(props) {
 		super(props);
 		this.googleMap = false;
-		//I don't think markers should go in the state because, like googleMap,
-		// They're referenced in odd places and may update at weird times from the rest of doms
-		// Since they're google map things
 		this.markers = {};
 		this.noParksModalOpen = false;
 	}
@@ -120,14 +117,6 @@ class BaseParksData extends Component {
 		this.noParksModalOpen = false;
 	};
 
-	//Request parks from server
-	//getParkData is a function, weird react notation perhaps?
-	//note, reqData could be X, just a variable name! int x=
-
-	//YOU NEED THE / in the ADDRESS!!
-	//don't put "getParkData", must be "/name"
-	//getParkData gets called, and does a fetch to
-	//app.post("/api/getParkData")
 	getParkData = reqData => {
 		console.log(reqData);
 		// this.updateHistoryQuery(reqData);
@@ -143,14 +132,14 @@ class BaseParksData extends Component {
 			let expiration = new Date(data.timestamp);
 			expiration.setMinutes(expiration.getMinutes() + 60);
 			if (!data.timestamp || now.getTime() > expiration.getTime()) {
-				console.log("Removing expired data from storage:", data);
+				// console.log("Removing expired data from storage:", data);
 				localData = false;
 				sessionStorage.removeItem(storageKey);
 			}
 		}
 
 		if (localData) {
-			console.log("Loaded from storage:", JSON.parse(localData));
+			// console.log("Loaded from storage:", JSON.parse(localData));
 			this.setState({
 				parks: JSON.parse(localData).parks,
 				moonPhase: JSON.parse(localData).moonPercent,
@@ -162,13 +151,10 @@ class BaseParksData extends Component {
 				isFetchingParks: false
 			});
 		} else {
-			// let fetchingState = this.state;
-			// fetchingState.isFetching = true;
-			// this.setState(fetchingState);
 			axios
 				.post("/api/getParkData", reqData)
 				.then(response => {
-					console.log(response.data);
+					// console.log(response.data);
 					if (!(response.status === 204)) {
 						let maxScore = 0;
 						for (var i = 0; i < response.data.parks.length; i++) {
@@ -196,9 +182,8 @@ class BaseParksData extends Component {
 							JSON.stringify(reqData),
 							JSON.stringify(response.data)
 						);
-						console.log("Saved to storage:", response.data);
+						// console.log("Saved to storage:", response.data);
 					} else {
-						console.log("GOT HERE 204 204 MUMBAI NO EXIST!");
 						this.setState({ parks: [], isFetchingParks: false });
 						// return <NoResultsModal />;
 					}
@@ -235,7 +220,7 @@ class BaseParksData extends Component {
 				}}
 			>
 				{props => (
-					<animated.div className="ParkMapStyle" style={props}>
+					<animated.div className="parkMapStyle" style={props}>
 						<ParkMap
 							parkList={this.state.parks}
 							markers={this.markers}
@@ -248,7 +233,7 @@ class BaseParksData extends Component {
 				)}
 			</Spring>
 
-			// <div className="ParkMapStyle">
+			// <div className="parkMapStyle">
 			// 	<ParkMap
 			// 		parkList={this.state.parks}
 			// 		markers={this.markers}
@@ -264,7 +249,7 @@ class BaseParksData extends Component {
 	renderParkForm = () => {
 		if (true) {
 			return (
-				<div className="ParkFormStyle">
+				<div className="parkFormStyle">
 					<ParkForm
 						fetchParks={this.getParkData}
 						clearParks={this.clearParks}
@@ -294,9 +279,10 @@ class BaseParksData extends Component {
 	};
 
 	renderNoResults = () => {
-		if (!this.state.isFetchingParks 
+		if (
+			!this.state.isFetchingParks
 			// && !this.noParksModalOpen
-			) {
+		) {
 			if (this.state.parks.length) {
 				if (
 					Math.max(...this.state.parks.map(park => park.score)) < 0.6
@@ -332,7 +318,7 @@ class BaseParksData extends Component {
 			<ResultsPageStyle>
 				{this.renderNoResults()}
 				{/* {this.renderParkMap()} */}
-				<div className="RightSideContainerFull">
+				<div className="formMoonCards">
 					{/* <button
 						onClick={() => {
 							this.setState({ hideForm: !this.state.hideForm });
@@ -341,36 +327,39 @@ class BaseParksData extends Component {
 						Toggle form
 					</button> */}
 					{/* <div className="FormMoonWrapper"> */}
-					{this.renderParkForm()}
 
-					<div className="MoonStyle">
-						<MoonComponent
-							moonPhase={this.state.moonPhase}
-							parkList={this.state.parks}
-							moonType={this.state.moonType}
-							stellarData={this.state.stellarData}
-						/>
-					</div>
+					<div className="formMoonSort">
+						{this.renderParkForm()}
 
-					<div className="SortByContainer">
-						<div className="SortBy">
-							Sort parks by:{"  "}
-							<button
-								onClick={this.sortParksDist}
-								disabled={this.state.sortedBy === "dist"}
-							>
-								Distance
-							</button>
-							<button
-								onClick={this.sortParksScore}
-								disabled={this.state.sortedBy === "score"}
-							>
-								Score
-							</button>
+						<div className="moonStyle">
+							<MoonComponent
+								moonPhase={this.state.moonPhase}
+								parkList={this.state.parks}
+								moonType={this.state.moonType}
+								stellarData={this.state.stellarData}
+							/>
+						</div>
+
+						<div className="sortByContainer">
+							<div className="sortBy">
+								Sort parks by:{"  "}
+								<button
+									onClick={this.sortParksDist}
+									disabled={this.state.sortedBy === "dist"}
+								>
+									Distance
+								</button>
+								<button
+									onClick={this.sortParksScore}
+									disabled={this.state.sortedBy === "score"}
+								>
+									Score
+								</button>
+							</div>
 						</div>
 					</div>
 
-					<div className="ParkTableStyle">
+					<div className="parkTableStyle">
 						<ParkTable
 							parkList={this.state.parks}
 							moon={this.state.moonPhase}
@@ -395,10 +384,9 @@ class BaseParksData extends Component {
 		);
 	};
 
-	//recursively calls render on it's children
 	render() {
-		console.log("ParksData - rendered");
-		console.log("Current location: ", window.location.pathname);
+		// console.log("ParksData - rendered");
+		// console.log("Current location: ", window.location.pathname);
 		return (
 			<MainContentWrapper
 				active={this.state.hideForm}
@@ -431,10 +419,10 @@ export default withRouter(ParksData);
 //////////////////////////////////////////
 
 const LandingPageStyle = styled.div`
-	.ParkFormStyle {
+	.parkFormStyle {
 		width: 95%;
-		margin: auto auto;
 		margin-top: 10vh;
+		max-width: 530px;
 
 		@media screen and (min-width: 320px) {
 			width: 95%;
@@ -442,227 +430,205 @@ const LandingPageStyle = styled.div`
 			margin-top: 10vh;
 		}
 
-		@media screen and (min-width: 420px) {
-			width: 90%;
+		@media screen and (min-width: 480px) {
+			width: 95%;
 			margin: auto auto;
 			margin-top: 10vh;
 		}
 
-		@media screen and (min-width: 769px) {
-			width: 50%;
-		
+		@media screen and (min-width: 600px) {
+			width: 75%;
 			margin: auto auto;
-			margin-top: 10vh;
+			margin-top: 5.5vh;
 		}
 
-
+		@media screen and (min-width: 1000px) {
+			width: 55%;
+			margin: auto auto;
+			margin-top: 7vh;
+		}
 	}
 `;
 
 const ResultsPageStyle = styled.div`
-	display: grid;
 	margin: 0 auto 0 auto;
 	margin-top: -80vh;
 	overflow: none;
-	
 
-	grid-template-columns: 1fr 1fr;
-	grid-column-gap: 10px;
-	grid-row-gap: 10px;
-	grid-template-areas: ". rightSide";
-	.Placeholder1 {
-		display: none;
-		grid-area: placeholder1;
-		background-color: azure;
-	}
-	.RightSideContainerFull {
+	.formMoonCards {
 		z-index: 0;
-		grid-area: rightSide;
-		margin-bottom: -30px; /* Spacing between cards offset */
-		/* overflow-y: scroll;
-		overflow-x: hidden; */
-		/* background-color: ${props => props.theme.white}; */
-	}
-	.ParkFormStyle {
-		/* height: 11vh; */
-		/* height: 50%; */
-		grid-area: form;
-		${({ active }) => active && `display: none;`}
-	}
-	/* .FormMoonWrapper{
-		min-height: 33.33vh;
-	} */
-
-	.MoonStyle {
-		/* height: 50%; */
-		/* background: ${props => props.theme.moonCard}; */
-		background: none;
-	}
-
-	.helpCard{
-		font-family: 'Lato', sans-serif;
-		height: 140px;
+		grid-area: formMoonCards;
+		margin-bottom: -30px;
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-		grid-template-rows: 1fr 1fr 1fr;
-		grid-template-areas: 
-		"help help help help help"
-		"iconA iconB iconC iconD iconE"
-		"descA descB descC descD descE";
-		padding: 0px 10px 10px 15px;
-		font-size: 14px;
-		/* box-shadow: inset 0px 0px 0px 4px #485261;
-
-		background: ${props => props.theme.cardLight}; */
-
-		background: -moz-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ff3.6+ */
-		background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(189,194,198,0.95)), color-stop(100%, rgba(172,177,181,1))); /* safari4+,chrome */
-		background: -webkit-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* safari5.1+,chrome10+ */
-		background: -o-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* opera 11.10+ */
-		background: -ms-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ie10+ */
-		background: linear-gradient(90deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* w3c */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', endColorstr='#ACB1B5',GradientType=1 ); /* ie6-9 */
-
-		img,i{
-			margin: auto auto auto auto;
-		}
-		span{
-			margin: 0px auto auto auto;
-		}
-		.help{
-			color: ${props => props.theme.fontDark};
-			font-size: 20px;
-			
-			font-weight: 600;
-			margin: auto auto 0px auto;
-			grid-area: help;
-		}
-
-		.iconA{
-			grid-area: iconA
-		}
-		.iconB{
-			grid-area: iconD
-		}
-		.iconC{
-			font-size: 52px;
-			grid-area: iconC
-		}
-		.iconD{
-			grid-area: iconB
-		}
-		.iconE{
-			
-			grid-area: iconE
-		}
-
-		.descA{
-			grid-area: descA
-		}
-		.descB{
-			grid-area: descD
-		}
-		.descC{
-			grid-area: descC
-		}
-		.descD{
-			grid-area: descB
-		}
-		.descE{
-			grid-area: descE
-		}
-
+		grid-template-columns: 1fr;
+		grid-template-areas:
+			"formMoonSort"
+			"cards";
 	}
 
-	.SortByContainer {
-		font-family: 'Lato', sans-serif;
-	
-		padding: 13px 0px 13px 0px;
-		width: 100%;
+	.parkTableStyle {
+		grid-area: cards;
+	}
 
-		.SortBy {
-			color: ${props => props.theme.white};
-			transition: color 0.2s ease;
-			button{	
-				all: unset;
-				color: ${props => props.theme.yellow};
-				font-weight: 600;
-				cursor: pointer;
-				margin: 0 0px 0 15px;
-				:hover {
-					color: ${props => props.theme.colorBad};
-					transition: color 0.2s ease;
-				}
-				:active {
-					color: ${props => props.theme.yellow};
-					transition: color 0.2s ease;
-		-webkit-transform: scale(1.05);
-		transform: scale(1.05);
+	.formMoonSort {
+		width: 95%;
+		margin: auto auto;
+		display: grid;
+		grid-area: formMoonSort;
 
-				}
+		grid-template-areas:
+			"form"
+			"moonContainer"
+			"sort";
+
+		.parkFormStyle {
+			grid-area: form;
+			width: 100%;
+			margin: 0rem 0 0.5rem 0;
+			@media screen and (min-width: 1025px) {
+
 			}
-			display: flex;
-			justify-content: flex-start;
+			${({ active }) => active && `display: none;`}
+		}
+
+		.moonStyle {
+			background: none;
+			grid-area: moonContainer;
+			margin-bottom: 3rem;
+		}
+
+		.sortByContainer {
+			font-family: "Lato", sans-serif;
+			grid-area: sort;
+			margin-bottom: 0.7rem;
+
+			.sortBy {
+				color: ${props => props.theme.white};
+				transition: color 0.2s ease;
+				button {
+					all: unset;
+					color: ${props => props.theme.yellow};
+					font-weight: 600;
+					cursor: pointer;
+					margin: 0 0px 0 15px;
+					:hover {
+						color: ${props => props.theme.colorBad};
+						transition: color 0.2s ease;
+					}
+					:active {
+						color: ${props => props.theme.yellow};
+						transition: color 0.2s ease;
+						-webkit-transform: scale(1.05);
+						transform: scale(1.05);
+					}
+				}
+				display: flex;
+				justify-content: flex-start;
+			}
 		}
 	}
 
-	.ParkTableStyle {
-		/* ${({ active }) => {
-			if (active) return `max-height:600px;`;
-			else return `max-height:300px`;
-		}} */
-	}
-
-	/* formerly min-width: 769px*/
-	@media screen and (max-width: 989px) {
-		margin-top: 4rem;
+	@media screen and (max-width: 320px) {
+		margin-top: 2vh;
 		width: 100%;
 		grid-template-columns: 1fr;
-		grid-template-rows: ${props => (props.hideMap ? "0px auto" : "50% auto")};
-		grid-template-areas:
-			/* "map" */
-			"rightSide";
-		.RightSideContainerFull {
+		grid-template-rows: ${props =>
+			props.hideMap ? "0px auto" : "50% auto"};
+		grid-template-areas: "formMoonCards";
+
+		.formMoonCards {
 			overflow: none;
 		}
 
-		.ParkMapStyle {
+		.parkMapStyle {
 			display: ${props => (props.hideMap ? "none" : "fixed")};
 		}
 	}
-	
-	@media screen and (min-width: 990px) and (max-width: 1300px) {
-		/* width: 90%; */
-		/* margin-top: 0rem; */
-		grid-template-columns: 1fr 1fr;
-		grid-template-rows: auto auto;
-		grid-template-areas:
-			". rightSide"
-			". rightSide";
-		.ParkFormStyle {
+
+	@media screen and (min-width: 320px) {
+		margin-top: 2vh;
+		width: 100%;
+		grid-template-columns: 1fr;
+		grid-template-rows: ${props =>
+			props.hideMap ? "0px auto" : "50% auto"};
+		grid-template-areas: "formMoonCards";
+		.formMoonCards {
+			overflow: none;
+		}
+
+		.parkMapStyle {
+			display: ${props => (props.hideMap ? "none" : "fixed")};
+		}
+	}
+
+	@media screen and (min-width: 600px) {
+		margin-top: 2vh;
+		width: 95%;
+		grid-template-columns: 1fr;
+		grid-template-areas: "formMoonCards";
+
+		.formMoonCards {
+			overflow: none;
+		}
+
+		.parkMapStyle {
+			display: ${props => (props.hideMap ? "none" : "fixed")};
+		}
+	}
+
+	@media screen and (min-width: 500px) {
+		.formMoonCards {
+			max-width: 530px;
+			margin: 0 auto;
+		}
+	}
+
+	@media screen and (min-width: 600px) {
+		.formMoonCards {
+			max-width: 530px;
+			margin: 0 auto;
+		}
+	}
+
+	@media screen and (min-width: 1025px) {
+		margin-top:3%;
+		.parkFormStyle {
 			grid-area: form;
 			${({ active }) => active && `display: none;`}
 		}
 	}
 `;
 
+//where both map and FormMoonCards located
 const MainContentWrapper = styled.div`
-	width: 90vw;
 	margin: 0 auto 0 auto;
-	.ParkMapStyle {
-		/* grid-area: map; */
+	/* display: block; */
 
-		position: -webkit-sticky;
-		position: sticky;
+	.parkMapStyle {
+		/* height: 80vh; */
+		width: 95%;
 		height: 80vh;
-		width: 42.5vw;
-		top: 10vh;
+		top: 10%;
 		background-color: gray;
-		display: ${props => (props.pathname === "/home" ? "none" : "fixed")};
+		display: none;
+		margin: 0 auto;
 	}
-	@media screen and (max-width: 989px) {
-		.ParkMapStyle {
-			display: ${props => (props.hideMap ? "none" : "fixed")};
+
+	@media screen and (min-width: 1025px) {
+		margin: 0 5%;
+		display: ${props => (props.pathname === "/home" ? "block" : "grid")};
+		/* display: grid; */
+		grid-template-columns: minmax(470px, 0.5fr) 1fr;
+		grid-template-areas: "formMoonCards map";
+
+		.formMoonCards {
+			grid-area: formMoonCards;
+		}
+		.parkMapStyle {
+			display: ${props =>
+				props.pathname === "/home" ? "none" : "fixed"};
+			grid-area: map;
+			position: sticky;
 		}
 	}
 `;
