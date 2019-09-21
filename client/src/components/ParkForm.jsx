@@ -303,7 +303,7 @@ class BaseParkForm extends Component {
 	// 	});
 	// };
 
-	//props to send one-way information to ParksData
+	//props to send one-way information to MainComponent
 	//this.state is the "X" in getParkData()
 	//fetchP(x) --> getParkData(x)
 	onSubmit = e => {
@@ -827,7 +827,7 @@ const SearchFormStyle = styled.div`
 
 		::placeholder {
 			font-weight: 300;
-			opacity: 0.3;
+			opacity: 0.5;
 		}
 	}
 

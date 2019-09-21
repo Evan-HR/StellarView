@@ -91,23 +91,6 @@ class ParkCard extends Component {
 							</div>
 						</div>
 
-						<div className="VisibleIcon">
-							{this.props.park.score > 0.8 ? (
-								<i className="far fa-eye visibleGoodIcon"></i>
-							) : this.props.park.score > 0.6 ? (
-								<i className="far fa-eye visiblePartlyIcon"></i>
-							) : (
-								<i className="fas fa-eye-slash invisibleIcon"></i>
-							)}
-						</div>
-
-						<span className="VisibleIconDesc">
-							{this.props.park.score > 0.8
-								? "Visible"
-								: this.props.park.score > 0.6
-								? "Partly Visible"
-								: "Not Visible"}
-						</span>
 					</div>
 
 					<div className="cardContent">
@@ -450,34 +433,6 @@ const CardStyle = styled.div`
 			}
 		}
 
-		.VisibleIcon {
-			display: flex;
-			display: none;
-			grid-area: VisibleIcon;
-			margin: auto auto;
-
-			/* margin: auto 10px auto 10px; */
-			.visibleGoodIcon {
-				font-size: 20px;
-				color: ${props => props.theme.parkMapGreen};
-			}
-
-			.visiblePartlyIcon {
-				font-size: 20px;
-				color: #92704f;
-			}
-			.invisibleIcon {
-				font-size: 20px;
-			}
-		}
-
-		.VisibleIconDesc {
-			display: flex;
-			display: none;
-			grid-area: VisibleIconDesc;
-			font-size: 13px;
-			margin: auto auto;
-		}
 	}
 
 	.cardContent {

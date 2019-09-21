@@ -1,7 +1,7 @@
 //Displays park table
 import React, { Component } from "react";
 import ParkCard from "./ParkCard";
-import ParkMapModal from "./ParkMapModal";
+import ParkMoreInfoModal from "./ParkMoreInfoModal";
 
 class ParkTableProfile extends Component {
 	state = {};
@@ -82,7 +82,7 @@ class ParkTableProfile extends Component {
 				<div className="border border-primary">
 					{this.renderParkTable()}
 				</div>
-				<ParkMapModal ref={this.parkModalChild} />
+				<ParkMoreInfoModal ref={this.parkModalChild} />
 			</React.Fragment>
 		);
 	}

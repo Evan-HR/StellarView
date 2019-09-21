@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { AuthConsumer } from "./AuthContext";
 import ParkTableProfile from "./ParkTableProfile";
-import { parkScore } from "./ParksData";
+import { parkScore } from "./MainComponent";
 
 class BaseProfile extends Component {
 	constructor(props) {
