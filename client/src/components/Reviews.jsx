@@ -345,7 +345,7 @@ const ReviewsStyle = styled.div`
 		font-weight: normal;
 	}
 	.success {
-		font-size: 20px;
+		font-size: 18px;
 	}
 `;
 
@@ -463,7 +463,7 @@ const AlertStyle = styled.div`
 
 	.AlertText {
 		/* background-color: #daa97961; */
-		font-size: 20px;
+		font-size: 18px;
 		font-weight: 400;
 		padding: 10px;
 		span {

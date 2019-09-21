@@ -155,16 +155,14 @@ class ParkMoreInfoModal extends Component {
 								) : (
 									<i className="fas fa-eye-slash invisibleIcon"></i>
 								)}
-									<div className="VisibleIconDesc">
+							</div>
+							<div className="VisibleIconDesc">
 								{this.park.score > 0.8
 									? "Visible"
 									: this.park.score > 0.6
 									? "Partly Visible"
 									: "Not Visible"}
 							</div>
-							</div>
-
-						
 
 							<div className="reportPark">
 								<ReportPark parkID={this.park.id} />
@@ -185,28 +183,26 @@ class ParkMoreInfoModal extends Component {
 								)}
 								<div className="directionsText">Directions</div>
 							</div>
-							
 
 							<div className="ParkScoreHeading">
 								Visibility Score
 							</div>
-							<div className="ParkScore">
-								<span className="ScoreNumerator">
-									<CountUp
-										start={0}
-										end={Math.round(this.park.score * 100)}
-										delay={0}
-									>
-										{({ countUpRef }) => (
-											<div className="Score">
-												<span ref={countUpRef} />
-												<span className="Percentage">
-													%
-												</span>
-											</div>
-										)}
-									</CountUp>
-								</span>
+							<div className="Score">
+								<CountUp
+									start={0}
+									end={Math.round(this.park.score * 100)}
+									delay={0}
+								>
+									{({ countUpRef }) => (
+										<React.Fragment>
+											<div
+												className="ScoreNumber"
+												ref={countUpRef}
+											/>
+											<div className="Percentage">%</div>
+										</React.Fragment>
+									)}
+								</CountUp>
 							</div>
 						</div>
 
@@ -425,9 +421,9 @@ const ModalStyle = styled.div`
 		font-style: normal;
 		font-weight: normal;
 		color: ${props => props.theme.white};
-		font-size: 30px;
+		font-size: 25px;
 		text-align: left;
-		padding: 1rem 2.5rem 2rem 1rem;
+		/* padding: 1rem 2.5rem 2rem 1rem; */
 		background: ${props => props.theme.mapBlue};
 		border: none;
 		border-radius: 0rem;
@@ -436,7 +432,7 @@ const ModalStyle = styled.div`
 			top: 0px;
 			right: 0px;
 			float: right;
-			font-size: 2.5rem;
+			font-size: 2rem;
 			font-weight: 700;
 			line-height: 1;
 			color: ${props => props.theme.white};
@@ -485,46 +481,37 @@ const ModalStyle = styled.div`
 		.HeaderGrid {
 			display: grid;
 			grid-area: HeaderGrid;
-			grid-template-columns: 1fr 1fr 1fr 1fr;
-			grid-template-rows: auto auto;
-			/* grid-template-areas:
-				"directions  	ParkScoreHeading   VisibleIcon"
-				"directionsText	ParkScoreHeading   VisibleIconDesc"
-				"favPark 	 	ParkScore 		   reportPark"
-				"favParkText 	ParkScore 		   reportParkText"; */
+			grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+			grid-template-rows: 50px 0.3fr 1fr;
 
 			grid-template-areas:
-				"ParkScoreHeading 	ParkScoreHeading 	 VisibleIcon 	  VisibleIcon"
-				"ParkScore 			ParkScore 	  		 VisibleIconDesc  VisibleIconDesc"
-				"directions  		favPark   	 		 reportPark ."
-				"directionsText		favParkText   		 reportParkText .";
+				"ParkScore 			ParkScore 	 		.		. VisibleIcon     VisibleIcon        "
+				"ParkScoreHeading 	ParkScoreHeading . . VisibleIconDesc VisibleIconDesc   "
+				"directions  		directions			favPark			 favPark		 reportPark			reportPark"
+				"directionsText		directionsText		favParkText	 	 favParkText	 reportParkText 	reportParkText";
 
 			.ParkScoreHeading {
 				grid-area: ParkScoreHeading;
-				font-size: 20px;
+				font-size: 18px;
+				margin-bottom: 20px;
 			}
-			.ParkScore {
+
+			.Score {
+				display: flex;
 				grid-area: ParkScore;
-				margin: auto auto;
-
-				.ScoreNumerator {
-					font-weight: 600;
-					font-size: 64px;
-					.Percentage {
-						font-size: 24px;
-					}
-				}
-
-				.ScoreDenominator {
-					font-weight: 500;
-
-					font-size: 24px;
+				font-size: 40px;
+				font-weight: 600;
+				align-items: baseline;
+				margin: auto auto 0 auto;
+				.Percentage {
+					display: inline-block;
+					font-size: 25px;
 				}
 			}
 
 			.VisibleIcon {
 				grid-area: VisibleIcon;
-				margin: auto 0;
+				margin: auto auto 0 auto;
 
 				/* margin: auto 10px auto 10px; */
 				.visibleGoodIcon {
@@ -534,18 +521,19 @@ const ModalStyle = styled.div`
 
 				.visiblePartlyIcon {
 					font-size: 37px;
-					color: #92704f;
+					color: ${props => props.theme.fontDark};
 				}
 				.invisibleIcon {
 					font-size: 37px;
+					color: ${props => props.theme.fontDark};
 				}
+			}
 
-				.VisibleIconDesc {
-					grid-area: VisibleIconDesc;
-					font-size: 20px;
-					font-weight: 400;
-					/* margin: auto auto; */
-				}
+			.VisibleIconDesc {
+				grid-area: VisibleIconDesc;
+				font-size: 18px;
+				font-weight: 400;
+				/* margin: auto auto; */
 			}
 
 			.directions {
@@ -559,12 +547,18 @@ const ModalStyle = styled.div`
 					text-decoration: none;
 				}
 				i {
-					color: ${props => props.theme.fontDark};
+					color: ${props => props.theme.franNavy};
+					transition: color 0.3s;
+					:hover,
+					:active {
+						color: ${props => props.theme.directionsHover};
+						transition: color 0.3s;
+					}
 				}
 
 				.directionsText {
 					grid-area: directionsText;
-					font-size: 20px;
+					font-size: 18px;
 					font-weight: 400;
 					font-family: Lato;
 				}
@@ -583,7 +577,7 @@ const ModalStyle = styled.div`
 
 				.favParkText {
 					grid-area: favParkText;
-					font-size: 20px;
+					font-size: 18px;
 					font-weight: 400;
 				}
 			}
@@ -596,7 +590,7 @@ const ModalStyle = styled.div`
 
 				.reportParkText {
 					grid-area: reportParkText;
-					font-size: 20px;
+					font-size: 18px;
 					font-weight: 400;
 				}
 			}
@@ -732,13 +726,6 @@ const ModalStyle = styled.div`
 	}
 `;
 
-const HeaderStyle = styled.div`
-	color: ${props => props.theme.fontDark};
-	font-family: "Lato", sans-serif;
-	font-style: normal;
-
-	font-size: 36px;
-`;
 
 const WeatherWrapper = styled.div`
 	display: flex;

@@ -55,5 +55,6 @@ export const theme = {
 	cardLightHover: "#c2ccd4",
 	yellow: "#edd9c0",
 	cardHeader: "#9298a0",
-	cardHeaderHover:"#707a88"
+	cardHeaderHover:"#707a88",
+	directionsHover:"#384771"
 };
