@@ -205,9 +205,11 @@ class ParkMoreInfoModal extends Component {
 									back={
 										<React.Fragment>
 											<span className="MoreInfoDesc">
-												Cloud Coverage is the % of the
-												sky that is covered by clouds.
-												Under 25% is considered good.
+												{this.park.score > 0.8
+													? "Good naked-eye star visibilty at this score"
+													: this.park.score > 0.6
+													? "Naked-eye stargazing may not be adequate at this time right now"
+													: "Naked-eye stargazing not possible at this time right now"}
 											</span>
 										</React.Fragment>
 									}
@@ -262,9 +264,11 @@ class ParkMoreInfoModal extends Component {
 									back={
 										<React.Fragment>
 											<span className="MoreInfoDesc">
-												Cloud Coverage is the % of the
-												sky that is covered by clouds.
-												Under 25% is considered good.
+												{this.park.score > 0.8
+													? "We recommend stargazing at score above 80%.  Read how the score is calculated here."
+													: this.park.score > 0.6
+													? "We do not strongly recommend stargazing at this score.  Read how the score is calculated here."
+													: "We strongly recommend to not stargaze at a score below 60%.  Read how the score is calculated here."}
 											</span>
 										</React.Fragment>
 									}
@@ -632,8 +636,6 @@ const ModalStyle = styled.div`
 		}
 
 		.MoreInfoDesc {
-			text-align: left;
-			display: block;
 			padding: 6px;
 			font-weight: 500;
 		}
@@ -673,13 +675,16 @@ const ModalStyle = styled.div`
 					width: 100%;
 					background-color: ${props => props.theme.cardDark};
 					border-radius: 20px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 
 					.Score {
 						display: flex;
-						font-size: 40px;
+						font-size: 50px;
 						font-weight: 600;
 						align-items: baseline;
-						margin: auto auto 0 auto;
+						margin: auto auto;
 						.Percentage {
 							display: inline-block;
 							font-size: 25px;
@@ -705,11 +710,14 @@ const ModalStyle = styled.div`
 					width: 100%;
 					background-color: ${props => props.theme.cardLight};
 					border-radius: 20px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					i {
+						font-size: 45px;
+					}
 				}
 			}
-
-
-
 
 			.cloudContainer {
 				height: 157px;
@@ -726,6 +734,9 @@ const ModalStyle = styled.div`
 				.cloudCard {
 					height: 157px;
 					position: absolute;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 					width: 100%;
 					background-color: ${props => props.theme.cardLight};
 					border-radius: 20px;
@@ -745,6 +756,9 @@ const ModalStyle = styled.div`
 				.lightPolCard {
 					height: 157px;
 					position: absolute;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 					width: 100%;
 					background-color: ${props => props.theme.cardDark};
 					border-radius: 20px;
@@ -764,6 +778,9 @@ const ModalStyle = styled.div`
 				.moonCard {
 					height: 157px;
 					position: absolute;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 					width: 100%;
 					background-color: ${props => props.theme.cardDark};
 					border-radius: 20px;
@@ -788,6 +805,9 @@ const ModalStyle = styled.div`
 				.humidityCard {
 					height: 157px;
 					position: absolute;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 					width: 100%;
 					background-color: ${props => props.theme.cardLight};
 					border-radius: 20px;
