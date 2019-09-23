@@ -206,10 +206,10 @@ class ParkMoreInfoModal extends Component {
 										<React.Fragment>
 											<span className="MoreInfoDesc">
 												{this.park.score > 0.8
-													? "Good naked-eye star visibilty at this score"
+													? "Good naked-eye star visibilty at this score."
 													: this.park.score > 0.6
-													? "Naked-eye stargazing may not be adequate at this time right now"
-													: "Naked-eye stargazing not possible at this time right now"}
+													? "Naked-eye stargazing may not be adequate at this time right now."
+													: "Naked-eye stargazing not possible at this time right now."}
 											</span>
 										</React.Fragment>
 									}
@@ -485,14 +485,20 @@ const ModalStyle = styled.div`
 		font-family: "Lato", sans-serif;
 		font-style: normal;
 		font-weight: normal;
-		color: ${props => props.theme.white};
+		color: ${props => props.theme.prettyDark};
 		font-size: 25px;
+		
 		text-align: left;
+		padding: 1.5rem 1rem;
+		
 		/* padding: 1rem 2.5rem 2rem 1rem; */
-		background: ${props => props.theme.mapBlue};
-		border: none;
+		background: ${props => props.theme.green};
+		border-bottom: 6px solid ${props => props.theme.prettyDark};
 		border-radius: 0rem;
 		.close {
+			outline: none;
+			text-shadow: none;
+			color: ${props => props.theme.prettyDark};
 			position: absolute;
 			top: 0px;
 			right: 0px;
@@ -500,25 +506,21 @@ const ModalStyle = styled.div`
 			font-size: 2rem;
 			font-weight: 700;
 			line-height: 1;
-			color: ${props => props.theme.white};
-			outline: none;
-			text-shadow: none;
-			opacity: 0.5;
+		
+
+			
 		}
 
 		.close:hover {
-			color: ${props => props.theme.colorBad};
+			color: ${props => props.theme.pink};
 			text-decoration: none;
 		}
 
 		.close:active {
-			color: ${props => props.theme.white};
+			color: ${props => props.theme.prettyDark};
 		}
 
-		.close:not(:disabled):not(.disabled):hover,
-		.close:not(:disabled):not(.disabled):focus {
-			opacity: 0.75;
-		}
+
 	}
 
 	.ContentGrid {
