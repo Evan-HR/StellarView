@@ -33,25 +33,25 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 	} else {
 		moonScore = 0;
 	}
-	var lightPolScore = 0.25 * (((-1 * 1) / 3) * (lightPol - 3));
+	var lightPolScore = ((-1 * 1) / 3) * (lightPol - 3);
 	var humidityScore = 0;
 	if (humidity < 0.4) {
-		humidityScore += 0.15 * 1;
+		humidityScore += 1;
 	} else if (inRange(humidity, 0.4, 0.8)) {
-		humidityScore += 0.15 * (-2.5 * humidity + 2);
+		humidityScore += -2.5 * humidity + 2;
 	} else if (0.8 < humidity) {
 		humidityScore += 0;
 	}
 	var cloudScore = 0;
 	if (cloudCov < 0.2) {
-		cloudScore += 0.15 * 1;
+		cloudScore += 1;
 	} else if (inRange(cloudCov, 0.2, 0.4)) {
-		cloudScore += 0.15 * (-5 * cloudCov + 2);
+		cloudScore += -5 * cloudCov + 2;
 	} else if (0.4 < cloudCov) {
 		cloudScore += 0;
 	}
 
-	const finalScore = moonScore + cloudScore + humidityScore + lightPolScore;
+	const finalScore = (0.45*moonScore) + (0.15*cloudScore) + (0.15*humidityScore) + (0.25*lightPolScore);
 
 	if (finalScore < 0) {
 		finalScore = 0;
@@ -59,14 +59,14 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 		finalScore = 100;
 	}
 
-	// console.log(
-	// 	"Moon score, cloudscore, humidity, lightpolscore ",
-	// 	moonScore,
-	// 	cloudScore,
-	// 	humidityScore,
-	// 	lightPolScore
-	// );
-	// console.log("final score: ", finalScore);
+	console.log(
+		"Moon score, cloudscore, humidity, lightpolscore ",
+		moonScore,
+		cloudScore,
+		humidityScore,
+		lightPolScore
+	);
+	console.log("final score: ", finalScore);
 	return {
 		finalScore: finalScore,
 		moonScore: moonScore,

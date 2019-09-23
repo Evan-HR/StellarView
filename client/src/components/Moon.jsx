@@ -9,7 +9,12 @@ function Moon(props) {
 	function prettyDate(time) {
 		var date = new Date(time);
 		var localeSpecificTime = date.toLocaleTimeString();
-		return localeSpecificTime.replace(/:\d+ /, " ");
+		if (localeSpecificTime==="Invalid Date"){
+			return "Not Available"
+		}else{
+			return localeSpecificTime.replace(/:\d+ /, " ");
+		}
+		
 	}
 
 	return (

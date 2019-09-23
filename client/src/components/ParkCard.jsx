@@ -254,14 +254,19 @@ const ParkCardWrapper = styled.div`
 		padding-bottom: 10px;
 	}
 
-	@media screen and (min-width: 375px) {
+	@media screen and (min-width: 355px) {
 		border-radius: 20px;
-		margin: 0 5px 15px 5px;
+		margin: 0 10px 15px 10px;
+	}
+
+	@media screen and (min-width: 400px) {
+		margin: 0 10px 15px 10px;
 	}
 
 
+
 	@media screen and (min-width: 480px) {
-		padding-bottom: 15px;
+		padding-bottom: 0px;
 	}
 
 	@media screen and (min-width: 525px) {
@@ -288,24 +293,21 @@ const ParkCardWrapper = styled.div`
 		padding-right: 0vw;
 	}
 
-	@media screen and (min-width: 1060px) {
+	/* @media screen and (min-width: 1060px) {
 		padding-left: 1vw;
 		padding-right: 1vw;
-	}
+	} */
 	@media screen and (min-width: 1292px) {
-		padding-left: 2.5vw;
-		padding-right: 2.5vw;
+		padding-bottom: 0px;
 	}
 
 	@media screen and (min-width: 1460px) {
-		padding-left: 5vw;
-		padding-right: 5vw;
+		
 	}
 
 	@media screen and (min-width: 1600px) {
-		padding-left: 6vw;
-		padding-right: 6vw;
-	} */
+		
+	} 
 `;
 
 const CardStyle = styled.div`
@@ -315,10 +317,10 @@ const CardStyle = styled.div`
 	font-size: 18px;
 	line-height: 23px;
 	color: ${props => props.theme.fontDark};
-	min-height: 30vh;
+	min-height: 270px;
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	grid-template-rows: 1/6fr 2/3fr;
+	grid-template-rows: 0.3fr auto;
 	/* grid-gap: 1em; */
 
 	grid-template-areas:
@@ -326,7 +328,7 @@ const CardStyle = styled.div`
 		"cardContent  cardContent cardContent 	 cardContent  	cardContent   cardContent";
 
 	@media screen and (min-width: 320px) {
-		grid-template-rows: 1/3fr 2/3fr;
+		grid-template-rows: 0.4fr auto;
 	}
 	@media screen and (min-width: 480px) {
 	}
@@ -337,17 +339,18 @@ const CardStyle = styled.div`
 		grid-template-columns: 1fr 0.2fr;
 		grid-template-areas: "ParkTitle CarIcon";
 		/* min-height: 13vh; */
-		background: ${props => props.theme.cardHeader};
+		background: ${props => props.theme.green};
+		border-bottom: 5px solid #111414;
 		padding: 13px 10px;
 		:hover,
 		:active {
-			background: ${props => props.theme.cardHeaderHover};
+			background: ${props => props.theme.cardHeader};
 		}
 		@media screen and (min-width: 320px) {
 			padding: 13px 10px;
 		}
 
-		@media screen and (min-width: 375px) {
+		@media screen and (min-width: 355px) {
 			border-top-left-radius: 20px;
 			border-top-right-radius: 20px;
 	
@@ -426,6 +429,9 @@ const CardStyle = styled.div`
 			grid-area: CarIcon;
 			margin: auto 0 auto auto;
 			font-size: 22px;
+			i{
+				color: ${props => props.theme.prettyDark}
+			}
 			/* padding-right: 1rem; */
 			.CarIconDesc {
 				margin: auto auto;
@@ -449,19 +455,20 @@ const CardStyle = styled.div`
 			"StarRev 	 StarRev 	 StarRev 	  	  StarRev  		MoreInfoDesc 	  MoreInfoDesc";
 
 		@media screen and (min-width: 320px) {
-			padding: 10px 10px;
+			padding: 0px 10px;
 			grid-template-rows: 1fr 1fr 0.5fr 1fr;
 		}
 
 		@media screen and (min-width: 430px) {
-			padding: 10px 30px;
-			.WeatherInfo {
-				padding-bottom: 10px;
-			}
+			padding: 0px 30px;
+	
 		}
 
 		@media screen and (min-width: 480px) {
-			padding: 10px 30px;
+			padding: 0px 30px;
+			.WeatherInfo {
+				padding-bottom: 10px;
+			}
 		}
 
 		@media screen and (min-width: 685px) {
@@ -631,7 +638,7 @@ const CardStyle = styled.div`
 			grid-area: Score;
 			font-size: 60px;
 			font-weight: 600;
-			padding-top: 15px;
+			padding-top: 25px;
 			align-items: baseline;
 			margin: auto 0;
 			.Percentage {
@@ -641,11 +648,12 @@ const CardStyle = styled.div`
 
 			@media screen and (min-width: 320px) {
 				font-size: 60px;
-				padding-top: 15px;
+				padding-top: 25px;
 			}
 
 			@media screen and (min-width: 480px) {
 				font-size: 80px;
+				padding-top: 15px;
 				.Percentage {
 					font-size: 30px;
 				}

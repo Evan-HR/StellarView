@@ -1316,7 +1316,7 @@ app.post("/api/getParkData", async (req, res) => {
 								moonset: moonTimeData.set
 							}
 						};
-						//console.log("Response ", reply);
+						console.log("Response ", reply);
 
 						//STEP 10: SEND DATA TO FRONT-END
 						res.send(reply);

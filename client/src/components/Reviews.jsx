@@ -222,7 +222,7 @@ class BaseReviews extends Component {
 						/>
 					</label>
 
-					<StarReviews scoreProp={this.handleStarScore} />
+					<StarReviews  starSize={this.props.starSize} scoreProp={this.handleStarScore} />
 					<div className="submitButton">
 						<button onClick={e => this.onSubmit(e)}>
 							Submit Review
@@ -253,7 +253,7 @@ class BaseReviews extends Component {
 	renderStarAvg() {
 		return (
 			<div>
-				<StarReviewsStatic avgScore={this.state.avgScore} />
+				<StarReviewsStatic  starSize={this.props.starSize}  avgScore={this.state.avgScore} />
 			</div>
 		);
 	}
@@ -265,7 +265,7 @@ class BaseReviews extends Component {
 			return (
 				<AlertStyle>
 					<div className="AlertText">
-						No reviews yet - be the first.
+						This park currently has no reviews. 
 					</div>
 				</AlertStyle>
 			);
@@ -345,7 +345,7 @@ const ReviewsStyle = styled.div`
 		font-weight: normal;
 	}
 	.success {
-		font-size: 20px;
+		font-size: 18px;
 	}
 `;
 
@@ -463,7 +463,7 @@ const AlertStyle = styled.div`
 
 	.AlertText {
 		/* background-color: #daa97961; */
-		font-size: 20px;
+		font-size: 18px;
 		font-weight: 400;
 		padding: 10px;
 		span {
