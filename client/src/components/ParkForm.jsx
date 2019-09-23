@@ -419,11 +419,11 @@ class BaseParkForm extends Component {
 	renderFormErrors = () => {
 		if (Object.keys(this.state.formErrors).length > 0) {
 			return (
-				<React.Fragment>
+				<ErrorStyle>
 					<b className="text-danger">
 						{this.state.formErrors.join(", ")}
 					</b>
-				</React.Fragment>
+					</ErrorStyle>
 			);
 		}
 	};
@@ -484,7 +484,7 @@ class BaseParkForm extends Component {
 							className="searchTerm"
 							type="text"
 							name="placeName"
-							placeholder="Enter your city e.g. London, ON"
+							placeholder="Enter your location"
 							value={this.state.reqData.placeName || ""}
 							onChange={this.handlePlaceChange}
 						/>
@@ -580,8 +580,8 @@ class BaseParkForm extends Component {
 						<SliderStyle>
 							<MuiSlider
 								aria-labelledby="discrete-slider-custom"
-								min={0}
-								max={6.5}
+								min={0.4}
+								max={4.0}
 								step={null}
 								valueLabelDisplay="auto"
 								marks={marksLight}
@@ -611,8 +611,7 @@ const marksDist = [
 		label: "5"
 	},
 	{
-		value: 25,
-		label: "25"
+		value: 25
 	},
 	{
 		value: 50,
@@ -638,23 +637,23 @@ const marksLight = [
 		label: "Dark"
 	},
 	{
-		value: 1.0,
+		value: 1.0
+	},
+	{
+		value: 1.75,
 		label: "Rural"
 	},
 	{
-		value: 1.75
-	},
-	{
 		value: 3.0,
-		label: "Brighter Rural"
+		label: "Rural/Suburban"
 	},
 	{
-		value: 4.5
+		value: 3.5
 	},
 	{
-		value: 6.0,
-		label: "Suburban"
+		value: 4.0
 	}
+	
 	// {
 	// 	value: 6,
 	// 	label: "6"
@@ -686,23 +685,36 @@ background: none;
 			: `auto auto`}; /* Three rows, two with explicit widths */
 	grid-gap: 10px;
 	grid-template-areas:
+	"searchBar searchBar searchBar"
+		"advancedSearchToggle advancedSearchToggle myLocation"
+		${props =>
+			props.advancedSearch
+				? `"advancedSearch advancedSearch advancedSearch"`
+				: ``};
+
+
+	@media screen and (min-width: 320) {
+		grid-template-areas:
 		"searchBar searchBar myLocation"
 		"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
 		${props =>
 			props.advancedSearch
 				? `"advancedSearch advancedSearch advancedSearch"`
 				: ``};
+	}
 
-
-	@media screen and (max-width: 420px) {
+	
+	@media screen and (min-width: 480px) {
 		grid-template-areas:
-		"searchBar searchBar searchBar"
-		"advancedSearchToggle advancedSearchToggle myLocation"
+		"searchBar searchBar myLocation"
+		"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
 		${props =>
 			props.advancedSearch
 				? `"advancedSearch advancedSearch advancedSearch"`
 				: ``};
 	}
+
+
 
 	.AdvancedSearch {
 		${props => (props.advancedSearch ? `` : `display: none`)}
@@ -749,6 +761,7 @@ background: none;
 
 	.advancedSearchToggle {
 		grid-area: advancedSearchToggle;
+		margin: auto 0;
 		span{
 			font-weight: 500;
 		}
@@ -871,4 +884,8 @@ const SliderStyle = styled.div`
 	.MuiSlider-markLabelActive {
 		color: ${props => props.theme.colorBad};
 	}
+`;
+
+const ErrorStyle = styled.div`
+	color: ${props => props.theme.colorBad};
 `;

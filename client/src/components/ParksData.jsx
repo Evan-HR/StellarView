@@ -294,9 +294,10 @@ class BaseParksData extends Component {
 	};
 
 	renderNoResults = () => {
-		if (!this.state.isFetchingParks 
+		if (
+			!this.state.isFetchingParks
 			// && !this.noParksModalOpen
-			) {
+		) {
 			if (this.state.parks.length) {
 				if (
 					Math.max(...this.state.parks.map(park => park.score)) < 0.6
@@ -434,28 +435,31 @@ const LandingPageStyle = styled.div`
 	.ParkFormStyle {
 		width: 95%;
 		margin: auto auto;
-		margin-top: 10vh;
+		margin-top: 5vh;
 
 		@media screen and (min-width: 320px) {
 			width: 95%;
 			margin: auto auto;
-			margin-top: 10vh;
+			margin-top: 2vh;
 		}
 
-		@media screen and (min-width: 420px) {
+		@media screen and (min-width: 480px) {
 			width: 90%;
 			margin: auto auto;
-			margin-top: 10vh;
+			margin-top: 3vh;
 		}
 
-		@media screen and (min-width: 769px) {
-			width: 50%;
-		
+		@media screen and (min-width: 600px) {
+			width: 75%;
 			margin: auto auto;
-			margin-top: 10vh;
+			margin-top: 5.5vh;
 		}
 
-
+		@media screen and (min-width: 1000px) {
+			width: 55%;
+			margin: auto auto;
+			margin-top: 7vh;
+		}
 	}
 `;
 
@@ -464,38 +468,24 @@ const ResultsPageStyle = styled.div`
 	margin: 0 auto 0 auto;
 	margin-top: -80vh;
 	overflow: none;
-	
 
 	grid-template-columns: 1fr 1fr;
 	grid-column-gap: 10px;
 	grid-row-gap: 10px;
 	grid-template-areas: ". rightSide";
-	.Placeholder1 {
-		display: none;
-		grid-area: placeholder1;
-		background-color: azure;
-	}
+
+
 	.RightSideContainerFull {
 		z-index: 0;
 		grid-area: rightSide;
-		margin-bottom: -30px; /* Spacing between cards offset */
-		/* overflow-y: scroll;
-		overflow-x: hidden; */
-		/* background-color: ${props => props.theme.white}; */
+		margin-bottom: -30px; 
 	}
 	.ParkFormStyle {
-		/* height: 11vh; */
-		/* height: 50%; */
 		grid-area: form;
 		${({ active }) => active && `display: none;`}
 	}
-	/* .FormMoonWrapper{
-		min-height: 33.33vh;
-	} */
 
 	.MoonStyle {
-		/* height: 50%; */
-		/* background: ${props => props.theme.moonCard}; */
 		background: none;
 	}
 
@@ -511,17 +501,14 @@ const ResultsPageStyle = styled.div`
 		"descA descB descC descD descE";
 		padding: 0px 10px 10px 15px;
 		font-size: 14px;
-		/* box-shadow: inset 0px 0px 0px 4px #485261;
 
-		background: ${props => props.theme.cardLight}; */
-
-		background: -moz-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ff3.6+ */
-		background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(189,194,198,0.95)), color-stop(100%, rgba(172,177,181,1))); /* safari4+,chrome */
-		background: -webkit-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* safari5.1+,chrome10+ */
-		background: -o-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* opera 11.10+ */
-		background: -ms-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* ie10+ */
-		background: linear-gradient(90deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); /* w3c */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', endColorstr='#ACB1B5',GradientType=1 ); /* ie6-9 */
+		background: -moz-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); 
+		background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(189,194,198,0.95)), color-stop(100%, rgba(172,177,181,1)));
+		background: -webkit-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); 
+		background: -o-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); 
+		background: -ms-linear-gradient(0deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); 
+		background: linear-gradient(90deg, rgba(189,194,198,0.95) 0%, rgba(172,177,181,1) 100%); 
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BDC2C6', endColorstr='#ACB1B5',GradientType=1 );
 
 		img,i{
 			margin: auto auto auto auto;
@@ -613,14 +600,12 @@ const ResultsPageStyle = styled.div`
 		}} */
 	}
 
-	/* formerly min-width: 769px*/
-	@media screen and (max-width: 989px) {
-		margin-top: 4rem;
-		width: 100%;
+	@media screen and (min-width: 320px) {
+		margin-top: 2vh;
+		width: 95%;
 		grid-template-columns: 1fr;
 		grid-template-rows: ${props => (props.hideMap ? "0px auto" : "50% auto")};
 		grid-template-areas:
-			/* "map" */
 			"rightSide";
 		.RightSideContainerFull {
 			overflow: none;
@@ -632,8 +617,6 @@ const ResultsPageStyle = styled.div`
 	}
 	
 	@media screen and (min-width: 990px) and (max-width: 1300px) {
-		/* width: 90%; */
-		/* margin-top: 0rem; */
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: auto auto;
 		grid-template-areas:
@@ -650,8 +633,6 @@ const MainContentWrapper = styled.div`
 	width: 90vw;
 	margin: 0 auto 0 auto;
 	.ParkMapStyle {
-		/* grid-area: map; */
-
 		position: -webkit-sticky;
 		position: sticky;
 		height: 80vh;

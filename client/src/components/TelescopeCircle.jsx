@@ -39,12 +39,22 @@ const TeleStyle = styled.div`
 	.circle {
 		width: 300px;
 		height: 300px;
-		margin: 15px auto 0;
+		margin: 55px auto;
 		background: ${props => props.theme.darkAccent};
 		border-radius: 50%;
 		/* moz-border-radius: 50%; */
 		overflow: hidden;
 		transition: all 500ms ease-in;
+
+		@media screen and (min-width: 320px) {
+			width: 250px;
+			height: 250px;
+		}
+
+		@media screen and (min-width: 420px) {
+			width: 300px;
+			height: 300px;
+		}
 	}
 
 	.stars {
@@ -63,21 +73,21 @@ const TeleStyle = styled.div`
 
 	.stars3 {
 		position: relative;
-		top: 180px;
+		top: 110px;
 		left: -50px;
 		animation: orbit 15s linear infinite;
 	}
 
 	.stars4 {
 		position: relative;
-		top: 150px;
+		top: 120px;
 		left: 300px;
 		animation: orbitrev 22s linear infinite;
 	}
 
 	.stars5 {
 		position: relative;
-		top: -50px;
+		top: 31px;
 		left: 300px;
 		animation: orbitrev 12s linear infinite;
 	}
@@ -147,7 +157,7 @@ const TeleStyle = styled.div`
 	}
 
 	.circle:hover {
-		transform: scale(1.2);
+		transform: scale(1.06);
 		transition: all 1000ms ease-in;
 	}
 
