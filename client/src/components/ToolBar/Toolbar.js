@@ -134,21 +134,23 @@ const ToolbarStyle = styled.header`
 		/* width: 85%; */
 		height: 100%;
 		margin: 0.5rem auto 0 auto;
+		width: 90%;
 		/* max-width: 1467px; */
 
 		@media screen and (min-width: 320px) {
-			width: 100%;
+			width: 90%;
 			margin: 0.5rem auto 0 auto;
 		}
 
 		
 		@media screen and (min-width: 480px) {
-			width: 100%;
+			width: 90%;
 			margin: 0.5rem auto 0 auto;
 		}
 
 		@media screen and (min-width: 600px) {
 			padding: 0px 6.5% 10px 6.5%;
+			width: 100%;
 			margin: 2rem auto 0 auto;
 		}
 
@@ -202,7 +204,7 @@ const ToolbarStyle = styled.header`
 			:hover,
 			:active {
 				transition: color 0.2s ease;
-				color: ${props => props.theme.colorBad};
+				color: ${props => props.theme.colorMedium};
 			}
 		}
 
@@ -232,7 +234,7 @@ const ToolbarStyle = styled.header`
 		:hover,
 		:active {
 			transition: color 0.2s ease;
-			color: ${props => props.theme.colorBad};
+			color: ${props => props.theme.colorMedium};
 		}
 	}
 

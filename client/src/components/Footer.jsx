@@ -5,11 +5,18 @@ class Footer extends Component {
 	render() {
 		return (
 			<FooterStyle>
-				© Vlad Falach {" | "} 
-				<a target="_blank" rel="noopener noreferrer" href="http://dustinjurkaulionis.com">
-					Dustin Jurkaulionis
-				</a>{" | "}
-				 Evan Reaume
+				<span className="Copyright">©</span>
+				<span className="Vlad">Vlad Falach</span>
+				<span className="Dustin">
+					<a
+						target="_blank"
+						rel="noopener noreferrer"
+						href="http://dustinjurkaulionis.com"
+					>
+						Dustin Jurkaulionis
+					</a>
+				</span>
+				<span className="Evan">Evan Reaume</span>
 			</FooterStyle>
 		);
 	}
@@ -19,29 +26,43 @@ export default Footer;
 
 const FooterStyle = styled.div`
 	width: 80%;
-	display: flex;
-	/* margin-top: 20px; */
+	display:grid;
 	justify-content: center;
 	font-family: Lato;
 	align-items: center;
-	padding: 30px 10px 15px 10px;
 	height: 100px;
-	/* font-family: monospace; */
 	font-weight: 500;
-	font-size: 14px;
 	letter-spacing: 0.2em;
 	background-color: ${props => props.theme.prettyDark};
 	color: ${props => props.theme.cardLight};
 	margin: auto auto;
 	font-weight: 400;
 	font-size: 11px;
+	padding: 0 13px;
+	max-width: 600px;
+
+	grid-template-columns: 20px 1fr 1fr 1fr;
+	grid-template-areas:
+			"Copyright Vlad Dustin Evan";
+	.Copyright{
+		grid-area: Copyright;
+	}
+	.Vlad{
+		grid-area: Vlad;
+	}
+	.Dustin{
+		grid-area: Dustin;
+	}
+	.Evan{
+		grid-area: Evan;
+	}
 
 	a {
 		all: unset;
 		padding: 0px 4px;
 		:hover,
 		:active {
-			color: ${props => props.theme.colorBad};
+			color: ${props => props.theme.highlightPink};
 			transition: color 0.2s ease;
 			cursor: pointer;
 		}

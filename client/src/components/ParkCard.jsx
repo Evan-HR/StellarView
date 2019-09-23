@@ -344,7 +344,7 @@ const CardStyle = styled.div`
 		padding: 13px 10px;
 		:hover,
 		:active {
-			background: ${props => props.theme.cardHeader};
+			background: ${props => props.theme.cardHeaderHover};
 		}
 		@media screen and (min-width: 320px) {
 			padding: 13px 10px;
@@ -593,7 +593,7 @@ const CardStyle = styled.div`
 				margin: 0px 0px 0px 14px;
 				:hover,
 				:active {
-					color: ${props => props.theme.colorBad};
+					color: ${props => props.theme.highlightPink};
 					transition: color 0.2s ease;
 				}
 
