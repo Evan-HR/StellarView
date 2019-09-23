@@ -222,7 +222,7 @@ class BaseReviews extends Component {
 						/>
 					</label>
 
-					<StarReviews scoreProp={this.handleStarScore} />
+					<StarReviews  starSize={this.props.starSize} scoreProp={this.handleStarScore} />
 					<div className="submitButton">
 						<button onClick={e => this.onSubmit(e)}>
 							Submit Review
@@ -253,7 +253,7 @@ class BaseReviews extends Component {
 	renderStarAvg() {
 		return (
 			<div>
-				<StarReviewsStatic avgScore={this.state.avgScore} />
+				<StarReviewsStatic  starSize={this.props.starSize}  avgScore={this.state.avgScore} />
 			</div>
 		);
 	}

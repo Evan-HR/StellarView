@@ -422,6 +422,7 @@ class ParkMoreInfoModal extends Component {
 								this.remountReviews()
 							) : (
 								<Reviews
+									starSize={"14px"}
 									refreshInfoModal={this.refreshModal}
 									parkID={this.park.id}
 								/>
@@ -474,12 +475,21 @@ export default ParkMoreInfoModal;
 const ModalStyle = styled.div`
 	display: flex;
 	flex-direction: column;
-	width: 452px;
+	/* width: 452px; */
 	height: 95vh;
 	font-family: "Lato", sans-serif;
 	border: none;
 	color: ${props => props.theme.fontDark};
 	background: black;
+
+	@media screen and (min-width: 320px) {
+		height: 100vh;
+		grid-template-rows: 0.4fr auto;
+	}
+
+	@media screen and (min-width: 600px) {
+		height: 93vh;
+	}
 
 	.modal-header {
 		font-family: "Lato", sans-serif;
@@ -487,10 +497,10 @@ const ModalStyle = styled.div`
 		font-weight: normal;
 		color: ${props => props.theme.prettyDark};
 		font-size: 25px;
-		
+
 		text-align: left;
 		padding: 1.5rem 1rem;
-		
+
 		/* padding: 1rem 2.5rem 2rem 1rem; */
 		background: ${props => props.theme.green};
 		border-bottom: 6px solid ${props => props.theme.prettyDark};
@@ -506,9 +516,6 @@ const ModalStyle = styled.div`
 			font-size: 2rem;
 			font-weight: 700;
 			line-height: 1;
-		
-
-			
 		}
 
 		.close:hover {
@@ -519,8 +526,6 @@ const ModalStyle = styled.div`
 		.close:active {
 			color: ${props => props.theme.prettyDark};
 		}
-
-
 	}
 
 	.ContentGrid {
@@ -625,10 +630,17 @@ const ModalStyle = styled.div`
 		.Value {
 			font-style: normal;
 			font-weight: 600;
-			font-size: 18px;
+			font-size: 14px;
 			display: flex;
 			justify-content: center;
 			align-items: center;
+
+			@media screen and (min-width: 320px) {
+				font-size: 14px;
+			}
+			@media screen and (min-width: 600px) {
+				font-size: 18px;
+			}
 
 			span {
 				display: inline-block;
@@ -640,6 +652,14 @@ const ModalStyle = styled.div`
 		.MoreInfoDesc {
 			padding: 6px;
 			font-weight: 500;
+			font-size: 14px;
+
+			@media screen and (min-width: 320px) {
+				font-size: 13px;
+			}
+			@media screen and (min-width: 600px) {
+				font-size: 1rem;
+			}
 		}
 
 		.weatherContainer {
