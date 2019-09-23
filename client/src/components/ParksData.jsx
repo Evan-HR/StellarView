@@ -331,7 +331,7 @@ class BaseParksData extends Component {
 	renderResults = () => {
 		return (
 			<ResultsPageStyle>
-				{this.renderNoResults()}
+				{/* {this.renderNoResults()} */}
 				{/* {this.renderParkMap()} */}
 				<div className="RightSideContainerFull">
 					{/* <button

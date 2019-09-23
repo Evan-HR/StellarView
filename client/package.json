@@ -6,6 +6,7 @@
   "dependencies": {
     "@material-ui/core": "^4.3.3",
     "bootstrap": "^4.3.1",
+    "eventemitter3": "^4.0.0",
     "letter-grade": "^1.0.0",
     "qs": "^6.7.0",
     "react": "^16.8.6",
