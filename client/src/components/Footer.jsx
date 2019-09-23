@@ -6,17 +6,17 @@ class Footer extends Component {
 		return (
 			<FooterStyle>
 				<span className="Copyright">©</span>
-				<span className="Vlad">Vlad Falach</span>
+				<span className="Vlad">Vlad<br/>Falach</span>
 				<span className="Dustin">
 					<a
 						target="_blank"
 						rel="noopener noreferrer"
 						href="http://dustinjurkaulionis.com"
 					>
-						Dustin Jurkaulionis
+						Dustin<br/>Jurkaulionis
 					</a>
 				</span>
-				<span className="Evan">Evan Reaume</span>
+				<span className="Evan">Evan<br/>Reaume</span>
 			</FooterStyle>
 		);
 	}
@@ -25,7 +25,7 @@ class Footer extends Component {
 export default Footer;
 
 const FooterStyle = styled.div`
-	width: 80%;
+	width: 100%;
 	display:grid;
 	justify-content: center;
 	font-family: Lato;
@@ -40,6 +40,19 @@ const FooterStyle = styled.div`
 	font-size: 11px;
 	padding: 0 13px;
 	max-width: 600px;
+
+	@media screen and (min-width: 320px) {
+		font-size: 11px;
+	}
+
+	@media screen and (min-width: 400px) {
+		font-size: 12px;
+		width: 80%;
+	}
+
+	@media screen and (min-width: 600px) {
+		font-size: 12px;
+	}
 
 	grid-template-columns: 20px 1fr 1fr 1fr;
 	grid-template-areas:
@@ -68,15 +81,5 @@ const FooterStyle = styled.div`
 		}
 	}
 
-	@media screen and (min-width: 320px) {
-		font-size: 11px;
-	}
 
-	@media screen and (min-width: 420px) {
-		font-size: 12px;
-	}
-
-	@media screen and (min-width: 600px) {
-		font-size: 12px;
-	}
 `;

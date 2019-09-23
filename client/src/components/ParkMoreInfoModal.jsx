@@ -544,7 +544,7 @@ const ModalStyle = styled.div`
 		}
 
 		.close:hover {
-			color: ${props => props.theme.highlightPink};
+			color: ${props => props.theme.colorMedium};
 			text-decoration: none;
 		}
 
