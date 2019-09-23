@@ -36,24 +36,33 @@ const TelescopeCircle = props => (
 export default TelescopeCircle;
 
 const TeleStyle = styled.div`
-
-width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    margin: auto auto;
-    z-index: 2;
-
+	width: 250px;
+	height: 250px;
+	border-top-left-radius: 50%;
+	border-top-right-radius: 50%;
+	border-bottom-left-radius: 50%;
+	border-bottom-right-radius: 50%;
+	margin: 40px auto;
+	z-index: 2;
+	overflow: hidden;
+	@media screen and (min-width: 420px) {
+		width: 300px;
+		height: 300px;
+	}
 
 	.circle {
 		width: 300px;
 		height: 300px;
-		margin: 55px auto;
+		margin: auto auto;
 		background: ${props => props.theme.darkAccent};
-		border-radius: 50%;
+		/* border-top-left-radius: 50%;
+border-top-right-radius: 50%;
+border-bottom-left-radius: 50%;
+border-bottom-right-radius: 50%; */
 		/* moz-border-radius: 50%; */
-		overflow: hidden;
+
 		transition: all 500ms ease-in;
-		z-index: 2;
+		z-index: 0;
 
 		@media screen and (min-width: 320px) {
 			width: 250px;
@@ -71,7 +80,7 @@ width: 300px;
 		top: 50px;
 		left: -50px;
 		animation: orbit 20s linear infinite;
-		z-index: 1;
+		z-index: 0;
 	}
 
 	.stars2 {
@@ -79,7 +88,7 @@ width: 300px;
 		top: 100px;
 		left: -50px;
 		animation: orbit 50s linear infinite;
-		z-index: 1;
+		z-index: 0;
 	}
 
 	.stars3 {
@@ -87,7 +96,7 @@ width: 300px;
 		top: 110px;
 		left: -50px;
 		animation: orbit 15s linear infinite;
-		z-index: 1;
+		z-index: 0;
 	}
 
 	.stars4 {
@@ -95,7 +104,7 @@ width: 300px;
 		top: 120px;
 		left: 300px;
 		animation: orbitrev 22s linear infinite;
-		z-index: 1;
+		z-index: 0;
 	}
 
 	.stars5 {
@@ -103,7 +112,7 @@ width: 300px;
 		top: 31px;
 		left: 300px;
 		animation: orbitrev 12s linear infinite;
-		z-index: 1;
+		z-index: 0;
 	}
 
 	.star-six {
@@ -113,7 +122,7 @@ width: 300px;
 		border-right: 5px solid transparent;
 		border-bottom: 9px solid #edd9c0;
 		position: absolute;
-		z-index: 1;
+		z-index: 0;
 	}
 
 	.star-six:after {
@@ -126,7 +135,7 @@ width: 300px;
 		content: "";
 		top: 3px;
 		left: -5px;
-		z-index: 1;
+		z-index: 0;
 	}
 
 	.moon {
@@ -134,7 +143,7 @@ width: 300px;
 		height: 20px;
 		border-radius: 50%;
 		box-shadow: 3px 3px 0 0 #edd9c0;
-		z-index: 1;
+		z-index: 0;
 	}
 
 	.starround4 {
@@ -146,7 +155,7 @@ width: 300px;
 		border-radius: 5px;
 		position: relative;
 		top: 20px;
-		z-index: 1;
+		z-index: 0;
 		left: 35px;
 	}
 
@@ -159,7 +168,7 @@ width: 300px;
 		border-radius: 5px;
 		position: relative;
 		top: 50px;
-		z-index: 1;
+		z-index: 0;
 		left: 105px;
 	}
 
@@ -169,7 +178,7 @@ width: 300px;
 		height: 6px;
 		-moz-border-radius: 5px;
 		-webkit-border-radius: 5px;
-		z-index: 1;
+		z-index: 0;
 		border-radius: 5px;
 		position: relative;
 		top: 50px;
