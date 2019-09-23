@@ -430,9 +430,9 @@ class BaseParkForm extends Component {
 
 	loadAutoComplete = () => {
 		const field = document.getElementById("address-field");
-		this.autoComplete = new window.google.maps.places.SearchBox(field);
+		this.autoComplete = new window.google.maps.places.Autocomplete(field);
 		// this.enableEnterKey(field);
-		this.autoComplete.addListener("places_changed", this.onPlaceChanged);
+		this.autoComplete.addListener("place_changed", this.onPlaceChanged);
 		// this.autoCompleteLoaded = true;
 	};
 
