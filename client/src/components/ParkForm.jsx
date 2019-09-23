@@ -11,6 +11,8 @@ import styled from "styled-components";
 // import nearMeButton from "./style/Media/round-my_location-24px.svg";
 // import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 // import LocationSearchInput from "./LocationSearchInput";
+import searchIcon from "./style/Media/search-solid.svg";
+import SVG from "react-inlinesvg";
 
 class BaseParkForm extends Component {
 	state = {
@@ -514,7 +516,8 @@ class BaseParkForm extends Component {
 								// this.getPlaceCoordinates(e);
 							}}
 						>
-							<i className="fa fa-search" />
+							<SVG src={searchIcon}></SVG>
+							{/* <i className="fa fa-search" /> */}
 						</button>
 					</form>
 				</div>
@@ -575,7 +578,9 @@ class BaseParkForm extends Component {
 							/>
 						</SliderStyle>
 						<br />
-						<span className="FormTitle">Max Light Pollution Zone</span>
+						<span className="FormTitle">
+							Max Light Pollution Zone
+						</span>
 						<br />
 						<SliderStyle>
 							<MuiSlider
@@ -773,9 +778,16 @@ const SearchFormStyle = styled.div`
 		width: 40px;
 		height: 36px;
 		
+		svg{
+			margin: auto auto;
+
+display: block;
+		}
 
 		background: ${(props, isInvalidLocation) =>
-			isInvalidLocation ? props.theme.highlightPink : props.theme.prettyDark};
+			isInvalidLocation
+				? props.theme.highlightPink
+				: props.theme.prettyDark};
 		text-align: center;
 
 		color: ${props => props.theme.white};

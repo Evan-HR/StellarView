@@ -124,8 +124,8 @@ class ParkTable extends Component {
 	renderLoading = () => {
 		return (
 			<div
-				className="spinner-grow text-primary"
-				style={{ width: "3rem", height: "3rem" }}
+				className="spinner-grow text-secondary"
+				style={{ marginTop:"20px", width: "3rem", height: "3rem" }}
 			/>
 		);
 	};
