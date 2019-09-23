@@ -108,7 +108,7 @@ app.use(
 		store: sessionStore,
 		//only logged/registered users have cookies
 		saveUninitialized: false,
-		//cookie: { secure: true }
+		proxy:true,
 		cookie: { secure: true, httpOnly: false }
 	})
 );
