@@ -36,6 +36,14 @@ const TelescopeCircle = props => (
 export default TelescopeCircle;
 
 const TeleStyle = styled.div`
+
+width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    margin: auto auto;
+    z-index: 2;
+
+
 	.circle {
 		width: 300px;
 		height: 300px;
