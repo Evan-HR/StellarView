@@ -126,9 +126,11 @@ class ParkMoreInfoModal extends Component {
 				{/* <div className="modal-content"> */}
 				<ModalStyle>
 					<div className="modal-header">
-						{this.park.name === "Unknown" && this.park.name_alt
-							? this.park.name_alt
-							: this.park.name}
+						<span className="ParkTitle">
+							{this.park.name === "Unknown" && this.park.name_alt
+								? this.park.name_alt
+								: this.park.name}
+						</span>
 
 						<button
 							type="button"
@@ -476,30 +478,53 @@ const ModalStyle = styled.div`
 	display: flex;
 	flex-direction: column;
 	/* width: 452px; */
-	height: 95vh;
+	height: 85vh;
 	font-family: "Lato", sans-serif;
 	border: none;
 	color: ${props => props.theme.fontDark};
 	background: black;
+	max-width: 500px;	
+	width: 100vw;
 
 	@media screen and (min-width: 320px) {
-		height: 100vh;
+		height: 85vh;
 		grid-template-rows: 0.4fr auto;
 	}
 
 	@media screen and (min-width: 600px) {
-		height: 93vh;
+		height: 95vh;
 	}
 
 	.modal-header {
-		font-family: "Lato", sans-serif;
-		font-style: normal;
-		font-weight: normal;
-		color: ${props => props.theme.prettyDark};
-		font-size: 25px;
+		padding: 0rem 1rem;
 
-		text-align: left;
-		padding: 1.5rem 1rem;
+		.ParkTitle {
+			font-family: "Lato", sans-serif;
+			font-style: normal;
+			font-weight: 500;
+			color: ${props => props.theme.prettyDark};
+
+			text-align: left;
+			padding: 1.5rem 1rem;
+			display: flex;
+			grid-area: ParkTitle;
+
+			color: ${props => props.theme.prettyDark};
+
+			font-size: 22px;
+			text-align: left;
+			margin: auto auto;
+			line-height: 30px;
+			/* padding-left: 1rem; */
+
+			@media screen and (min-width: 320px) {
+
+			}
+			@media screen and (min-width: 480px) {
+				
+			
+			}
+		}
 
 		/* padding: 1rem 2.5rem 2rem 1rem; */
 		background: ${props => props.theme.green};
@@ -510,7 +535,7 @@ const ModalStyle = styled.div`
 			text-shadow: none;
 			color: ${props => props.theme.prettyDark};
 			position: absolute;
-			top: 0px;
+			top: -3px;
 			right: 0px;
 			float: right;
 			font-size: 2rem;
@@ -519,7 +544,7 @@ const ModalStyle = styled.div`
 		}
 
 		.close:hover {
-			color: ${props => props.theme.pink};
+			color: ${props => props.theme.highlightPink};
 			text-decoration: none;
 		}
 
@@ -546,7 +571,7 @@ const ModalStyle = styled.div`
 
 		.textContainer {
 			grid-area: infoText;
-
+			font-weight: 500;
 			font-size: 15px;
 		}
 

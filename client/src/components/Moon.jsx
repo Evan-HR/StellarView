@@ -86,6 +86,10 @@ const MoonStyle = styled.div`
 	@media screen and (min-width: 600px) {
 		font-size: 35px;
 	}
+	@media screen and (min-width: 1025px) {
+		font-size: 30px;
+	}
+
 
 	.stellarDataDisplay {
 		font-weight: 300;
@@ -166,12 +170,26 @@ const MoonStyle = styled.div`
 
 			.moonTypeLeftWord{
 				display: inline-block;
-				margin: auto auto auto 20%;
+				/* margin: auto auto auto 20%; */
+				margin: auto auto;
+				padding-right: 5px;
+				@media screen and (min-width: 600px) {
+					margin: auto 30px auto auto;
+					padding-right: 0px;
+			}
+				
+
 				grid-area: moonTypeLeftWord;
 			}
 			.moonTypeRightWord{
 				display: inline-block;
-				margin: auto 20% auto auto;
+				/* margin: auto 20% auto auto; */
+				margin: auto auto;
+
+				@media screen and (min-width: 600px) {
+					margin: auto auto auto 30px;
+			}
+				
 				grid-area: moonTypeRightWord;
 			}
 

@@ -51,7 +51,11 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 		cloudScore += 0;
 	}
 
-	const finalScore = (0.45*moonScore) + (0.15*cloudScore) + (0.15*humidityScore) + (0.25*lightPolScore);
+	const finalScore =
+		0.45 * moonScore +
+		0.15 * cloudScore +
+		0.15 * humidityScore +
+		0.25 * lightPolScore;
 
 	if (finalScore < 0) {
 		finalScore = 0;
@@ -420,18 +424,19 @@ export default withRouter(MainComponent);
 
 const LandingPageStyle = styled.div`
 	.parkFormStyle {
-		width: 95%;
+		width: 90%;
+		margin: auto auto;
 		margin-top: 10vh;
 		max-width: 530px;
 
 		@media screen and (min-width: 320px) {
-			width: 95%;
+			width: 85%;
 			margin: auto auto;
 			margin-top: 10vh;
 		}
 
 		@media screen and (min-width: 480px) {
-			width: 95%;
+			width: 85%;
 			margin: auto auto;
 			margin-top: 10vh;
 		}
@@ -481,12 +486,21 @@ const ResultsPageStyle = styled.div`
 			"moonContainer"
 			"sort";
 
+		@media screen and (min-width: 350px) {
+			padding: 0 5px;
+		}
+
+		@media screen and (min-width: 600px) {
+			padding: 0;
+		}
+
 		.parkFormStyle {
 			grid-area: form;
-			width: 100%;
-			margin: 0rem 0 0.5rem 0;
-			@media screen and (min-width: 1025px) {
-
+			width: 90%;
+			margin: auto auto;
+			@media screen and (min-width: 600px) {
+				width: 100%;
+				margin: 0rem 0 0.5rem 0;
 			}
 			${({ active }) => active && `display: none;`}
 		}
@@ -512,7 +526,7 @@ const ResultsPageStyle = styled.div`
 					cursor: pointer;
 					margin: 0 0px 0 15px;
 					:hover {
-						color: ${props => props.theme.colorBad};
+						color: ${props => props.theme.highlightPink};
 						transition: color 0.2s ease;
 					}
 					:active {
@@ -591,7 +605,7 @@ const ResultsPageStyle = styled.div`
 	}
 
 	@media screen and (min-width: 1025px) {
-		margin-top:3%;
+		margin-top: 3%;
 		.parkFormStyle {
 			grid-area: form;
 			${({ active }) => active && `display: none;`}

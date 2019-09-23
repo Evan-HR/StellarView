@@ -56,5 +56,6 @@ export const theme = {
 	cardHeaderHover:"#707a88",
 	directionsHover:"#384771",
 	pink:"#DBCCC5",
-	green: "#8C969C"
+	green: "#8C969C",
+	highlightPink:"#bbabba"
 };

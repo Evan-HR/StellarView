@@ -575,7 +575,7 @@ class BaseParkForm extends Component {
 							/>
 						</SliderStyle>
 						<br />
-						<span className="FormTitle">Light Pollution</span>
+						<span className="FormTitle">Max Light Pollution Zone</span>
 						<br />
 						<SliderStyle>
 							<MuiSlider
@@ -737,7 +737,8 @@ const SearchFormStyle = styled.div`
 				background: gray;
 			}
 			:hover:enabled {
-				color: ${props => props.theme.colorBad};
+				background-color: ${props => props.theme.colorMedium};
+				/* color: ${props => props.theme.highlightPink}; */
 			}
 			:active:enabled {
 				-webkit-transform: scale(1.05);
@@ -771,16 +772,17 @@ const SearchFormStyle = styled.div`
 	.searchButton {
 		width: 40px;
 		height: 36px;
+		
 
 		background: ${(props, isInvalidLocation) =>
-			isInvalidLocation ? props.theme.colorBad : props.theme.prettyDark};
+			isInvalidLocation ? props.theme.highlightPink : props.theme.prettyDark};
 		text-align: center;
 
 		color: ${props => props.theme.white};
 
 		cursor: pointer;
 		font-size: 20px;
-		border: none;
+		border: 2px solid #2a2c2d;
 		float: left;
 		background-position: center;
 		transition: background 0.2s, color 0.1s ease;
@@ -793,7 +795,7 @@ const SearchFormStyle = styled.div`
 			background: ${props => props.theme.prettyDark}
 				radial-gradient(circle, transparent 1%, rgba(0, 0, 0, 0.3) 1%)
 				center/15000%;
-			color: ${props => props.theme.colorBad};
+			color: ${props => props.theme.colorMedium};
 		}
 
 		:active {
@@ -837,7 +839,7 @@ const SearchFormStyle = styled.div`
 		color: #bdbdbd;
 		:hover,
 		:active {
-			color: ${props => props.theme.colorBad};
+			color: ${props => props.theme.colorMedium};
 			transition: color 0.2s ease;
 		}
 	}
@@ -852,10 +854,10 @@ const SliderStyle = styled.div`
 		font-family: "Lato", sans-serif;
 	}
 	.MuiSlider-markLabelActive {
-		color: ${props => props.theme.colorBad};
+		color: ${props => props.theme.colorMedium};
 	}
 `;
 
 const ErrorStyle = styled.div`
-	color: ${props => props.theme.colorBad};
+	color: ${props => props.theme.colorMedium};
 `;

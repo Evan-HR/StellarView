@@ -45,6 +45,7 @@ const TeleStyle = styled.div`
 		/* moz-border-radius: 50%; */
 		overflow: hidden;
 		transition: all 500ms ease-in;
+		z-index: 2;
 
 		@media screen and (min-width: 320px) {
 			width: 250px;
@@ -62,6 +63,7 @@ const TeleStyle = styled.div`
 		top: 50px;
 		left: -50px;
 		animation: orbit 20s linear infinite;
+		z-index: 1;
 	}
 
 	.stars2 {
@@ -69,6 +71,7 @@ const TeleStyle = styled.div`
 		top: 100px;
 		left: -50px;
 		animation: orbit 50s linear infinite;
+		z-index: 1;
 	}
 
 	.stars3 {
@@ -76,6 +79,7 @@ const TeleStyle = styled.div`
 		top: 110px;
 		left: -50px;
 		animation: orbit 15s linear infinite;
+		z-index: 1;
 	}
 
 	.stars4 {
@@ -83,6 +87,7 @@ const TeleStyle = styled.div`
 		top: 120px;
 		left: 300px;
 		animation: orbitrev 22s linear infinite;
+		z-index: 1;
 	}
 
 	.stars5 {
@@ -90,6 +95,7 @@ const TeleStyle = styled.div`
 		top: 31px;
 		left: 300px;
 		animation: orbitrev 12s linear infinite;
+		z-index: 1;
 	}
 
 	.star-six {
@@ -99,6 +105,7 @@ const TeleStyle = styled.div`
 		border-right: 5px solid transparent;
 		border-bottom: 9px solid #edd9c0;
 		position: absolute;
+		z-index: 1;
 	}
 
 	.star-six:after {
@@ -111,6 +118,7 @@ const TeleStyle = styled.div`
 		content: "";
 		top: 3px;
 		left: -5px;
+		z-index: 1;
 	}
 
 	.moon {
@@ -118,6 +126,7 @@ const TeleStyle = styled.div`
 		height: 20px;
 		border-radius: 50%;
 		box-shadow: 3px 3px 0 0 #edd9c0;
+		z-index: 1;
 	}
 
 	.starround4 {
@@ -129,6 +138,7 @@ const TeleStyle = styled.div`
 		border-radius: 5px;
 		position: relative;
 		top: 20px;
+		z-index: 1;
 		left: 35px;
 	}
 
@@ -141,6 +151,7 @@ const TeleStyle = styled.div`
 		border-radius: 5px;
 		position: relative;
 		top: 50px;
+		z-index: 1;
 		left: 105px;
 	}
 
@@ -150,6 +161,7 @@ const TeleStyle = styled.div`
 		height: 6px;
 		-moz-border-radius: 5px;
 		-webkit-border-radius: 5px;
+		z-index: 1;
 		border-radius: 5px;
 		position: relative;
 		top: 50px;
