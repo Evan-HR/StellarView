@@ -2,6 +2,7 @@
 *.env
 config.py
 __pycache__
+qgis/data/output
 
 
 # Created by https://www.gitignore.io/api/node,sass
