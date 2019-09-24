@@ -36,7 +36,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // enable ssl redirect
-app.use(sslRedirect());
+// app.use(sslRedirect());
 
 //for dynamic html generation
 app.set("view engine", "ejs");
@@ -108,7 +108,7 @@ app.use(
 		store: sessionStore,
 		//only logged/registered users have cookies
 		saveUninitialized: false,
-		//cookie: { secure: true }
+		// secure: true,
 		cookie: { httpOnly: false }
 	})
 );
@@ -1316,7 +1316,7 @@ app.post("/api/getParkData", async (req, res) => {
 								moonset: moonTimeData.set
 							}
 						};
-						//console.log("Response ", reply);
+						console.log("Response ", reply);
 
 						//STEP 10: SEND DATA TO FRONT-END
 						res.send(reply);

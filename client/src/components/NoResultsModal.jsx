@@ -141,7 +141,7 @@ const NoResultsStyle = styled.div`
 		top: 0px;
 		right: 0px;
 		float: right;
-		font-size: 2.5rem;
+		font-size: 2rem;
 		font-weight: 700;
 		line-height: 1;
 		color: ${props => props.theme.white};

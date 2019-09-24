@@ -9,7 +9,12 @@ function Moon(props) {
 	function prettyDate(time) {
 		var date = new Date(time);
 		var localeSpecificTime = date.toLocaleTimeString();
-		return localeSpecificTime.replace(/:\d+ /, " ");
+		if (localeSpecificTime==="Invalid Date"){
+			return "Not Available"
+		}else{
+			return localeSpecificTime.replace(/:\d+ /, " ");
+		}
+		
 	}
 
 	return (
@@ -18,11 +23,11 @@ function Moon(props) {
 				{props.moonPhase ? (
 					<React.Fragment>
 						<div className="moonDisplay">
-							<span>{props.moonType.split(" ")[0]}</span>
-							<span className="MoonDisplayContainer">
+							<span className="moonTypeLeftWord">{props.moonType.split(" ")[0]}</span>
+							<span className="moonImage">
 								<MoonDisplay phase={props.moonPhase} />
 							</span>
-							<span>{props.moonType.split(" ")[1]}</span>
+							<span className="moonTypeRightWord">{props.moonType.split(" ")[1]}</span>
 						</div>
 						<div className="stellarDataDisplay">
 							<span className="Sunset">Sunset</span>
@@ -66,20 +71,31 @@ const MoonStyle = styled.div`
 	font-family: "Lato", sans-serif;
 	font-weight: 400;
 	font-style: normal;
-	font-size: 35px;
+	font-size: 21px;
 	text-align: center;
 	text-transform: uppercase;
 
-	@media screen and (max-width: 569px) {
-		font-size: 23px;
+	@media screen and (min-width: 320px) {
+		font-size: 21px;
 	}
 
-	.stellarDataDisplay {
+	@media screen and (min-width: 480px) {
+		font-size: 30px;
+	}
 
+	@media screen and (min-width: 600px) {
+		font-size: 35px;
+	}
+	@media screen and (min-width: 1025px) {
+		font-size: 30px;
+	}
+
+
+	.stellarDataDisplay {
 		font-weight: 300;
-		font-size: 16px;
-		padding: 15px 10px 20px 10px;
-		margin-bottom: 10px;
+		font-size: 14px;
+		/* padding: 15px 0.8rem 20px 0.8rem;
+		margin-bottom: 10px; */
 		text-transform: none;
 		display: grid;
 
@@ -89,7 +105,15 @@ const MoonStyle = styled.div`
 		grid-template-areas:
 			"Sunset    Nightfall    Moonrise Moonset"
 			"SunsetTime NightfallTime MoonriseTime  MoonsetTime";
-		
+
+
+			@media screen and (min-width: 320px) {
+				font-size: 14px;
+			}
+			
+			@media screen and (min-width: 480px) {
+				font-size: 15px;
+			}
 
 		.Nightfall {
 			/* font-family: "Lato", sans-serif; */
@@ -133,16 +157,52 @@ const MoonStyle = styled.div`
 		}
 	}
 	.moonDisplay {
-		height: 140px;
-		display: flex;
-		align-items: center;
+		/* height: 140px; */
+		display: grid;
+		/* align-items: center;
 		justify-content: space-evenly;
-		align-content: space-between;
+		align-content: space-between; */
+		margin: 25px 0px;
+		grid-template-columns: 1fr minmax(80px, 100px) 1fr;
 
-		.MoonDisplayContainer {
+		grid-template-areas:
+			"moonTypeLeftWord moonImage moonTypeRightWord";
+
+			.moonTypeLeftWord{
+				display: inline-block;
+				/* margin: auto auto auto 20%; */
+				margin: auto auto;
+				padding-right: 5px;
+				@media screen and (min-width: 600px) {
+					margin: auto 30px auto auto;
+					padding-right: 0px;
+			}
+				
+
+				grid-area: moonTypeLeftWord;
+			}
+			.moonTypeRightWord{
+				display: inline-block;
+				/* margin: auto 20% auto auto; */
+				margin: auto auto;
+
+				@media screen and (min-width: 600px) {
+					margin: auto auto auto 30px;
+			}
+				
+				grid-area: moonTypeRightWord;
+			}
+
+		.moonImage {
+			
 			border-radius: 100px;
-			box-shadow: 0 0 20px #485261;
-			width: 90px;
+			/* box-shadow: 0 0 20px #485261; */
+			/* width: 80px; */
+			grid-area: moonImage;
+
+			@media screen and (min-width: 480px) {
+				/* width: 90px; */
+			}
 		}
 	}
 `;

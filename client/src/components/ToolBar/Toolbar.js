@@ -116,33 +116,65 @@ export default withRouter(Toolbar);
 
 const ToolbarStyle = styled.header`
 	width: 100%;
-	margin: 20px 0px 0px 0px;
-	top: 0;
+	margin: 0.3rem 0px 0px 0px;
 	left: 0;
+	
+
+
+	@media screen and (min-width: 480px) {
+		margin: 0.3rem 0px 0px 0px;
+	}
 
 	@media screen and (min-width: 801px) {
-		margin: 30px 0px 0px 0px;
+		/* margin: 30px 0px 0px 0px; */
 	}
 
 	.toolbar__center {
 		display: block;
-		width: 85%;
+		/* width: 85%; */
 		height: 100%;
-		margin: 0 auto 0 auto;
+		margin: 0.5rem auto 0 auto;
+		width: 90%;
+		/* max-width: 1467px; */
 
-		/* @media screen and (max-width: 767.999px) {
-			width: 95%;
-		} */
+		@media screen and (min-width: 320px) {
+			width: 90%;
+			margin: 0.5rem auto 0 auto;
+		}
+
+		
+		@media screen and (min-width: 480px) {
+			width: 90%;
+			margin: 0.5rem auto 0 auto;
+		}
+
+		@media screen and (min-width: 600px) {
+			padding: 0px 6.5% 10px 6.5%;
+			width: 100%;
+			margin: 2rem auto 0 auto;
+		}
+
+		@media screen and (min-width: 1025px) {
+			padding: 0px 6.5% 30px 6.5%;
+			margin: 2rem auto 0 auto;
+		}
+
+		
 	}
 
 	.toolbarLogo {
 		svg {
 			width: 80%;
 			margin: 0 10% 0 0px;
+			@media screen and (min-width: 320px) {
+				max-width: 300px;
+				
+			}
 
 			@media screen and (min-width: 480px) {
-				width: 60%;
-				margin: 0 35% 0 0px;
+				width: 80%;
+				margin: 0 10% 0 0px;
+				max-width: 360px;
 			}
 
 			@media screen and (min-width: 600px) {
@@ -172,7 +204,7 @@ const ToolbarStyle = styled.header`
 			:hover,
 			:active {
 				transition: color 0.2s ease;
-				color: ${props => props.theme.colorBad};
+				color: ${props => props.theme.colorMedium};
 			}
 		}
 
@@ -202,7 +234,7 @@ const ToolbarStyle = styled.header`
 		:hover,
 		:active {
 			transition: color 0.2s ease;
-			color: ${props => props.theme.colorBad};
+			color: ${props => props.theme.colorMedium};
 		}
 	}
 

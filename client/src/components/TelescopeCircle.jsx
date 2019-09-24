@@ -36,15 +36,39 @@ const TelescopeCircle = props => (
 export default TelescopeCircle;
 
 const TeleStyle = styled.div`
+	width: 320px;
+	height: 320px;
+
+	margin: 40px auto;
+	overflow: hidden;
+	transition: all 500ms ease-in;
+
+	:hover {
+		transform: scale(1.06);
+		transition: all 1000ms ease-in;
+	}
+
+	@media screen and (min-width: 320px) {
+	
+	}
+	@media screen and (min-width: 420px) {
+	
+	}
+
 	.circle {
+
+		margin: auto auto;
+		clip-path: circle(50% at 50% 50%);
+		background: ${props => props.theme.darkAccent};
+		/* border-top-left-radius: 50%;
+border-top-right-radius: 50%;
+border-bottom-left-radius: 50%;
+border-bottom-right-radius: 50%; */
+		/* moz-border-radius: 50%; */
+		transition: all 500ms ease-in;
 		width: 300px;
 		height: 300px;
-		margin: 55px auto;
-		background: ${props => props.theme.darkAccent};
-		border-radius: 50%;
-		/* moz-border-radius: 50%; */
-		overflow: hidden;
-		transition: all 500ms ease-in;
+	
 
 		@media screen and (min-width: 320px) {
 			width: 250px;
@@ -62,6 +86,7 @@ const TeleStyle = styled.div`
 		top: 50px;
 		left: -50px;
 		animation: orbit 20s linear infinite;
+	
 	}
 
 	.stars2 {
@@ -69,6 +94,7 @@ const TeleStyle = styled.div`
 		top: 100px;
 		left: -50px;
 		animation: orbit 50s linear infinite;
+	
 	}
 
 	.stars3 {
@@ -76,6 +102,7 @@ const TeleStyle = styled.div`
 		top: 110px;
 		left: -50px;
 		animation: orbit 15s linear infinite;
+
 	}
 
 	.stars4 {
@@ -83,6 +110,7 @@ const TeleStyle = styled.div`
 		top: 120px;
 		left: 300px;
 		animation: orbitrev 22s linear infinite;
+	
 	}
 
 	.stars5 {
@@ -90,6 +118,7 @@ const TeleStyle = styled.div`
 		top: 31px;
 		left: 300px;
 		animation: orbitrev 12s linear infinite;
+	
 	}
 
 	.star-six {
@@ -99,6 +128,7 @@ const TeleStyle = styled.div`
 		border-right: 5px solid transparent;
 		border-bottom: 9px solid #edd9c0;
 		position: absolute;
+	
 	}
 
 	.star-six:after {
@@ -111,6 +141,7 @@ const TeleStyle = styled.div`
 		content: "";
 		top: 3px;
 		left: -5px;
+	
 	}
 
 	.moon {
@@ -118,6 +149,7 @@ const TeleStyle = styled.div`
 		height: 20px;
 		border-radius: 50%;
 		box-shadow: 3px 3px 0 0 #edd9c0;
+	
 	}
 
 	.starround4 {
@@ -129,6 +161,7 @@ const TeleStyle = styled.div`
 		border-radius: 5px;
 		position: relative;
 		top: 20px;
+	
 		left: 35px;
 	}
 
@@ -141,6 +174,7 @@ const TeleStyle = styled.div`
 		border-radius: 5px;
 		position: relative;
 		top: 50px;
+	
 		left: 105px;
 	}
 
@@ -156,10 +190,7 @@ const TeleStyle = styled.div`
 		right: 85px;
 	}
 
-	.circle:hover {
-		transform: scale(1.06);
-		transition: all 1000ms ease-in;
-	}
+	
 
 	@keyframes orbit {
 		50% {

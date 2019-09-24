@@ -12,8 +12,6 @@ export const theme = {
 	logoA: "#7c6e7e",
 	logoTele: "#515b75",
 	mauve: "#B4768A",
-	pink: "#DE8382",
-	green: "#556673",
 	modalOverlay: "#151515",
 	darker: "#252629",
 	darkBlue: "#252A36",
@@ -54,6 +52,10 @@ export const theme = {
 	cardDarkHover: "#c2c8ce",
 	cardLightHover: "#c2ccd4",
 	yellow: "#edd9c0",
-	cardHeader: "#9298a0",
-	cardHeaderHover:"#707a88"
+	cardHeader: "#8C969C",
+	cardHeaderHover:"#707a88",
+	directionsHover:"#384771",
+	pink:"#DBCCC5",
+	green: "#8C969C",
+	highlightPink:"#bbabba"
 };

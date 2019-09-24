@@ -39,7 +39,7 @@ const modalStyle = {
 	}
 };
 
-class ParkMapModal extends Component {
+class ParkMoreInfoModal extends Component {
 	state = {
 		modalIsOpen: false
 	};
@@ -126,9 +126,11 @@ class ParkMapModal extends Component {
 				{/* <div className="modal-content"> */}
 				<ModalStyle>
 					<div className="modal-header">
-						{this.park.name === "Unknown" && this.park.name_alt
-							? this.park.name_alt
-							: this.park.name}
+						<span className="ParkTitle">
+							{this.park.name === "Unknown" && this.park.name_alt
+								? this.park.name_alt
+								: this.park.name}
+						</span>
 
 						<button
 							type="button"
@@ -153,55 +155,128 @@ class ParkMapModal extends Component {
 								<div className="reportParkText">Report</div>
 							</div>
 
-							<ScoreWrapper>
-								<div className="ParkScore">
-									<div className="Heading">
-										<span>SCORE</span>
-									</div>
-									<span className="ScoreNumerator">
-										<CountUp
-											start={0}
-											end={Math.round(
-												this.park.score * 100
-											)}
-											delay={0}
-										>
-											{({ countUpRef }) => (
-												<div className="Score">
-													<span ref={countUpRef} />
-													<span className="Percentage">
-														%
-													</span>
-												</div>
-											)}
-										</CountUp>
-									</span>
-									<span className="Value">
-										{this.park.score > 0.8
-											? "Visible"
-											: this.park.score > 0.6
-											? "Partly Visible"
-											: "Not Visible"}
-									</span>
-								</div>
-							</ScoreWrapper>
+							<div className="directions">
+								{this.userLocation ? (
+									<a
+										href={`https://www.google.com/maps?saddr=${this.userLocation.lat},${this.userLocation.lng}&daddr=${this.park.lat},${this.park.lng}`}
+										target="_blank"
+									>
+										<i className="fas fa-car"></i>
+									</a>
+								) : (
+									""
+								)}
+								<div className="directionsText">Directions</div>
+							</div>
 						</div>
 
 						<span className="textContainer">
 							Tap a square for more info
-							{this.userLocation ? (
-								<a
-									href={`https://www.google.com/maps?saddr=${this.userLocation.lat},${this.userLocation.lng}&daddr=${this.park.lat},${this.park.lng}`}
-									target="_blank"
-								>
-									Directions
-								</a>
-							) : (
-								""
-							)}
 						</span>
 
 						<div className="weatherContainer">
+							<div className="visibilityContainer">
+								<Card
+									cardName="visibilityCard"
+									front={
+										<React.Fragment>
+											<WeatherWrapper>
+												<div className="Heading">
+													<span>Star Visibility</span>
+												</div>
+												<div className="VisibleIcon">
+													{this.park.score > 0.8 ? (
+														<i className="far fa-eye visibleGoodIcon"></i>
+													) : this.park.score >
+													  0.6 ? (
+														<i className="far fa-eye visiblePartlyIcon"></i>
+													) : (
+														<i className="fas fa-eye-slash invisibleIcon"></i>
+													)}
+												</div>
+												<div className="Value">
+													{this.park.score > 0.8
+														? "Visible"
+														: this.park.score > 0.6
+														? "Partly Visible"
+														: "Not Visible"}
+												</div>
+											</WeatherWrapper>
+										</React.Fragment>
+									}
+									back={
+										<React.Fragment>
+											<span className="MoreInfoDesc">
+												{this.park.score > 0.8
+													? "Good naked-eye star visibilty at this score."
+													: this.park.score > 0.6
+													? "Naked-eye stargazing may not be adequate at this time right now."
+													: "Naked-eye stargazing not possible at this time right now."}
+											</span>
+										</React.Fragment>
+									}
+								/>
+							</div>
+
+							<div className="scoreContainer">
+								<Card
+									cardName="scoreCard"
+									front={
+										<React.Fragment>
+											<WeatherWrapper>
+												<div className="Heading">
+													<span>
+														Visibility Score
+													</span>
+												</div>
+												<div className="Score">
+													<CountUp
+														start={0}
+														end={Math.round(
+															this.park.score *
+																100
+														)}
+														delay={0}
+													>
+														{({ countUpRef }) => (
+															<React.Fragment>
+																<div
+																	className="ScoreNumber"
+																	ref={
+																		countUpRef
+																	}
+																/>
+																<div className="Percentage">
+																	%
+																</div>
+															</React.Fragment>
+														)}
+													</CountUp>
+												</div>
+												<div className="Value">
+													{this.park.score > 0.8
+														? "Great"
+														: this.park.score > 0.6
+														? "Poor"
+														: "Very poor"}
+												</div>
+											</WeatherWrapper>
+										</React.Fragment>
+									}
+									back={
+										<React.Fragment>
+											<span className="MoreInfoDesc">
+												{this.park.score > 0.8
+													? "We recommend stargazing at score above 80%.  Read how the score is calculated here."
+													: this.park.score > 0.6
+													? "We do not strongly recommend stargazing at this score.  Read how the score is calculated here."
+													: "We strongly recommend to not stargaze at a score below 60%.  Read how the score is calculated here."}
+											</span>
+										</React.Fragment>
+									}
+								/>
+							</div>
+
 							<div className="cloudContainer">
 								<Card
 									cardName="cloudCard"
@@ -240,6 +315,7 @@ class ParkMapModal extends Component {
 									}
 								/>
 							</div>
+
 							<div className="lightPolContainer">
 								<Card
 									cardName="lightPolCard"
@@ -348,14 +424,11 @@ class ParkMapModal extends Component {
 								this.remountReviews()
 							) : (
 								<Reviews
+									starSize={"14px"}
 									refreshInfoModal={this.refreshModal}
 									parkID={this.park.id}
 								/>
 							)}
-							{/* <Reviews
-								refreshInfoModal={this.refreshModal}
-								parkID={this.park.id}
-							/> */}
 						</div>
 					</div>
 				</ModalStyle>
@@ -399,63 +472,86 @@ function Card(props) {
 	);
 }
 
-export default ParkMapModal;
+export default ParkMoreInfoModal;
 
 const ModalStyle = styled.div`
-	/* max-height: 100vh;
-	max-width: 100vw; */
 	display: flex;
 	flex-direction: column;
-	width: 452px;
-	height: 95vh;
-	font-family: 'Lato', sans-serif;
+	/* width: 452px; */
+	height: 85vh;
+	font-family: "Lato", sans-serif;
 	border: none;
 	color: ${props => props.theme.fontDark};
-	background:black;
+	background: black;
+	max-width: 500px;	
+	width: 100vw;
+
+	@media screen and (min-width: 320px) {
+		height: 85vh;
+		grid-template-rows: 0.4fr auto;
+	}
+
+	@media screen and (min-width: 600px) {
+		height: 95vh;
+	}
 
 	.modal-header {
-		font-family: 'Lato', sans-serif;
-		font-style: normal;
-		font-weight: normal;
-		color: ${props => props.theme.white};
-		font-size: 30px;
-		text-align: left;
-		padding: 1rem 2.5rem 2rem 1rem;
-		background: ${props => props.theme.mapBlue};
-		border: none;
+		padding: 0rem 1rem;
+
+		.ParkTitle {
+			font-family: "Lato", sans-serif;
+			font-style: normal;
+			font-weight: 500;
+			color: ${props => props.theme.prettyDark};
+
+			text-align: left;
+			padding: 1.5rem 1rem;
+			display: flex;
+			grid-area: ParkTitle;
+
+			color: ${props => props.theme.prettyDark};
+
+			font-size: 22px;
+			text-align: left;
+			margin: auto auto;
+			line-height: 30px;
+			/* padding-left: 1rem; */
+
+			@media screen and (min-width: 320px) {
+
+			}
+			@media screen and (min-width: 480px) {
+				
+			
+			}
+		}
+
+		/* padding: 1rem 2.5rem 2rem 1rem; */
+		background: ${props => props.theme.green};
+		border-bottom: 6px solid ${props => props.theme.prettyDark};
 		border-radius: 0rem;
-		/* border-bottom: 2px solid #9ea6ad; */
 		.close {
-		position: absolute;
-		top: 0px;
-		right: 0px;
-		float: right;
-		font-size: 2.5rem;
-		font-weight: 700;
-		line-height: 1;
-		color: ${props => props.theme.white};
-		outline: none;
-		text-shadow: none;
-		opacity: 0.5;
+			outline: none;
+			text-shadow: none;
+			color: ${props => props.theme.prettyDark};
+			position: absolute;
+			top: -3px;
+			right: 0px;
+			float: right;
+			font-size: 2rem;
+			font-weight: 700;
+			line-height: 1;
+		}
+
+		.close:hover {
+			color: ${props => props.theme.colorMedium};
+			text-decoration: none;
+		}
+
+		.close:active {
+			color: ${props => props.theme.prettyDark};
+		}
 	}
-
-	.close:hover {
-		color: ${props => props.theme.colorBad};
-		text-decoration: none;
-	}
-
-	.close:active {
-		color: ${props => props.theme.white};
-	}
-
-	.close:not(:disabled):not(.disabled):hover,
-	.close:not(:disabled):not(.disabled):focus {
-		opacity: 0.75;
-	}
-
-	}
-
-
 
 	.ContentGrid {
 		display: grid;
@@ -472,112 +568,104 @@ const ModalStyle = styled.div`
 		height: 100%;
 		overflow-y: auto;
 		background: ${props => props.theme.white};
-		
 
-
-.textContainer{
-	grid-area: infoText;
-	font-family: monospace;
-    font-size: 15px;
-}
-
-.HeaderGrid{
-		display: grid;
-		grid-area: HeaderGrid;
-		grid-template-columns: 1fr 1fr 1fr;
-		grid-template-rows: auto auto;
-		grid-template-areas:
-		"favPark 	 ParkScore reportPark"
-		"favParkText ParkScore reportParkText";
-
-		.ParkScore {
-			grid-area: ParkScore;
-			display: inline-block;
-			vertical-align: middle;
-			text-align: center;
-			margin: auto auto;
-			display: flex;
-			flex-direction: column;
-
-			.Heading{
-				font-size: 30px;
-			}
-
-	
-			
-
-			.ScoreNumerator {
-				/* font-family: Barlow; */
-				font-weight: 600;
-				font-size: 64px;
-				.Percentage {
-					font-size: 24px;
-				}
-			}
-
-			.ScoreDenominator {
-				/* font-family: Barlow; */
-				font-weight: 500;
-
-				font-size: 24px;
-			}
+		.textContainer {
+			grid-area: infoText;
+			font-weight: 500;
+			font-size: 15px;
 		}
 
-				/* .shareIcon {
-					color: ${props => props.theme.fontDark};
-					grid-area: shareIcon;
-				}
-				.faqIcon {
-					color: ${props => props.theme.fontDark};
-					grid-area: faqIcon;
-				} */
-				i{
-						font-size: 40px;
-					}
+		.HeaderGrid {
+			display: grid;
+			grid-area: HeaderGrid;
+			grid-template-columns: 1fr 1fr 1fr;
+			grid-template-rows: 1fr 0.2fr;
 
-					
-				.favPark {
-					margin: auto 0;
-					grid-area: favPark;
-					button:focus {outline:0;}
-					
-				
-					
-					.favParkText{
-						grid-area: favParkText;
-						font-size: 20px;
-						font-weight: 400;
-					}
+			grid-template-areas:
+				"directions  				favPark			 		 reportPark	"
+				"directionsText				favParkText	 	 	 reportParkText ";
 
+			.ParkScoreHeading {
+				grid-area: ParkScoreHeading;
+				font-size: 18px;
+				margin-bottom: 20px;
+			}
+
+			.directions {
+				margin: auto 0;
+				grid-area: directions;
+				font-size: 20px;
+
+				font-weight: 400;
+				a {
+					outline: none;
+					text-decoration: none;
 				}
-				.reportPark {
-					margin: auto 0;
-					grid-area: reportPark;
-					button{
-						outline: none;
-					}
-				
-					.reportParkText{
-						grid-area: reportParkText;
-						font-size: 20px;
-						font-weight: 400;
+				i {
+					color: ${props => props.theme.franNavy};
+					transition: color 0.3s;
+					:hover,
+					:active {
+						color: ${props => props.theme.directionsHover};
+						transition: color 0.3s;
 					}
 				}
-				
-			
-			
-		
-	}
 
+				.directionsText {
+					grid-area: directionsText;
+					font-size: 16px;
+					font-weight: 400;
+					font-family: Lato;
+				}
+			}
+
+			i {
+				font-size: 40px;
+			}
+
+			.favPark {
+				margin: auto 0;
+				grid-area: favPark;
+				button:focus {
+					outline: 0;
+				}
+
+				.favParkText {
+					grid-area: favParkText;
+					font-size: 16px;
+					font-weight: 400;
+				}
+			}
+			.reportPark {
+				margin: auto 0;
+				grid-area: reportPark;
+				button {
+					outline: none;
+				}
+
+				.reportParkText {
+					grid-area: reportParkText;
+					font-size: 16px;
+					font-weight: 400;
+				}
+			}
+		}
 
 		.Heading,
 		.Value {
 			font-style: normal;
 			font-weight: 600;
-			font-size: 18px;
+			font-size: 14px;
 			display: flex;
-			justify-content: center; /* align horizontal */
-			align-items: center; /* align vertical */
+			justify-content: center;
+			align-items: center;
+
+			@media screen and (min-width: 320px) {
+				font-size: 14px;
+			}
+			@media screen and (min-width: 600px) {
+				font-size: 18px;
+			}
 
 			span {
 				display: inline-block;
@@ -587,17 +675,20 @@ const ModalStyle = styled.div`
 		}
 
 		.MoreInfoDesc {
-			text-align: left;
-			display: block;
 			padding: 6px;
 			font-weight: 500;
+			font-size: 14px;
+
+			@media screen and (min-width: 320px) {
+				font-size: 13px;
+			}
+			@media screen and (min-width: 600px) {
+				font-size: 1rem;
+			}
 		}
-
-
 
 		.weatherContainer {
 			img {
-				/* width: 100%; */
 				width: 70px;
 				margin-left: auto;
 				margin-right: auto;
@@ -606,31 +697,93 @@ const ModalStyle = styled.div`
 			grid-area: weatherContainer;
 			display: grid;
 			grid-template-columns: 1fr 1fr;
-			grid-template-rows: 1fr 1fr;
+			grid-template-rows: 1fr 1fr 1fr;
 			grid-row-gap: 20px;
 			grid-column-gap: 20px;
 			grid-template-areas:
+				"scoreContainer    visibilityContainer"
 				"cloudContainer    lightPolContainer"
 				"moonContainer     humidityContainer";
 
+			.scoreContainer {
+				height: 157px;
+				grid-area: scoreContainer;
+				position: relative;
+				cursor: pointer;
+				transition: transform 0.4s ease;
+				&:hover {
+					transition: transform 0.4s ease;
+					transform: translate3d(0px, -3px, 0px) scale(1.03);
+				}
+
+				.scoreCard {
+					height: 157px;
+					position: absolute;
+					width: 100%;
+					background-color: ${props => props.theme.cardDark};
+					border-radius: 20px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+
+					.Score {
+						display: flex;
+						font-size: 50px;
+						font-weight: 600;
+						align-items: baseline;
+						margin: auto auto;
+						.Percentage {
+							display: inline-block;
+							font-size: 25px;
+						}
+					}
+				}
+			}
+
+			.visibilityContainer {
+				height: 157px;
+				grid-area: visibilityContainer;
+				position: relative;
+				cursor: pointer;
+				transition: transform 0.4s ease;
+				&:hover {
+					transition: transform 0.4s ease;
+					transform: translate3d(0px, -3px, 0px) scale(1.03);
+				}
+
+				.visibilityCard {
+					height: 157px;
+					position: absolute;
+					width: 100%;
+					background-color: ${props => props.theme.cardLight};
+					border-radius: 20px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					i {
+						font-size: 45px;
+					}
+				}
+			}
 
 			.cloudContainer {
 				height: 157px;
 				grid-area: cloudContainer;
 				position: relative;
 				cursor: pointer;
-	
-  transition: transform 0.4s ease;
-  &:hover {
 
-    transition: transform 0.4s ease;
-    transform: translate3d(0px, -3px, 0px) scale(1.03);
-  }
-				
+				transition: transform 0.4s ease;
+				&:hover {
+					transition: transform 0.4s ease;
+					transform: translate3d(0px, -3px, 0px) scale(1.03);
+				}
 
 				.cloudCard {
 					height: 157px;
 					position: absolute;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 					width: 100%;
 					background-color: ${props => props.theme.cardLight};
 					border-radius: 20px;
@@ -642,31 +795,28 @@ const ModalStyle = styled.div`
 				position: relative;
 				cursor: pointer;
 				transition: transform 0.4s ease;
-  &:hover {
-
-    transition: transform 0.4s ease;
-    transform: translate3d(0px, -3px, 0px) scale(1.03);
-  }
-				
+				&:hover {
+					transition: transform 0.4s ease;
+					transform: translate3d(0px, -3px, 0px) scale(1.03);
+				}
 
 				.lightPolCard {
 					height: 157px;
 					position: absolute;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 					width: 100%;
 					background-color: ${props => props.theme.cardDark};
 					border-radius: 20px;
-					
-
-
 				}
 			}
 			.moonContainer {
 				transition: transform 0.4s ease;
-  &:hover {
-
-    transition: transform 0.4s ease;
-    transform: translate3d(0px, -3px, 0px) scale(1.03);
-  }
+				&:hover {
+					transition: transform 0.4s ease;
+					transform: translate3d(0px, -3px, 0px) scale(1.03);
+				}
 				height: 157px;
 				grid-area: moonContainer;
 				position: relative;
@@ -675,6 +825,9 @@ const ModalStyle = styled.div`
 				.moonCard {
 					height: 157px;
 					position: absolute;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 					width: 100%;
 					background-color: ${props => props.theme.cardDark};
 					border-radius: 20px;
@@ -687,11 +840,10 @@ const ModalStyle = styled.div`
 			}
 			.humidityContainer {
 				transition: transform 0.4s ease;
-  &:hover {
-
-    transition: transform 0.4s ease;
-    transform: translate3d(0px, -3px, 0px) scale(1.03);
-  }
+				&:hover {
+					transition: transform 0.4s ease;
+					transform: translate3d(0px, -3px, 0px) scale(1.03);
+				}
 				height: 157px;
 				grid-area: humidityContainer;
 				position: relative;
@@ -700,6 +852,9 @@ const ModalStyle = styled.div`
 				.humidityCard {
 					height: 157px;
 					position: absolute;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 					width: 100%;
 					background-color: ${props => props.theme.cardLight};
 					border-radius: 20px;
@@ -709,17 +864,8 @@ const ModalStyle = styled.div`
 
 		.reviewsContainer {
 			grid-area: reviewsContainer;
-			/* background-color: purple; */
 		}
 	}
-`;
-
-const HeaderStyle = styled.div`
-	color: ${props => props.theme.fontDark};
-	font-family: "Lato", sans-serif;
-	font-style: normal;
-
-	font-size: 36px;
 `;
 
 const WeatherWrapper = styled.div`
@@ -728,9 +874,4 @@ const WeatherWrapper = styled.div`
 	height: 100%;
 	padding: 10px 0px 10px 0px;
 	justify-content: space-between;
-`;
-
-const ScoreWrapper = styled.div`
-	display: flex;
-	flex-direction: column;
 `;
