@@ -112,6 +112,12 @@ class ParkMoreInfoModal extends Component {
 		this.toRemountReviews = false;
 	};
 
+	getLocation = () => {
+		navigator.geolocation.getCurrentPosition(position => {
+			window.open(`https://www.google.com/maps?saddr=${position.coords.latitude},${position.coords.longitude}&daddr=${this.park.lat},${this.park.lng}`, "_blank");
+		});
+	};
+
 	render() {
 		return (
 			<Modal
@@ -164,7 +170,9 @@ class ParkMoreInfoModal extends Component {
 										<i className="fas fa-car"></i>
 									</a>
 								) : (
-									""
+									<a onClick={this.getLocation}>
+										<i className="fas fa-car"></i>
+									</a>
 								)}
 								<div className="directionsText">Directions</div>
 							</div>
@@ -483,7 +491,7 @@ const ModalStyle = styled.div`
 	border: none;
 	color: ${props => props.theme.fontDark};
 	background: black;
-	max-width: 500px;	
+	max-width: 500px;
 	width: 100vw;
 
 	@media screen and (min-width: 320px) {
@@ -518,11 +526,8 @@ const ModalStyle = styled.div`
 			/* padding-left: 1rem; */
 
 			@media screen and (min-width: 320px) {
-
 			}
 			@media screen and (min-width: 480px) {
-				
-			
 			}
 		}
 

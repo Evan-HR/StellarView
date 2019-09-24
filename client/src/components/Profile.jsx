@@ -90,14 +90,14 @@ class BaseProfile extends Component {
 					console.log("Response from second call", response);
 
 					for (var i = 0; i < response.data.parks.length; i++) {
-						if (response.data.parks[i].weather) {
-							response.data.parks[i].score = parkScore(
-								response.data.moonFraction,
-								response.data.parks[i].weather.humidity / 100,
-								response.data.parks[i].weather.clouds / 100,
-								response.data.parks[i].light_pol / 100
-							);
-						}
+						let tempScore = parkScore(
+							response.data.moonFraction,
+							response.data.parks[i].weather.humidity / 100,
+							response.data.parks[i].weather.clouds / 100,
+							response.data.parks[i].light_pol / 100
+						);
+						response.data.parks[i].score = tempScore.finalScore;
+						response.data.parks[i].scoreBreakdown = tempScore;
 					}
 
 					this.setState({
