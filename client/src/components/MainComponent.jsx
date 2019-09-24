@@ -320,7 +320,7 @@ class BaseMainComponent extends Component {
 	renderResults = () => {
 		return (
 			<ResultsPageStyle>
-				{this.renderNoResults()}
+				{/* {this.renderNoResults()} */}
 				{/* {this.renderParkMap()} */}
 				<div className="formMoonCards">
 					{/* <button

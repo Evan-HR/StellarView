@@ -2,6 +2,8 @@
 *.env
 config.py
 __pycache__
+qgis/data/output
+qgis/data/lightPollution*.tif
 
 
 # Created by https://www.gitignore.io/api/node,sass

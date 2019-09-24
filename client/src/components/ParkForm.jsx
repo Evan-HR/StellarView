@@ -432,22 +432,22 @@ class BaseParkForm extends Component {
 
 	loadAutoComplete = () => {
 		const field = document.getElementById("address-field");
-		this.autoComplete = new window.google.maps.places.SearchBox(field);
+		this.autoComplete = new window.google.maps.places.Autocomplete(field);
 		// this.enableEnterKey(field);
-		this.autoComplete.addListener("places_changed", this.onPlaceChanged);
+		this.autoComplete.addListener("place_changed", this.onPlaceChanged);
 		// this.autoCompleteLoaded = true;
 	};
 
 	onPlaceChanged = () => {
 		console.log("Getting location from places");
-		let places = this.autoComplete.getPlaces();
-		if (places == 0) {
-			return;
-		}
+		let place = this.autoComplete.getPlace();
+		// if (places == 0) {
+		// 	return;
+		// }
 
-		var place = places[0];
-		console.log("Valid place:", place);
-		if (place.geometry && place.geometry.location) {
+		// var place = places[0];
+		// console.log("Valid place:", place);
+		if (place && place.geometry && place.geometry.location) {
 			let location = place.geometry.location.toJSON();
 			console.log(location);
 			if (window.google) {
