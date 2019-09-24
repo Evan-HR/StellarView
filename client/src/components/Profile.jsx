@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthConsumer } from "./AuthContext";
 import ParkTableProfile from "./ParkTableProfile";
 import { parkScore } from "./MainComponent";
+import styled from "styled-components";
 
 class BaseProfile extends Component {
 	constructor(props) {
@@ -96,7 +97,7 @@ class BaseProfile extends Component {
 								response.data.parks[i].weather.clouds / 100,
 								response.data.parks[i].light_pol / 100
 							);
-						} 
+						}
 					}
 
 					this.setState({
@@ -155,11 +156,13 @@ class BaseProfile extends Component {
 		console.log("HAS FAV SPOTS", this.props.context.hasFavSpots);
 		console.log(this.state);
 		return (
-			<div>
-				Hello, {this.props.context.firstName}!<br />
-				{this.renderNoSpotsMsg()}
-				{this.sendToParkTable()}
-			</div>
+			<ProfileStyle>
+				<div>
+					<span className="firstName">Hello, {this.props.context.firstName}!</span>
+					{this.renderNoSpotsMsg()}
+					{this.sendToParkTable()}
+				</div>
+			</ProfileStyle>
 		);
 	}
 }
@@ -169,3 +172,12 @@ const Profile = props => (
 );
 
 export default Profile;
+
+const ProfileStyle = styled.div`
+	.firstName {
+		font-size: 20px;
+		margin: 20px auto;
+		display: block;
+		color: ${props => props.theme.white};
+	}
+`;

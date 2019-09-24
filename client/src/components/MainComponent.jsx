@@ -428,7 +428,7 @@ const LandingPageStyle = styled.div`
 		margin: auto auto;
 		margin-top: 10vh;
 		max-width: 530px;
-		overflow: hidden;
+		/* overflow: hidden; */
 
 		@media screen and (min-width: 320px) {
 			width: 85%;

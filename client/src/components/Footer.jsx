@@ -5,7 +5,7 @@ class Footer extends Component {
 	render() {
 		return (
 			<FooterStyle>
-				<span className="Copyright">©</span>
+		
 				<span className="Vlad">Vlad<br/>Falach</span>
 				<span className="Dustin">
 					<a
@@ -54,12 +54,12 @@ const FooterStyle = styled.div`
 		font-size: 12px;
 	}
 
-	grid-template-columns: 20px 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr;
 	grid-template-areas:
-			"Copyright Vlad Dustin Evan";
-	.Copyright{
+			"Vlad Dustin Evan";
+	/* .Copyright{
 		grid-area: Copyright;
-	}
+	} */
 	.Vlad{
 		grid-area: Vlad;
 	}

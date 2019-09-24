@@ -36,7 +36,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // enable ssl redirect
-app.use(sslRedirect());
+// app.use(sslRedirect());
 
 //for dynamic html generation
 app.set("view engine", "ejs");
@@ -108,8 +108,8 @@ app.use(
 		store: sessionStore,
 		//only logged/registered users have cookies
 		saveUninitialized: false,
-		proxy:true,
-		cookie: { secure: true, httpOnly: false }
+		// secure: true,
+		cookie: { httpOnly: false }
 	})
 );
 

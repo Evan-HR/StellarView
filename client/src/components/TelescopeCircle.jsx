@@ -36,27 +36,29 @@ const TelescopeCircle = props => (
 export default TelescopeCircle;
 
 const TeleStyle = styled.div`
-	width: 250px;
-	height: 250px;
+	width: 320px;
+	height: 320px;
 
 	margin: 40px auto;
 	overflow: hidden;
-	clip-path: circle(50% at 50% 50%);
 	transition: all 500ms ease-in;
 
 	:hover {
 		transform: scale(1.06);
 		transition: all 1000ms ease-in;
 	}
+
+	@media screen and (min-width: 320px) {
+	
+	}
 	@media screen and (min-width: 420px) {
-		width: 300px;
-		height: 300px;
+	
 	}
 
 	.circle {
-		width: 300px;
-		height: 300px;
+
 		margin: auto auto;
+		clip-path: circle(50% at 50% 50%);
 		background: ${props => props.theme.darkAccent};
 		/* border-top-left-radius: 50%;
 border-top-right-radius: 50%;
@@ -64,6 +66,8 @@ border-bottom-left-radius: 50%;
 border-bottom-right-radius: 50%; */
 		/* moz-border-radius: 50%; */
 		transition: all 500ms ease-in;
+		width: 300px;
+		height: 300px;
 	
 
 		@media screen and (min-width: 320px) {

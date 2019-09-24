@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import ParkCard from "./ParkCard";
 import ParkMoreInfoModal from "./ParkMoreInfoModal";
+import styled from 'styled-components';
 
 class ParkTableProfile extends Component {
 	state = {};
@@ -30,15 +31,15 @@ class ParkTableProfile extends Component {
 		if (this.props.parkList.length > 0) {
 			return this.props.parkList.map(this.renderPark);
 		} else {
-			return (
-				<tr>
-					<td colSpan={3}>
-						<strong style={{ color: "red" }}>
-							No parks available.
-						</strong>
-					</td>
-				</tr>
-			);
+			return "";
+
+			// <tr>
+			// 	<td colSpan={3}>
+			// 		<strong style={{ color: "red" }}>
+			// 			No parks available.
+			// 		</strong>
+			// 	</td>
+			// </tr>
 		}
 	};
 
@@ -78,14 +79,18 @@ class ParkTableProfile extends Component {
 	render() {
 		console.log("ParkTable - rendered");
 		return (
-			<React.Fragment>
-				<div className="border border-primary">
-					{this.renderParkTable()}
-				</div>
+			<ProfileParksStyle>
+				{this.renderParkTable()}
+
 				<ParkMoreInfoModal ref={this.parkModalChild} />
-			</React.Fragment>
+			</ProfileParksStyle>
 		);
 	}
 }
 
 export default ParkTableProfile;
+
+const ProfileParksStyle = styled.div`
+	max-width: 550px;
+	margin: auto auto;
+`;
