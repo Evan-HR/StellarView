@@ -165,7 +165,10 @@ class BaseLogin extends Component {
 							""
 						) : (
 							<React.Fragment>
-								Not a member? <Register hideLink={true} />
+								Not a member?{" "}
+								<span>
+									<Register hideLink={true} />
+								</span>
 							</React.Fragment>
 						)}
 					</p>
@@ -210,7 +213,7 @@ class BaseLogin extends Component {
 					onAfterOpen={this.afterOpenModal}
 					onRequestClose={this.closeModal}
 					contentLabel="Login Modal"
-					className="modal-dialog"
+					// className="modal-dialog"
 					style={customStyles}
 				>
 					<ModalStyle>
@@ -297,39 +300,44 @@ const NewLoginStyle = styled.div`
 	-ms-flex-pack: center;
 	justify-content: center;
 	height: 80vh;
-	width: 60vw;
 	position: relative;
 	background: ${props => props.theme.prettyDark};
 	font-family: "Lato", sans-serif;
 	color: ${props => props.theme.white};
-	/* min-height: 100vh; */
+	width: 100vw;
+
+	@media screen and (min-width: 320px) {
+		width: 100vw;
+	}
+
+	@media screen and (min-width: 600px) {
+		width: 60vw;
+	}
+
+	@media screen and (min-width: 801px) {
+		width: 45vw;
+	}
 
 	.close {
-		position: absolute;
-		top: 0px;
-		right: 0px;
-		float: right;
-		font-size: 2.5rem;
-		font-weight: 700;
-		line-height: 1;
-		color: ${props => props.theme.white};
 		outline: none;
 		text-shadow: none;
-		opacity: 0.5;
+		color: ${props => props.theme.white};
+		position: absolute;
+		top: -3px;
+		right: 0px;
+		float: right;
+		font-size: 2rem;
+		font-weight: 700;
+		line-height: 1;
 	}
 
 	.close:hover {
-		color: ${props => props.theme.colorBad};
+		color: ${props => props.theme.pink};
 		text-decoration: none;
 	}
 
 	.close:active {
-		color: ${props => props.theme.white};
-	}
-
-	.close:not(:disabled):not(.disabled):hover,
-	.close:not(:disabled):not(.disabled):focus {
-		opacity: 0.75;
+		color: ${props => props.theme.colorMedium};
 	}
 
 	/* helpers/grid.css */
@@ -381,7 +389,7 @@ const NewLoginStyle = styled.div`
 	a:focus,
 	a:hover {
 		text-decoration: none;
-		color: ${props => props.theme.colorBad};
+		color: ${props => props.theme.highlightPink};
 		transition: 0.25s;
 	}
 
@@ -481,7 +489,7 @@ const NewLoginStyle = styled.div`
 	}
 
 	.login input[type="submit"] {
-		background-color: ${props => props.theme.colorBad};
+		background-color: ${props => props.theme.highlightPink};
 		color: ${props => props.theme.prettyDark};
 		font-weight: 600;
 		text-transform: uppercase;
@@ -503,6 +511,20 @@ const NewLoginStyle = styled.div`
 
 	.text--center {
 		text-align: center;
+		span {
+			cursor: pointer;
+			color: ${props => props.theme.yellow};
+			transition: color 0.25s;
+			:focus,
+			:hover {
+				text-decoration: none;
+				color: ${props => props.theme.highlightPink};
+				transition: color 0.25s;
+			}
+			:active{
+				color: ${props => props.theme.colorMedium};
+			}
+		}
 	}
 `;
 

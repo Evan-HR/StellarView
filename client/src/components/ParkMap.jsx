@@ -3,7 +3,7 @@ import React, { Component, createRef } from "react";
 // import PropTypes from "prop-types";
 // import Modal from "react-modal";
 // import ReactDOM from "react-dom";
-import ParkMapModal from "./ParkMapModal";
+import ParkMoreInfoModal from "./ParkMoreInfoModal";
 import Reviews from "./Reviews";
 import FavPark from "./FavPark";
 
@@ -233,7 +233,7 @@ class ParkMap extends Component {
 					style={{ width: "100%", height: "100%" }}
 				/>
 
-				<ParkMapModal ref={this.parkModalChild} />
+				<ParkMoreInfoModal ref={this.parkModalChild} />
 			</React.Fragment>
 		);
 	}
