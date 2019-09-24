@@ -12,6 +12,18 @@ import cloudGoodIcon from "./style/Media/cardIcons/cloudGood.svg";
 import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import ReportPark from "./ReportPark";
 import CountUp from "react-countup";
+import { withRouter } from "react-router-dom";
+import {
+	notifyInfoModalIsOpen,
+	notifyInfoModalIsClosed
+} from "./MainComponent";
+import ee from "eventemitter3";
+
+const emitter = new ee();
+
+export const notifyCloseModal = msg => {
+	emitter.emit("notifyCloseModal", msg);
+};
 
 const modalStyle = {
 	overlay: {
@@ -49,6 +61,9 @@ class ParkMoreInfoModal extends Component {
 		this.park = { weather: {} };
 		this.userLocation = {};
 		this.toRemountReviews = false;
+		emitter.on("notifyCloseModal", msg => {
+			this.closeModal();
+		});
 	}
 
 	//means..
@@ -91,6 +106,10 @@ class ParkMoreInfoModal extends Component {
 		this.moonType = content.moonType;
 		console.log(this.park);
 		this.setState({ modalIsOpen: true });
+		notifyInfoModalIsOpen();
+		this.props.history.push(
+			`${window.location.pathname}${window.location.search}#modal`
+		);
 	};
 
 	afterOpenModal = () => {
@@ -100,6 +119,7 @@ class ParkMoreInfoModal extends Component {
 	closeModal = () => {
 		console.log("CLOSE GOT HERE!!!!!!");
 		document.body.style.overflow = "visible";
+		notifyInfoModalIsClosed();
 		this.setState({ modalIsOpen: false });
 	};
 
@@ -114,9 +134,22 @@ class ParkMoreInfoModal extends Component {
 
 	getLocation = () => {
 		navigator.geolocation.getCurrentPosition(position => {
-			window.open(`https://www.google.com/maps?saddr=${position.coords.latitude},${position.coords.longitude}&daddr=${this.park.lat},${this.park.lng}`, "_blank");
+			window.open(
+				`https://www.google.com/maps?saddr=${position.coords.latitude},${position.coords.longitude}&daddr=${this.park.lat},${this.park.lng}`,
+				"_blank"
+			);
 		});
 	};
+
+	componentDidUpdate() {
+		window.onpopstate = e => {
+			console.log("Modal detected back:", window.location.href);
+			if (this.state.modalIsOpen) {
+				console.log("Trying to go back with modal open");
+				this.closeModal();
+			}
+		};
+	}
 
 	render() {
 		return (
@@ -480,7 +513,22 @@ function Card(props) {
 	);
 }
 
-export default ParkMoreInfoModal;
+const withRouterAndRef = WrappedComponent => {
+	class InnerComponentWithRef extends React.Component {
+		render() {
+			const { forwardRef, ...rest } = this.props;
+			return <WrappedComponent {...rest} ref={forwardRef} />;
+		}
+	}
+	const ComponentWithRouter = withRouter(InnerComponentWithRef, {
+		withRef: true
+	});
+	return React.forwardRef((props, ref) => {
+		return <ComponentWithRouter {...props} forwardRef={ref} />;
+	});
+};
+
+export default withRouterAndRef(ParkMoreInfoModal);
 
 const ModalStyle = styled.div`
 	display: flex;

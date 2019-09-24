@@ -1,6 +1,6 @@
 //Store parks state and handle display
 import React, { Component } from "react";
-import ParkForm from "./ParkForm";
+import ParkForm, { notifyLoadQuery } from "./ParkForm";
 import ParkTable from "./ParkTable";
 import ParkMap from "./ParkMap";
 import { BrowserRouter as Router, Route } from "react-router-dom";
@@ -15,6 +15,18 @@ import tempIcon from "./style/Media/cardIcons/temperature.svg";
 import { withRouter } from "react-router-dom";
 import TelescopeCircle from "./TelescopeCircle";
 import NoResultsModal from "./NoResultsModal";
+import { notifyCloseModal } from "./ParkMoreInfoModal";
+import ee from "eventemitter3";
+
+const emitter = new ee();
+
+export const notifyInfoModalIsOpen = msg => {
+	emitter.emit("infoModalIsOpen", msg);
+};
+
+export const notifyInfoModalIsClosed = msg => {
+	emitter.emit("infoModalIsClosed", msg);
+};
 
 function inRange(x, min, max) {
 	return (x - min) * (x - max) <= 0;
@@ -92,7 +104,8 @@ class BaseMainComponent extends Component {
 		isFetchingParks: false,
 		hideForm: false,
 		hideMap: true,
-		sortedBy: "dist"
+		sortedBy: "dist",
+		infoModalIsOpen: false
 	};
 	/* Note - park object is:
         {
@@ -110,7 +123,28 @@ class BaseMainComponent extends Component {
 		this.googleMap = false;
 		this.markers = {};
 		this.noParksModalOpen = false;
+		emitter.on("infoModalIsOpen", msg => {
+			console.log("Main component heard about modal OPENING");
+			this.setState({ infoModalIsOpen: true });
+		});
+		emitter.on("infoModalIsClosed", () => {
+			console.log("Main component heard about modal CLOSING");
+			this.setState({ infoModalIsOpen: false });
+		});
 	}
+
+	componentDidUpdate = () => {
+		window.onpopstate = e => {
+			console.log("Detected back button");
+			if (this.state.infoModalIsOpen) {
+				console.log("Notifying modal");
+				notifyCloseModal();
+			} else {
+				console.log("Notifying park form");
+				notifyLoadQuery();
+			}
+		};
+	};
 
 	handleMapLoaded = googleMapActual => {
 		this.googleMap = googleMapActual;
@@ -321,56 +355,56 @@ class BaseMainComponent extends Component {
 				{/* {this.renderNoResults()} */}
 				{/* {this.renderParkMap()} */}
 				{/* <div className="formMoonCards"> */}
-					{/* <button
+				{/* <button
 						onClick={() => {
 							this.setState({ hideForm: !this.state.hideForm });
 						}}
 					>
 						Toggle form
 					</button> */}
-					{/* <div className="FormMoonWrapper"> */}
+				{/* <div className="FormMoonWrapper"> */}
 
-					<div className="formMoonSort">
-						{/* {this.renderParkForm()} */}
+				<div className="formMoonSort">
+					{/* {this.renderParkForm()} */}
 
-						<div className="moonStyle">
-							<MoonComponent
-								moonPhase={this.state.moonPhase}
-								parkList={this.state.parks}
-								moonType={this.state.moonType}
-								stellarData={this.state.stellarData}
-							/>
-						</div>
-
-						<div className="sortByContainer">
-							<div className="sortBy">
-								Sort parks by:{"  "}
-								<button
-									onClick={this.sortParksDist}
-									disabled={this.state.sortedBy === "dist"}
-								>
-									Distance
-								</button>
-								<button
-									onClick={this.sortParksScore}
-									disabled={this.state.sortedBy === "score"}
-								>
-									Score
-								</button>
-							</div>
-						</div>
-					</div>
-
-					<div className="parkTableStyle">
-						<ParkTable
+					<div className="moonStyle">
+						<MoonComponent
+							moonPhase={this.state.moonPhase}
 							parkList={this.state.parks}
-							moon={this.state.moonPhase}
 							moonType={this.state.moonType}
-							googleMap={this.googleMap}
-							markers={this.markers}
-							isLoadingParks={this.state.isFetchingParks}
+							stellarData={this.state.stellarData}
 						/>
 					</div>
+
+					<div className="sortByContainer">
+						<div className="sortBy">
+							Sort parks by:{"  "}
+							<button
+								onClick={this.sortParksDist}
+								disabled={this.state.sortedBy === "dist"}
+							>
+								Distance
+							</button>
+							<button
+								onClick={this.sortParksScore}
+								disabled={this.state.sortedBy === "score"}
+							>
+								Score
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<div className="parkTableStyle">
+					<ParkTable
+						parkList={this.state.parks}
+						moon={this.state.moonPhase}
+						moonType={this.state.moonType}
+						googleMap={this.googleMap}
+						markers={this.markers}
+						isLoadingParks={this.state.isFetchingParks}
+					/>
+				</div>
 				{/* </div> */}
 			</ResultsPageStyle>
 		);

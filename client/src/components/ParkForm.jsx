@@ -14,6 +14,13 @@ import styled from "styled-components";
 import { notify } from "./Notification";
 import searchIcon from "./style/Media/search-solid.svg";
 import SVG from "react-inlinesvg";
+import ee from "eventemitter3";
+
+const emitter = new ee();
+
+export const notifyLoadQuery = msg => {
+	emitter.emit("parkFormToLoadQuery", msg);
+};
 
 class BaseParkForm extends Component {
 	state = {
@@ -38,6 +45,10 @@ class BaseParkForm extends Component {
 		this.sliderLight = this.state.reqData.lightpol;
 		this.sliderDist = this.state.reqData.dist;
 		this.autoComplete = false;
+		emitter.on("parkFormToLoadQuery", () => {
+			console.log("Park form got back button event");
+			this.loadQuery();
+		});
 	}
 
 	//There are two cases when we would want to load results form url query:
@@ -59,10 +70,15 @@ class BaseParkForm extends Component {
 			this.loadAutoComplete();
 		}
 		//On back button load previous results
-		window.onpopstate = e => {
-			console.log("Back button pressed");
-			this.loadQuery();
-		};
+		// window.onpopstate = e => {
+		// 	console.log("Back button pressed");
+		// 	console.log(window.location.href);
+		// 	if (window.location.hash === "#modal") {
+		// 		notifyCloseModal();
+		// 	} else {
+		// 		this.loadQuery();
+		// 	}
+		// };
 	}
 
 	//Load query into state
@@ -501,7 +517,7 @@ class BaseParkForm extends Component {
 							onClick={e => {
 								console.log("Enter got here first");
 								if (this.state.placesComplete) {
-									this.onSubmit()
+									this.onSubmit();
 								} else {
 									notify("Please select a valid place!");
 									console.log(
