@@ -12,8 +12,8 @@ export default class Notification extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-            show: false,
-            msg: ''
+			show: false,
+			msg: ""
 		};
 		emitter.on("notification", msg => {
 			this.showNotification(msg);
@@ -24,8 +24,8 @@ export default class Notification extends Component {
 		console.log(msg);
 		this.setState(
 			{
-                show: true,
-                msg: msg
+				show: true,
+				msg: msg
 			},
 			() => {
 				setTimeout(() => {
@@ -47,6 +47,7 @@ export default class Notification extends Component {
 const Container = styled.div`
 	background-color: red;
 	position: absolute;
+	/* display: ${props => (props.show ? "initial" : "none")}; */
 	top: ${props => (props.show ? "16px" : "-100px")};
 	right: 16px;
 	padding: 16px;

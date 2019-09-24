@@ -342,7 +342,7 @@ class BaseParksData extends Component {
 						Toggle form
 					</button> */}
 					{/* <div className="FormMoonWrapper"> */}
-					{this.renderParkForm()}
+					{/* {this.renderParkForm()} */}
 
 					<div className="MoonStyle">
 						<MoonComponent
@@ -389,7 +389,7 @@ class BaseParksData extends Component {
 	renderLanding = () => {
 		return (
 			<LandingPageStyle>
-				{this.renderParkForm()}
+				{/* {this.renderParkForm()} */}
 				<TelescopeCircle />
 				{/* {this.renderParkMap()} */}
 			</LandingPageStyle>
@@ -407,6 +407,7 @@ class BaseParksData extends Component {
 				pathname={window.location.pathname}
 			>
 				{this.renderParkMap()}
+				{this.renderParkForm()}
 				{window.location.pathname === "/home"
 					? this.renderLanding()
 					: this.renderResults()}

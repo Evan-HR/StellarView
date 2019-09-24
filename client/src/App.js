@@ -24,6 +24,7 @@ import Footer from "./components/Footer";
 import ScrollUpButton from "react-scroll-up-button";
 import NotFoundPage from "./components/NotFoundPage";
 import StarBackgroundLess from "./components/StarBackgroundLess";
+import Notification from "./components/Notification";
 
 class App extends Component {
 	state = {
@@ -55,6 +56,7 @@ class App extends Component {
 		console.log("App - rendered");
 		return (
 			<React.Fragment>
+				<Notification />
 				<ScrollUpButton />
 				<GlobalStyle />
 				{/* <StarBackgroundLess/> */}

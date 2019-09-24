@@ -11,6 +11,7 @@ import styled from "styled-components";
 // import nearMeButton from "./style/Media/round-my_location-24px.svg";
 // import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 // import LocationSearchInput from "./LocationSearchInput";
+import { notify } from "./Notification";
 
 class BaseParkForm extends Component {
 	state = {
@@ -110,12 +111,11 @@ class BaseParkForm extends Component {
 
 	handlePlaceChange = changeEvent => {
 		this.setState({
-			...this.state,
 			reqData: {
 				...this.state.reqData,
 				placeName: changeEvent.target.value
 			},
-
+			placesComplete: false,
 			isInvalidLocation: false
 		});
 	};
@@ -423,7 +423,7 @@ class BaseParkForm extends Component {
 					<b className="text-danger">
 						{this.state.formErrors.join(", ")}
 					</b>
-					</ErrorStyle>
+				</ErrorStyle>
 			);
 		}
 	};
@@ -499,11 +499,9 @@ class BaseParkForm extends Component {
 							onClick={e => {
 								console.log("Enter got here first");
 								if (this.state.placesComplete) {
-									this.setState(
-										{ placesComplete: false },
-										this.onSubmit
-									);
+									this.onSubmit()
 								} else {
+									notify("Please select a valid place!");
 									console.log(
 										"Didn't use autocomplete yet!",
 										this.state
@@ -566,7 +564,7 @@ class BaseParkForm extends Component {
 							<MuiSlider
 								aria-labelledby="discrete-slider-custom"
 								min={5}
-								max={300}
+								max={100}
 								step={5}
 								valueLabelDisplay="auto"
 								marks={marksDist}
@@ -582,7 +580,7 @@ class BaseParkForm extends Component {
 								aria-labelledby="discrete-slider-custom"
 								min={0.4}
 								max={4.0}
-								step={null}
+								step={0.1}
 								valueLabelDisplay="auto"
 								marks={marksLight}
 								value={parseFloat(this.state.reqData.lightpol)}
@@ -618,17 +616,21 @@ const marksDist = [
 		label: "50"
 	},
 	{
+		value: 75,
+		label: "75"
+	},
+	{
 		value: 100,
 		label: "100"
-	},
-	{
-		value: 200,
-		label: "200"
-	},
-	{
-		value: 300,
-		label: "300"
 	}
+	// {
+	// 	value: 200,
+	// 	label: "200"
+	// },
+	// {
+	// 	value: 300,
+	// 	label: "300"
+	// }
 ];
 
 const marksLight = [
@@ -653,7 +655,7 @@ const marksLight = [
 	{
 		value: 4.0
 	}
-	
+
 	// {
 	// 	value: 6,
 	// 	label: "6"
