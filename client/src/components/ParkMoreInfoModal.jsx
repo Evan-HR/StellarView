@@ -116,7 +116,7 @@ class ParkMoreInfoModal extends Component {
 		return (
 			<Modal
 				// className="modal-dialog"
-				closeTimeoutMS={800}
+				closeTimeoutMS={200}
 				isOpen={this.state.modalIsOpen}
 				onAfterOpen={this.afterOpenModal}
 				onRequestClose={this.closeModal}
