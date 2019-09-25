@@ -5,6 +5,18 @@ import { withRouter, Link } from "react-router-dom";
 import styled from "styled-components";
 import formSuccess from "./style/Media/formSuccess.svg";
 import Login from "./Login";
+import {
+	notifyRegisterModalIsOpen,
+	notifyRegisterModalIsClosed
+} from "./MainComponent";
+import ee from "eventemitter3";
+
+const emitter = new ee();
+
+export const notifyCloseRegisterModal = msg => {
+	emitter.emit("notifyCloseRegisterModal", msg);
+};
+
 class Register extends Component {
 	state = {
 		userName: "",
@@ -18,8 +30,19 @@ class Register extends Component {
 		isRegistering: false
 	};
 
+	constructor(props) {
+		super(props);
+		emitter.on("notifyCloseRegisterModal", msg => {
+			this.closeModal();
+		});
+	}
+
 	openModal = () => {
-		this.setState({ ...this.state, modalIsOpen: true });
+		notifyRegisterModalIsOpen();
+		this.props.history.push(
+			`${window.location.pathname}${window.location.search}#register`
+		);
+		this.setState({ modalIsOpen: true });
 	};
 
 	afterOpenModal = () => {
@@ -27,7 +50,12 @@ class Register extends Component {
 	};
 
 	closeModal = () => {
-		this.setState({ ...this.state, modalIsOpen: false, errorDB: false });
+		notifyRegisterModalIsClosed();
+		this.props.history.push(
+			`${window.location.pathname}${window.location.search}`,
+			null
+		);
+		this.setState({ modalIsOpen: false, errorDB: false });
 		document.body.style.overflow = "visible";
 	};
 
@@ -201,7 +229,10 @@ class Register extends Component {
 							""
 						) : (
 							<React.Fragment>
-								Already a member? <span><Login hideLink={true}/></span>
+								Already a member?{" "}
+								<span>
+									<Login hideLink={true} />
+								</span>
 							</React.Fragment>
 						)}
 					</p>
@@ -298,7 +329,7 @@ class Register extends Component {
 	}
 }
 
-export default Register;
+export default withRouter(Register);
 /////////////////////////////////
 
 const customStyles = {
@@ -585,7 +616,7 @@ const NewLoginStyle = styled.div`
 				color: ${props => props.theme.highlightPink};
 				transition: color 0.25s;
 			}
-			:active{
+			:active {
 				color: ${props => props.theme.colorMedium};
 			}
 		}

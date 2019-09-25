@@ -12,6 +12,18 @@ import cloudGoodIcon from "./style/Media/cardIcons/cloudGood.svg";
 import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import ReportPark from "./ReportPark";
 import CountUp from "react-countup";
+import { withRouter } from "react-router-dom";
+import {
+	notifyInfoModalIsOpen,
+	notifyInfoModalIsClosed
+} from "./MainComponent";
+import ee from "eventemitter3";
+
+const emitter = new ee();
+
+export const notifyCloseModal = msg => {
+	emitter.emit("notifyCloseModal", msg);
+};
 
 const modalStyle = {
 	overlay: {
@@ -49,6 +61,9 @@ class ParkMoreInfoModal extends Component {
 		this.park = { weather: {} };
 		this.userLocation = {};
 		this.toRemountReviews = false;
+		emitter.on("notifyCloseModal", msg => {
+			this.closeModal();
+		});
 	}
 
 	//means..
@@ -91,6 +106,10 @@ class ParkMoreInfoModal extends Component {
 		this.moonType = content.moonType;
 		console.log(this.park);
 		this.setState({ modalIsOpen: true });
+		notifyInfoModalIsOpen();
+		this.props.history.push(
+			`${window.location.pathname}${window.location.search}#modal`
+		);
 	};
 
 	afterOpenModal = () => {
@@ -100,6 +119,11 @@ class ParkMoreInfoModal extends Component {
 	closeModal = () => {
 		console.log("CLOSE GOT HERE!!!!!!");
 		document.body.style.overflow = "visible";
+		notifyInfoModalIsClosed();
+		this.props.history.push(
+			`${window.location.pathname}${window.location.search}`,
+			null
+		);
 		this.setState({ modalIsOpen: false });
 	};
 
@@ -110,6 +134,15 @@ class ParkMoreInfoModal extends Component {
 
 	remountReviews = () => {
 		this.toRemountReviews = false;
+	};
+
+	getLocation = () => {
+		navigator.geolocation.getCurrentPosition(position => {
+			window.open(
+				`https://www.google.com/maps?saddr=${position.coords.latitude},${position.coords.longitude}&daddr=${this.park.lat},${this.park.lng}`,
+				"_blank"
+			);
+		});
 	};
 
 	render() {
@@ -164,7 +197,9 @@ class ParkMoreInfoModal extends Component {
 										<i className="fas fa-car"></i>
 									</a>
 								) : (
-									""
+									<a onClick={this.getLocation}>
+										<i className="fas fa-car"></i>
+									</a>
 								)}
 								<div className="directionsText">Directions</div>
 							</div>
@@ -472,7 +507,22 @@ function Card(props) {
 	);
 }
 
-export default ParkMoreInfoModal;
+const withRouterAndRef = WrappedComponent => {
+	class InnerComponentWithRef extends React.Component {
+		render() {
+			const { forwardRef, ...rest } = this.props;
+			return <WrappedComponent {...rest} ref={forwardRef} />;
+		}
+	}
+	const ComponentWithRouter = withRouter(InnerComponentWithRef, {
+		withRef: true
+	});
+	return React.forwardRef((props, ref) => {
+		return <ComponentWithRouter {...props} forwardRef={ref} />;
+	});
+};
+
+export default withRouterAndRef(ParkMoreInfoModal);
 
 const ModalStyle = styled.div`
 	display: flex;
@@ -483,7 +533,7 @@ const ModalStyle = styled.div`
 	border: none;
 	color: ${props => props.theme.fontDark};
 	background: black;
-	max-width: 500px;	
+	max-width: 500px;
 	width: 100vw;
 
 	@media screen and (min-width: 320px) {
@@ -518,11 +568,8 @@ const ModalStyle = styled.div`
 			/* padding-left: 1rem; */
 
 			@media screen and (min-width: 320px) {
-
 			}
 			@media screen and (min-width: 480px) {
-				
-			
 			}
 		}
 
