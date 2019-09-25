@@ -7,6 +7,17 @@ import styled from "styled-components";
 import Register from "./Register";
 import formError from "./style/Media/formError.svg";
 import formSuccess from "./style/Media/formSuccess.svg";
+import {
+	notifyLoginModalIsOpen,
+	notifyLoginModalIsClosed
+} from "./MainComponent";
+import ee from "eventemitter3";
+
+const emitter = new ee();
+
+export const notifyCloseLoginModal = msg => {
+	emitter.emit("notifyCloseLoginModal", msg);
+};
 
 Modal.setAppElement("#root");
 class BaseLogin extends Component {
@@ -18,7 +29,18 @@ class BaseLogin extends Component {
 		loginSuccess: false
 	};
 
+	constructor(props) {
+		super(props);
+		emitter.on("notifyCloseLoginModal", msg => {
+			this.closeModal();
+		});
+	}
+
 	openModal = () => {
+		notifyLoginModalIsOpen();
+		this.props.history.push(
+			`${window.location.pathname}${window.location.search}#login`
+		);
 		this.setState({ modalIsOpen: true });
 	};
 
@@ -28,6 +50,11 @@ class BaseLogin extends Component {
 
 	closeModal = () => {
 		console.log("Closing login modal");
+		notifyLoginModalIsClosed();
+		this.props.history.push(
+			`${window.location.pathname}${window.location.search}`,
+			null
+		);
 		this.props.refreshInfoModal();
 		this.setState({ modalIsOpen: false, errorDB: false });
 		document.body.style.overflow = "visible";
@@ -237,7 +264,7 @@ BaseLogin.defaultProps = {
 	}
 };
 
-export default Login;
+export default withRouter(Login);
 
 /////////////////////////////////
 
@@ -521,7 +548,7 @@ const NewLoginStyle = styled.div`
 				color: ${props => props.theme.highlightPink};
 				transition: color 0.25s;
 			}
-			:active{
+			:active {
 				color: ${props => props.theme.colorMedium};
 			}
 		}

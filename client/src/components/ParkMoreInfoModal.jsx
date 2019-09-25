@@ -120,6 +120,10 @@ class ParkMoreInfoModal extends Component {
 		console.log("CLOSE GOT HERE!!!!!!");
 		document.body.style.overflow = "visible";
 		notifyInfoModalIsClosed();
+		this.props.history.push(
+			`${window.location.pathname}${window.location.search}`,
+			null
+		);
 		this.setState({ modalIsOpen: false });
 	};
 
@@ -140,16 +144,6 @@ class ParkMoreInfoModal extends Component {
 			);
 		});
 	};
-
-	componentDidUpdate() {
-		window.onpopstate = e => {
-			console.log("Modal detected back:", window.location.href);
-			if (this.state.modalIsOpen) {
-				console.log("Trying to go back with modal open");
-				this.closeModal();
-			}
-		};
-	}
 
 	render() {
 		return (

@@ -16,6 +16,8 @@ import { withRouter } from "react-router-dom";
 import TelescopeCircle from "./TelescopeCircle";
 import NoResultsModal from "./NoResultsModal";
 import { notifyCloseModal } from "./ParkMoreInfoModal";
+import { notifyCloseLoginModal } from "./Login";
+import { notifyCloseRegisterModal } from "./Register";
 import ee from "eventemitter3";
 
 const emitter = new ee();
@@ -26,6 +28,22 @@ export const notifyInfoModalIsOpen = msg => {
 
 export const notifyInfoModalIsClosed = msg => {
 	emitter.emit("infoModalIsClosed", msg);
+};
+
+export const notifyLoginModalIsOpen = msg => {
+	emitter.emit("loginModalIsOpen", msg);
+};
+
+export const notifyLoginModalIsClosed = msg => {
+	emitter.emit("loginModalIsClosed", msg);
+};
+
+export const notifyRegisterModalIsOpen = msg => {
+	emitter.emit("registerModalIsOpen", msg);
+};
+
+export const notifyRegisterModalIsClosed = msg => {
+	emitter.emit("registerModalIsClosed", msg);
 };
 
 function inRange(x, min, max) {
@@ -105,7 +123,9 @@ class BaseMainComponent extends Component {
 		hideForm: false,
 		hideMap: true,
 		sortedBy: "dist",
-		infoModalIsOpen: false
+		infoModalIsOpen: false,
+		loginModalIsOpen: false,
+		registerModalIsOpen: false
 	};
 	/* Note - park object is:
         {
@@ -131,6 +151,22 @@ class BaseMainComponent extends Component {
 			console.log("Main component heard about modal CLOSING");
 			this.setState({ infoModalIsOpen: false });
 		});
+		emitter.on("loginModalIsOpen", msg => {
+			console.log("Main component heard about modal OPENING");
+			this.setState({ loginModalIsOpen: true });
+		});
+		emitter.on("loginModalIsClosed", () => {
+			console.log("Main component heard about modal CLOSING");
+			this.setState({ loginModalIsOpen: false });
+		});
+		emitter.on("registerModalIsOpen", msg => {
+			console.log("Main component heard about modal OPENING");
+			this.setState({ registerModalIsOpen: true });
+		});
+		emitter.on("registerModalIsClosed", () => {
+			console.log("Main component heard about modal CLOSING");
+			this.setState({ registerModalIsOpen: false });
+		});
 	}
 
 	componentDidUpdate = () => {
@@ -139,6 +175,12 @@ class BaseMainComponent extends Component {
 			if (this.state.infoModalIsOpen) {
 				console.log("Notifying modal");
 				notifyCloseModal();
+			} else if (this.state.loginModalIsOpen) {
+				console.log("Notifying modal");
+				notifyCloseLoginModal();
+			} else if (this.state.registerModalIsOpen) {
+				console.log("Notifying modal");
+				notifyCloseRegisterModal();
 			} else {
 				console.log("Notifying park form");
 				notifyLoadQuery();
