@@ -11,8 +11,16 @@ import styled from "styled-components";
 // import nearMeButton from "./style/Media/round-my_location-24px.svg";
 // import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 // import LocationSearchInput from "./LocationSearchInput";
+import { notify } from "./Notification";
 import searchIcon from "./style/Media/search-solid.svg";
 import SVG from "react-inlinesvg";
+import ee from "eventemitter3";
+
+const emitter = new ee();
+
+export const notifyLoadQuery = msg => {
+	emitter.emit("parkFormToLoadQuery", msg);
+};
 
 class BaseParkForm extends Component {
 	state = {
@@ -37,6 +45,10 @@ class BaseParkForm extends Component {
 		this.sliderLight = this.state.reqData.lightpol;
 		this.sliderDist = this.state.reqData.dist;
 		this.autoComplete = false;
+		emitter.on("parkFormToLoadQuery", () => {
+			console.log("Park form got back button event");
+			this.loadQuery();
+		});
 	}
 
 	//There are two cases when we would want to load results form url query:
@@ -58,10 +70,15 @@ class BaseParkForm extends Component {
 			this.loadAutoComplete();
 		}
 		//On back button load previous results
-		window.onpopstate = e => {
-			console.log("Back button pressed");
-			this.loadQuery();
-		};
+		// window.onpopstate = e => {
+		// 	console.log("Back button pressed");
+		// 	console.log(window.location.href);
+		// 	if (window.location.hash === "#modal") {
+		// 		notifyCloseModal();
+		// 	} else {
+		// 		this.loadQuery();
+		// 	}
+		// };
 	}
 
 	//Load query into state
@@ -112,12 +129,11 @@ class BaseParkForm extends Component {
 
 	handlePlaceChange = changeEvent => {
 		this.setState({
-			...this.state,
 			reqData: {
 				...this.state.reqData,
 				placeName: changeEvent.target.value
 			},
-
+			placesComplete: false,
 			isInvalidLocation: false
 		});
 	};
@@ -501,11 +517,9 @@ class BaseParkForm extends Component {
 							onClick={e => {
 								console.log("Enter got here first");
 								if (this.state.placesComplete) {
-									this.setState(
-										{ placesComplete: false },
-										this.onSubmit
-									);
+									this.onSubmit();
 								} else {
+									notify("Please select a valid place!");
 									console.log(
 										"Didn't use autocomplete yet!",
 										this.state
@@ -569,7 +583,7 @@ class BaseParkForm extends Component {
 							<MuiSlider
 								aria-labelledby="discrete-slider-custom"
 								min={5}
-								max={300}
+								max={100}
 								step={5}
 								valueLabelDisplay="auto"
 								marks={marksDist}
@@ -587,7 +601,7 @@ class BaseParkForm extends Component {
 								aria-labelledby="discrete-slider-custom"
 								min={0.4}
 								max={4.0}
-								step={null}
+								step={0.1}
 								valueLabelDisplay="auto"
 								marks={marksLight}
 								value={parseFloat(this.state.reqData.lightpol)}
@@ -623,17 +637,21 @@ const marksDist = [
 		label: "50"
 	},
 	{
+		value: 75,
+		label: "75"
+	},
+	{
 		value: 100,
 		label: "100"
-	},
-	{
-		value: 200,
-		label: "200"
-	},
-	{
-		value: 300,
-		label: "300"
 	}
+	// {
+	// 	value: 200,
+	// 	label: "200"
+	// },
+	// {
+	// 	value: 300,
+	// 	label: "300"
+	// }
 ];
 
 const marksLight = [
