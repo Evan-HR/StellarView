@@ -97,7 +97,7 @@ class Toolbar extends Component {
 									</Register>
 								</li>
 								<li>
-									<Link to="/faq">
+									<Link to="/FAQ">
 										<div className="toolbarLink">FAQ</div>
 									</Link>
 								</li>

@@ -109,7 +109,7 @@ class App extends Component {
 									path={["/home", "/search"]}
 									component={MainComponent}
 								/>
-								<Route path="/faq" component={FAQ} />
+								<Route path="/FAQ" component={FAQ} />
 
 								<Route
 									//Since /profile is outside the switch,

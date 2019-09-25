@@ -80,7 +80,7 @@ class SideDrawer extends Component {
 					</li>
 					<li>
 						<Link
-							to="/faq"
+							to="/FAQ"
 							onClick={this.props.close}
 							style={{ textDecoration: "none" }}
 						>
