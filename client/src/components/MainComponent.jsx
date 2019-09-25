@@ -471,6 +471,7 @@ class BaseMainComponent extends Component {
 				hideMap={this.state.hideMap}
 				pathname={window.location.pathname}
 			>
+				{/* <div className="HeresResults">We found some spots.</div> */}
 				{this.renderParkMap()}
 				<div className="formMoonCards">
 					{this.renderParkForm()}
@@ -698,12 +699,13 @@ const MainContentWrapper = styled.div`
 
 	.parkMapStyle {
 		/* height: 80vh; */
-		width: 95%;
-		height: 80vh;
+		width: 90%;
+		max-width: 500px;
+		height: 45vh;
 		top: 10%;
 		background-color: gray;
-		display: none;
-		margin: 0 auto;
+		display: ${props => (props.pathname === "/home" ? "none" : "block")};
+		margin: 40px auto 30px auto;
 	}
 
 	@media screen and (min-width: 1025px) {
@@ -720,7 +722,12 @@ const MainContentWrapper = styled.div`
 			display: ${props =>
 				props.pathname === "/home" ? "none" : "fixed"};
 			grid-area: map;
+			width: 95%;
+			height: 80vh;
+			top: 10%;
 			position: sticky;
+			max-width: none;
+			margin: 0 auto;
 		}
 	}
 
