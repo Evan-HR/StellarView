@@ -234,6 +234,11 @@ const FAQ = props => (
 export default FAQ;
 
 const FAQStyle = styled.div`
+
+.FAQHeader{
+	text-align: center;
+	margin-bottom: 50px;
+}
 	width: 85%;
 	margin: auto auto;
 	max-width: 700px;
