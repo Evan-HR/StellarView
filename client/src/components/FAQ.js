@@ -41,20 +41,26 @@ const FAQ = props => (
 				<span>
 					STELLARGAZE was made by 3 developers who met at McMaster
 					University's Computer Science department in Hamilton,
-					Ontario. The idea came from Evan Reaume. It was implemented
-					by Dustin Jurkaulionis and Vlad Falach over the Summer of
-					2019. It was designed by all three.
+					Ontario. The idea came from Evan Reaume, after realizing the
+					current applications out there are not so user-friendly. It
+					was implemented by Dustin Jurkaulionis and Vlad Falach over
+					the Summer of 2019. It was designed by all three.
 				</span>
 			</div>
 			<h1 id="why">Why was this made?</h1>
 			<div className="Background">
 				<span>
-					This project was made to help us all make stargazing more
-					enjoyable. To us, this means being able to see the stars as
-					conveniently as possible. Our scoring algorithm hopes to
-					achieve that for you, so that an enjoyable experience can be
-					had by directing you to a nearby park with low light
-					pollution and good weather.
+					{" "}
+					Humans have a special connection to the sky. There are
+					roughly 5000 stars visible at night, and such stars are not
+					so easy to spot due to light pollution and our migration
+					into cities. This project was made to help us all make
+					stargazing more enjoyable. To us, this means being able to
+					see the stars as conveniently as possible. Our scoring
+					algorithm hopes to achieve that for you, so that an
+					enjoyable experience can be had by directing you to a nearby
+					park of your choice with low light pollution and good
+					weather.
 				</span>
 			</div>
 			<h1 id="how">How does it work?</h1>
@@ -139,14 +145,15 @@ const FAQ = props => (
 				</span>
 			</div>
 			<div id="credits"></div>
-			<h1 id="contact">How do I contact you?</h1>
+			<h1 id="contact">How do I contact?</h1>
 			<div className="Background">
 				<span>
 					Are you a sidewalk astronmer? Casual observer of the skies?
 					Professional? A human? We'd love to hear your feedback! Our
 					algorithm is continuously being improved so any advice
 					and/or feedback would be greatly appreciated. Please email
-					us at dev@stellargaze.com.
+					us at{" "}
+					<a href="mailto:dev@stellargaze.com">dev@stellargaze.com</a>
 				</span>
 			</div>
 		</div>
