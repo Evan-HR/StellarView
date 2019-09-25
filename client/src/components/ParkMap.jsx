@@ -97,8 +97,8 @@ class ParkMap extends Component {
 		let location = { lat: parseFloat(park.lat), lng: parseFloat(park.lng) };
 
 		if (this.props.markers[park.id]) {
-			console.log("Park marker already on map!");
-			console.log("PARK SCORE IS: ", park.score);
+			// console.log("Park marker already on map!");
+			// console.log("PARK SCORE IS: ", park.score);
 		} else {
 			let markerIcon = markerBad;
 			let tempScore = park.score * 100;
@@ -130,7 +130,7 @@ class ParkMap extends Component {
 			});
 
 			marker.addListener("click", () => {
-				console.log("Clicked marker at", marker.title);
+				// console.log("Clicked marker at", marker.title);
 				let modalContent = {
 					park: park,
 					moonPhase: this.props.moonPhase,
@@ -165,7 +165,7 @@ class ParkMap extends Component {
 		//Clear existing markers
 		//TODO: Definitely possible to optimize
 		// -Not deleting markers when there's no change? But then have to check for changes
-		console.log("#Markers:", Object.keys(this.props.markers).length);
+		// console.log("#Markers:", Object.keys(this.props.markers).length);
 		if (this.props.markers.currentLocation) {
 			this.props.markers.currentLocation.setMap(null);
 			delete this.props.markers.currentLocation;
@@ -185,12 +185,12 @@ class ParkMap extends Component {
 
 		//Add new markers if possible
 		if (this.props.location.length !== 0) {
-			console.log("Adding markers..");
+			// console.log("Adding markers..");
 			// this.googleMapBounds = new window.google.maps.LatLngBounds();
 			this.addCurrentLocationMarker();
 			//Sometimes crashes here, probably because parkList is JSON and not an array
 			//Crash is fixed I think? Notify if it happens again
-			console.log("Drawing parks:", this.props.parkList);
+			// console.log("Drawing parks:", this.props.parkList);
 			// this.googleMapBounds = new window.google.maps.LatLngBounds();
 			this.props.parkList.map(this.addParkMarker);
 			if (
@@ -215,7 +215,7 @@ class ParkMap extends Component {
 	};
 
 	render() {
-		console.log("ParkMap - rendered");
+		// console.log("ParkMap - rendered");
 		//NOTE: mapStyles is NEEDED for map to display
 		const mapStyles = {
 			width: "100%",

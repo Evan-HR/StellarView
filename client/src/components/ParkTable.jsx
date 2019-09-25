@@ -131,7 +131,7 @@ class ParkTable extends Component {
 	};
 
 	render() {
-		console.log("ParkTable - rendered");
+		// console.log("ParkTable - rendered");
 		return (
 			<React.Fragment>
 				{this.props.isLoadingParks ? (

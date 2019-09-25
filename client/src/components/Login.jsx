@@ -49,7 +49,7 @@ class BaseLogin extends Component {
 	};
 
 	closeModal = () => {
-		console.log("Closing login modal");
+		// console.log("Closing login modal");
 		notifyLoginModalIsClosed();
 		this.props.history.push(
 			`${window.location.pathname}${window.location.search}`,
@@ -100,7 +100,7 @@ class BaseLogin extends Component {
 	}
 
 	loginSuccess = () => {
-		console.log("get here for some reason?");
+		// console.log("get here for some reason?");
 		this.setState({ loginSuccess: true, errorDB: false });
 		setTimeout(() => {
 			this.closeModal();
@@ -260,7 +260,7 @@ const Login = props => (
 
 BaseLogin.defaultProps = {
 	refreshInfoModal: () => {
-		console.log("Default prop!");
+		// console.log("Default prop!");
 	}
 };
 

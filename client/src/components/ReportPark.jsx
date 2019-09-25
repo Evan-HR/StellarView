@@ -27,7 +27,7 @@ class BaseReportPark extends Component {
 	};
 
 	closeModal = () => {
-		console.log("Closing login modal");
+		// console.log("Closing login modal");
 		this.props.refreshInfoModal();
 		this.setState({ ...this.state, modalIsOpen: false, errorDB: false });
 		document.body.style.overflow = "visible";
@@ -73,7 +73,7 @@ class BaseReportPark extends Component {
 	}
 
 	reportSuccess = () => {
-		console.log("get here for some reason?");
+		// console.log("get here for some reason?");
 		this.setState({ reportSuccess: true, errorDB: false });
 		setTimeout(() => {
 			this.closeModal();
@@ -238,7 +238,7 @@ const ReportPark = props => (
 
 BaseReportPark.defaultProps = {
 	refreshInfoModal: () => {
-		console.log("Default prop!");
+		// console.log("Default prop!");
 	}
 };
 

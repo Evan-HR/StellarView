@@ -93,14 +93,14 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 		finalScore = 1;
 	}
 
-	console.log(
-		"Moon score, cloudscore, humidity, lightpolscore ",
-		moonScore,
-		cloudScore,
-		humidityScore,
-		lightPolScore
-	);
-	console.log("final score: ", finalScore);
+	// console.log(
+	// 	"Moon score, cloudscore, humidity, lightpolscore ",
+	// 	moonScore,
+	// 	cloudScore,
+	// 	humidityScore,
+	// 	lightPolScore
+	// );
+	// console.log("final score: ", finalScore);
 	return {
 		finalScore: finalScore,
 		moonScore: moonScore,
@@ -144,45 +144,45 @@ class BaseMainComponent extends Component {
 		this.markers = {};
 		this.noParksModalOpen = false;
 		emitter.on("infoModalIsOpen", msg => {
-			console.log("Main component heard about modal OPENING");
+			// console.log("Main component heard about modal OPENING");
 			this.setState({ infoModalIsOpen: true });
 		});
 		emitter.on("infoModalIsClosed", () => {
-			console.log("Main component heard about modal CLOSING");
+			// console.log("Main component heard about modal CLOSING");
 			this.setState({ infoModalIsOpen: false });
 		});
 		emitter.on("loginModalIsOpen", msg => {
-			console.log("Main component heard about modal OPENING");
+			// console.log("Main component heard about modal OPENING");
 			this.setState({ loginModalIsOpen: true });
 		});
 		emitter.on("loginModalIsClosed", () => {
-			console.log("Main component heard about modal CLOSING");
+			// console.log("Main component heard about modal CLOSING");
 			this.setState({ loginModalIsOpen: false });
 		});
 		emitter.on("registerModalIsOpen", msg => {
-			console.log("Main component heard about modal OPENING");
+			// console.log("Main component heard about modal OPENING");
 			this.setState({ registerModalIsOpen: true });
 		});
 		emitter.on("registerModalIsClosed", () => {
-			console.log("Main component heard about modal CLOSING");
+			// console.log("Main component heard about modal CLOSING");
 			this.setState({ registerModalIsOpen: false });
 		});
 	}
 
 	componentDidUpdate = () => {
 		window.onpopstate = e => {
-			console.log("Detected back button");
+			// console.log("Detected back button");
 			if (this.state.infoModalIsOpen) {
-				console.log("Notifying modal");
+				// console.log("Notifying modal");
 				notifyCloseModal();
 			} else if (this.state.loginModalIsOpen) {
-				console.log("Notifying modal");
+				// console.log("Notifying modal");
 				notifyCloseLoginModal();
 			} else if (this.state.registerModalIsOpen) {
-				console.log("Notifying modal");
+				// console.log("Notifying modal");
 				notifyCloseRegisterModal();
 			} else {
-				console.log("Notifying park form");
+				// console.log("Notifying park form");
 				notifyLoadQuery();
 			}
 		};
@@ -198,7 +198,7 @@ class BaseMainComponent extends Component {
 	};
 
 	getParkData = reqData => {
-		console.log(reqData);
+		// console.log(reqData);
 		// this.updateHistoryQuery(reqData);
 		this.setState({ isFetchingParks: true });
 		let storageKey = JSON.stringify(reqData);

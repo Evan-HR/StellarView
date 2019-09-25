@@ -46,7 +46,7 @@ class BaseParkForm extends Component {
 		this.sliderDist = this.state.reqData.dist;
 		this.autoComplete = false;
 		emitter.on("parkFormToLoadQuery", () => {
-			console.log("Park form got back button event");
+			// console.log("Park form got back button event");
 			this.loadQuery();
 		});
 	}
@@ -58,10 +58,10 @@ class BaseParkForm extends Component {
 	// componentDidMount runs RIGHT after post-render
 	componentDidMount() {
 		// this.getMyLocation();
-		console.log("USER LOC: ", this.props.userLocation);
+		// console.log("USER LOC: ", this.props.userLocation);
 
 		//On page load, load results from query is possible
-		console.log("Form mounted, searching...");
+		// console.log("Form mounted, searching...");
 		this.loadQuery();
 	}
 
@@ -86,7 +86,7 @@ class BaseParkForm extends Component {
 		let query = qs.parse(window.location.search, {
 			ignoreQueryPrefix: true
 		});
-		console.log(query);
+		// console.log(query);
 		// console.log("First mount? ", this.state.firstLoad)
 		if (Object.keys(query).length !== 0) {
 			if (
@@ -109,7 +109,7 @@ class BaseParkForm extends Component {
 					},
 					//SetState callback
 					() => {
-						console.log("Submitting..", this.state.reqData);
+						// console.log("Submitting..", this.state.reqData);
 						this.onSubmit();
 					}
 				);
@@ -152,7 +152,7 @@ class BaseParkForm extends Component {
 				}`
 			)
 			.then(({ data }) => {
-				console.log(data);
+				// console.log(data);
 
 				if (window.google) {
 					var latLng = new window.google.maps.LatLng(
@@ -188,13 +188,13 @@ class BaseParkForm extends Component {
 	//    bind the success callback or make use of arrow function.
 	getMyLocation = e => {
 		this.setState({ isLoadingLocation: true });
-		console.log(this.props);
+		// console.log(this.props);
 		if (
 			!this.props.authState.userLocation ||
 			(this.props.authState.userLocation.lat === "" &&
 				this.props.authState.userLocation.lng === "")
 		) {
-			console.log("Getting new location");
+			// console.log("Getting new location");
 			navigator.geolocation.getCurrentPosition(
 				async position => {
 					console.log(
@@ -204,7 +204,7 @@ class BaseParkForm extends Component {
 						`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
 					);
 					address = address["data"]["address"]["city"];
-					console.log(address);
+					// console.log(address);
 					this.setState(
 						{
 							...this.state,
@@ -245,7 +245,7 @@ class BaseParkForm extends Component {
 				{ enableHighAccuracy: true }
 			);
 		} else {
-			console.log("Fetching auth location");
+			// console.log("Fetching auth location");
 			if (window.google && this.props.googleMap) {
 				this.props.googleMap.panTo(
 					new window.google.maps.LatLng(
@@ -326,7 +326,7 @@ class BaseParkForm extends Component {
 	//fetchP(x) --> getParkData(x)
 	onSubmit = e => {
 		if (e) e.preventDefault();
-		console.log(this.state.reqData);
+		// console.log(this.state.reqData);
 		const errors = this.validate(this.state.reqData);
 		if (errors.length === 0) {
 			var d = new Date();
@@ -358,7 +358,7 @@ class BaseParkForm extends Component {
 	};
 
 	updateHistoryQuery = reqData => {
-		console.log("Updating history...");
+		// console.log("Updating history...");
 		//this.props.history.push({ query: "test" });
 		let query = qs.parse(window.location.search, {
 			ignoreQueryPrefix: true
@@ -377,7 +377,7 @@ class BaseParkForm extends Component {
 				}&lightpol=${parseFloat(reqData.lightpol).toFixed(2)}`
 			);
 		} else {
-			console.log("Attempting to repeat current search.");
+			// console.log("Attempting to repeat current search.");
 		}
 	};
 
@@ -455,7 +455,7 @@ class BaseParkForm extends Component {
 	};
 
 	onPlaceChanged = () => {
-		console.log("Getting location from places");
+		// console.log("Getting location from places");
 		let place = this.autoComplete.getPlace();
 		// if (places == 0) {
 		// 	return;
@@ -465,7 +465,7 @@ class BaseParkForm extends Component {
 		// console.log("Valid place:", place);
 		if (place && place.geometry && place.geometry.location) {
 			let location = place.geometry.location.toJSON();
-			console.log(location);
+			// console.log(location);
 			if (window.google) {
 				this.props.googleMap.panTo(place.geometry.location); //Make map global
 			}
@@ -515,15 +515,15 @@ class BaseParkForm extends Component {
 								this.state.isGeocodingLocation
 							}
 							onClick={e => {
-								console.log("Enter got here first");
+								// console.log("Enter got here first");
 								if (this.state.placesComplete) {
 									this.onSubmit();
 								} else {
 									notify("Please select a valid place!");
-									console.log(
-										"Didn't use autocomplete yet!",
-										this.state
-									);
+									// console.log(
+									// 	"Didn't use autocomplete yet!",
+									// 	this.state
+									// );
 								}
 								// this.onSubmit();
 								// this.onPlaceChanged();

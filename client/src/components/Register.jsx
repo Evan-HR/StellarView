@@ -90,7 +90,7 @@ class Register extends Component {
 	};
 
 	errorMsg() {
-		console.log(this.state);
+		// console.log(this.state);
 		if (this.state.errorDB === true) {
 			if (this.state.regErrors) {
 				return this.state.regErrors.map(errors => {
@@ -257,18 +257,18 @@ class Register extends Component {
 	};
 
 	registerSuccess = () => {
-		console.log("get here for some reason?");
+		// console.log("get here for some reason?");
 		this.setState({
 			registerSuccess: true,
 			modalIsOpen: false,
 			isRegistering: false
 		});
-		console.log("REG SUCCESS, GOING TO LOGIN NOW");
+		// console.log("REG SUCCESS, GOING TO LOGIN NOW");
 		this.props.handleLogin();
 	};
 
 	onSubmit = e => {
-		console.log("SUBMIT BUTTON PRESSED");
+		// console.log("SUBMIT BUTTON PRESSED");
 		this.setState({ isRegistering: true });
 		e.preventDefault();
 		axios

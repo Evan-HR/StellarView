@@ -53,7 +53,7 @@ class App extends Component {
 			backdrop = <Backdrop click={this.backdropClickHandler} />;
 		}
 		//console.log("parks ", parks);
-		console.log("App - rendered");
+		// console.log("App - rendered");
 		return (
 			<React.Fragment>
 				<Notification />
@@ -83,7 +83,7 @@ class App extends Component {
 									render={() => (
 										<AuthConsumer>
 											{authState => {
-												console.log(authState);
+												// console.log(authState);
 												if (authState.isAuth !== null) {
 													if (
 														authState.isAuth ===
