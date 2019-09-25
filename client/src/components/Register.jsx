@@ -128,7 +128,7 @@ class Register extends Component {
 					className="close"
 					aria-label="Close"
 				>
-					<i className="fas fa-window-close" />
+					<i class="fas fa-times"></i>
 				</button>
 				<div className="grid">
 					<form onSubmit={this.onSubmit} className="form login">
@@ -350,6 +350,7 @@ const customStyles = {
 		padding: "0px",
 		border: "none",
 		borderRadius: "2.5px",
+		background:"black",
 		marginRight: "-50%",
 		transform: "translate(-50%, -50%)",
 		maxWidth: "100vw",
@@ -418,8 +419,8 @@ const NewLoginStyle = styled.div`
 		text-shadow: none;
 		color: ${props => props.theme.white};
 		position: absolute;
-		top: -3px;
-		right: 0px;
+		top: -1px;
+right: 4px;
 		float: right;
 		font-size: 2rem;
 		font-weight: 700;

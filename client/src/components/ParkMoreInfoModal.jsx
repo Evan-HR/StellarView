@@ -171,7 +171,7 @@ class ParkMoreInfoModal extends Component {
 							className="close"
 							aria-label="Close"
 						>
-							<i className="fas fa-window-close" />
+							<i class="fas fa-times"></i>
 						</button>
 					</div>
 					<div className="ContentGrid">
@@ -528,7 +528,7 @@ const ModalStyle = styled.div`
 	display: flex;
 	flex-direction: column;
 	/* width: 452px; */
-	height: 85vh;
+	height: 95vh;
 	font-family: "Lato", sans-serif;
 	border: none;
 	color: ${props => props.theme.fontDark};
@@ -537,7 +537,7 @@ const ModalStyle = styled.div`
 	width: 100vw;
 
 	@media screen and (min-width: 320px) {
-		height: 85vh;
+		height: 99vh;
 		grid-template-rows: 0.4fr auto;
 	}
 
@@ -582,8 +582,8 @@ const ModalStyle = styled.div`
 			text-shadow: none;
 			color: ${props => props.theme.prettyDark};
 			position: absolute;
-			top: -3px;
-			right: 0px;
+			top: -1px;
+right: 4px;
 			float: right;
 			font-size: 2rem;
 			font-weight: 700;
@@ -591,7 +591,7 @@ const ModalStyle = styled.div`
 		}
 
 		.close:hover {
-			color: ${props => props.theme.colorMedium};
+			color: ${props => props.theme.lightDark};
 			text-decoration: none;
 		}
 

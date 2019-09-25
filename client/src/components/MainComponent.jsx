@@ -396,58 +396,58 @@ class BaseMainComponent extends Component {
 			<ResultsPageStyle>
 				{/* {this.renderNoResults()} */}
 				{/* {this.renderParkMap()} */}
-				{/* <div className="formMoonCards"> */}
-				{/* <button
+				<div className="formMoonCards">
+					{/* <button
 						onClick={() => {
 							this.setState({ hideForm: !this.state.hideForm });
 						}}
 					>
 						Toggle form
 					</button> */}
-				{/* <div className="FormMoonWrapper"> */}
+					{/* <div className="FormMoonWrapper"> */}
 
-				<div className="formMoonSort">
-					{/* {this.renderParkForm()} */}
+					<div className="formMoonSort">
+						{/* {this.renderParkForm()} */}
 
-					<div className="moonStyle">
-						<MoonComponent
-							moonPhase={this.state.moonPhase}
-							parkList={this.state.parks}
-							moonType={this.state.moonType}
-							stellarData={this.state.stellarData}
-						/>
-					</div>
+						<div className="moonStyle">
+							<MoonComponent
+								moonPhase={this.state.moonPhase}
+								parkList={this.state.parks}
+								moonType={this.state.moonType}
+								stellarData={this.state.stellarData}
+							/>
+						</div>
 
-					<div className="sortByContainer">
-						<div className="sortBy">
-							Sort parks by:{"  "}
-							<button
-								onClick={this.sortParksDist}
-								disabled={this.state.sortedBy === "dist"}
-							>
-								Distance
-							</button>
-							<button
-								onClick={this.sortParksScore}
-								disabled={this.state.sortedBy === "score"}
-							>
-								Score
-							</button>
+						<div className="sortByContainer">
+							<div className="sortBy">
+								Sort parks by:{"  "}
+								<button
+									onClick={this.sortParksDist}
+									disabled={this.state.sortedBy === "dist"}
+								>
+									Distance
+								</button>
+								<button
+									onClick={this.sortParksScore}
+									disabled={this.state.sortedBy === "score"}
+								>
+									Score
+								</button>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div className="parkTableStyle">
-					<ParkTable
-						parkList={this.state.parks}
-						moon={this.state.moonPhase}
-						moonType={this.state.moonType}
-						googleMap={this.googleMap}
-						markers={this.markers}
-						isLoadingParks={this.state.isFetchingParks}
-					/>
+					<div className="parkTableStyle">
+						<ParkTable
+							parkList={this.state.parks}
+							moon={this.state.moonPhase}
+							moonType={this.state.moonType}
+							googleMap={this.googleMap}
+							markers={this.markers}
+							isLoadingParks={this.state.isFetchingParks}
+						/>
+					</div>
 				</div>
-				{/* </div> */}
 			</ResultsPageStyle>
 		);
 	};
@@ -757,5 +757,21 @@ const MainContentWrapper = styled.div`
 			margin-top: 7vh;
 		}
 	}`
-			: "	"}
+			: `.parkFormStyle {
+			width: 90%;
+
+
+		max-width: 500px;
+		margin: 30px auto auto auto;
+	
+		
+		@media screen and (min-width: 600px) {
+				width: 100%;
+				margin: 30px auto 0.5rem auto;
+			}
+			@media screen and (min-width: 1025px) {
+				width: 100%;
+				margin: 0rem auto 0.5rem auto;
+			}
+	}`}
 `;
