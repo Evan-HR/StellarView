@@ -76,7 +76,7 @@ https://www.physics.mcmaster.ca/sidewalkastronomy \
 https://www.youtube.com/playlist?list=PL0dzCUj1L5JE4w_OctDGyZOhML6OtJSqR \
 https://www.handprint.com/ASTRO/bortle.html
 
-Light pollution data via: https://ngdc.noaa.gov/eog/viirs/download_dnb_composites.html\
+Light pollution data via: https://ngdc.noaa.gov/eog/viirs/download_dnb_composites.html
 
 ## MORE INFO
 Check out the wiki to read more about some of the things we learned about during this project\
