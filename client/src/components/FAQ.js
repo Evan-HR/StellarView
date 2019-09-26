@@ -39,11 +39,11 @@ const FAQ = props => (
 			<h1 id="who">Who are we?</h1>
 			<div className="Background">
 				<span>
-					STELLARGAZE was made by 3 developers who met at McMaster
+					STELLARGAZE is made by 3 developers who met at McMaster
 					University's Computer Science department in Hamilton,
-					Ontario. The idea came from Evan Reaume. It was implemented
-					by Dustin Jurkaulionis and Vlad Falach over the Summer of
-					2019. It was designed by all three.
+					Ontario. It was implemented by Dustin Jurkaulionis and Vlad
+					Falach over the Summer of 2019. The idea came from Evan
+					Reaume. It was designed by all three.
 				</span>
 			</div>
 			<h1 id="why">Why was this made?</h1>
@@ -182,6 +182,7 @@ const FAQStyle = styled.div`
 	.FAQ_Sections_Content {
 		color: ${props => props.theme.white};
 		text-align: left;
+		font-size: large;
 		.HowWork {
 			li {
 				padding-bottom: 20px;
