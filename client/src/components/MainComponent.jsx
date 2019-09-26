@@ -82,25 +82,27 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 	}
 
 	const finalScore =
-		0.45 * moonScore +
-		0.15 * cloudScore +
+		0.35 * moonScore +
+		0.25 * cloudScore +
 		0.15 * humidityScore +
 		0.25 * lightPolScore;
 
 	if (finalScore < 0) {
 		finalScore = 0;
-	} else if (finalScore > 1) {
-		finalScore = 1;
+	} else if (finalScore >= 1) {
+		finalScore = 0.99;
 	}
 
-	// console.log(
-	// 	"Moon score, cloudscore, humidity, lightpolscore ",
-	// 	moonScore,
-	// 	cloudScore,
-	// 	humidityScore,
-	// 	lightPolScore
-	// );
-	// console.log("final score: ", finalScore);
+	console.log(
+		"Moon score, cloudscore, humidity, lightpolscore ",
+		moonScore,
+		cloudScore,
+		humidityScore,
+		lightPolScore
+	);
+
+
+	console.log("final score: ", finalScore);
 	return {
 		finalScore: finalScore,
 		moonScore: moonScore,
@@ -362,9 +364,12 @@ class BaseMainComponent extends Component {
 			// && !this.noParksModalOpen
 		) {
 			if (this.state.parks.length) {
+				console.log("GET HERE");
 				if (
-					Math.max(...this.state.parks.map(park => park.score)) < 0.6
+					Math.max(...this.state.parks.map(park => park.score)) < 0.65
+					
 				) {
+					console.log("max score is: ", Math.max(...this.state.parks.map(park => park.score)));
 					this.noParksModalOpen = true;
 					return (
 						<NoResultsModal
@@ -380,6 +385,7 @@ class BaseMainComponent extends Component {
 					return "";
 				}
 			} else {
+
 				console.log("Drawing noresultsmodal for no parks");
 				this.noParksModalOpen = true;
 				return (
@@ -388,6 +394,9 @@ class BaseMainComponent extends Component {
 					/>
 				);
 			}
+		}
+		else{
+			console.log("BAD BRANCH GOT HERE");
 		}
 	};
 
@@ -418,24 +427,47 @@ class BaseMainComponent extends Component {
 							/>
 						</div>
 
-						<div className="sortByContainer">
-							<div className="sortBy">
-								Sort parks by:{"  "}
-								<button
-									onClick={this.sortParksDist}
-									disabled={this.state.sortedBy === "dist"}
-								>
-									Distance
-								</button>
-								<button
-									onClick={this.sortParksScore}
-									disabled={this.state.sortedBy === "score"}
-								>
-									Score
-								</button>
-							</div>
-						</div>
+						{/* <div className="reviewsContainer">
+							{this.toRemountReviews ? (
+								this.remountReviews()
+							) : (
+								<Reviews
+									starSize={"14px"}
+									refreshInfoModal={this.refreshModal}
+									parkID={this.park.id}
+								/>
+							)}
+						</div> */}
+
+						{this.state.parks.length>0 ? (
+								<div className="sortByContainer">
+								<div className="sortBy">
+									Sort parks by:{"  "}
+									<button
+										onClick={this.sortParksDist}
+										disabled={this.state.sortedBy === "dist"}
+									>
+										Distance
+									</button>
+									<button
+										onClick={this.sortParksScore}
+										disabled={this.state.sortedBy === "score"}
+									>
+										Score
+									</button>
+								</div>
+							</div>)
+
+						:(""
+
+						)}
+
+	
+					
 					</div>
+
+
+				
 
 					<div className="parkTableStyle">
 						<ParkTable
@@ -705,7 +737,7 @@ const MainContentWrapper = styled.div`
 		top: 10%;
 		background-color: gray;
 		display: ${props => (props.pathname === "/home" ? "none" : "block")};
-		margin: 40px auto 30px auto;
+		margin: 40px auto 40px auto;
 	}
 
 	@media screen and (min-width: 1025px) {
@@ -777,8 +809,8 @@ const MainContentWrapper = styled.div`
 				margin: 30px auto 0.5rem auto;
 			}
 			@media screen and (min-width: 1025px) {
-				width: 100%;
-				margin: 0rem auto 0.5rem auto;
+				width: 90%;
+				margin: auto auto;
 			}
 	}`}
 `;

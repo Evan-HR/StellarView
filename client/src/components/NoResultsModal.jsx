@@ -32,18 +32,25 @@ class NoResultsModal extends Component {
 					className="close"
 					aria-label="Close"
 				>
-					<i className="fas fa-window-close" />
+					<i className="fas fa-times" />
 				</button>
 				{this.props.noVis ? (
-					<span>
-						No parks have good visibility! Try again later!{" "}
-						{this.props.moonPhase}
-						{JSON.stringify(this.props.scoreBreakdown)}
-					</span>
+					<div className="messageBox">
+						<span>
+							No parks have good visibility! Try again later!{" "}
+							{this.props.moonPhase}
+							{JSON.stringify(this.props.scoreBreakdown)}
+						</span>
+					</div>
 				) : (
-					<span>
-						Sorry, we couldn't find any parks in this area!{" "}
-					</span>
+					<div className="messageBox">
+						<i className="reportIcon fas fa-exclamation-triangle fa-2x"></i>
+						<span>
+							Sorry, we couldn't find any suitable parks in this
+							area! Try increasing your max distance and/or light
+							pollution value using <i>Advanced Search</i>.
+						</span>
+					</div>
 				)}
 			</NoResultsStyle>
 		);
@@ -58,12 +65,12 @@ class NoResultsModal extends Component {
 		return (
 			<React.Fragment>
 				<Modal
-					closeTimeoutMS={800}
+					closeTimeoutMS={400}
 					isOpen={this.state.modalIsOpen}
 					onAfterOpen={this.afterOpenModal}
 					onRequestClose={this.closeModal}
 					contentLabel="Login Modal"
-					className="modal-dialog"
+					// className="modal-dialog"
 					style={customStyles}
 				>
 					<ModalStyle>
@@ -103,6 +110,7 @@ const customStyles = {
 		padding: "0px",
 		border: "none",
 		borderRadius: "2.5px",
+		backgroundColor: "rgba(0,0,0,0.9)",
 		marginRight: "-50%",
 		transform: "translate(-50%, -50%)",
 		maxWidth: "100vw",
@@ -129,39 +137,58 @@ const NoResultsStyle = styled.div`
 	width: 60vw;
 	height: 30vh;
 	border: none;
+	max-width: 530px;
 	width: 60vw;
 	position: relative;
 	background: ${props => props.theme.prettyDark};
 	font-family: "Lato", sans-serif;
 	color: ${props => props.theme.white};
+
+	i {
+		color: ${props => props.theme.yellow};
+	}
+	span {
+		max-width: 300px;
+		display: block;
+		margin: 10px auto;
+	}
 	/* min-height: 100vh; */
 
+	@media screen and (min-width: 320px) {
+		width: 100vw;
+	}
+
+	@media screen and (min-width: 600px) {
+		width: 60vw;
+	}
+
+	@media screen and (min-width: 801px) {
+		width: 45vw;
+	}
+
+	.messageBox {
+		width: 80%;
+		margin: auto auto;
+	}
+
 	.close {
+		outline: none;
+		text-shadow: none;
+		color: ${props => props.theme.white};
 		position: absolute;
-		top: 0px;
-		right: 0px;
+		top: -1px;
+		right: 4px;
 		float: right;
 		font-size: 2rem;
 		font-weight: 700;
 		line-height: 1;
-		color: ${props => props.theme.white};
-		outline: none;
-		text-shadow: none;
-		opacity: 0.5;
-	}
-
-	.close:hover {
-		color: ${props => props.theme.colorBad};
-		text-decoration: none;
-	}
-
-	.close:active {
-		color: ${props => props.theme.white};
-	}
-
-	.close:not(:disabled):not(.disabled):hover,
-	.close:not(:disabled):not(.disabled):focus {
-		opacity: 0.75;
+		:hover {
+			color: ${props => props.theme.colorMedium};
+			text-decoration: none;
+		}
+		:active {
+			color: ${props => props.theme.white};
+		}
 	}
 `;
 

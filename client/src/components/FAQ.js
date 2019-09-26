@@ -48,9 +48,11 @@ const FAQ = props => (
 					STELLARGAZE was made by 3 developers who met at McMaster
 					University's Computer Science department in Hamilton,
 					Ontario. The idea came from Evan Reaume, after realizing the
-					current applications out there are not so user-friendly. The front and back-end
-					was fully implemented by both Dustin Jurkaulionis and Vlad Falach over
-					the Summer of 2019. It was designed by all three.
+					current applications out there are not so user-friendly. The
+					front and back-end was fully implemented by both Dustin
+					Jurkaulionis and Vlad Falach over the Summer of 2019 as
+					their first full-scale web application. It was designed by
+					all three.
 				</span>
 			</div>
 			<h1 id="why">Why was this made?</h1>
@@ -63,10 +65,8 @@ const FAQ = props => (
 					into cities. This project was made to help us all make
 					stargazing more enjoyable. To us, this means being able to
 					see the stars as conveniently as possible. Our scoring
-					algorithm hopes to achieve that for you, so that an
-					enjoyable experience can be had by directing you to a nearby
-					park of your choice with low light pollution and good
-					weather.
+					algorithm hopes to achieve that for you, so that less time
+					is spent planning and more time can be spent stargazing.
 				</span>
 			</div>
 			<h1 id="how">How does it work?</h1>
@@ -123,26 +123,27 @@ const FAQ = props => (
 			</div>
 			<h1 id="secure">How secure is this?</h1>
 			<div className="Background">
-			<span>
-				<ul>
-					<li>
-						This site makes use of cookies. We only store your
-						preferred name and user id in them. The user id allows
-						us to gather your reviews and favorited parks. We use
-						cookies so that your log-in status persists even if our
-						server shuts down.
-					</li>
-					<li>
-						Your password is encrypted using{" "}
-						<a
-							target="_blank"
-							href="https://en.wikipedia.org/wiki/Bcrypt"
-						>
-							Bcrypt
-						</a>
-						. Thus, we do not view or store any plaintext passwords.
-					</li>
-				</ul>
+				<span>
+					<ul>
+						<li>
+							This site makes use of cookies. We only store your
+							preferred name and user id in them. The user id
+							allows us to gather your reviews and favorited
+							parks. We use cookies so that your log-in status
+							persists even if our server shuts down.
+						</li>
+						<li>
+							Your password is encrypted using{" "}
+							<a
+								target="_blank"
+								href="https://en.wikipedia.org/wiki/Bcrypt"
+							>
+								Bcrypt
+							</a>
+							. Thus, we do not view or store any plaintext
+							passwords.
+						</li>
+					</ul>
 				</span>
 			</div>
 			<h1 id="dataGeneration">
@@ -192,30 +193,58 @@ const FAQ = props => (
 			</div>
 			<h1 id="credits">Credits</h1>
 			<div className="Background">
-			<span>
+				<span>
 					<ul>
-					<li>
-							Light pollution data provided by the VIIRS Day/Night Band Nighttime Lights images via the <a target="_blank" href="https://eogdata.mines.edu/download_dnb_composites.html">Earth Observations Group (EOG)</a>
+						<li>
+							Light pollution data provided by the VIIRS Day/Night
+							Band Nighttime Lights images via the{" "}
+							<a
+								target="_blank"
+								href="https://eogdata.mines.edu/download_dnb_composites.html"
+							>
+								Earth Observations Group (EOG)
+							</a>
 						</li>
 						VIIRS Day/Night Band Nighttime Lights
 						<li>
-							Band value numbers for the radiance corresponding to a Bortle number provided by Jurij Stare of <a target="_blank" href="https://www.lightpollutionmap.info/">lightpollutionmap.info</a>
+							Band value numbers for the radiance corresponding to
+							a Bortle number provided by Jurij Stare of{" "}
+							<a
+								target="_blank"
+								href="https://www.lightpollutionmap.info/"
+							>
+								lightpollutionmap.info
+							</a>
 						</li>
 						<li>
-							Moonrise/moonset and sunrise/sunset data provided by <a target="_blank" href="http://suncalc.net">Suncalc</a>
+							Moonrise/moonset and sunrise/sunset data provided by{" "}
+							<a target="_blank" href="http://suncalc.net">
+								Suncalc
+							</a>
 						</li>
 						<li>
-							Telescope animation in homepage adapted based on a Codepen by <a target="_blank" href="https://codepen.io/littleginger">@littleginger</a>
+							Telescope animation in homepage adapted based on a
+							Codepen by{" "}
+							<a
+								target="_blank"
+								href="https://codepen.io/littleginger"
+							>
+								@littleginger
+							</a>
 						</li>
 						<li>
-							404 page astronaut animation adapted based on a Codepen by <a target="_blank" href="https://codepen.io/hellochad">@hellochad</a>
+							404 page astronaut animation adapted based on a
+							Codepen by{" "}
+							<a
+								target="_blank"
+								href="https://codepen.io/hellochad"
+							>
+								@hellochad
+							</a>
 						</li>
-						
 					</ul>
 				</span>
-				</div>
-
-		
+			</div>
 			<h1 id="contact">How do I contact?</h1>
 			<div className="Background">
 				<span>
@@ -234,11 +263,10 @@ const FAQ = props => (
 export default FAQ;
 
 const FAQStyle = styled.div`
-
-.FAQHeader{
-	text-align: center;
-	margin-bottom: 50px;
-}
+	.FAQHeader {
+		text-align: center;
+		margin-bottom: 50px;
+	}
 	width: 85%;
 	margin: auto auto;
 	max-width: 700px;
@@ -250,12 +278,12 @@ const FAQStyle = styled.div`
 	}
 	.FAQ_Sections {
 		font-size: 17px;
-		
+
 		ul {
 			list-style: none;
 			text-align: left;
 			padding: 0;
-    list-style-type: none;
+			list-style-type: none;
 		}
 		a {
 			color: ${props => props.theme.white};
@@ -270,9 +298,9 @@ const FAQStyle = styled.div`
 		color: ${props => props.theme.white};
 		text-align: left;
 
-		ul{
+		ul {
 			list-style-position: inside;
-  padding-left: 0;
+			padding-left: 0;
 		}
 		.HowWork {
 			li {

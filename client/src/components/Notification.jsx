@@ -30,7 +30,7 @@ export default class Notification extends Component {
 			() => {
 				setTimeout(() => {
 					this.setState({ show: false });
-				}, 6000);
+				}, 4000);
 			}
 		);
 	};
@@ -38,19 +38,25 @@ export default class Notification extends Component {
 	render() {
 		return (
 			<React.Fragment>
-				<Container show={this.state.show}>{this.state.msg}</Container>
+				<Container show={this.state.show}>{this.state.msg}
+				</Container>
 			</React.Fragment>
 		);
 	}
 }
 
 const Container = styled.div`
-	background-color: red;
+	background-color: ${props=>props.theme.cardDark};
+	color: ${props=>props.theme.prettyDark};
+	font-family: "Lato", sans-serif;
+	font-size: 18px;
+	font-weight: 500px;
+	border-radius: 2px;
 	position: absolute;
 	/* display: ${props => (props.show ? "initial" : "none")}; */
-	top: ${props => (props.show ? "16px" : "-100px")};
-	right: 16px;
+	top: ${props => (props.show ? "20vh" : "-100px")};
+	left: 20px;
 	padding: 16px;
 	z-index: 999;
-	transition: top 0.5s ease;
+	/* transition: left 1.0s ease; */
 `;

@@ -183,11 +183,17 @@ class BaseParkForm extends Component {
 			});
 	};
 
+	renderInvalidLocation = () => {
+		this.setState({
+			...this.state,
+			isInvalidLocation: true
+		});
+	};
 	//   In order to have access to  this.state inside
 	//    getCurrentPosition's callback, you either need to
 	//    bind the success callback or make use of arrow function.
 	getMyLocation = e => {
-		this.setState({ isLoadingLocation: true });
+		this.setState({ isLoadingLocation: true,isInvalidLocation:false });
 		// console.log(this.props);
 		if (
 			!this.props.authState.userLocation ||
@@ -519,7 +525,8 @@ class BaseParkForm extends Component {
 								if (this.state.placesComplete) {
 									this.onSubmit();
 								} else {
-									notify("Please select a valid place!");
+									this.renderInvalidLocation();
+									// notify("Invalid location - please try again.");
 									// console.log(
 									// 	"Didn't use autocomplete yet!",
 									// 	this.state
@@ -613,6 +620,20 @@ class BaseParkForm extends Component {
 
 				{this.renderFormErrors()}
 
+				{this.state.isInvalidLocation ? (
+					<span className="messageAboveForm">
+						<span className=" invalidLocation">
+							Invalid location - please try again.
+						</span>
+					</span>
+				) : (
+					<span className="messageAboveForm">
+						<span className="generic">
+							Let's stargaze:
+						</span>
+					</span>
+				)}
+
 				{/* <button
 							onClick={e => this.onSubmit(e)}
 							disabled={this.props.isFetchingParks}
@@ -699,7 +720,9 @@ const SearchFormStyle = styled.div`
 		props.advancedSearch ? `auto auto auto` : `auto auto`};
 	grid-gap: 10px;
 	grid-template-areas:
+"messageAboveForm messageAboveForm messageAboveForm"
 		"searchBar searchBar searchBar"
+	
 		"advancedSearchToggle advancedSearchToggle myLocation"
 		${props =>
 			props.advancedSearch
@@ -708,6 +731,7 @@ const SearchFormStyle = styled.div`
 
 	@media screen and (min-width: 320) {
 		grid-template-areas:
+"messageAboveForm messageAboveForm messageAboveForm"
 			"searchBar searchBar myLocation"
 			"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
 			${props =>
@@ -718,12 +742,35 @@ const SearchFormStyle = styled.div`
 
 	@media screen and (min-width: 480px) {
 		grid-template-areas:
+		"messageAboveForm messageAboveForm messageAboveForm"
 			"searchBar searchBar myLocation"
 			"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
 			${props =>
 				props.advancedSearch
 					? `"advancedSearch advancedSearch advancedSearch"`
 					: ``};
+	}
+
+	.messageAboveForm{
+		grid-area: messageAboveForm;
+		text-align: left;
+		font-weight: 600;
+		animation: fadein 3s;
+			@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+
+
+		.invalidLocation{
+			color: ${props => props.theme.colorBad};
+		}
+		.generic{
+			color: ${props => props.theme.yellow};
+
+		}
+		
 	}
 
 	.AdvancedSearch {
@@ -781,6 +828,7 @@ const SearchFormStyle = styled.div`
 		button {
 			float: left;
 			i {
+				margin-left: 5px;
 				transform: rotate(
 					${props => (props.advancedSearch ? `0deg` : `-90deg`)}
 				);
