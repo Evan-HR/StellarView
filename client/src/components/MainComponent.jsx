@@ -50,36 +50,34 @@ function inRange(x, min, max) {
 	return (x - min) * (x - max) <= 0;
 }
 
+//Returns a score function that is:
+// f(x)=0 if x<min
+// f(x)=1 if x>max
+// f(x)=linear between min and max
+function linearScore(x, minX, maxX) {
+	if (minX > maxX) {
+		let temp = minX;
+		minX = maxX;
+		maxX = temp;
+	}
+	let y = 0;
+	let minY = 0;
+	let maxY = 1;
+	if (x < minX) return minY;
+	if (x > maxX) return maxY;
+	y = ((maxY - minY) / (maxX - minX)) * (x - minX) + minY;
+	return y;
+}
+
 export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 	// console.log("MOON FRACTION % IS !!!!!!!!!!!!!!", moonFraction);
 	// console.log("CLOUD COV IS !!!!!!!!!!!!!!", cloudCov);
 	// console.log("LIGHT POL IS !!!!!!!!!!!!!!", lightPol);
 	// console.log("humidity COV IS !!!!!!!!!!!!!!", humidity);
-	var moonScore = 0;
-	if (moonFraction < 0.2) {
-		moonScore = 1;
-	} else if (inRange(moonFraction, 0.2, 0.7)) {
-		moonScore = -2 * moonFraction + 1.4;
-	} else {
-		moonScore = 0;
-	}
+	var moonScore = linearScore(1 - moonFraction, 0.2, 0.7);
 	var lightPolScore = ((-1 * 1) / 3) * (lightPol - 3);
-	var humidityScore = 0;
-	if (humidity < 0.4) {
-		humidityScore += 1;
-	} else if (inRange(humidity, 0.4, 0.8)) {
-		humidityScore += -2.5 * humidity + 2;
-	} else if (0.8 < humidity) {
-		humidityScore += 0;
-	}
-	var cloudScore = 0;
-	if (cloudCov < 0.2) {
-		cloudScore += 1;
-	} else if (inRange(cloudCov, 0.2, 0.4)) {
-		cloudScore += -5 * cloudCov + 2;
-	} else if (0.4 < cloudCov) {
-		cloudScore += 0;
-	}
+	var humidityScore = linearScore(humidity, 0.4, 0.8);
+	var cloudScore = linearScore(cloudCov, 0.2, 0.4);
 
 	const finalScore =
 		0.45 * moonScore +
