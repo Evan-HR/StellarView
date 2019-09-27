@@ -88,8 +88,7 @@ class NoResultsModal extends Component {
 
 		var whyBadString = "";
 		if (goodMoonCondition) {
-			whyBadString +=
-				"The moon brightness isn't a problem tonight, but it's a bit too humid and/or cloudy right now.  Try again tomorrow, and close to see nearby parks with adequate light pollution.";
+			whyBadString += `Moon brightness isn't a problem tonight, but it's forecasted to be a bit too humid and/or cloudy right now. Try again tomorrow, and close to see nearby parks with adequate light pollution.`;
 		} else {
 			whyBadString += `The moon is shining too bright right now, hiding the stars.  Try again in ${daysUntilGoodMoon} days when the moon is a ${nextGoodMoonType}`;
 		}
@@ -107,7 +106,7 @@ class NoResultsModal extends Component {
 		// }
 
 		//returns moon icon + moonPhrase, humidity icon + phrase, etc.
-		return <div className="moonResult">{whyBadString}</div>;
+		return <span>{whyBadString}</span>;
 	};
 
 	renderNoParks = () => {
@@ -123,30 +122,31 @@ class NoResultsModal extends Component {
 				</button>
 				{this.props.noVis ? (
 					<div className="messageBox">
-						<div className="Symbol">
+						{/* <div className="Symbol">
 							<i className="reportIcon fas fa-exclamation-triangle fa-2x"></i>
+						</div> */}
+
+						<div className="openingMsg">
+							<h1>We're sorry.</h1>
+							<span>
+								No parks in your area scored above 65%. <br></br>We do
+								not recommend stargazing tonight.
+							</span>
 						</div>
-						<span>
-							<div className="openingMsg">
-								We're sorry 😔, no parks in your area scored
-								above 65%. We do not recommend stargazing
-								tonight.
-							</div>
-							<div className="why">Why?</div>
-							<div className="whyExplanation">
-								{this.renderMessage(
-									this.props.moonPhase,
-									JSON.parse(
-										JSON.stringify(
-											this.props.scoreBreakdown
-										)
-									)
-								)}
-							</div>
-							{/* <div>
+						<div className="Symbol">
+						<i class="far fa-question-circle fa-2x"></i>
+						</div>
+						<div className="whyExplanation">
+							{this.renderMessage(
+								this.props.moonPhase,
+								JSON.parse(
+									JSON.stringify(this.props.scoreBreakdown)
+								)
+							)}
+						</div>
+						{/* <div>
 							{JSON.stringify(this.props.scoreBreakdown)}
 							</div> */}
-						</span>
 					</div>
 				) : (
 					<div className="messageBox">
@@ -253,18 +253,31 @@ const NoResultsStyle = styled.div`
 	font-family: "Lato", sans-serif;
 	color: ${props => props.theme.white};
 
-	text-align: ${props => (props.noVis ? "left" : "center")};
+
+	/* text-align: ${props => (props.noVis ? "left" : "center")}; */
 	.Symbol {
+		padding: 15px 0px;
 		i {
-			color: ${props => props.theme.yellow};
+			color: ${props => props.theme.colorMedium};
 		}
 	}
 
+.whyExplanation{
+	display: block;
+		margin: auto auto;
+		background: ${props => props.theme.moonBackground};
+
+border-radius: 20px;
+
+padding: 20px;
+max-width: 400px;
 	span {
-		max-width: 300px;
-		display: block;
-		margin: 10px auto;
+		
+	
+		
 	}
+}
+
 	/* min-height: 100vh; */
 
 	@media screen and (min-width: 320px) {
@@ -278,7 +291,7 @@ const NoResultsStyle = styled.div`
 
 	@media screen and (min-width: 801px) {
 		width: ${props => (props.noVis ? "70vw" : "45vw")};
-		height: ${props => (props.noVis ? "50vh" : "30vh")};
+		height: ${props => (props.noVis ? "70vh" : "30vh")};
 	}
 
 	.messageBox {
