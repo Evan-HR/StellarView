@@ -23,9 +23,96 @@ class NoResultsModal extends Component {
 		// this.props.handleCloseNoParksModal();
 	};
 
+	renderMessage = (moonPhaseNum, scoreBreakdown) => {
+		// var moonScore = scoreBreakdown.moonScore;
+		var humidityScore = scoreBreakdown.humidityScore;
+		var cloudScore = scoreBreakdown.cloudScore;
+		// console.log("scores: "+moonScore+humidityScore+cloudScore+lightPolScore);
+		function inRange(x, min, max) {
+			return (x - min) * (x - max) <= 0;
+		}
+
+		//moon
+		var daysUntilGoodMoon;
+		var goodMoonCondition = false;
+		var nextGoodMoonType = "";
+		if (
+			inRange(moonPhaseNum, 0.9375, 1) ||
+			inRange(moonPhaseNum, 0, 0.0625)
+		) {
+			//new moon
+			goodMoonCondition = true;
+		} else if (inRange(moonPhaseNum, 0.0625, 0.1875)) {
+			goodMoonCondition = true;
+			//Waxing Crescent
+		} else if (inRange(moonPhaseNum, 0.1875, 0.3125)) {
+			goodMoonCondition = true;
+		} else if (inRange(moonPhaseNum, 0.3125, 0.4375)) {
+			//"Waxing Gibbous";
+			daysUntilGoodMoon = 11;
+			nextGoodMoonType += "Last Quarter";
+		} else if (inRange(moonPhaseNum, 0.4375, 0.5625)) {
+			//"full moon";
+			daysUntilGoodMoon = 7;
+			nextGoodMoonType += "Last Quarter";
+		} else if (inRange(moonPhaseNum, 0.5625, 0.6875)) {
+			//Waning Gibbous
+			daysUntilGoodMoon = 4;
+			nextGoodMoonType += "Last Quarter";
+		} else if (inRange(moonPhaseNum, 0.6875, 0.8125)) {
+			//Last Quarter
+
+			goodMoonCondition = true;
+		} else if (inRange(moonPhaseNum, 0.8125, 0.9375)) {
+			//Waning Crescent"
+			goodMoonCondition = true;
+		} else {
+			//New Moon
+			goodMoonCondition = true;
+		}
+
+		//weather
+		// var badHumidity = true;
+		// var badClouds = true;
+		// if(humidityScore>.60){
+		// 	badHumidity = false;
+		// }
+		// if(cloudScore>.60){
+		// 	badClouds = false;
+		// }
+
+		//dynamic string message
+
+		// var humidityPhrase;
+		// var cloudPhrase;
+
+		var whyBadString = "";
+		if (goodMoonCondition) {
+			whyBadString +=
+				"The moon brightness isn't a problem tonight, but it's a bit too humid and/or cloudy right now.  Try again tomorrow, but close to see parks with adequate light pollution."
+		} else {
+			whyBadString += `The moon is shining too bright right now, hiding the stars.  Try again in ${daysUntilGoodMoon} days when the moon is a ${nextGoodMoonType}`;
+		}
+
+		// if (badHumidity){
+		// 	humidityPhrase+="Humidity levels seem alright...";
+		// }else{
+		// 	humidityPhrase+="Humidity levels are poor...";
+		// }
+
+		// if (badClouds){
+		// 	cloudPhrase+="It's too cloudy!";
+		// }else{
+		// 	cloudPhrase+="It's not very cloudy, that's good!";
+		// }
+
+		//returns moon icon + moonPhrase, humidity icon + phrase, etc.
+		return <div className="moonResult">{whyBadString}</div>;
+	};
+
 	renderNoParks = () => {
 		return (
-			<NoResultsStyle>
+			<NoResultsStyle noVis={this.props.noVis}>
 				<button
 					type="button"
 					onClick={this.closeModal}
@@ -36,10 +123,29 @@ class NoResultsModal extends Component {
 				</button>
 				{this.props.noVis ? (
 					<div className="messageBox">
+						<i className="reportIcon fas fa-exclamation-triangle fa-2x"></i>
 						<span>
-							No parks have good visibility! Try again later!{" "}
-							{this.props.moonPhase}
+							<div className="openingMsg">
+								We're sorry, no parks in your area scored above
+								65%. We do not recommend stargazing tonight.
+							
+							</div>
+							<div className="why">Why?</div>
+							<div className="whyExplanation">
+					
+								{this.renderMessage(
+								
+								this.props.moonPhase,
+									JSON.parse(
+										JSON.stringify(
+											this.props.scoreBreakdown
+										)
+									)
+								)}
+							</div>
+							{/* <div>
 							{JSON.stringify(this.props.scoreBreakdown)}
+							</div> */}
 						</span>
 					</div>
 				) : (
@@ -156,6 +262,7 @@ const NoResultsStyle = styled.div`
 
 	@media screen and (min-width: 320px) {
 		width: 100vw;
+		width: ${props => (props.noVis ? "100vw" : "block")};
 	}
 
 	@media screen and (min-width: 600px) {
@@ -163,7 +270,8 @@ const NoResultsStyle = styled.div`
 	}
 
 	@media screen and (min-width: 801px) {
-		width: 45vw;
+		width: ${props => (props.noVis ? "70vw" : "45vw")};
+		height: ${props => (props.noVis ? "50vh" : "30vh")};
 	}
 
 	.messageBox {

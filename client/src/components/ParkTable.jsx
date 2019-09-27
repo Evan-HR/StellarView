@@ -27,10 +27,24 @@ class ParkTable extends Component {
 		this.isAnimating = {};
 	}
 
+	renderBadParks = () => {
+		return (
+			<NoResultsModal
+				noVis={true}
+				moonPhase={this.props.moon}
+				scoreBreakdown={this.props.parkList[0].scoreBreakdown}
+			/>
+		);
+	};
+
 	renderParkCardList = () => {
 		if (this.props.parkList.length > 0) {
 			return (
-				
+				<React.Fragment>
+					{Math.max(...this.props.parkList.map(park => park.score)) <
+					0.65
+						? this.renderBadParks()
+						: ""}
 					<Transition
 						native
 						items={this.props.parkList}
@@ -58,18 +72,11 @@ class ParkTable extends Component {
 							</animated.div>
 						)}
 					</Transition>
-				
+				</React.Fragment>
 			);
 			// return <div>{this.props.parkList.map(this.renderParkCard)}</div>;
 		} else {
-			return (
-				<NoResultsModal />
-				// <div className="text-center">
-				// 	<div className="card text-white bg-danger">
-				// 		<div className="card-header">No parks available.</div>
-				// 	</div>
-				// </div>
-			);
+			return <NoResultsModal />;
 		}
 	};
 
@@ -107,17 +114,7 @@ class ParkTable extends Component {
 		if (this.props.parkList.length > 0) {
 			return this.props.parkList.map(this.renderPark);
 		} else {
-			return (
-				<NoResultsModal moonPhase={this.props.moon} />
-
-				// <tr>
-				// 	<td colSpan={3}>
-				// 		<strong style={{ color: "red" }}>
-				// 			No parks available.
-				// 		</strong>
-				// 	</td>
-				// </tr>
-			);
+			return <NoResultsModal moonPhase={this.props.moon} />;
 		}
 	};
 
@@ -125,7 +122,7 @@ class ParkTable extends Component {
 		return (
 			<div
 				className="spinner-grow text-secondary"
-				style={{ marginTop:"20px", width: "3rem", height: "3rem" }}
+				style={{ marginTop: "20px", width: "3rem", height: "3rem" }}
 			/>
 		);
 	};
@@ -145,4 +142,3 @@ class ParkTable extends Component {
 }
 
 export default ParkTable;
-

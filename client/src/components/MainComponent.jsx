@@ -14,7 +14,6 @@ import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import tempIcon from "./style/Media/cardIcons/temperature.svg";
 import { withRouter } from "react-router-dom";
 import TelescopeCircle from "./TelescopeCircle";
-import NoResultsModal from "./NoResultsModal";
 import { notifyCloseModal } from "./ParkMoreInfoModal";
 import { notifyCloseLoginModal } from "./Login";
 import { notifyCloseRegisterModal } from "./Register";
@@ -82,7 +81,7 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 	}
 
 	const finalScore =
-		0.35 * moonScore +
+		0 * moonScore +
 		0.25 * cloudScore +
 		0.15 * humidityScore +
 		0.25 * lightPolScore;
@@ -100,7 +99,6 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 		humidityScore,
 		lightPolScore
 	);
-
 
 	console.log("final score: ", finalScore);
 	return {
@@ -358,63 +356,11 @@ class BaseMainComponent extends Component {
 		this.setState({ parks: parksArray, sortedBy: "score" });
 	};
 
-	renderNoResults = () => {
-		if (
-			!this.state.isFetchingParks
-			// && !this.noParksModalOpen
-		) {
-			if (this.state.parks.length) {
-				console.log("GET HERE");
-				if (
-					Math.max(...this.state.parks.map(park => park.score)) < 0.65
-					
-				) {
-					console.log("max score is: ", Math.max(...this.state.parks.map(park => park.score)));
-					this.noParksModalOpen = true;
-					return (
-						<NoResultsModal
-							noVis={true}
-							moonPhase={this.state.moonPhase}
-							scoreBreakdown={this.state.parks[0].scoreBreakdown}
-							handleCloseNoParksModal={
-								this.handleCloseNoParksModal
-							}
-						/>
-					);
-				} else {
-					return "";
-				}
-			} else {
-
-				console.log("Drawing noresultsmodal for no parks");
-				this.noParksModalOpen = true;
-				return (
-					<NoResultsModal
-						handleCloseNoParksModal={this.handleCloseNoParksModal}
-					/>
-				);
-			}
-		}
-		else{
-			console.log("BAD BRANCH GOT HERE");
-		}
-	};
 
 	renderResults = () => {
 		return (
 			<ResultsPageStyle>
-				{/* {this.renderNoResults()} */}
-				{/* {this.renderParkMap()} */}
 				<div className="formMoonCards">
-					{/* <button
-						onClick={() => {
-							this.setState({ hideForm: !this.state.hideForm });
-						}}
-					>
-						Toggle form
-					</button> */}
-					{/* <div className="FormMoonWrapper"> */}
-
 					<div className="formMoonSort">
 						{/* {this.renderParkForm()} */}
 
@@ -427,47 +373,32 @@ class BaseMainComponent extends Component {
 							/>
 						</div>
 
-						{/* <div className="reviewsContainer">
-							{this.toRemountReviews ? (
-								this.remountReviews()
-							) : (
-								<Reviews
-									starSize={"14px"}
-									refreshInfoModal={this.refreshModal}
-									parkID={this.park.id}
-								/>
-							)}
-						</div> */}
-
-						{this.state.parks.length>0 ? (
-								<div className="sortByContainer">
+						{this.state.parks.length > 0 ? (
+							<div className="sortByContainer">
 								<div className="sortBy">
 									Sort parks by:{"  "}
 									<button
 										onClick={this.sortParksDist}
-										disabled={this.state.sortedBy === "dist"}
+										disabled={
+											this.state.sortedBy === "dist"
+										}
 									>
 										Distance
 									</button>
 									<button
 										onClick={this.sortParksScore}
-										disabled={this.state.sortedBy === "score"}
+										disabled={
+											this.state.sortedBy === "score"
+										}
 									>
 										Score
 									</button>
 								</div>
-							</div>)
-
-						:(""
-
+							</div>
+						) : (
+							""
 						)}
-
-	
-					
 					</div>
-
-
-				
 
 					<div className="parkTableStyle">
 						<ParkTable
@@ -495,8 +426,6 @@ class BaseMainComponent extends Component {
 	};
 
 	render() {
-		// console.log("MainComponent - rendered");
-		// console.log("Current location: ", window.location.pathname);
 		return (
 			<MainContentWrapper
 				active={this.state.hideForm}
