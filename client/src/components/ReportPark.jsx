@@ -27,7 +27,7 @@ class BaseReportPark extends Component {
 	};
 
 	closeModal = () => {
-		console.log("Closing login modal");
+		// console.log("Closing login modal");
 		this.props.refreshInfoModal();
 		this.setState({ ...this.state, modalIsOpen: false, errorDB: false });
 		document.body.style.overflow = "visible";
@@ -73,7 +73,7 @@ class BaseReportPark extends Component {
 	}
 
 	reportSuccess = () => {
-		console.log("get here for some reason?");
+		// console.log("get here for some reason?");
 		this.setState({ reportSuccess: true, errorDB: false });
 		setTimeout(() => {
 			this.closeModal();
@@ -170,7 +170,7 @@ class BaseReportPark extends Component {
 					className="close"
 					aria-label="Close"
 				>
-					<i className="fas fa-window-close" />
+					<i class="fas fa-times"></i>
 				</button>
 				<div className="form">
 					<div className="wrapper">
@@ -220,8 +220,8 @@ class BaseReportPark extends Component {
 				>
 					<ModalStyle>
 						{/* <div className="modal-content"> */}
-							{this.renderReportModal()}
-							{/* {this.renderModalContent()} */}
+						{this.renderReportModal()}
+						{/* {this.renderModalContent()} */}
 						{/* </div> */}
 					</ModalStyle>
 				</Modal>
@@ -238,7 +238,7 @@ const ReportPark = props => (
 
 BaseReportPark.defaultProps = {
 	refreshInfoModal: () => {
-		console.log("Default prop!");
+		// console.log("Default prop!");
 	}
 };
 
@@ -311,8 +311,8 @@ const LoginStyle = styled.div`
 		text-shadow: none;
 		color: ${props => props.theme.white};
 		position: absolute;
-		top: -3px;
-		right: 0px;
+		top: -1px;
+		right: 4px;
 		float: right;
 		font-size: 2rem;
 		font-weight: 700;
@@ -357,7 +357,7 @@ const LoginStyle = styled.div`
 				transition: background 0s;
 				-webkit-transform: scale(1.05);
 				transform: scale(1.05);
-			}	
+			}
 		}
 	}
 `;
@@ -426,12 +426,12 @@ const ReportFormStyle = styled.div`
 		-ms-user-select: none;
 		user-select: none;
 		font-size: 20px;
-span{
-	:hover,:focus{
-			color: ${props => props.theme.yellow};
+		span {
+			:hover,
+			:focus {
+				color: ${props => props.theme.yellow};
+			}
 		}
-}
-		
 	}
 
 	/* Hide the browser's default radio button */
@@ -440,7 +440,6 @@ span{
 		opacity: 0;
 		cursor: pointer;
 	}
-
 
 	/* Create a custom radio button */
 	.checkmark {

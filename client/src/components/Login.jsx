@@ -49,7 +49,7 @@ class BaseLogin extends Component {
 	};
 
 	closeModal = () => {
-		console.log("Closing login modal");
+		// console.log("Closing login modal");
 		notifyLoginModalIsClosed();
 		this.props.history.push(
 			`${window.location.pathname}${window.location.search}`,
@@ -100,7 +100,7 @@ class BaseLogin extends Component {
 	}
 
 	loginSuccess = () => {
-		console.log("get here for some reason?");
+		// console.log("get here for some reason?");
 		this.setState({ loginSuccess: true, errorDB: false });
 		setTimeout(() => {
 			this.closeModal();
@@ -136,7 +136,7 @@ class BaseLogin extends Component {
 					className="close"
 					aria-label="Close"
 				>
-					<i className="fas fa-window-close" />
+					<i class="fas fa-times"></i>
 				</button>
 				<div className="grid">
 					<form onSubmit={this.onSubmit} className="form login">
@@ -230,7 +230,7 @@ class BaseLogin extends Component {
 					{this.props.children ? (
 						<React.Fragment>{this.props.children}</React.Fragment>
 					) : (
-						<React.Fragment>Login</React.Fragment>
+						"Login"
 					)}
 				</a>
 
@@ -260,7 +260,7 @@ const Login = props => (
 
 BaseLogin.defaultProps = {
 	refreshInfoModal: () => {
-		console.log("Default prop!");
+		// console.log("Default prop!");
 	}
 };
 
@@ -285,6 +285,7 @@ const customStyles = {
 		bottom: "auto",
 		padding: "0px",
 		border: "none",
+		background:"black",
 		borderRadius: "2.5px",
 		marginRight: "-50%",
 		transform: "translate(-50%, -50%)",
@@ -350,8 +351,8 @@ const NewLoginStyle = styled.div`
 		text-shadow: none;
 		color: ${props => props.theme.white};
 		position: absolute;
-		top: -3px;
-		right: 0px;
+		top: -1px;
+right: 4px;
 		float: right;
 		font-size: 2rem;
 		font-weight: 700;

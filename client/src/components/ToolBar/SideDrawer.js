@@ -30,7 +30,7 @@ class SideDrawer extends Component {
 											onClick={this.props.close}
 											style={{ textDecoration: "none" }}
 										>
-											<div className="sidebarLink">
+											<div className="sidebarLink Favs">
 												Favorites
 											</div>
 										</Link>
@@ -58,25 +58,27 @@ class SideDrawer extends Component {
 							} else {
 								return (
 									<li>
-										<div
-											className="sidebarLink"
-											onClick={this.props.close}
+										<Login
+											handleLogin={this.props.handleLogin}
 										>
-											<Login
-												handleLogin={
-													this.props.handleLogin
-												}
-											/>
-										</div>
+											<div
+												className="sidebarLink"
+												onClick={this.props.close}
+											>
+												Login
+											</div>
+										</Login>
 									</li>
 								);
 							}
 						}}
 					</AuthConsumer>
 					<li>
+						<Register handleLogin={this.props.handleLogin}>
 						<div className="sidebarLink" onClick={this.props.close}>
-							<Register handleLogin={this.props.handleLogin} />
+						Register
 						</div>
+						</Register>
 					</li>
 					<li>
 						<Link
@@ -122,19 +124,21 @@ const SideDrawerStyle = styled.nav`
 
 	.sidebarLink {
 		cursor: pointer;
-		color: ${props => props.theme.prettyDark};;
+		color: ${props => props.theme.prettyDark};
 		transition: color 0.2s ease;
 		text-decoration: none;
 		font-size: 1.5rem;
 		display: block;
+		.Favs {
+			color: ${props => props.theme.colorBad};
+		}
 
-		:hover,:active {
-		color: ${props => props.theme.colorBad};
-		transition: color 0.2s ease;
+		:hover,
+		:active {
+			color: ${props => props.theme.colorBad};
+			transition: color 0.2s ease;
+		}
 	}
-	}
-
-
 
 	li {
 		margin: 0.5rem 0;

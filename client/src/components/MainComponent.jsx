@@ -14,7 +14,6 @@ import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import tempIcon from "./style/Media/cardIcons/temperature.svg";
 import { withRouter } from "react-router-dom";
 import TelescopeCircle from "./TelescopeCircle";
-import NoResultsModal from "./NoResultsModal";
 import { notifyCloseModal } from "./ParkMoreInfoModal";
 import { notifyCloseLoginModal } from "./Login";
 import { notifyCloseRegisterModal } from "./Register";
@@ -80,15 +79,15 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 	var cloudScore = linearScore(cloudCov, 0.2, 0.4);
 
 	const finalScore =
-		0.45 * moonScore +
-		0.15 * cloudScore +
+		0.35 * moonScore +
+		0.25 * cloudScore +
 		0.15 * humidityScore +
 		0.25 * lightPolScore;
 
 	if (finalScore < 0) {
 		finalScore = 0;
-	} else if (finalScore > 1) {
-		finalScore = 1;
+	} else if (finalScore >= 1) {
+		finalScore = 0.99;
 	}
 
 	console.log(
@@ -98,6 +97,7 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 		humidityScore,
 		lightPolScore
 	);
+
 	console.log("final score: ", finalScore);
 	return {
 		finalScore: finalScore,
@@ -142,45 +142,45 @@ class BaseMainComponent extends Component {
 		this.markers = {};
 		this.noParksModalOpen = false;
 		emitter.on("infoModalIsOpen", msg => {
-			console.log("Main component heard about modal OPENING");
+			// console.log("Main component heard about modal OPENING");
 			this.setState({ infoModalIsOpen: true });
 		});
 		emitter.on("infoModalIsClosed", () => {
-			console.log("Main component heard about modal CLOSING");
+			// console.log("Main component heard about modal CLOSING");
 			this.setState({ infoModalIsOpen: false });
 		});
 		emitter.on("loginModalIsOpen", msg => {
-			console.log("Main component heard about modal OPENING");
+			// console.log("Main component heard about modal OPENING");
 			this.setState({ loginModalIsOpen: true });
 		});
 		emitter.on("loginModalIsClosed", () => {
-			console.log("Main component heard about modal CLOSING");
+			// console.log("Main component heard about modal CLOSING");
 			this.setState({ loginModalIsOpen: false });
 		});
 		emitter.on("registerModalIsOpen", msg => {
-			console.log("Main component heard about modal OPENING");
+			// console.log("Main component heard about modal OPENING");
 			this.setState({ registerModalIsOpen: true });
 		});
 		emitter.on("registerModalIsClosed", () => {
-			console.log("Main component heard about modal CLOSING");
+			// console.log("Main component heard about modal CLOSING");
 			this.setState({ registerModalIsOpen: false });
 		});
 	}
 
 	componentDidUpdate = () => {
 		window.onpopstate = e => {
-			console.log("Detected back button");
+			// console.log("Detected back button");
 			if (this.state.infoModalIsOpen) {
-				console.log("Notifying modal");
+				// console.log("Notifying modal");
 				notifyCloseModal();
 			} else if (this.state.loginModalIsOpen) {
-				console.log("Notifying modal");
+				// console.log("Notifying modal");
 				notifyCloseLoginModal();
 			} else if (this.state.registerModalIsOpen) {
-				console.log("Notifying modal");
+				// console.log("Notifying modal");
 				notifyCloseRegisterModal();
 			} else {
-				console.log("Notifying park form");
+				// console.log("Notifying park form");
 				notifyLoadQuery();
 			}
 		};
@@ -196,7 +196,7 @@ class BaseMainComponent extends Component {
 	};
 
 	getParkData = reqData => {
-		console.log(reqData);
+		// console.log(reqData);
 		// this.updateHistoryQuery(reqData);
 		this.setState({ isFetchingParks: true });
 		let storageKey = JSON.stringify(reqData);
@@ -354,98 +354,61 @@ class BaseMainComponent extends Component {
 		this.setState({ parks: parksArray, sortedBy: "score" });
 	};
 
-	renderNoResults = () => {
-		if (
-			!this.state.isFetchingParks
-			// && !this.noParksModalOpen
-		) {
-			if (this.state.parks.length) {
-				if (
-					Math.max(...this.state.parks.map(park => park.score)) < 0.6
-				) {
-					this.noParksModalOpen = true;
-					return (
-						<NoResultsModal
-							noVis={true}
-							moonPhase={this.state.moonPhase}
-							scoreBreakdown={this.state.parks[0].scoreBreakdown}
-							handleCloseNoParksModal={
-								this.handleCloseNoParksModal
-							}
-						/>
-					);
-				} else {
-					return "";
-				}
-			} else {
-				console.log("Drawing noresultsmodal for no parks");
-				this.noParksModalOpen = true;
-				return (
-					<NoResultsModal
-						handleCloseNoParksModal={this.handleCloseNoParksModal}
-					/>
-				);
-			}
-		}
-	};
 
 	renderResults = () => {
 		return (
 			<ResultsPageStyle>
-				{/* {this.renderNoResults()} */}
-				{/* {this.renderParkMap()} */}
-				{/* <div className="formMoonCards"> */}
-				{/* <button
-						onClick={() => {
-							this.setState({ hideForm: !this.state.hideForm });
-						}}
-					>
-						Toggle form
-					</button> */}
-				{/* <div className="FormMoonWrapper"> */}
+				<div className="formMoonCards">
+					<div className="formMoonSort">
+						{/* {this.renderParkForm()} */}
 
-				<div className="formMoonSort">
-					{/* {this.renderParkForm()} */}
+						<div className="moonStyle">
+							<MoonComponent
+								moonPhase={this.state.moonPhase}
+								parkList={this.state.parks}
+								moonType={this.state.moonType}
+								stellarData={this.state.stellarData}
+							/>
+						</div>
 
-					<div className="moonStyle">
-						<MoonComponent
-							moonPhase={this.state.moonPhase}
+						{this.state.parks.length > 0 ? (
+							<div className="sortByContainer">
+								<div className="sortBy">
+									Sort parks by:{"  "}
+									<button
+										onClick={this.sortParksDist}
+										disabled={
+											this.state.sortedBy === "dist"
+										}
+									>
+										Distance
+									</button>
+									<button
+										onClick={this.sortParksScore}
+										disabled={
+											this.state.sortedBy === "score"
+										}
+									>
+										Score
+									</button>
+								</div>
+							</div>
+						) : (
+							""
+						)}
+					</div>
+
+					<div className="parkTableStyle">
+						<ParkTable
 							parkList={this.state.parks}
+							moon={this.state.moonPhase}
 							moonType={this.state.moonType}
-							stellarData={this.state.stellarData}
+							googleMap={this.googleMap}
+							markers={this.markers}
+							isLoadingParks={this.state.isFetchingParks}
 						/>
 					</div>
-
-					<div className="sortByContainer">
-						<div className="sortBy">
-							Sort parks by:{"  "}
-							<button
-								onClick={this.sortParksDist}
-								disabled={this.state.sortedBy === "dist"}
-							>
-								Distance
-							</button>
-							<button
-								onClick={this.sortParksScore}
-								disabled={this.state.sortedBy === "score"}
-							>
-								Score
-							</button>
-						</div>
-					</div>
 				</div>
-
-				<div className="parkTableStyle">
-					<ParkTable
-						parkList={this.state.parks}
-						moon={this.state.moonPhase}
-						moonType={this.state.moonType}
-						googleMap={this.googleMap}
-						markers={this.markers}
-						isLoadingParks={this.state.isFetchingParks}
-					/>
-				</div>
-				{/* </div> */}
 			</ResultsPageStyle>
 		);
 	};
@@ -461,14 +424,13 @@ class BaseMainComponent extends Component {
 	};
 
 	render() {
-		// console.log("MainComponent - rendered");
-		// console.log("Current location: ", window.location.pathname);
 		return (
 			<MainContentWrapper
 				active={this.state.hideForm}
 				hideMap={this.state.hideMap}
 				pathname={window.location.pathname}
 			>
+				{/* <div className="HeresResults">We found some spots.</div> */}
 				{this.renderParkMap()}
 				<div className="formMoonCards">
 					{this.renderParkForm()}
@@ -696,12 +658,13 @@ const MainContentWrapper = styled.div`
 
 	.parkMapStyle {
 		/* height: 80vh; */
-		width: 95%;
-		height: 80vh;
+		width: 90%;
+		max-width: 500px;
+		height: 45vh;
 		top: 10%;
 		background-color: gray;
-		display: none;
-		margin: 0 auto;
+		display: ${props => (props.pathname === "/home" ? "none" : "block")};
+		margin: 40px auto 40px auto;
 	}
 
 	@media screen and (min-width: 1025px) {
@@ -718,7 +681,12 @@ const MainContentWrapper = styled.div`
 			display: ${props =>
 				props.pathname === "/home" ? "none" : "fixed"};
 			grid-area: map;
+			width: 95%;
+			height: 80vh;
+			top: 10%;
 			position: sticky;
+			max-width: none;
+			margin: 0 auto;
 		}
 	}
 
@@ -755,5 +723,21 @@ const MainContentWrapper = styled.div`
 			margin-top: 7vh;
 		}
 	}`
-			: "	"}
+			: `.parkFormStyle {
+			width: 90%;
+
+
+		max-width: 500px;
+		margin: 30px auto auto auto;
+	
+		
+		@media screen and (min-width: 600px) {
+				width: 100%;
+				margin: 30px auto 0.5rem auto;
+			}
+			@media screen and (min-width: 1025px) {
+				width: 90%;
+				margin: auto auto;
+			}
+	}`}
 `;
