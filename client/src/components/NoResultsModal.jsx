@@ -89,7 +89,7 @@ class NoResultsModal extends Component {
 		var whyBadString = "";
 		if (goodMoonCondition) {
 			whyBadString +=
-				"The moon brightness isn't a problem tonight, but it's a bit too humid and/or cloudy right now.  Try again tomorrow, but close to see parks with adequate light pollution."
+				"The moon brightness isn't a problem tonight, but it's a bit too humid and/or cloudy right now.  Try again tomorrow, and close to see nearby parks with adequate light pollution.";
 		} else {
 			whyBadString += `The moon is shining too bright right now, hiding the stars.  Try again in ${daysUntilGoodMoon} days when the moon is a ${nextGoodMoonType}`;
 		}
@@ -123,19 +123,19 @@ class NoResultsModal extends Component {
 				</button>
 				{this.props.noVis ? (
 					<div className="messageBox">
-						<i className="reportIcon fas fa-exclamation-triangle fa-2x"></i>
+						<div className="Symbol">
+							<i className="reportIcon fas fa-exclamation-triangle fa-2x"></i>
+						</div>
 						<span>
 							<div className="openingMsg">
-								We're sorry, no parks in your area scored above
-								65%. We do not recommend stargazing tonight.
-							
+								We're sorry 😔, no parks in your area scored
+								above 65%. We do not recommend stargazing
+								tonight.
 							</div>
 							<div className="why">Why?</div>
 							<div className="whyExplanation">
-					
 								{this.renderMessage(
-								
-								this.props.moonPhase,
+									this.props.moonPhase,
 									JSON.parse(
 										JSON.stringify(
 											this.props.scoreBreakdown
@@ -150,7 +150,10 @@ class NoResultsModal extends Component {
 					</div>
 				) : (
 					<div className="messageBox">
-						<i className="reportIcon fas fa-exclamation-triangle fa-2x"></i>
+						<div className="Symbol">
+							<i className="reportIcon fas fa-exclamation-triangle fa-2x"></i>
+						</div>
+
 						<span>
 							Sorry, we couldn't find any suitable parks in this
 							area! Try increasing your max distance and/or light
@@ -250,9 +253,13 @@ const NoResultsStyle = styled.div`
 	font-family: "Lato", sans-serif;
 	color: ${props => props.theme.white};
 
-	i {
-		color: ${props => props.theme.yellow};
+	text-align: ${props => (props.noVis ? "left" : "center")};
+	.Symbol {
+		i {
+			color: ${props => props.theme.yellow};
+		}
 	}
+
 	span {
 		max-width: 300px;
 		display: block;
