@@ -86,11 +86,23 @@ class NoResultsModal extends Component {
 		// var humidityPhrase;
 		// var cloudPhrase;
 
-		var whyBadString = "";
 		if (goodMoonCondition) {
-			whyBadString += `Moon brightness isn't a problem tonight, but it's forecasted to be a bit too humid and/or cloudy right now. Try again tomorrow, and close to see nearby parks with adequate light pollution.`;
+			return (
+				<span>
+					Moon brightness isn't a problem tonight, but it's forecasted
+					to be a bit too humid and/or cloudy right now. Try again
+					tomorrow, and close to see nearby parks with adequate light
+					pollution.
+				</span>
+			);
 		} else {
-			whyBadString += `The moon is shining too bright right now, hiding the stars.  Try again in ${daysUntilGoodMoon} days when the moon is a ${nextGoodMoonType}`;
+			return (
+				<span>
+					The moon is shining too bright right now, hiding the stars. <br></br>
+					Try again in <span className="daysUntil">{daysUntilGoodMoon}</span> days, when the moon is a <br></br><span className="nextMoon">{nextGoodMoonType}</span>
+				</span>
+			);
+
 		}
 
 		// if (badHumidity){
@@ -106,11 +118,12 @@ class NoResultsModal extends Component {
 		// }
 
 		//returns moon icon + moonPhrase, humidity icon + phrase, etc.
-		return <span>{whyBadString}</span>;
+
 	};
 
 	renderNoParks = () => {
 		return (
+			
 			<NoResultsStyle noVis={this.props.noVis}>
 				<button
 					type="button"
@@ -129,12 +142,12 @@ class NoResultsModal extends Component {
 						<div className="openingMsg">
 							<h1>We're sorry.</h1>
 							<span>
-								No parks in your area scored above 65%. <br></br>We do
-								not recommend stargazing tonight.
+								No parks in your area scored above 70%.{" "}
+								<br></br>We do not recommend stargazing tonight.
 							</span>
 						</div>
 						<div className="Symbol">
-						<i class="far fa-question-circle fa-2x"></i>
+							<i class="far fa-question-circle fa-2x"></i>
 						</div>
 						<div className="whyExplanation">
 							{this.renderMessage(
@@ -171,6 +184,7 @@ class NoResultsModal extends Component {
 
 	//classNameName changes model content, style gives you anything you specify to override defaults
 	render() {
+		// console.log("moon phase is: ",this.props.moonPhase);
 		return (
 			<React.Fragment>
 				<Modal
@@ -228,7 +242,6 @@ const customStyles = {
 	}
 };
 
-//style the "modal" here - don't worry about the ccontent shit
 const NoResultsStyle = styled.div`
 	-webkit-box-align: center;
 	-ms-flex-align: center;
@@ -244,17 +257,16 @@ const NoResultsStyle = styled.div`
 	-ms-flex-pack: center;
 	justify-content: center;
 	width: 60vw;
-	height: 30vh;
 	border: none;
 	max-width: 530px;
-	width: 60vw;
 	position: relative;
 	background: ${props => props.theme.prettyDark};
 	font-family: "Lato", sans-serif;
 	color: ${props => props.theme.white};
 
+	@media screen and (min-width: 320px) {
+	}
 
-	/* text-align: ${props => (props.noVis ? "left" : "center")}; */
 	.Symbol {
 		padding: 15px 0px;
 		i {
@@ -262,23 +274,34 @@ const NoResultsStyle = styled.div`
 		}
 	}
 
-.whyExplanation{
-	display: block;
+	.whyExplanation {
+		display: block;
 		margin: auto auto;
 		background: ${props => props.theme.moonBackground};
 
-border-radius: 20px;
+		border-radius: 20px;
 
-padding: 20px;
-max-width: 400px;
-	span {
-		
-	
-		
+		padding: 20px 10px;
+		max-width: 450px;
+		span {
+			.daysUntil{
+				color: ${props => props.theme.colorMedium};
+				font-size: 25px;
+			}
+			.nextMoon{
+				color: ${props => props.theme.colorMedium};
+				font-size: 25px;
+			}
+		}
+
+		@media screen and (min-width: 320px) {
+			padding: 20px 10px;
+		}
+
+		@media screen and (min-width: 480px) {
+			padding: 20px;
+		}
 	}
-}
-
-	/* min-height: 100vh; */
 
 	@media screen and (min-width: 320px) {
 		width: 100vw;
@@ -295,8 +318,18 @@ max-width: 400px;
 	}
 
 	.messageBox {
-		width: 80%;
+		width: 95%;
 		margin: auto auto;
+
+		@media screen and (min-width: 320px) {
+			padding: 40px 0;
+			width: 95%;
+		}
+
+		@media screen and (min-width: 600px) {
+			padding: 40px 0;
+			width: 85%;
+		}
 	}
 
 	.close {

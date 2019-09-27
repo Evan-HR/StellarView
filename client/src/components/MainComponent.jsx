@@ -81,7 +81,7 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 	}
 
 	const finalScore =
-		0 * moonScore +
+		0.35 * moonScore +
 		0.25 * cloudScore +
 		0.15 * humidityScore +
 		0.25 * lightPolScore;

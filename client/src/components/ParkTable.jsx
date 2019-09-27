@@ -42,7 +42,7 @@ class ParkTable extends Component {
 			return (
 				<React.Fragment>
 					{Math.max(...this.props.parkList.map(park => park.score)) <
-					0.65
+					0.70
 						? this.renderBadParks()
 						: ""}
 					<Transition
