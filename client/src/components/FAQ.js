@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import QGISModel from "./style/Images/QGISModel.png";
+import WeatherEstimation from "./style/Images/Weather-Estimation-Test.png";
 
 const FAQ = props => (
 	<FAQStyle>
@@ -99,10 +101,86 @@ const FAQ = props => (
 				</span>
 			</div>
 			<h2 id="dataGeneration">
-				QGIS, openstreetmaps, satellite image, how it blends together,
+				QGIS, openstreetmaps, satellite image, how it blends together
+			</h2>
+			<div className="Background">
+				<span className="HowWork">
+					<p>
+						The process of calculating star visibility requires a
+						combination of multiple data sources: real-time data
+						such as weather data and sky object data, and
+						non-real-time data, such as park location and light
+						pollution. This data is not real-time since the values,
+						don't change significantly from day to day. As a result,
+						these values are best calculated beforehand and stored
+						in a database.
+					</p>
+					<p>
+						An invaluable tool in creating the database was the QGIS
+						process toolkit. The process begins by collecting data
+						on all objects labeled as parks on OpenStreetMaps. This
+						is done via the{" "}
+						<a href="https://github.com/3liz/QuickOSM">QuickOSM</a>{" "}
+						plugin, which allows this process to be automatic. The
+						process has to be run on each state sized area in turn,
+						so it's wrapped in another python script.
+					</p>
+					<figure>
+						<img
+							src={QGISModel}
+							alt="QGIS Graphical Process Modeler"
+						/>
+					</figure>
+
+					<p>
+						The average light pollution for each park is sampled,
+						and the extra information is dropped from the parks. The
+						parks are then filtered by light pollution, to drop the
+						ones that have too much light pollution to be used for
+						stargazing regardless of the conditions from the
+						database.
+					</p>
+					<p>
+						A number of parks listed in OSM don't have names, since
+						they represent small parkettes or rural sports fields.
+						In order to deal with having a large number of "Unnamed"
+						parks, we had to develop a script which uses a reverse
+						geocoding service,{" "}
+						<a href="https://nominatim.org/">Nominatim</a>, in order
+						to generate approximate names for these missing parks.
+						Some of these parks returned simply street addresses,
+						but others returned names of other nearby objects, such
+						as monuments or schools.
+					</p>
+					<p>
+						This process was done for all parks in Canada, USA, New
+						Zealand and Australia. The generated parks dataset is
+						then stored in the database for later use.
+					</p>
+				</span>
+			</div>
+			<h2>
 				distances(crow flies /w research), weather(how we got around
 				excess API calls)
 			</h2>
+			<div className="Background">
+				<span className="HowWork">
+					<p>
+						When a request is executed, a number of real-time data
+						has to be collected in order to caluclate the score,
+						such as the forecasted weather, moon phase, and
+						distance, among others.
+					</p>
+					<p>
+						Weather forecast data is obtained from{" "}
+						<a href="https://openweathermap.org/">OpenWeather</a>.
+					</p>
+					<img
+						src={WeatherEstimation}
+						alt="Weather Estimation Test"
+					/>
+				</span>
+			</div>
 			<h2 id="programming-tools">Mention the frameworks/tools used</h2>
 			<h2 id="ranking">Factors (moon, humidity, cloud cov, lightpol) </h2>
 			/*all dustin */
@@ -182,11 +260,15 @@ const FAQStyle = styled.div`
 	.FAQ_Sections_Content {
 		color: ${props => props.theme.white};
 		text-align: left;
-		font-size: large;
+		/* font-size: large; */
 		.HowWork {
 			li {
 				padding-bottom: 20px;
 			}
+		}
+
+		img {
+			width: 100%;
 		}
 
 		.Background {
