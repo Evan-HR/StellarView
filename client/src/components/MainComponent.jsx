@@ -17,6 +17,7 @@ import TelescopeCircle from "./TelescopeCircle";
 import { notifyCloseModal } from "./ParkMoreInfoModal";
 import { notifyCloseLoginModal } from "./Login";
 import { notifyCloseRegisterModal } from "./Register";
+import Tutorial from "./Tutorial";
 import ee from "eventemitter3";
 
 const emitter = new ee();
@@ -354,7 +355,6 @@ class BaseMainComponent extends Component {
 		this.setState({ parks: parksArray, sortedBy: "score" });
 	};
 
-
 	renderResults = () => {
 		return (
 			<ResultsPageStyle>
@@ -418,6 +418,11 @@ class BaseMainComponent extends Component {
 			<LandingPageStyle>
 				{/* {this.renderParkForm()} */}
 				<TelescopeCircle />
+
+				<span className="tutorial">
+					<Tutorial>View Tutorial</Tutorial>
+				</span>
+
 				{/* {this.renderParkMap()} */}
 			</LandingPageStyle>
 		);
@@ -460,6 +465,19 @@ export default withRouter(MainComponent);
 //////////////////////////////////////////
 
 const LandingPageStyle = styled.div`
+	.tutorial {
+		font-size: 20px;
+		font-weight: 500;
+		cursor: pointer;
+		color: ${props => props.theme.yellow};
+		transition: color 0.2s ease;
+		:hover,
+		:active {
+			color: ${props => props.theme.colorMedium};
+			transition: color 0.2s ease;
+		}
+	}
+
 	.parkFormStyle {
 		width: 90%;
 		margin: auto auto;

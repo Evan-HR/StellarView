@@ -587,10 +587,11 @@ class BaseParkForm extends Component {
 
 						<br />
 						<SliderStyle>
+							{/* old max was 250 */}
 							<MuiSlider
 								aria-labelledby="discrete-slider-custom"
 								min={5}
-								max={250}
+								max={140}
 								step={5}
 								valueLabelDisplay="auto"
 								marks={marksDist}
@@ -604,6 +605,7 @@ class BaseParkForm extends Component {
 						</span>
 						<br />
 						<SliderStyle>
+							{/* old max was 4.0 */}
 							<MuiSlider
 								aria-labelledby="discrete-slider-custom"
 								min={0.4}
@@ -666,13 +668,13 @@ const marksDist = [
 		label: "100"
 	},
 	{
-		value: 150,
-		label: "150"
-	},
-	{
-		value: 250,
-		label: "250"
+		value: 140,
+		label: "140"
 	}
+	// {
+	// 	value: 250,
+	// 	label: "250"
+	// }
 ];
 
 const marksLight = [

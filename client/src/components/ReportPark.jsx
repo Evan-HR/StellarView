@@ -125,6 +125,17 @@ class BaseReportPark extends Component {
 					<span className="checkmark"></span>
 				</label>
 				<label className="container">
+					<span>Too many lights</span>
+					<input
+						type="radio"
+						name="report"
+						id="inaccessible"
+						value="inaccessible"
+						onChange={this.handleFormChange}
+					/>
+					<span className="checkmark"></span>
+				</label>
+				<label className="container">
 					<span>By-laws enforced</span>
 					<input
 						type="radio"

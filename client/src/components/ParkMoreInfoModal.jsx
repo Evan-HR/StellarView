@@ -537,7 +537,7 @@ const ModalStyle = styled.div`
 	width: 100vw;
 
 	@media screen and (min-width: 320px) {
-		height: 99vh;
+		height: 97vh;
 		grid-template-rows: 0.4fr auto;
 	}
 

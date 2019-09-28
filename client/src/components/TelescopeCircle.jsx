@@ -3,32 +3,30 @@ import styled from "styled-components";
 
 const TelescopeCircle = props => (
 	<TeleStyle>
-		<div className="circle">
-			<div className="stars">
-				<div className="star-six"></div>
-				<div className="starround2"></div>
-				<div className="starround6"></div>
-			</div>
+		<div className="stars">
+			<div className="star-six"></div>
+			<div className="starround2"></div>
+			<div className="starround6"></div>
+		</div>
 
-			<div className="stars2">
-				<div className="starround2"></div>
-				<div className="moon"></div>
-			</div>
+		<div className="stars2">
+			<div className="starround2"></div>
+			<div className="moon"></div>
+		</div>
 
-			<div className="stars3">
-				<div className="starround4"></div>
-				<div className="starround2"></div>
-			</div>
+		<div className="stars3">
+			<div className="starround4"></div>
+			<div className="starround2"></div>
+		</div>
 
-			<div className="stars4">
-				<div className="starround2"></div>
-				<div className="star-six"></div>
-			</div>
+		<div className="stars4">
+			<div className="starround2"></div>
+			<div className="star-six"></div>
+		</div>
 
-			<div className="stars5">
-				<div className="starround4"></div>
-				<div className="starround2"></div>
-			</div>
+		<div className="stars5">
+			<div className="starround4"></div>
+			<div className="starround2"></div>
 		</div>
 	</TeleStyle>
 );
@@ -36,10 +34,17 @@ const TelescopeCircle = props => (
 export default TelescopeCircle;
 
 const TeleStyle = styled.div`
-	width: 320px;
-	height: 320px;
+	/* width: 320px;
+	height: 320px; */
 
-	margin: 40px auto;
+	/* margin: auto auto; */
+	clip-path: circle(50% at 50% 50%);
+	background: ${props => props.theme.darkAccent};
+
+	transition: all 500ms ease-in;
+	width: 300px;
+	height: 300px;
+	margin: 40px auto 20px auto;
 	overflow: hidden;
 	transition: all 500ms ease-in;
 
@@ -49,36 +54,18 @@ const TeleStyle = styled.div`
 	}
 
 	@media screen and (min-width: 320px) {
-	
 	}
 	@media screen and (min-width: 420px) {
-	
 	}
 
-	.circle {
+	@media screen and (min-width: 320px) {
+		width: 250px;
+		height: 250px;
+	}
 
-		margin: auto auto;
-		clip-path: circle(50% at 50% 50%);
-		background: ${props => props.theme.darkAccent};
-		/* border-top-left-radius: 50%;
-border-top-right-radius: 50%;
-border-bottom-left-radius: 50%;
-border-bottom-right-radius: 50%; */
-		/* moz-border-radius: 50%; */
-		transition: all 500ms ease-in;
+	@media screen and (min-width: 420px) {
 		width: 300px;
 		height: 300px;
-	
-
-		@media screen and (min-width: 320px) {
-			width: 250px;
-			height: 250px;
-		}
-
-		@media screen and (min-width: 420px) {
-			width: 300px;
-			height: 300px;
-		}
 	}
 
 	.stars {
@@ -86,7 +73,6 @@ border-bottom-right-radius: 50%; */
 		top: 50px;
 		left: -50px;
 		animation: orbit 20s linear infinite;
-	
 	}
 
 	.stars2 {
@@ -94,7 +80,6 @@ border-bottom-right-radius: 50%; */
 		top: 100px;
 		left: -50px;
 		animation: orbit 50s linear infinite;
-	
 	}
 
 	.stars3 {
@@ -102,7 +87,6 @@ border-bottom-right-radius: 50%; */
 		top: 110px;
 		left: -50px;
 		animation: orbit 15s linear infinite;
-
 	}
 
 	.stars4 {
@@ -110,7 +94,6 @@ border-bottom-right-radius: 50%; */
 		top: 120px;
 		left: 300px;
 		animation: orbitrev 22s linear infinite;
-	
 	}
 
 	.stars5 {
@@ -118,7 +101,6 @@ border-bottom-right-radius: 50%; */
 		top: 31px;
 		left: 300px;
 		animation: orbitrev 12s linear infinite;
-	
 	}
 
 	.star-six {
@@ -128,7 +110,6 @@ border-bottom-right-radius: 50%; */
 		border-right: 5px solid transparent;
 		border-bottom: 9px solid #edd9c0;
 		position: absolute;
-	
 	}
 
 	.star-six:after {
@@ -141,7 +122,6 @@ border-bottom-right-radius: 50%; */
 		content: "";
 		top: 3px;
 		left: -5px;
-	
 	}
 
 	.moon {
@@ -149,7 +129,6 @@ border-bottom-right-radius: 50%; */
 		height: 20px;
 		border-radius: 50%;
 		box-shadow: 3px 3px 0 0 #edd9c0;
-	
 	}
 
 	.starround4 {
@@ -161,7 +140,7 @@ border-bottom-right-radius: 50%; */
 		border-radius: 5px;
 		position: relative;
 		top: 20px;
-	
+
 		left: 35px;
 	}
 
@@ -174,7 +153,7 @@ border-bottom-right-radius: 50%; */
 		border-radius: 5px;
 		position: relative;
 		top: 50px;
-	
+
 		left: 105px;
 	}
 
@@ -189,8 +168,6 @@ border-bottom-right-radius: 50%; */
 		top: 50px;
 		right: 85px;
 	}
-
-	
 
 	@keyframes orbit {
 		50% {
