@@ -267,7 +267,7 @@ class ParkMoreInfoModal extends Component {
 												<div className="Score">
 													<CountUp
 														start={0}
-														end={Math.round(
+														end={Math.trunc(
 															this.park.score *
 																100
 														)}
@@ -583,7 +583,7 @@ const ModalStyle = styled.div`
 			color: ${props => props.theme.prettyDark};
 			position: absolute;
 			top: -1px;
-right: 4px;
+			right: 4px;
 			float: right;
 			font-size: 2rem;
 			font-weight: 700;

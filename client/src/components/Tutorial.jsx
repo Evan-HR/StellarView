@@ -300,17 +300,13 @@ class Tutorial extends Component {
 				>
 					<i className="fas fa-times" />
 				</button>
-				<div className="containerTutorial">
-					{this.renderMessage()}
-
-		
-				</div>
+				<div className="containerTutorial">{this.renderMessage()}</div>
 				<div className="Icon">
-						<i
-							className="far fa-arrow-alt-circle-right fa-3x"
-							onClick={this.incrementButton}
-						></i>
-					</div>
+					<i
+						className="far fa-arrow-alt-circle-right fa-3x"
+						onClick={this.incrementButton}
+					></i>
+				</div>
 			</TutorialStyle>
 		);
 	};
@@ -383,7 +379,7 @@ const customStyles = {
 
 //style the "modal" here - don't worry about the ccontent shit
 const TutorialStyle = styled.div`
-max-width: 600px;
+	max-width: 600px;
 	background: ${props => props.theme.moonBackground};
 	border-radius: 8px;
 	/* padding: 20px; */
@@ -394,10 +390,16 @@ max-width: 600px;
 	color: ${props => props.theme.white};
 	font-weight: 400;
 
-	
-	.containerTutorial{
+	.containerTutorial {
 		padding: 30px;
 		height: 350px;
+
+		@media screen and (min-width: 320px) {
+			padding: 30px;
+		}
+		@media screen and (min-width: 470px) {
+			padding: 60px;
+		}
 	}
 	h3 {
 		color: ${props => props.theme.yellow};

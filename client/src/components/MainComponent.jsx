@@ -85,8 +85,8 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 	// console.log("humidity COV IS !!!!!!!!!!!!!!", humidity);
 	var moonScore = linearScore(1 - moonFraction, 0.2, 0.7);
 	var lightPolScore = ((-1 * 1) / 3) * (lightPol - 3);
-	var humidityScore = linearScore(humidity, 0.4, 0.8);
-	var cloudScore = linearScore(cloudCov, 0.2, 0.4);
+	var humidityScore = linearScore(1 - humidity, 0.4, 0.8);
+	var cloudScore = linearScore(1 - cloudCov, 0.15, 0.4);
 
 	const finalScore =
 		0.35 * moonScore +
