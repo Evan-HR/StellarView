@@ -9,12 +9,11 @@ function Moon(props) {
 	function prettyDate(time) {
 		var date = new Date(time);
 		var localeSpecificTime = date.toLocaleTimeString();
-		if (localeSpecificTime==="Invalid Date"){
-			return "Not Available"
-		}else{
+		if (localeSpecificTime === "Invalid Date") {
+			return "Not Available";
+		} else {
 			return localeSpecificTime.replace(/:\d+ /, " ");
 		}
-		
 	}
 
 	return (
@@ -23,11 +22,15 @@ function Moon(props) {
 				{props.moonPhase ? (
 					<React.Fragment>
 						<div className="moonDisplay">
-							<span className="moonTypeLeftWord">{props.moonType.split(" ")[0]}</span>
+							<span className="moonTypeLeftWord">
+								{props.moonType.split(" ")[0]}
+							</span>
 							<span className="moonImage">
 								<MoonDisplay phase={props.moonPhase} />
 							</span>
-							<span className="moonTypeRightWord">{props.moonType.split(" ")[1]}</span>
+							<span className="moonTypeRightWord">
+								{props.moonType.split(" ")[1]}
+							</span>
 						</div>
 						<div className="stellarDataDisplay">
 							<span className="Sunset">Sunset</span>
@@ -90,7 +93,6 @@ const MoonStyle = styled.div`
 		font-size: 30px;
 	}
 
-
 	.stellarDataDisplay {
 		font-weight: 300;
 		font-size: 14px;
@@ -106,14 +108,13 @@ const MoonStyle = styled.div`
 			"Sunset    Nightfall    Moonrise Moonset"
 			"SunsetTime NightfallTime MoonriseTime  MoonsetTime";
 
+		@media screen and (min-width: 320px) {
+			font-size: 14px;
+		}
 
-			@media screen and (min-width: 320px) {
-				font-size: 14px;
-			}
-			
-			@media screen and (min-width: 480px) {
-				font-size: 15px;
-			}
+		@media screen and (min-width: 480px) {
+			font-size: 15px;
+		}
 
 		.Nightfall {
 			/* font-family: "Lato", sans-serif; */
@@ -165,36 +166,33 @@ const MoonStyle = styled.div`
 		margin: 25px 0px;
 		grid-template-columns: 1fr minmax(80px, 100px) 1fr;
 
-		grid-template-areas:
-			"moonTypeLeftWord moonImage moonTypeRightWord";
+		grid-template-areas: "moonTypeLeftWord moonImage moonTypeRightWord";
 
-			.moonTypeLeftWord{
-				display: inline-block;
-				/* margin: auto auto auto 20%; */
-				margin: auto auto;
-				padding-right: 5px;
-				@media screen and (min-width: 600px) {
-					margin: auto 30px auto auto;
-					padding-right: 0px;
+		.moonTypeLeftWord {
+			display: inline-block;
+			/* margin: auto auto auto 20%; */
+			margin: auto auto;
+			padding-right: 5px;
+			@media screen and (min-width: 600px) {
+				margin: auto 30px auto auto;
+				padding-right: 0px;
 			}
-				
 
-				grid-area: moonTypeLeftWord;
-			}
-			.moonTypeRightWord{
-				display: inline-block;
-				/* margin: auto 20% auto auto; */
-				margin: auto auto;
+			grid-area: moonTypeLeftWord;
+		}
+		.moonTypeRightWord {
+			display: inline-block;
+			/* margin: auto 20% auto auto; */
+			margin: auto auto;
 
-				@media screen and (min-width: 600px) {
-					margin: auto auto auto 30px;
+			@media screen and (min-width: 600px) {
+				margin: auto auto auto 30px;
 			}
-				
-				grid-area: moonTypeRightWord;
-			}
+
+			grid-area: moonTypeRightWord;
+		}
 
 		.moonImage {
-			
 			border-radius: 100px;
 			/* box-shadow: 0 0 20px #485261; */
 			/* width: 80px; */

@@ -42,10 +42,11 @@ class ParkTable extends Component {
 			return (
 				<React.Fragment>
 					{Math.max(...this.props.parkList.map(park => park.score)) <
-					0.70
+					0.7
 						? this.renderBadParks()
 						: ""}
-					<Transition
+					{this.props.parkList.map(park => this.renderParkCard(park))}
+					{/* <Transition
 						native
 						items={this.props.parkList}
 						keys={item => item.id}
@@ -71,7 +72,7 @@ class ParkTable extends Component {
 								{this.renderParkCard(item)}
 							</animated.div>
 						)}
-					</Transition>
+					</Transition> */}
 				</React.Fragment>
 			);
 			// return <div>{this.props.parkList.map(this.renderParkCard)}</div>;
