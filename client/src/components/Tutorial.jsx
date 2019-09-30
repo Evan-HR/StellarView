@@ -276,8 +276,8 @@ class Tutorial extends Component {
 	};
 
 	incrementButton = () => {
-		console.log("button pressed");
-		console.log("nextcounter", this.state.nextCounter);
+		// console.log("button pressed");
+		// console.log("nextcounter", this.state.nextCounter);
 		if (this.state.nextCounter < 9) {
 			this.setState({ nextCounter: this.state.nextCounter + 1 });
 		} else if (this.state.nextCounter === 9) {
@@ -392,6 +392,7 @@ max-width: 600px;
 	/* padding: 20px; */
 	font-family: "Lato", sans-serif;
 	color: ${props => props.theme.white};
+	font-weight: 400;
 
 	
 	.containerTutorial{
@@ -402,6 +403,7 @@ max-width: 600px;
 		color: ${props => props.theme.yellow};
 		border-bottom: 2px solid ${props => props.theme.yellow};
 		margin: 20px 0px;
+		font-weight: 600;
 	}
 
 	.Icon {
