@@ -13,6 +13,9 @@ import {
 import ee from "eventemitter3";
 import searchIcon from "./style/Media/search-solid.svg";
 import SVG from "react-inlinesvg";
+import markerGood from "./style/MapMarkers/resultsGood.svg";
+import markerAverage from "./style/MapMarkers/resultsMedium.svg";
+import markerBad from "./style/MapMarkers/resultsBad.svg";
 
 const emitter = new ee();
 
@@ -72,17 +75,23 @@ export const notifyCloseLoginModal = msg => {
 
 Modal.setAppElement("#root");
 class Tutorial extends Component {
-	state = {
-		nextCounter: 0,
-		globalStepMsgCounter: 0
-	};
-
 	constructor(props) {
 		super(props);
 		emitter.on("notifyCloseLoginModal", msg => {
 			this.closeModal();
 		});
+		this.state = {
+			nextCounter: 0,
+			globalStepMsgCounter: 0
+		};
 	}
+
+	// componentDidMount() {
+	// 	this.setState({
+	// 		nextCounter: 0,
+	// 		globalStepMsgCounter:0
+	// 	});
+	// }
 
 	openModal = () => {
 		notifyLoginModalIsOpen();
@@ -109,17 +118,41 @@ class Tutorial extends Component {
 		document.body.style.overflow = "visible";
 	};
 
-	renderStepOneMessage = () => {
+	renderStepOneSearch = () => {
+		return (
+			<React.Fragment>
+				{this.state.nextCounter === 0 ? (
+					<div className="secondary">
+						<div className="searchIcon">
+							<SVG src={searchIcon}></SVG>
+						</div>
+					</div>
+				) : this.state.nextCounter === 1 ? (
+					<div className="secondary">
+						<div className="myLocation">
+							<button className="nearMe" type="button">
+								<strong>Near me</strong>
+							</button>
+						</div>
+					</div>
+				) : (
+					""
+				)}
+			</React.Fragment>
+		);
+	};
+
+	renderMessage = () => {
 		if (this.state.nextCounter === 0) {
 			return (
 				<React.Fragment>
 					<h3>SEARCH</h3>
 					<span>
-						First, start by entering a place name. When you begin
-						typing, the form will autofill. Tap the place you'd like
-						to search from and then tap the magnifying glass or
-						select "Near Me".
+						Start by entering any location in North America (minus
+						some parts of PEI) or New Zealand and then tap the
+						magnifying glass.
 					</span>
+					{this.renderStepOneSearch()}
 				</React.Fragment>
 			);
 		} else if (this.state.nextCounter === 1) {
@@ -127,9 +160,11 @@ class Tutorial extends Component {
 				<React.Fragment>
 					<h3>SEARCH</h3>
 					<span>
+						You can also search near you by pressing "Near Me".
 						Please allow your browser to have access to your
 						location.
 					</span>
+					{this.renderStepOneSearch()}
 				</React.Fragment>
 			);
 		} else if (this.state.nextCounter === 2) {
@@ -144,8 +179,6 @@ class Tutorial extends Component {
 				</React.Fragment>
 			);
 		} else if (this.state.nextCounter === 3) {
-			this.resetIncrementButton();
-			this.incrementGlobal();
 			return (
 				<React.Fragment>
 					<h3>SEARCH</h3>
@@ -157,49 +190,104 @@ class Tutorial extends Component {
 					</span>
 				</React.Fragment>
 			);
-		}
-	};
-
-	renderStepTwoMessage = () => {
-		if (this.state.nextCounter === 0) {
+		} else if (this.state.nextCounter === 4) {
 			return (
 				<React.Fragment>
-					<h3>RESEARCH</h3>
-					<span>BLAH!</span>
+					<h3>RESULTS</h3>
+					<span>
+						If successful, parks will be returned in the form of a
+						map, or in card form. The red, yellow, and green map
+						markers mean poor, mediocre, and great star visibiliy
+						respectively.
+					</span>
+					<div className="secondary">
+						<img src={markerBad} />
+						<img src={markerAverage} />
+						<img src={markerGood} />
+					</div>
 				</React.Fragment>
 			);
-		} else if (this.state.nextCounter === 1) {
+		} else if (this.state.nextCounter === 5) {
 			return (
 				<React.Fragment>
-					<h3>RESEARCH</h3>
-					<span>HUA!</span>
+					<h3>RESULTS</h3>
+					<span>
+						You can click a map marker or a card to bring up more
+						information, which includes the reviews, the score
+						breakdown, and the ability to <i>favorite</i>,{" "}
+						<i>report</i>, or get <i>directions</i> to the park.
+					</span>
+				</React.Fragment>
+			);
+		} else if (this.state.nextCounter === 6) {
+			return (
+				<React.Fragment>
+					<h3>RESULTS</h3>
+					<span>
+						If none of the parks returned score above 70%, we advise
+						that you do not make the journey to stargaze that night.
+						We will provide you with an estimate return date if the
+						poor score was due to the moon illumination.
+					</span>
+					<div className="secondary">
+						<i className="fas fa-eye-slash fa-2x"></i>
+					</div>
+				</React.Fragment>
+			);
+		} else if (this.state.nextCounter === 7) {
+			return (
+				<React.Fragment>
+					<h3>STARGAZE</h3>
+					<span>
+						A score above 70% means the conditions for stargazing
+						are adequate. Please note the forecast information on
+						the cards and cross-check with your local weather
+						service before deciding.
+					</span>
+				</React.Fragment>
+			);
+		} else if (this.state.nextCounter === 8) {
+			return (
+				<React.Fragment>
+					<h3>STARGAZE</h3>
+					<span>
+						Please see FAQ for a breakdown on how the score is
+						formulated. Essentially, the moon phase plays the
+						biggest role, followed by light pollution, cloud
+						coverage, and humidity.
+					</span>
+				</React.Fragment>
+			);
+		} else if (this.state.nextCounter === 9) {
+			return (
+				<React.Fragment>
+					<h3>STARGAZE</h3>
+					<span>
+						Go to the park and enjoy your evening! If the park has
+						heavy streetlights, find a darker area nearby to settle
+						down and report the park for us in the More Information
+						page.
+					</span>
+					<div className="secondary">
+						<i className="far fa-laugh-wink fa-2x"></i>
+					</div>
 				</React.Fragment>
 			);
 		}
 	};
 
 	incrementButton = () => {
-		// console.log("nextcounter", this.state.nextCounter);
-		this.setState({ nextCounter: this.state.nextCounter + 1 });
+		console.log("button pressed");
+		console.log("nextcounter", this.state.nextCounter);
+		if (this.state.nextCounter < 9) {
+			this.setState({ nextCounter: this.state.nextCounter + 1 });
+		} else if (this.state.nextCounter === 9) {
+			this.closeModal();
+		}
 	};
 
 	resetIncrementButton = () => {
-		this.setState({ nextCounter: 0 });
-	};
-
-	incrementGlobal = () => {
-		// console.log("nextcounter", this.state.nextCounter);
-		this.setState({
-			globalStepMsgCounter: this.state.globalStepMsgCounter + 1
-		});
-	};
-
-	renderMessageSwitch = () => {
-		if (this.state.globalStepMsgCounter === 0) {
-			return this.renderStepOneMessage();
-		} else if (this.state.globalStepMsgCounter === 1) {
-			return this.renderStepTwoMessage();
-		}
+		this.setState({ nextCounter: (this.state.nextCounter = 0) });
 	};
 
 	renderStepOne = () => {
@@ -213,88 +301,17 @@ class Tutorial extends Component {
 				>
 					<i className="fas fa-times" />
 				</button>
+				<div className="containerTutorial">
+					{this.renderMessage()}
 
-				<div className="Explanation">
-					{this.renderMessageSwitch()}
-
-					<div className="Icon">
+		
+				</div>
+				<div className="Icon">
 						<i
-							class="far fa-arrow-alt-circle-right fa-2x"
+							className="far fa-arrow-alt-circle-right fa-3x"
 							onClick={this.incrementButton}
 						></i>
 					</div>
-				</div>
-				<span className="ExampleTxt">Example Form</span>
-				<SearchFormStyle>
-					<div className="citySearch">
-						<form
-							onSubmit={e => {
-								e.preventDefault();
-							}}
-						>
-							<input
-								id="address-field"
-								className="searchTerm"
-								type="text"
-								name="placeName"
-								placeholder="Enter your location"
-								disabled
-							/>
-
-							<button className={"searchButton"}>
-								<SVG src={searchIcon}></SVG>
-								{/* <i className="fa fa-search" /> */}
-							</button>
-						</form>
-					</div>
-
-					<div className="myLocation">
-						<button className="nearMe" type="button">
-							<strong>Near me</strong>
-						</button>
-					</div>
-
-					<div className="advancedSearchToggle">
-						<button className="ToggleAdvancedSearch">
-							<span>Advanced Search</span>
-							<i className="fas fa-caret-down" />
-						</button>
-					</div>
-
-					<div className="AdvancedSearch">
-						{/* <LocationSearchInput /> */}
-						<form>
-							<span className="FormTitle">Max Distance (km)</span>
-
-							<br />
-							<SliderStyle>
-								<MuiSlider
-									aria-labelledby="discrete-slider-custom"
-									min={5}
-									max={250}
-									step={5}
-									valueLabelDisplay="auto"
-									marks={marksDist}
-								/>
-							</SliderStyle>
-							<br />
-							<span className="FormTitle">
-								Max Light Pollution Zone
-							</span>
-							<br />
-							<SliderStyle>
-								<MuiSlider
-									aria-labelledby="discrete-slider-custom"
-									min={0.4}
-									max={4.0}
-									step={0.1}
-									valueLabelDisplay="auto"
-									marks={marksLight}
-								/>
-							</SliderStyle>
-						</form>
-					</div>
-				</SearchFormStyle>
 			</TutorialStyle>
 		);
 	};
@@ -315,7 +332,7 @@ class Tutorial extends Component {
 				</a>
 
 				<Modal
-					closeTimeoutMS={800}
+					closeTimeoutMS={600}
 					isOpen={this.state.modalIsOpen}
 					onAfterOpen={this.afterOpenModal}
 					onRequestClose={this.closeModal}
@@ -367,99 +384,101 @@ const customStyles = {
 
 //style the "modal" here - don't worry about the ccontent shit
 const TutorialStyle = styled.div`
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	align-items: center;
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-orient: vertical;
-	-webkit-box-direction: normal;
-	-ms-flex-direction: column;
-	flex-direction: column;
-	/* -webkit-box-pack: center;
-	-ms-flex-pack: center;
-	justify-content: center; */
-	height: 90vh;
-	position: relative;
-	background: ${props => props.theme.prettyDark};
+max-width: 600px;
+	background: ${props => props.theme.moonBackground};
+	border-radius: 8px;
+	/* padding: 20px; */
+	text-align: left;
+	font-size: 15px;
+	/* padding: 20px; */
 	font-family: "Lato", sans-serif;
 	color: ${props => props.theme.white};
-	width: 100vw;
 
-	@media screen and (min-width: 320px) {
-		width: 100vw;
+	
+	.containerTutorial{
+		padding: 30px;
+		height: 350px;
 	}
-
-	@media screen and (min-width: 600px) {
-		width: 60vw;
-	}
-
-	@media screen and (min-width: 801px) {
-		width: 45vw;
-	}
-
 	h3 {
-		margin: 15px;
-		margin-bottom: 30px;
+		color: ${props => props.theme.yellow};
+		border-bottom: 2px solid ${props => props.theme.yellow};
+		margin: 20px 0px;
 	}
 
-	.ExampleTxt {
-		margin: 10px;
-		margin-top: 50px;
+	.Icon {
+		color: ${props => props.theme.colorMedium};
+		cursor: pointer;
+		padding: 0 30px 30px 0px;
+		text-align: right;
+		animation: nextGlow 2s;
+		-moz-animation: nextGlow 2s infinite;
+		-webkit-animation: nextGlow 2s infinite;
+
+		@keyframes nextGlow {
+			0% {
+				color: ${props => props.theme.colorMedium};
+			}
+			50% {
+				color: ${props => props.theme.colorBad};
+			}
+			100% {
+				color: ${props => props.theme.colorMedium};
+			}
+		}
+
+		@-moz-keyframes nextGlow {
+			0% {
+				color: ${props => props.theme.colorMedium};
+			}
+			50% {
+				color: ${props => props.theme.colorBad};
+			}
+			100% {
+				color: ${props => props.theme.colorMedium};
+			}
+		}
+
+		@-webkit-keyframes nextGlow {
+			0% {
+				color: ${props => props.theme.colorMedium};
+			}
+			50% {
+				color: ${props => props.theme.yellow};
+			}
+			100% {
+				color: ${props => props.theme.colorMedium};
+			}
+		}
 	}
 
-	.Explanation {
-		background: ${props => props.theme.moonBackground};
-		border-radius: 8px;
-		/* padding: 20px; */
-		text-align: left;
-		font-size: 15px;
+	.secondary {
+		margin: 30px auto 30px auto;
+		justify-content: center;
 
-		padding: 20px;
-		.Icon {
-			color: ${props => props.theme.colorMedium};
-			cursor: pointer;
-			text-align: right;
-			animation: nextGlow 2s;
-			-moz-animation: nextGlow 2s infinite;
-			-webkit-animation: nextGlow 2s infinite;
+		display: flex;
+		.myLocation {
+			color: ${props => props.theme.white};
+			font-size: 13px;
+			width: 90px;
+			text-align: center;
 
-			@keyframes nextGlow {
-				0% {
-					color: ${props => props.theme.colorMedium};
-				}
-				50% {
-					color: ${props => props.theme.colorBad};
-				}
-				100% {
-					color: ${props => props.theme.colorMedium};
-				}
+			.nearMe {
+				all: unset;
+
+				background: ${props => props.theme.yellow};
+				border-radius: 20px;
+				height: 36px;
+				width: 100%;
+				color: ${props => props.theme.prettyDark};
+				transition: color 0.1s ease;
+				font-size: 15px;
+				font-weight: 600;
 			}
+		}
 
-			@-moz-keyframes nextGlow {
-				0% {
-					color: ${props => props.theme.colorMedium};
-				}
-				50% {
-					color: ${props => props.theme.colorBad};
-				}
-				100% {
-					color: ${props => props.theme.colorMedium};
-				}
-			}
-
-			@-webkit-keyframes nextGlow {
-				0% {
-					color: ${props => props.theme.colorMedium};
-				}
-				50% {
-					color: ${props => props.theme.yellow};
-				}
-				100% {
-					color: ${props => props.theme.colorMedium};
-				}
-			}
+		.searchIcon {
+			width: 40px;
+			display: block;
 		}
 	}
 
@@ -497,162 +516,4 @@ const ModalStyle = styled.div`
 	background-clip: padding-box;
 	border-radius: 0.3rem;
 	outline: 0;
-`;
-
-const SearchFormStyle = styled.div`
-	background: none;
-
-	font-family: "Lato", sans-serif;
-
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	grid-template-rows: auto auto auto;
-	grid-gap: 10px;
-	grid-template-areas:
-		"searchBar searchBar searchBar"
-		"advancedSearchToggle advancedSearchToggle myLocation"
-		"advancedSearch advancedSearch advancedSearch";
-
-	@media screen and (min-width: 320) {
-		grid-template-areas:
-			"searchBar searchBar myLocation"
-			"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
-			"advancedSearch advancedSearch advancedSearch";
-	}
-
-	@media screen and (min-width: 480px) {
-		grid-template-areas:
-			"searchBar searchBar myLocation"
-			"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
-			"advancedSearch advancedSearch advancedSearch";
-	}
-
-	.messageAboveForm {
-		grid-area: messageAboveForm;
-		text-align: left;
-		font-weight: 600;
-		animation: fadein 3s;
-		@keyframes fadein {
-			from {
-				opacity: 0;
-			}
-			to {
-				opacity: 1;
-			}
-		}
-
-		.invalidLocation {
-			color: ${props => props.theme.colorBad};
-		}
-		.generic {
-			color: ${props => props.theme.yellow};
-		}
-	}
-
-	.AdvancedSearch {
-		width: 90%;
-		margin: auto auto;
-		grid-area: advancedSearch;
-
-		.FormTitle {
-			color: ${props => props.theme.white};
-			font-weight: 600;
-		}
-	}
-
-	.myLocation {
-		color: ${props => props.theme.white};
-		font-size: 13px;
-
-		.nearMe {
-			all: unset;
-
-			background: ${props => props.theme.yellow};
-			border-radius: 20px;
-			height: 36px;
-			width: 100%;
-			color: ${props => props.theme.prettyDark};
-			transition: color 0.1s ease;
-			font-size: 15px;
-			font-weight: 600;
-		}
-		grid-area: myLocation;
-	}
-
-	.advancedSearchToggle {
-		grid-area: advancedSearchToggle;
-		margin: auto 0;
-		span {
-			font-weight: 500;
-		}
-
-		button {
-			float: left;
-			i {
-				margin-left: 5px;
-			}
-		}
-	}
-
-	.citySearch {
-		grid-area: searchBar;
-	}
-
-	.searchButton {
-		width: 40px;
-		height: 36px;
-
-		svg {
-			margin: auto auto;
-
-			display: block;
-		}
-
-		background: ${props => props.theme.prettyDark};
-		text-align: center;
-
-		color: ${props => props.theme.white};
-
-		font-size: 20px;
-		border: 2px solid #2a2c2d;
-		float: left;
-		background-position: center;
-	}
-
-	.searchTerm:focus {
-		color: ${props => props.theme.white};
-	}
-
-	.searchTerm {
-		width: calc(100% - 40px);
-		background-color: ${props => props.theme.darkAccent};
-		transition: background-color 0.1s ease;
-
-		padding: 5px;
-		height: 36px;
-
-		outline: none;
-		color: ${props => props.theme.white};
-		border: none;
-		float: left;
-	}
-
-	.ToggleAdvancedSearch {
-		all: unset;
-
-		color: #bdbdbd;
-	}
-`;
-
-const SliderStyle = styled.div`
-	.MuiSlider-root {
-		color: ${props => props.theme.cardLight};
-	}
-	.MuiSlider-markLabel {
-		color: #bdbdbd;
-		font-family: "Lato", sans-serif;
-	}
-	.MuiSlider-markLabelActive {
-		color: ${props => props.theme.colorMedium};
-	}
 `;
