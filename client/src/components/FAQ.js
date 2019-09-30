@@ -253,6 +253,44 @@ const FAQ = props => (
 			</div>
 			<h2 id="programming-tools">Mention the frameworks/tools used</h2>
 			<h2 id="ranking">Factors (moon, humidity, cloud cov, lightpol) </h2>
+			<div className="Background">
+				<span>
+					<p>
+						The final park score is caluclated from a combination of
+						factors, primarily the moon illumination, humidity,
+						cloud coverage and light pollution.
+					</p>
+					<p>
+						The significance of the moon illumination is that, just
+						like sun, the moon reflects light to earth which is
+						scattered in the atmosphere. The effect is that when the
+						moon is in the sky at full illumination it can actually
+						crowd out a lot of the smaller, dimmer, stars.
+					</p>
+					<p>
+						Humidity also contributes to poor star visibility.
+						Humidity itself refers to the amount of water vapor in
+						the air, with 100% humidity being the point where it
+						begins to condense into dew. As a result, higher
+						humidity means that there is more light scattering. This
+						makes it easier for dimmer stars to be crowded out.
+					</p>
+					<p>
+						Cloud coverage effect on star visibility is obvious,
+						since clouds block the sky. However at reasonably low
+						cloud coverage levels it may still be possible to view
+						stars through gaps in the clouds.
+					</p>
+					<p>
+						Light pollution crowds out dimmer objects in the sky,
+						and in urban centers actually makes star gazing
+						impossible. One of the main sources of light pollution
+						is street lights, which scatter light. Humidity plays a
+						role in light pollution, since humidity scatters light
+						from ground sources. 
+					</p>
+				</span>
+			</div>
 			/*all dustin */
 			<h1 id="future">Future notes</h1>
 			<div className="Background">
@@ -321,6 +359,16 @@ const FAQ = props => (
 							<a target="_blank" href="http://suncalc.net">
 								Suncalc
 							</a>
+						</li>
+						<li>
+							OpenStreetMap data gathered via{" "}
+							<a
+								target="_blank"
+								href="https://github.com/3liz/QuickOSM"
+							>
+								QuickOSM
+							</a>{" "}
+							plugin.
 						</li>
 						<li>
 							Telescope animation in homepage adapted based on a

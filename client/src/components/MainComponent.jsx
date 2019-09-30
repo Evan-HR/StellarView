@@ -95,7 +95,7 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 		0.35 * moonScore +
 		0.25 * cloudScore +
 		0.15 * humidityScore +
-		0.25 * lightPolScore;
+		0.25 * (lightPolScore + 0.5 * (humidityScore - 0.5));
 
 	if (finalScore < 0) {
 		finalScore = 0;
