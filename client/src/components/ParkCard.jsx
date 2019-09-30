@@ -175,7 +175,7 @@ class ParkCard extends Component {
 						<div className="Score">
 							<CountUp
 								start={0}
-								end={Math.round(this.props.park.score * 100)}
+								end={Math.trunc(this.props.park.score * 100)}
 								delay={0}
 							>
 								{({ countUpRef }) => (
@@ -184,6 +184,7 @@ class ParkCard extends Component {
 											className="ScoreNumber"
 											ref={countUpRef}
 										/>
+						
 										<div className="Percentage">%</div>
 									</React.Fragment>
 								)}

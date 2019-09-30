@@ -23,27 +23,156 @@ class NoResultsModal extends Component {
 		// this.props.handleCloseNoParksModal();
 	};
 
+	renderMessage = (moonPhaseNum, scoreBreakdown) => {
+		// var moonScore = scoreBreakdown.moonScore;
+		var humidityScore = scoreBreakdown.humidityScore;
+		var cloudScore = scoreBreakdown.cloudScore;
+		// console.log("scores: "+moonScore+humidityScore+cloudScore+lightPolScore);
+		function inRange(x, min, max) {
+			return (x - min) * (x - max) <= 0;
+		}
+
+		//moon
+		var daysUntilGoodMoon;
+		var goodMoonCondition = false;
+		var nextGoodMoonType = "";
+		if (
+			inRange(moonPhaseNum, 0.9375, 1) ||
+			inRange(moonPhaseNum, 0, 0.0625)
+		) {
+			//new moon
+			goodMoonCondition = true;
+		} else if (inRange(moonPhaseNum, 0.0625, 0.1875)) {
+			goodMoonCondition = true;
+			//Waxing Crescent
+		} else if (inRange(moonPhaseNum, 0.1875, 0.3125)) {
+			goodMoonCondition = true;
+		} else if (inRange(moonPhaseNum, 0.3125, 0.4375)) {
+			//"Waxing Gibbous";
+			daysUntilGoodMoon = 11;
+			nextGoodMoonType += "Last Quarter";
+		} else if (inRange(moonPhaseNum, 0.4375, 0.5625)) {
+			//"full moon";
+			daysUntilGoodMoon = 7;
+			nextGoodMoonType += "Last Quarter";
+		} else if (inRange(moonPhaseNum, 0.5625, 0.6875)) {
+			//Waning Gibbous
+			daysUntilGoodMoon = 4;
+			nextGoodMoonType += "Last Quarter";
+		} else if (inRange(moonPhaseNum, 0.6875, 0.8125)) {
+			//Last Quarter
+
+			goodMoonCondition = true;
+		} else if (inRange(moonPhaseNum, 0.8125, 0.9375)) {
+			//Waning Crescent"
+			goodMoonCondition = true;
+		} else {
+			//New Moon
+			goodMoonCondition = true;
+		}
+
+		//weather
+		// var badHumidity = true;
+		// var badClouds = true;
+		// if(humidityScore>.60){
+		// 	badHumidity = false;
+		// }
+		// if(cloudScore>.60){
+		// 	badClouds = false;
+		// }
+
+		//dynamic string message
+
+		// var humidityPhrase;
+		// var cloudPhrase;
+
+		if (goodMoonCondition) {
+			return (
+				<span>
+					Moon brightness isn't a problem tonight, but it's forecasted
+					to be a bit too humid and/or cloudy right now. Try again
+					tomorrow, and close to see nearby parks with adequate light
+					pollution.
+				</span>
+			);
+		} else {
+			return (
+				<span>
+					The moon is shining too bright right now, hiding the stars. <br></br>
+					Try again in <span className="daysUntil">{daysUntilGoodMoon}</span> days, when the moon is a <br></br><span className="nextMoon">{nextGoodMoonType}</span>
+				</span>
+			);
+
+		}
+
+		// if (badHumidity){
+		// 	humidityPhrase+="Humidity levels seem alright...";
+		// }else{
+		// 	humidityPhrase+="Humidity levels are poor...";
+		// }
+
+		// if (badClouds){
+		// 	cloudPhrase+="It's too cloudy!";
+		// }else{
+		// 	cloudPhrase+="It's not very cloudy, that's good!";
+		// }
+
+		//returns moon icon + moonPhrase, humidity icon + phrase, etc.
+
+	};
+
 	renderNoParks = () => {
 		return (
-			<NoResultsStyle>
+			
+			<NoResultsStyle noVis={this.props.noVis}>
 				<button
 					type="button"
 					onClick={this.closeModal}
 					className="close"
 					aria-label="Close"
 				>
-					<i className="fas fa-window-close" />
+					<i className="fas fa-times" />
 				</button>
 				{this.props.noVis ? (
-					<span>
-						No parks have good visibility! Try again later!{" "}
-						{this.props.moonPhase}
-						{JSON.stringify(this.props.scoreBreakdown)}
-					</span>
+					<div className="messageBox">
+						{/* <div className="Symbol">
+							<i className="reportIcon fas fa-exclamation-triangle fa-2x"></i>
+						</div> */}
+
+						<div className="openingMsg">
+							<h1>We're sorry.</h1>
+							<span>
+								No parks in your area scored above 70%.{" "}
+								<br></br>We do not recommend stargazing tonight.
+							</span>
+						</div>
+						<div className="Symbol">
+							<i class="far fa-question-circle fa-2x"></i>
+						</div>
+						<div className="whyExplanation">
+							{this.renderMessage(
+								this.props.moonPhase,
+								JSON.parse(
+									JSON.stringify(this.props.scoreBreakdown)
+								)
+							)}
+						</div>
+						{/* <div>
+							{JSON.stringify(this.props.scoreBreakdown)}
+							</div> */}
+					</div>
 				) : (
-					<span>
-						Sorry, we couldn't find any parks in this area!{" "}
-					</span>
+					<div className="messageBox">
+						<div className="Symbol">
+							<i className="reportIcon fas fa-exclamation-triangle fa-2x"></i>
+						</div>
+
+						<span>
+							Sorry, we couldn't find any suitable parks in this
+							area! Try increasing your max distance and/or light
+							pollution value using <i>Advanced Search</i>.
+						</span>
+					</div>
 				)}
 			</NoResultsStyle>
 		);
@@ -55,15 +184,16 @@ class NoResultsModal extends Component {
 
 	//classNameName changes model content, style gives you anything you specify to override defaults
 	render() {
+		// console.log("moon phase is: ",this.props.moonPhase);
 		return (
 			<React.Fragment>
 				<Modal
-					closeTimeoutMS={800}
+					closeTimeoutMS={400}
 					isOpen={this.state.modalIsOpen}
 					onAfterOpen={this.afterOpenModal}
 					onRequestClose={this.closeModal}
 					contentLabel="Login Modal"
-					className="modal-dialog"
+					// className="modal-dialog"
 					style={customStyles}
 				>
 					<ModalStyle>
@@ -103,6 +233,7 @@ const customStyles = {
 		padding: "0px",
 		border: "none",
 		borderRadius: "2.5px",
+		backgroundColor: "rgba(0,0,0,0.9)",
 		marginRight: "-50%",
 		transform: "translate(-50%, -50%)",
 		maxWidth: "100vw",
@@ -111,7 +242,6 @@ const customStyles = {
 	}
 };
 
-//style the "modal" here - don't worry about the ccontent shit
 const NoResultsStyle = styled.div`
 	-webkit-box-align: center;
 	-ms-flex-align: center;
@@ -127,41 +257,99 @@ const NoResultsStyle = styled.div`
 	-ms-flex-pack: center;
 	justify-content: center;
 	width: 60vw;
-	height: 30vh;
 	border: none;
-	width: 60vw;
+	max-width: 530px;
 	position: relative;
 	background: ${props => props.theme.prettyDark};
 	font-family: "Lato", sans-serif;
 	color: ${props => props.theme.white};
-	/* min-height: 100vh; */
+
+	@media screen and (min-width: 320px) {
+	}
+
+	.Symbol {
+		padding: 15px 0px;
+		i {
+			color: ${props => props.theme.colorMedium};
+		}
+	}
+
+	.whyExplanation {
+		display: block;
+		margin: auto auto;
+		background: ${props => props.theme.moonBackground};
+
+		border-radius: 20px;
+
+		padding: 20px 10px;
+		max-width: 450px;
+		span {
+			.daysUntil{
+				color: ${props => props.theme.colorMedium};
+				font-size: 25px;
+			}
+			.nextMoon{
+				color: ${props => props.theme.colorMedium};
+				font-size: 25px;
+			}
+		}
+
+		@media screen and (min-width: 320px) {
+			padding: 20px 10px;
+		}
+
+		@media screen and (min-width: 480px) {
+			padding: 20px;
+		}
+	}
+
+	@media screen and (min-width: 320px) {
+		width: 100vw;
+		width: ${props => (props.noVis ? "100vw" : "block")};
+	}
+
+	@media screen and (min-width: 600px) {
+		width: 60vw;
+	}
+
+	@media screen and (min-width: 801px) {
+		width: ${props => (props.noVis ? "70vw" : "45vw")};
+		height: ${props => (props.noVis ? "70vh" : "30vh")};
+	}
+
+	.messageBox {
+		width: 95%;
+		margin: auto auto;
+
+		@media screen and (min-width: 320px) {
+			padding: 40px 0;
+			width: 95%;
+		}
+
+		@media screen and (min-width: 600px) {
+			padding: 40px 0;
+			width: 85%;
+		}
+	}
 
 	.close {
+		outline: none;
+		text-shadow: none;
+		color: ${props => props.theme.white};
 		position: absolute;
-		top: 0px;
-		right: 0px;
+		top: -1px;
+		right: 4px;
 		float: right;
 		font-size: 2rem;
 		font-weight: 700;
 		line-height: 1;
-		color: ${props => props.theme.white};
-		outline: none;
-		text-shadow: none;
-		opacity: 0.5;
-	}
-
-	.close:hover {
-		color: ${props => props.theme.colorBad};
-		text-decoration: none;
-	}
-
-	.close:active {
-		color: ${props => props.theme.white};
-	}
-
-	.close:not(:disabled):not(.disabled):hover,
-	.close:not(:disabled):not(.disabled):focus {
-		opacity: 0.75;
+		:hover {
+			color: ${props => props.theme.colorMedium};
+			text-decoration: none;
+		}
+		:active {
+			color: ${props => props.theme.white};
+		}
 	}
 `;
 

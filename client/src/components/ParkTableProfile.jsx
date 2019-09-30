@@ -77,7 +77,7 @@ class ParkTableProfile extends Component {
 	};
 
 	render() {
-		console.log("ParkTable - rendered");
+		// console.log("ParkTable - rendered");
 		return (
 			<ProfileParksStyle>
 				{this.renderParkTable()}

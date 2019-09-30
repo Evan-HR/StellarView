@@ -29,20 +29,20 @@ class BaseFavPark extends Component {
 	};
 
 	componentDidMount() {
-		console.log("get has faved gets called!");
+		// console.log("get has faved gets called!");
 		this.getHasFaved();
 	}
 
 	getHasFaved() {
-		console.log("reached getHasFaved()");
+		// console.log("reached getHasFaved()");
 		if (this.props.context.userFavorites.includes(this.props.parkID)) {
 			this.setState({ hasFaved: true });
 		}
 	}
 
 	handleUnfavSpot() {
-		console.log(this.props.parkID);
-		console.log(this.props.context.userID);
+		// console.log(this.props.parkID);
+		// console.log(this.props.context.userID);
 		axios
 			.post("/api/postUnfavSpot", {
 				params: {
@@ -52,7 +52,7 @@ class BaseFavPark extends Component {
 			})
 			.then(response => {
 				//TODO: send handler to auth about fav spots
-				console.log({ message: "Fav Spot is: ", response });
+				// console.log({ message: "Fav Spot is: ", response });
 				this.setState({ buttonPressed: true, hasUnfaved: true, hasFaved:false });
 				this.props.context.userFavorites.pop(this.props.parkID);
 				// this.props.context.hasFavSpots = true;
@@ -64,8 +64,8 @@ class BaseFavPark extends Component {
 	}
 
 	handleFavSpot() {
-		console.log(this.props.parkID);
-		console.log(this.props.context.userID);
+		// console.log(this.props.parkID);
+		// console.log(this.props.context.userID);
 		axios
 			.post("/api/postFavSpot", {
 				params: {
@@ -75,7 +75,7 @@ class BaseFavPark extends Component {
 			})
 			.then(response => {
 				//TODO: send handler to auth about fav spots
-				console.log({ message: "Fav Spot is: ", response });
+				// console.log({ message: "Fav Spot is: ", response });
 				this.setState({ buttonPressed: true,hasFaved: true,hasUnfaved:false });
 				this.props.context.userFavorites.push(this.props.parkID);
 				this.props.context.hasFavSpots = true;
@@ -122,7 +122,7 @@ class BaseFavPark extends Component {
 				);
 			}
 		} else {
-			console.log("NOT LOGGED IN FAVPARK GOT HERE!");
+			// console.log("NOT LOGGED IN FAVPARK GOT HERE!");
 
 			return (
 				<Login handleLogin={this.props.handleLogin}>

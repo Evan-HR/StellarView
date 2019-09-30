@@ -18,6 +18,12 @@ const FAQ = props => (
 					<a href="#how">How does it work?</a>
 				</li>
 				<li>
+					<a href="#register">Why register?</a>
+				</li>
+				<li>
+					<a href="#secure">How secure is this?</a>
+				</li>
+				<li>
 					<a href="#dataGeneration">Link to datageneration</a>
 				</li>
 				<li>
@@ -43,20 +49,26 @@ const FAQ = props => (
 				<span>
 					STELLARGAZE is made by 3 developers who met at McMaster
 					University's Computer Science department in Hamilton,
-					Ontario. It was implemented by Dustin Jurkaulionis and Vlad
-					Falach over the Summer of 2019. The idea came from Evan
-					Reaume. It was designed by all three.
+					Ontario. The idea came from Evan Reaume, after realizing the
+					current applications out there are not so user-friendly. The
+					front and back-end was fully implemented by both Dustin
+					Jurkaulionis and Vlad Falach over the Summer of 2019 as
+					their first full-scale web application. It was designed by
+					all three.
 				</span>
 			</div>
 			<h1 id="why">Why was this made?</h1>
 			<div className="Background">
 				<span>
-					This project was made to help us all make stargazing more
-					enjoyable. To us, this means being able to see the stars as
-					conveniently as possible. Our scoring algorithm hopes to
-					achieve that for you, so that an enjoyable experience can be
-					had by directing you to a nearby park with low light
-					pollution and good weather.
+					{" "}
+					Humans have a special connection to the sky. There are
+					roughly 5000 stars visible at night, and such stars are not
+					so easy to spot due to light pollution and our migration
+					into cities. This project was made to help us all make
+					stargazing more enjoyable. To us, this means being able to
+					see the stars as conveniently as possible. Our scoring
+					algorithm hopes to achieve that for you, so that less time
+					is spent planning and more time can be spent stargazing.
 				</span>
 			</div>
 			<h1 id="how">How does it work?</h1>
@@ -98,6 +110,42 @@ const FAQ = props => (
 					transition) or below, cloud coverage below 25%, humidity
 					below 70%, and a moon phase below 50% illumination (First
 					Quarter and below, for instance).
+				</span>
+			</div>
+			<h1 id="register">Why register?</h1>
+			<div className="Background">
+				<span>
+					Registering grants you the ability to review a park. In the
+					future, it will be important for e-mail alerts/newsletters.
+					These e-mail alerts will be automatically sent in the
+					morning and will suggest parks that are predicted to have
+					good naked-eye star visibility. We will ask for user
+					permission before this is fully implemented.
+				</span>
+			</div>
+			<h1 id="secure">How secure is this?</h1>
+			<div className="Background">
+				<span>
+					<ul>
+						<li>
+							This site makes use of cookies. We only store your
+							preferred name and user id in them. The user id
+							allows us to gather your reviews and favorited
+							parks. We use cookies so that your log-in status
+							persists even if our server shuts down.
+						</li>
+						<li>
+							Your password is encrypted using{" "}
+							<a
+								target="_blank"
+								href="https://en.wikipedia.org/wiki/Bcrypt"
+							>
+								Bcrypt
+							</a>
+							. Thus, we do not view or store any plaintext
+							passwords.
+						</li>
+					</ul>
 				</span>
 			</div>
 			<h2 id="dataGeneration">
@@ -227,21 +275,80 @@ const FAQ = props => (
 
 						<li>Android/iOS application.</li>
 						<li>
+							Better login/registration system with e-mail
+							confirmation, ability to change passwords, delete
+							account, etc.
+						</li>
+						<li>
 							More accurate weather predictions using a paid
 							weather API service.
 						</li>
 					</ul>
 				</span>
 			</div>
-			<div id="credits"></div>
-			<h1 id="contact">How do I contact you?</h1>
+			<h1 id="credits">Credits</h1>
+			<div className="Background">
+				<span>
+					<ul>
+						<li>
+							Light pollution data provided by the VIIRS Day/Night
+							Band Nighttime Lights images via the{" "}
+							<a
+								target="_blank"
+								href="https://eogdata.mines.edu/download_dnb_composites.html"
+							>
+								Earth Observations Group (EOG)
+							</a>
+						</li>
+						VIIRS Day/Night Band Nighttime Lights
+						<li>
+							Band value numbers for the radiance corresponding to
+							a Bortle number provided by Jurij Stare of{" "}
+							<a
+								target="_blank"
+								href="https://www.lightpollutionmap.info/"
+							>
+								lightpollutionmap.info
+							</a>
+						</li>
+						<li>
+							Moonrise/moonset and sunrise/sunset data provided by{" "}
+							<a target="_blank" href="http://suncalc.net">
+								Suncalc
+							</a>
+						</li>
+						<li>
+							Telescope animation in homepage adapted based on a
+							Codepen by{" "}
+							<a
+								target="_blank"
+								href="https://codepen.io/littleginger"
+							>
+								@littleginger
+							</a>
+						</li>
+						<li>
+							404 page astronaut animation adapted based on a
+							Codepen by{" "}
+							<a
+								target="_blank"
+								href="https://codepen.io/hellochad"
+							>
+								@hellochad
+							</a>
+						</li>
+					</ul>
+				</span>
+			</div>
+			<h1 id="contact">How do I contact?</h1>
 			<div className="Background">
 				<span>
 					Are you a sidewalk astronmer? Casual observer of the skies?
 					Professional? A human? We'd love to hear your feedback! Our
 					algorithm is continuously being improved so any advice
 					and/or feedback would be greatly appreciated. Please email
-					us at dev@stellargaze.com.
+					us at{" "}
+					<a href="mailto:dev@stellargaze.com">dev@stellargaze.com</a>
 				</span>
 			</div>
 		</div>
@@ -251,8 +358,13 @@ const FAQ = props => (
 export default FAQ;
 
 const FAQStyle = styled.div`
-	width: 75%;
+	.FAQHeader {
+		text-align: center;
+		margin-bottom: 50px;
+	}
+	width: 85%;
 	margin: auto auto;
+	max-width: 700px;
 
 	font-family: "Lato", sans-serif;
 	h1 {
@@ -261,9 +373,12 @@ const FAQStyle = styled.div`
 	}
 	.FAQ_Sections {
 		font-size: 17px;
+
 		ul {
 			list-style: none;
 			text-align: left;
+			padding: 0;
+			list-style-type: none;
 		}
 		a {
 			color: ${props => props.theme.white};
@@ -277,7 +392,11 @@ const FAQStyle = styled.div`
 	.FAQ_Sections_Content {
 		color: ${props => props.theme.white};
 		text-align: left;
-		/* font-size: large; */
+
+		ul {
+			list-style-position: inside;
+			padding-left: 0;
+		}
 		.HowWork {
 			li {
 				padding-bottom: 20px;

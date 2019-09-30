@@ -14,7 +14,7 @@ class Toolbar extends Component {
 	state = {};
 
 	handleLogout(e) {
-		console.log("Loggin out...");
+		// console.log("Loggin out...");
 		e.preventDefault();
 		axios.get("/api/logout");
 		this.props.handleLogoutState();

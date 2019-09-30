@@ -14,10 +14,11 @@ import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
 import tempIcon from "./style/Media/cardIcons/temperature.svg";
 import { withRouter } from "react-router-dom";
 import TelescopeCircle from "./TelescopeCircle";
-import NoResultsModal from "./NoResultsModal";
 import { notifyCloseModal } from "./ParkMoreInfoModal";
 import { notifyCloseLoginModal } from "./Login";
 import { notifyCloseRegisterModal } from "./Register";
+import { notifyCloseTutorialModal } from "./Tutorial";
+import Tutorial from "./Tutorial";
 import ee from "eventemitter3";
 
 const emitter = new ee();
@@ -46,8 +47,37 @@ export const notifyRegisterModalIsClosed = msg => {
 	emitter.emit("registerModalIsClosed", msg);
 };
 
+export const notifyTutorialModalIsOpen = msg => {
+	emitter.emit("tutorialModalIsOpen", msg);
+};
+
+export const notifyTutorialModalIsClosed = msg => {
+	emitter.emit("tutorialModalIsClosed", msg);
+};
+
 function inRange(x, min, max) {
 	return (x - min) * (x - max) <= 0;
+}
+
+//Returns a score function that is:
+// f(x)=0 if x<min
+// f(x)=1 if x>max
+// f(x)=linear between min and max
+function linearScore(x, minX, maxX) {
+	// if (minX > maxX) {
+	// 	let temp = minX;
+	// 	minX = maxX;
+	// 	maxX = temp;
+	// }
+	let y = 0;
+	let minY = 0;
+	let maxY = 1;
+	// if (x < minX) return minY;
+	// if (x > maxX) return maxY;
+	y = ((maxY - minY) / (maxX - minX)) * (x - minX) + minY;
+	if (y > 1) y = 1;
+	if (y < 0) y = 0;
+	return y;
 }
 
 export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
@@ -55,51 +85,36 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 	// console.log("CLOUD COV IS !!!!!!!!!!!!!!", cloudCov);
 	// console.log("LIGHT POL IS !!!!!!!!!!!!!!", lightPol);
 	// console.log("humidity COV IS !!!!!!!!!!!!!!", humidity);
-	var moonScore = 0;
-	if (moonFraction < 0.2) {
-		moonScore = 1;
-	} else if (inRange(moonFraction, 0.2, 0.7)) {
-		moonScore = -2 * moonFraction + 1.4;
-	} else {
-		moonScore = 0;
-	}
-	var lightPolScore = ((-1 * 1) / 3) * (lightPol - 3);
-	var humidityScore = 0;
-	if (humidity < 0.4) {
-		humidityScore += 1;
-	} else if (inRange(humidity, 0.4, 0.8)) {
-		humidityScore += -2.5 * humidity + 2;
-	} else if (0.8 < humidity) {
-		humidityScore += 0;
-	}
-	var cloudScore = 0;
-	if (cloudCov < 0.2) {
-		cloudScore += 1;
-	} else if (inRange(cloudCov, 0.2, 0.4)) {
-		cloudScore += -5 * cloudCov + 2;
-	} else if (0.4 < cloudCov) {
-		cloudScore += 0;
-	}
+	var moonScore = linearScore(moonFraction, 0.7, 0.2);
+	// var lightPolScore = ((-1 * 1) / 3) * (lightPol - 3);
+	var lightPolScore = linearScore(lightPol, 4.0, 0.4);
+	var humidityScore = linearScore(humidity, 0.8, 0.4);
+	var cloudScore = linearScore(cloudCov, 0.35, 0.15);
 
 	const finalScore =
-		0.45 * moonScore +
-		0.15 * cloudScore +
+		0.35 * moonScore +
+		0.25 * cloudScore +
 		0.15 * humidityScore +
 		0.25 * lightPolScore;
 
 	if (finalScore < 0) {
 		finalScore = 0;
-	} else if (finalScore > 1) {
-		finalScore = 1;
+	} else if (finalScore >= 1) {
+		finalScore = 0.99;
 	}
 
-	console.log(
-		"Moon score, cloudscore, humidity, lightpolscore ",
-		moonScore,
-		cloudScore,
-		humidityScore,
-		lightPolScore
-	);
+	console.log({
+		moonValue: moonFraction,
+		moonScore: moonScore,
+		cloudValue: cloudCov,
+		cloudScore: cloudScore,
+		humidityValue: humidity,
+		humidityScore: humidityScore,
+		lightPolValue: lightPol,
+		lightPolScore: lightPolScore,
+		finalScore: finalScore
+	});
+
 	console.log("final score: ", finalScore);
 	return {
 		finalScore: finalScore,
@@ -125,7 +140,8 @@ class BaseMainComponent extends Component {
 		sortedBy: "dist",
 		infoModalIsOpen: false,
 		loginModalIsOpen: false,
-		registerModalIsOpen: false
+		registerModalIsOpen: false,
+		tutorialModalIsOpen: false
 	};
 	/* Note - park object is:
         {
@@ -144,45 +160,56 @@ class BaseMainComponent extends Component {
 		this.markers = {};
 		this.noParksModalOpen = false;
 		emitter.on("infoModalIsOpen", msg => {
-			console.log("Main component heard about modal OPENING");
+			// console.log("Main component heard about modal OPENING");
 			this.setState({ infoModalIsOpen: true });
 		});
 		emitter.on("infoModalIsClosed", () => {
-			console.log("Main component heard about modal CLOSING");
+			// console.log("Main component heard about modal CLOSING");
 			this.setState({ infoModalIsOpen: false });
 		});
 		emitter.on("loginModalIsOpen", msg => {
-			console.log("Main component heard about modal OPENING");
+			// console.log("Main component heard about modal OPENING");
 			this.setState({ loginModalIsOpen: true });
 		});
 		emitter.on("loginModalIsClosed", () => {
-			console.log("Main component heard about modal CLOSING");
+			// console.log("Main component heard about modal CLOSING");
 			this.setState({ loginModalIsOpen: false });
 		});
 		emitter.on("registerModalIsOpen", msg => {
-			console.log("Main component heard about modal OPENING");
+			// console.log("Main component heard about modal OPENING");
 			this.setState({ registerModalIsOpen: true });
 		});
 		emitter.on("registerModalIsClosed", () => {
-			console.log("Main component heard about modal CLOSING");
+			// console.log("Main component heard about modal CLOSING");
 			this.setState({ registerModalIsOpen: false });
+		});
+		emitter.on("tutorialModalIsOpen", () => {
+			// console.log("Main component heard about modal CLOSING");
+			this.setState({ tutorialModalIsOpen: true });
+		});
+		emitter.on("tutorialModalIsClosed", () => {
+			// console.log("Main component heard about modal CLOSING");
+			this.setState({ tutorialModalIsOpen: false });
 		});
 	}
 
 	componentDidUpdate = () => {
 		window.onpopstate = e => {
-			console.log("Detected back button");
+			// console.log("Detected back button");
 			if (this.state.infoModalIsOpen) {
-				console.log("Notifying modal");
+				// console.log("Notifying modal");
 				notifyCloseModal();
 			} else if (this.state.loginModalIsOpen) {
-				console.log("Notifying modal");
+				// console.log("Notifying modal");
 				notifyCloseLoginModal();
 			} else if (this.state.registerModalIsOpen) {
-				console.log("Notifying modal");
+				// console.log("Notifying modal");
 				notifyCloseRegisterModal();
+			} else if (this.state.tutorialModalIsOpen) {
+				// console.log("Notifying modal");
+				notifyCloseTutorialModal();
 			} else {
-				console.log("Notifying park form");
+				// console.log("Notifying park form");
 				notifyLoadQuery();
 			}
 		};
@@ -198,7 +225,7 @@ class BaseMainComponent extends Component {
 	};
 
 	getParkData = reqData => {
-		console.log(reqData);
+		// console.log(reqData);
 		// this.updateHistoryQuery(reqData);
 		this.setState({ isFetchingParks: true });
 		let storageKey = JSON.stringify(reqData);
@@ -242,7 +269,7 @@ class BaseMainComponent extends Component {
 								response.data.moonFraction,
 								response.data.parks[i].weather.humidity / 100,
 								response.data.parks[i].weather.clouds / 100,
-								response.data.parks[i].light_pol / 100
+								response.data.parks[i].light_pol
 							);
 							response.data.parks[i].score = tempScore.finalScore;
 							response.data.parks[i].scoreBreakdown = tempScore;
@@ -356,98 +383,60 @@ class BaseMainComponent extends Component {
 		this.setState({ parks: parksArray, sortedBy: "score" });
 	};
 
-	renderNoResults = () => {
-		if (
-			!this.state.isFetchingParks
-			// && !this.noParksModalOpen
-		) {
-			if (this.state.parks.length) {
-				if (
-					Math.max(...this.state.parks.map(park => park.score)) < 0.6
-				) {
-					this.noParksModalOpen = true;
-					return (
-						<NoResultsModal
-							noVis={true}
-							moonPhase={this.state.moonPhase}
-							scoreBreakdown={this.state.parks[0].scoreBreakdown}
-							handleCloseNoParksModal={
-								this.handleCloseNoParksModal
-							}
-						/>
-					);
-				} else {
-					return "";
-				}
-			} else {
-				console.log("Drawing noresultsmodal for no parks");
-				this.noParksModalOpen = true;
-				return (
-					<NoResultsModal
-						handleCloseNoParksModal={this.handleCloseNoParksModal}
-					/>
-				);
-			}
-		}
-	};
-
 	renderResults = () => {
 		return (
 			<ResultsPageStyle>
-				{/* {this.renderNoResults()} */}
-				{/* {this.renderParkMap()} */}
-				{/* <div className="formMoonCards"> */}
-				{/* <button
-						onClick={() => {
-							this.setState({ hideForm: !this.state.hideForm });
-						}}
-					>
-						Toggle form
-					</button> */}
-				{/* <div className="FormMoonWrapper"> */}
+				<div className="formMoonCards">
+					<div className="formMoonSort">
+						{/* {this.renderParkForm()} */}
 
-				<div className="formMoonSort">
-					{/* {this.renderParkForm()} */}
+						<div className="moonStyle">
+							<MoonComponent
+								moonPhase={this.state.moonPhase}
+								parkList={this.state.parks}
+								moonType={this.state.moonType}
+								stellarData={this.state.stellarData}
+							/>
+						</div>
 
-					<div className="moonStyle">
-						<MoonComponent
-							moonPhase={this.state.moonPhase}
+						{this.state.parks.length > 0 ? (
+							<div className="sortByContainer">
+								<div className="sortBy">
+									Sort parks by:{"  "}
+									<button
+										onClick={this.sortParksDist}
+										disabled={
+											this.state.sortedBy === "dist"
+										}
+									>
+										Distance
+									</button>
+									<button
+										onClick={this.sortParksScore}
+										disabled={
+											this.state.sortedBy === "score"
+										}
+									>
+										Score
+									</button>
+								</div>
+							</div>
+						) : (
+							""
+						)}
+					</div>
+
+					<div className="parkTableStyle">
+						<ParkTable
 							parkList={this.state.parks}
+							moon={this.state.moonPhase}
 							moonType={this.state.moonType}
-							stellarData={this.state.stellarData}
+							googleMap={this.googleMap}
+							markers={this.markers}
+							isLoadingParks={this.state.isFetchingParks}
 						/>
 					</div>
-
-					<div className="sortByContainer">
-						<div className="sortBy">
-							Sort parks by:{"  "}
-							<button
-								onClick={this.sortParksDist}
-								disabled={this.state.sortedBy === "dist"}
-							>
-								Distance
-							</button>
-							<button
-								onClick={this.sortParksScore}
-								disabled={this.state.sortedBy === "score"}
-							>
-								Score
-							</button>
-						</div>
-					</div>
 				</div>
-
-				<div className="parkTableStyle">
-					<ParkTable
-						parkList={this.state.parks}
-						moon={this.state.moonPhase}
-						moonType={this.state.moonType}
-						googleMap={this.googleMap}
-						markers={this.markers}
-						isLoadingParks={this.state.isFetchingParks}
-					/>
-				</div>
-				{/* </div> */}
 			</ResultsPageStyle>
 		);
 	};
@@ -457,20 +446,24 @@ class BaseMainComponent extends Component {
 			<LandingPageStyle>
 				{/* {this.renderParkForm()} */}
 				<TelescopeCircle />
+
+				<span className="tutorial">
+					<Tutorial>View Tutorial</Tutorial>
+				</span>
+
 				{/* {this.renderParkMap()} */}
 			</LandingPageStyle>
 		);
 	};
 
 	render() {
-		// console.log("MainComponent - rendered");
-		// console.log("Current location: ", window.location.pathname);
 		return (
 			<MainContentWrapper
 				active={this.state.hideForm}
 				hideMap={this.state.hideMap}
 				pathname={window.location.pathname}
 			>
+				{/* <div className="HeresResults">We found some spots.</div> */}
 				{this.renderParkMap()}
 				<div className="formMoonCards">
 					{this.renderParkForm()}
@@ -500,6 +493,19 @@ export default withRouter(MainComponent);
 //////////////////////////////////////////
 
 const LandingPageStyle = styled.div`
+	.tutorial {
+		font-size: 20px;
+		font-weight: 500;
+		cursor: pointer;
+		color: ${props => props.theme.yellow};
+		transition: color 0.2s ease;
+		:hover,
+		:active {
+			color: ${props => props.theme.colorMedium};
+			transition: color 0.2s ease;
+		}
+	}
+
 	.parkFormStyle {
 		width: 90%;
 		margin: auto auto;
@@ -698,12 +704,13 @@ const MainContentWrapper = styled.div`
 
 	.parkMapStyle {
 		/* height: 80vh; */
-		width: 95%;
-		height: 80vh;
+		width: 90%;
+		max-width: 500px;
+		height: 45vh;
 		top: 10%;
 		background-color: gray;
-		display: none;
-		margin: 0 auto;
+		display: ${props => (props.pathname === "/home" ? "none" : "block")};
+		margin: 40px auto 40px auto;
 	}
 
 	@media screen and (min-width: 1025px) {
@@ -720,7 +727,12 @@ const MainContentWrapper = styled.div`
 			display: ${props =>
 				props.pathname === "/home" ? "none" : "fixed"};
 			grid-area: map;
+			width: 95%;
+			height: 80vh;
+			top: 10%;
 			position: sticky;
+			max-width: none;
+			margin: 0 auto;
 		}
 	}
 
@@ -757,5 +769,21 @@ const MainContentWrapper = styled.div`
 			margin-top: 7vh;
 		}
 	}`
-			: "	"}
+			: `.parkFormStyle {
+			width: 90%;
+
+
+		max-width: 500px;
+		margin: 30px auto auto auto;
+	
+		
+		@media screen and (min-width: 600px) {
+				width: 100%;
+				margin: 30px auto 0.5rem auto;
+			}
+			@media screen and (min-width: 1025px) {
+				width: 90%;
+				margin: auto auto;
+			}
+	}`}
 `;
