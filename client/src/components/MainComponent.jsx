@@ -64,17 +64,19 @@ function inRange(x, min, max) {
 // f(x)=1 if x>max
 // f(x)=linear between min and max
 function linearScore(x, minX, maxX) {
-	if (minX > maxX) {
-		let temp = minX;
-		minX = maxX;
-		maxX = temp;
-	}
+	// if (minX > maxX) {
+	// 	let temp = minX;
+	// 	minX = maxX;
+	// 	maxX = temp;
+	// }
 	let y = 0;
 	let minY = 0;
 	let maxY = 1;
-	if (x < minX) return minY;
-	if (x > maxX) return maxY;
+	// if (x < minX) return minY;
+	// if (x > maxX) return maxY;
 	y = ((maxY - minY) / (maxX - minX)) * (x - minX) + minY;
+	if (y > 1) y = 1;
+	if (y < 0) y = 0;
 	return y;
 }
 
