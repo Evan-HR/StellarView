@@ -85,10 +85,11 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 	// console.log("CLOUD COV IS !!!!!!!!!!!!!!", cloudCov);
 	// console.log("LIGHT POL IS !!!!!!!!!!!!!!", lightPol);
 	// console.log("humidity COV IS !!!!!!!!!!!!!!", humidity);
-	var moonScore = linearScore(1 - moonFraction, 0.2, 0.7);
-	var lightPolScore = ((-1 * 1) / 3) * (lightPol - 3);
-	var humidityScore = linearScore(1 - humidity, 0.4, 0.8);
-	var cloudScore = linearScore(1 - cloudCov, 0.15, 0.4);
+	var moonScore = linearScore(moonFraction, 0.7, 0.2);
+	// var lightPolScore = ((-1 * 1) / 3) * (lightPol - 3);
+	var lightPolScore = linearScore(lightPol, 4.0, 0.4);
+	var humidityScore = linearScore(humidity, 0.8, 0.4);
+	var cloudScore = linearScore(cloudCov, 0.35, 0.15);
 
 	const finalScore =
 		0.35 * moonScore +
@@ -102,13 +103,17 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 		finalScore = 0.99;
 	}
 
-	console.log(
-		"Moon score, cloudscore, humidity, lightpolscore ",
-		moonScore,
-		cloudScore,
-		humidityScore,
-		lightPolScore
-	);
+	console.log({
+		moonValue: moonFraction,
+		moonScore: moonScore,
+		cloudValue: cloudCov,
+		cloudScore: cloudScore,
+		humidityValue: humidity,
+		humidityScore: humidityScore,
+		lightPolValue: lightPol,
+		lightPolScore: lightPolScore,
+		finalScore: finalScore
+	});
 
 	console.log("final score: ", finalScore);
 	return {
@@ -264,7 +269,7 @@ class BaseMainComponent extends Component {
 								response.data.moonFraction,
 								response.data.parks[i].weather.humidity / 100,
 								response.data.parks[i].weather.clouds / 100,
-								response.data.parks[i].light_pol / 100
+								response.data.parks[i].light_pol
 							);
 							response.data.parks[i].score = tempScore.finalScore;
 							response.data.parks[i].scoreBreakdown = tempScore;
