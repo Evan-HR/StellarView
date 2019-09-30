@@ -7,7 +7,7 @@ STELLARGAZE was made by 3 developers who met at McMaster University's Computer S
 ## Why was this made?
 Humans have a special connection to the sky. There are roughly 5000 stars visible at night, and such stars are not so easy to spot due to light pollution and our migration into cities. This project was made to help us all make stargazing more enjoyable. To us, this means being able to see the stars as conveniently as possible. Our scoring algorithm hopes to achieve that for you, so that less time is spent planning and more time can be spent stargazing.
 
-##H ow does it work?
+## How does it work?
 Details on how it works can be found at https://www.stellargaze.com/FAQ
 
 ## What's next?
