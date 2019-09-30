@@ -21,7 +21,7 @@ Details on how it works can be found at https://www.stellargaze.com/FAQ
 Are you a sidewalk astronmer? Casual observer of the skies? Professional? A web developer? A human? We'd love to hear your feedback! Our algorithm is continuously being improved and we are open-source so any advice and/or feedback would be greatly appreciated. Please email us at dev@stellargaze.com
 
 ## HELPFUL LINKS
-https://www.physics.mcmaster.ca/sidewalkastronomy /
-https://www.handprint.com/ASTRO/bortle.html /
-Light pollution data via: https://ngdc.noaa.gov/eog/viirs/download_dnb_composites.html
+* https://www.physics.mcmaster.ca/sidewalkastronomy 
+* Bortle information via: https://www.handprint.com/ASTRO/bortle.html 
+* Light pollution data via: https://ngdc.noaa.gov/eog/viirs/download_dnb_composites.html
 
