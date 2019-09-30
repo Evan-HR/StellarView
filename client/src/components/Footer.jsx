@@ -6,9 +6,15 @@ class Footer extends Component {
 		return (
 			<FooterStyle>
 				<span className="Vlad">
-					Vlad
-					<br />
-					Falach
+					<a
+						target="_blank"
+						rel="noopener noreferrer"
+						href="http://vladfalach.com"
+					>
+						Vlad
+						<br />
+						Falach
+					</a>
 				</span>
 				<span className="Dustin">
 					<a
