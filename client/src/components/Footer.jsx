@@ -5,18 +5,29 @@ class Footer extends Component {
 	render() {
 		return (
 			<FooterStyle>
-		
-				<span className="Vlad">Vlad<br/>Falach</span>
+				<span className="Vlad">
+					<a
+						target="_blank"
+						rel="noopener noreferrer"
+						href="http://vladfalach.com"
+					>
+						Vlad
+						<br />
+						Falach
+					</a>
+				</span>
 				<span className="Dustin">
 					<a
 						target="_blank"
 						rel="noopener noreferrer"
 						href="http://dustinjurkaulionis.com"
 					>
-						Dustin<br/>Jurkaulionis
+						Dustin
+						<br />
+						Jurkaulionis
 					</a>
 				</span>
-				<span className="Evan">Evan<br/>Reaume</span>
+				{/* <span className="Evan">Evan<br/>Reaume</span> */}
 			</FooterStyle>
 		);
 	}
@@ -26,8 +37,9 @@ export default Footer;
 
 const FooterStyle = styled.div`
 	width: 100%;
-	display:grid;
-	justify-content: center;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
 	font-family: Lato;
 	align-items: center;
 	height: 100px;
@@ -55,18 +67,17 @@ const FooterStyle = styled.div`
 	}
 
 	grid-template-columns: 1fr 1fr 1fr;
-	grid-template-areas:
-			"Vlad Dustin Evan";
+	grid-template-areas: "Vlad Dustin Evan";
 	/* .Copyright{
 		grid-area: Copyright;
 	} */
-	.Vlad{
+	.Vlad {
 		grid-area: Vlad;
 	}
-	.Dustin{
+	.Dustin {
 		grid-area: Dustin;
 	}
-	.Evan{
+	.Evan {
 		grid-area: Evan;
 	}
 
@@ -80,6 +91,4 @@ const FooterStyle = styled.div`
 			cursor: pointer;
 		}
 	}
-
-
 `;

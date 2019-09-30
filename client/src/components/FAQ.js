@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import QGISModel from "./style/Images/QGISModel.png";
+import WeatherEstimation from "./style/Images/Weather-Estimation-Test.png";
 
 const FAQ = props => (
 	<FAQStyle>
@@ -45,7 +47,7 @@ const FAQ = props => (
 			<h1 id="who">Who are we?</h1>
 			<div className="Background">
 				<span>
-					STELLARGAZE was made by 3 developers who met at McMaster
+					STELLARGAZE is made by 3 developers who met at McMaster
 					University's Computer Science department in Hamilton,
 					Ontario. The idea came from Evan Reaume, after realizing the
 					current applications out there are not so user-friendly. The
@@ -146,13 +148,111 @@ const FAQ = props => (
 					</ul>
 				</span>
 			</div>
-			<h1 id="dataGeneration">
-				QGIS, openstreetmaps, satellite image, how it blends together,
+			<h2 id="dataGeneration">
+				QGIS, openstreetmaps, satellite image, how it blends together
+			</h2>
+			<div className="Background">
+				<span className="HowWork">
+					<p>
+						The process of calculating star visibility requires a
+						combination of multiple data sources: real-time data
+						such as weather data and sky object data, and
+						non-real-time data, such as park location and light
+						pollution. This data is not real-time since the values,
+						don't change significantly from day to day. As a result,
+						these values are best calculated beforehand and stored
+						in a database.
+					</p>
+					<p>
+						An invaluable tool in creating the database was the QGIS
+						process toolkit. The process begins by collecting data
+						on all objects labeled as parks on OpenStreetMaps. This
+						is done via the{" "}
+						<a href="https://github.com/3liz/QuickOSM">QuickOSM</a>{" "}
+						plugin, which allows this process to be automatic. The
+						process has to be run on each state sized area in turn,
+						so it's wrapped in another python script.
+					</p>
+					<figure>
+						<a href={QGISModel} target="_blank">
+							<img
+								src={QGISModel}
+								alt="QGIS Graphical Process Modeler"
+							/>
+						</a>
+					</figure>
+
+					<p>
+						The average light pollution for each park is sampled,
+						and the extra information is dropped from the parks. The
+						parks are then filtered by light pollution, to drop the
+						ones that have too much light pollution to be used for
+						stargazing regardless of the conditions from the
+						database.
+					</p>
+					<p>
+						A number of parks listed in OSM don't have names, since
+						they represent small parkettes or rural sports fields.
+						In order to deal with having a large number of "Unnamed"
+						parks, we had to develop a script which uses a reverse
+						geocoding service,{" "}
+						<a href="https://nominatim.org/">Nominatim</a>, in order
+						to generate approximate names for these missing parks.
+						Some of these parks returned simply street addresses,
+						but others returned names of other nearby objects, such
+						as monuments or schools.
+					</p>
+					<p>
+						This process was done for all parks in Canada, USA, New
+						Zealand and Australia. The generated parks dataset is
+						then stored in the database for later use.
+					</p>
+				</span>
+			</div>
+			<h2>
 				distances(crow flies /w research), weather(how we got around
 				excess API calls)
-			</h1>
-			<h1 id="programming-tools">Mention the frameworks/tools used</h1>
-			<h1 id="ranking">Factors (moon, humidity, cloud cov, lightpol) </h1>
+			</h2>
+			<div className="Background">
+				<span className="HowWork">
+					<p>
+						When a request is executed, a number of real-time data
+						has to be collected in order to caluclate the score,
+						such as the forecasted weather, moon phase, and
+						distance, among others.
+					</p>
+					<p>
+						Weather forecast data is obtained from{" "}
+						<a href="https://openweathermap.org/">OpenWeather</a>.
+						Due to the data limitations and the wide area required
+						for forecasting, doing forecast requests for each park
+						individually was infeasible. As a result a k-means
+						clustering algorithm was used to cluster nearby parks
+						together, since all parks in an area could share a
+						forecast. After some testing, there was not a
+						significant difference between using nearest neighbor
+						and the more elaborate methods, so nearest neighbor was
+						used. As a result, the centroid of each cluster of parks
+						is used as the forecast request point, and all parks in
+						a cluster share the same forecast.
+					</p>
+
+					<a href={WeatherEstimation} target="_blank">
+						<img
+							src={WeatherEstimation}
+							alt="Weather Estimation Test"
+						/>
+					</a>
+					<p>
+						If the user makes a search after it is already dark, a
+						future weather forecast wouldn't be as useful as the
+						current weather, in which case they are shown the
+						current conditions instead of the forecast.
+					</p>
+				</span>
+			</div>
+			<h2 id="programming-tools">Mention the frameworks/tools used</h2>
+			<h2 id="ranking">Factors (moon, humidity, cloud cov, lightpol) </h2>
 			/*all dustin */
 			<h1 id="future">Future notes</h1>
 			<div className="Background">
@@ -306,6 +406,10 @@ const FAQStyle = styled.div`
 			li {
 				padding-bottom: 20px;
 			}
+		}
+
+		img {
+			width: 100%;
 		}
 
 		.Background {
