@@ -1,7 +1,7 @@
 //Displays park table
 import React, { Component } from "react";
 import ParkCard from "./ParkCard";
-import { Transition, animated } from "react-spring/renderprops";
+import { useSpring, animated as a } from "react-spring";
 import NoResultsModal from "./NoResultsModal";
 
 class ParkTable extends Component {
@@ -27,6 +27,12 @@ class ParkTable extends Component {
 		this.isAnimating = {};
 	}
 
+	springStyle = () => {
+		useSpring({
+			opacity: this.props.parkList[0].score ? 1 : 0
+		});
+	};
+
 	renderBadParks = () => {
 		return (
 			<NoResultsModal
@@ -45,7 +51,12 @@ class ParkTable extends Component {
 					0.7
 						? this.renderBadParks()
 						: ""}
-					{this.props.parkList.map(park => this.renderParkCard(park))}
+
+					<a.div style={this.springStyle}>
+						{this.props.parkList.map(park =>
+							this.renderParkCard(park)
+						)}
+					</a.div>
 					{/* <Transition
 						native
 						items={this.props.parkList}
