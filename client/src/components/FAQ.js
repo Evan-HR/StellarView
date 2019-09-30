@@ -174,10 +174,12 @@ const FAQ = props => (
 						so it's wrapped in another python script.
 					</p>
 					<figure>
-						<img
-							src={QGISModel}
-							alt="QGIS Graphical Process Modeler"
-						/>
+						<a href={QGISModel} target="_blank">
+							<img
+								src={QGISModel}
+								alt="QGIS Graphical Process Modeler"
+							/>
+						</a>
 					</figure>
 
 					<p>
@@ -234,10 +236,13 @@ const FAQ = props => (
 						is used as the forecast request point, and all parks in
 						a cluster share the same forecast.
 					</p>
-					<img
-						src={WeatherEstimation}
-						alt="Weather Estimation Test"
-					/>
+
+					<a href={WeatherEstimation} target="_blank">
+						<img
+							src={WeatherEstimation}
+							alt="Weather Estimation Test"
+						/>
+					</a>
 					<p>
 						If the user makes a search after it is already dark, a
 						future weather forecast wouldn't be as useful as the
