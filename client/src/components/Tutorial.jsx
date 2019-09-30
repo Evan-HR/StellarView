@@ -1,14 +1,12 @@
 import React, { Component } from "react";
-import axios from "axios";
 import Modal from "react-modal";
 import { AuthConsumer } from "./AuthContext";
 import { withRouter, Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
-import Register from "./Register";
 import MuiSlider from "@material-ui/core/Slider";
 import {
-	notifyLoginModalIsOpen,
-	notifyLoginModalIsClosed
+	notifyTutorialModalIsOpen,
+	notifyTutorialModalIsClosed
 } from "./MainComponent";
 import ee from "eventemitter3";
 import searchIcon from "./style/Media/search-solid.svg";
@@ -69,18 +67,19 @@ const marksLight = [
 	// }
 ];
 
-export const notifyCloseLoginModal = msg => {
-	emitter.emit("notifyCloseLoginModal", msg);
+export const notifyCloseTutorialModal = msg => {
+	emitter.emit("notifyCloseTutorialModal", msg);
 };
 
 Modal.setAppElement("#root");
 class Tutorial extends Component {
 	constructor(props) {
 		super(props);
-		emitter.on("notifyCloseLoginModal", msg => {
+		emitter.on("notifyCloseTutorialModal", msg => {
 			this.closeModal();
 		});
 		this.state = {
+			modalIsOpen: false,
 			nextCounter: 0,
 			globalStepMsgCounter: 0
 		};
@@ -94,9 +93,9 @@ class Tutorial extends Component {
 	// }
 
 	openModal = () => {
-		notifyLoginModalIsOpen();
+		notifyTutorialModalIsOpen();
 		this.props.history.push(
-			`${window.location.pathname}${window.location.search}#login`
+			`${window.location.pathname}${window.location.search}#tutorial`
 		);
 		this.setState({ modalIsOpen: true });
 	};
@@ -108,7 +107,7 @@ class Tutorial extends Component {
 	closeModal = () => {
 		// console.log("Closing login modal");
 		this.setState({ nextCounter: (this.state.nextCounter = 0) });
-		notifyLoginModalIsClosed();
+		notifyTutorialModalIsClosed();
 		this.props.history.push(
 			`${window.location.pathname}${window.location.search}`,
 			null
@@ -269,7 +268,7 @@ class Tutorial extends Component {
 						page.
 					</span>
 					<div className="secondary">
-						<i className="far fa-laugh-wink fa-2x"></i>
+						<i className="far fa-laugh-wink fa-3x"></i>
 					</div>
 				</React.Fragment>
 			);
@@ -277,8 +276,8 @@ class Tutorial extends Component {
 	};
 
 	incrementButton = () => {
-		console.log("button pressed");
-		console.log("nextcounter", this.state.nextCounter);
+		// console.log("button pressed");
+		// console.log("nextcounter", this.state.nextCounter);
 		if (this.state.nextCounter < 9) {
 			this.setState({ nextCounter: this.state.nextCounter + 1 });
 		} else if (this.state.nextCounter === 9) {
@@ -393,6 +392,7 @@ max-width: 600px;
 	/* padding: 20px; */
 	font-family: "Lato", sans-serif;
 	color: ${props => props.theme.white};
+	font-weight: 400;
 
 	
 	.containerTutorial{
@@ -403,6 +403,7 @@ max-width: 600px;
 		color: ${props => props.theme.yellow};
 		border-bottom: 2px solid ${props => props.theme.yellow};
 		margin: 20px 0px;
+		font-weight: 600;
 	}
 
 	.Icon {
