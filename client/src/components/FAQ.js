@@ -174,11 +174,28 @@ const FAQ = props => (
 					<p>
 						Weather forecast data is obtained from{" "}
 						<a href="https://openweathermap.org/">OpenWeather</a>.
+						Due to the data limitations and the wide area required
+						for forecasting, doing forecast requests for each park
+						individually was infeasible. As a result a k-means
+						clustering algorithm was used to cluster nearby parks
+						together, since all parks in an area could share a
+						forecast. After some testing, there was not a
+						significant difference between using nearest neighbor
+						and the more elaborate methods, so nearest neighbor was
+						used. As a result, the centroid of each cluster of parks
+						is used as the forecast request point, and all parks in
+						a cluster share the same forecast.
 					</p>
 					<img
 						src={WeatherEstimation}
 						alt="Weather Estimation Test"
 					/>
+					<p>
+						If the user makes a search after it is already dark, a
+						future weather forecast wouldn't be as useful as the
+						current weather, in which case they are shown the
+						current conditions instead of the forecast.
+					</p>
 				</span>
 			</div>
 			<h2 id="programming-tools">Mention the frameworks/tools used</h2>
