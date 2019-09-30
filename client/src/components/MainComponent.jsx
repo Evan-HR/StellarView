@@ -17,6 +17,7 @@ import TelescopeCircle from "./TelescopeCircle";
 import { notifyCloseModal } from "./ParkMoreInfoModal";
 import { notifyCloseLoginModal } from "./Login";
 import { notifyCloseRegisterModal } from "./Register";
+import { notifyCloseTutorialModal } from "./Tutorial";
 import Tutorial from "./Tutorial";
 import ee from "eventemitter3";
 
@@ -44,6 +45,14 @@ export const notifyRegisterModalIsOpen = msg => {
 
 export const notifyRegisterModalIsClosed = msg => {
 	emitter.emit("registerModalIsClosed", msg);
+};
+
+export const notifyTutorialModalIsOpen = msg => {
+	emitter.emit("tutorialModalIsOpen", msg);
+};
+
+export const notifyTutorialModalIsClosed = msg => {
+	emitter.emit("tutorialModalIsClosed", msg);
 };
 
 function inRange(x, min, max) {
@@ -124,7 +133,8 @@ class BaseMainComponent extends Component {
 		sortedBy: "dist",
 		infoModalIsOpen: false,
 		loginModalIsOpen: false,
-		registerModalIsOpen: false
+		registerModalIsOpen: false,
+		tutorialModalIsOpen: false
 	};
 	/* Note - park object is:
         {
@@ -166,6 +176,14 @@ class BaseMainComponent extends Component {
 			// console.log("Main component heard about modal CLOSING");
 			this.setState({ registerModalIsOpen: false });
 		});
+		emitter.on("tutorialModalIsOpen", () => {
+			// console.log("Main component heard about modal CLOSING");
+			this.setState({ tutorialModalIsOpen: true });
+		});
+		emitter.on("tutorialModalIsClosed", () => {
+			// console.log("Main component heard about modal CLOSING");
+			this.setState({ tutorialModalIsOpen: false });
+		});
 	}
 
 	componentDidUpdate = () => {
@@ -180,6 +198,9 @@ class BaseMainComponent extends Component {
 			} else if (this.state.registerModalIsOpen) {
 				// console.log("Notifying modal");
 				notifyCloseRegisterModal();
+			} else if (this.state.tutorialModalIsOpen) {
+				// console.log("Notifying modal");
+				notifyCloseTutorialModal();
 			} else {
 				// console.log("Notifying park form");
 				notifyLoadQuery();
