@@ -789,12 +789,12 @@ const SearchFormStyle = styled.div`
 	.myLocation {
 		color: ${props => props.theme.white};
 		font-size: 13px;
+		-webkit-appearance: none !important;
+-moz-appearance: none !important;
+appearance: none !important;
 
 		.nearMe {
 			all: unset;
-			-webkit-appearance: none !important;
--moz-appearance: none !important;
-appearance: none!important;
 			cursor: pointer;
 
 			background: ${props => props.theme.yellow};
