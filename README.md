@@ -18,7 +18,7 @@ Details on how it works can be found at https://www.stellargaze.com/FAQ
 * More accurate weather predictions using a paid weather API service.
 
 ## How can I help?
-Are you a sidewalk astronmer? Casual observer of the skies? Professional? A web developer? A human? We'd love to hear your feedback! Our algorithm is continuously being improved and we are open-source so any advice and/or feedback would be greatly appreciated. Please email us at dev@stellargaze.com
+Are you a sidewalk astronomer? Casual observer of the skies? Professional? A web developer? A human? We'd love to hear your feedback! Our algorithm is continuously being improved and we are open-source so any advice and/or feedback would be greatly appreciated. Please email us at dev@stellargaze.com
 
 ## HELPFUL LINKS
 * https://www.physics.mcmaster.ca/sidewalkastronomy 
