@@ -537,8 +537,8 @@ class BaseParkForm extends Component {
 								// this.getPlaceCoordinates(e);
 							}}
 						>
-							<SVG src={searchIcon}></SVG>
-							{/* <i className="fa fa-search" /> */}
+							{/* <SVG src={searchIcon}></SVG> */}
+							<i className="fa fa-search" />
 						</button>
 					</form>
 				</div>
