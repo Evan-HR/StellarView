@@ -891,9 +891,6 @@ display: block;
 		}
 	}
 
-	.searchTerm:focus {
-		color: ${props => props.theme.white};
-	}
 
 	.searchTerm {
 		-webkit-appearance: none !important;
@@ -910,6 +907,11 @@ display: block;
 		color: ${props => props.theme.white};
 		border: none;
 		float: left;
+
+		:focus {
+		color: ${props => props.theme.white};
+	}
+
 		:hover,
 		:active {
 			background-color: ${props => props.theme.moonBackground};
@@ -924,6 +926,10 @@ display: block;
 
 	.ToggleAdvancedSearch {
 		all: unset;
+		-webkit-appearance: none !important;
+			-moz-appearance: none !important;
+			appearance: none !important;
+		
 		cursor: pointer;
 		color: #bdbdbd;
 		:hover,
