@@ -300,6 +300,7 @@ class BaseMainComponent extends Component {
 							moonPhase: response.data.moonPercent,
 							moonFraction: response.data.moonfraction,
 							moonType: response.data.moonType,
+							totalResults: response.data.totalResults,
 							stellarData: response.data.stellarData,
 							fetchReq: reqData,
 							isFetchingParks: false
@@ -441,6 +442,7 @@ class BaseMainComponent extends Component {
 										Score
 									</button>
 								</div>
+								{` Showing nearest ${this.state.parks.length}/${this.state.totalResults} parks.`}
 							</div>
 						) : (
 							""
