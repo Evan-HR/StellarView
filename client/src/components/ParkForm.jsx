@@ -792,9 +792,9 @@ const SearchFormStyle = styled.div`
 
 		.nearMe {
 			all: unset;
-			-webkit-appearance: none;
--moz-appearance: none;
-appearance: none;
+			-webkit-appearance: none !important;
+-moz-appearance: none !important;
+appearance: none!important;
 			cursor: pointer;
 
 			background: ${props => props.theme.yellow};
@@ -846,9 +846,9 @@ appearance: none;
 	.searchButton {
 		width: 40px;
 		height: 36px;
-		-webkit-appearance: none;
--moz-appearance: none;
-appearance: none;
+		-webkit-appearance: none !important;
+-moz-appearance: none !important;
+appearance: none !important;
 		
 		svg{
 			margin: auto auto;

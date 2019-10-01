@@ -345,6 +345,9 @@ const LoginStyle = styled.div`
 
 		.nearMe {
 			all: unset;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
 			cursor: pointer;
 			background-color: ${props => props.theme.cardLight};
 			height: 36px;
