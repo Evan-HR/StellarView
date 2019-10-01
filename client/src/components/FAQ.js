@@ -82,7 +82,7 @@ const FAQ = props => (
 							We analyze a satellite image provided by the Earth
 							Observations Group (EOG) at NOAA/NCEI. This
 							Day/Night Band image captures the average radiance
-							values of North America and New Zealand. The pixel
+							values of North America, Australia, and New Zealand. The pixel
 							values we extract correspond to a number on the
 							Bortle scale, which gives an approximate measure of
 							the night sky's brightness at a particular location.{" "}
@@ -403,7 +403,7 @@ const FAQ = props => (
 			<h1 id="contact">How do I contact?</h1>
 			<div className="Background">
 				<span>
-					Are you a sidewalk astronmer? Casual observer of the skies?
+					Are you a sidewalk astronomer? Casual observer of the skies?
 					Professional? A human? We'd love to hear your feedback! Our
 					algorithm is continuously being improved so any advice
 					and/or feedback would be greatly appreciated. Please email

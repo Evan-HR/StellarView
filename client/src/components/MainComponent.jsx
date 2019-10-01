@@ -18,6 +18,7 @@ import { notifyCloseModal } from "./ParkMoreInfoModal";
 import { notifyCloseLoginModal } from "./Login";
 import { notifyCloseRegisterModal } from "./Register";
 import { notifyCloseTutorialModal } from "./Tutorial";
+import { notifyCloseResultsModal } from "./NoResultsModal";
 import Tutorial from "./Tutorial";
 import ee from "eventemitter3";
 
@@ -53,6 +54,14 @@ export const notifyTutorialModalIsOpen = msg => {
 
 export const notifyTutorialModalIsClosed = msg => {
 	emitter.emit("tutorialModalIsClosed", msg);
+};
+
+export const notifyResultsModalIsOpen = msg => {
+	emitter.emit("resultsModalIsOpen", msg);
+};
+
+export const notifyResultsModalIsClosed = msg => {
+	emitter.emit("resultsModalIsClosed", msg);
 };
 
 function inRange(x, min, max) {
@@ -141,7 +150,8 @@ class BaseMainComponent extends Component {
 		infoModalIsOpen: false,
 		loginModalIsOpen: false,
 		registerModalIsOpen: false,
-		tutorialModalIsOpen: false
+		tutorialModalIsOpen: false,
+		resultsModalIsOpen: false
 	};
 	/* Note - park object is:
         {
@@ -191,6 +201,14 @@ class BaseMainComponent extends Component {
 			// console.log("Main component heard about modal CLOSING");
 			this.setState({ tutorialModalIsOpen: false });
 		});
+		emitter.on("resultsModalIsOpen", () => {
+			// console.log("Main component heard about modal CLOSING");
+			this.setState({ resultsModalIsOpen: true });
+		});
+		emitter.on("resultsModalIsClosed", () => {
+			// console.log("Main component heard about modal CLOSING");
+			this.setState({ resultsModalIsClosed: false });
+		});
 	}
 
 	componentDidUpdate = () => {
@@ -208,6 +226,9 @@ class BaseMainComponent extends Component {
 			} else if (this.state.tutorialModalIsOpen) {
 				// console.log("Notifying modal");
 				notifyCloseTutorialModal();
+			}else if (this.state.resultsModalIsOpen) {
+				// console.log("Notifying modal");
+				notifyCloseResultsModal();
 			} else {
 				// console.log("Notifying park form");
 				notifyLoadQuery();

@@ -537,7 +537,7 @@ const ModalStyle = styled.div`
 	width: 100vw;
 
 	@media screen and (min-width: 320px) {
-		height: 97vh;
+		height: 95vh;
 		grid-template-rows: 0.4fr auto;
 	}
 
@@ -565,12 +565,6 @@ const ModalStyle = styled.div`
 			text-align: left;
 			margin: auto auto;
 			line-height: 30px;
-			/* padding-left: 1rem; */
-
-			@media screen and (min-width: 320px) {
-			}
-			@media screen and (min-width: 480px) {
-			}
 		}
 
 		/* padding: 1rem 2.5rem 2rem 1rem; */

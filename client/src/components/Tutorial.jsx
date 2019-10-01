@@ -97,7 +97,7 @@ class Tutorial extends Component {
 		this.props.history.push(
 			`${window.location.pathname}${window.location.search}#tutorial`
 		);
-		this.setState({ modalIsOpen: true });
+		this.setState({ ...this.state, modalIsOpen: true });
 	};
 
 	afterOpenModal = () => {
@@ -148,7 +148,7 @@ class Tutorial extends Component {
 					<h3>SEARCH</h3>
 					<span>
 						Start by entering any location in North America (minus
-						some parts of PEI) or New Zealand and then tap the
+						some parts of PEI), Australia, or New Zealand. Tap the
 						magnifying glass.
 					</span>
 					{this.renderStepOneSearch()}

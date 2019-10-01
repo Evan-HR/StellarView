@@ -2,14 +2,35 @@ import React, { Component } from "react";
 import Modal from "react-modal";
 import { withRouter, Link } from "react-router-dom";
 import styled from "styled-components";
+import ee from "eventemitter3";
+import {
+	notifyResultsModalIsOpen,
+	notifyResultsModalIsClosed
+} from "./MainComponent";
+
+const emitter = new ee();
+
+export const notifyCloseResultsModal = msg => {
+	emitter.emit("notifyCloseResultsModal", msg);
+};
 
 Modal.setAppElement("#root");
 class NoResultsModal extends Component {
-	state = {
-		modalIsOpen: false
-	};
+	constructor(props) {
+		super(props);
+		emitter.on("notifyCloseResultsModal", msg => {
+			this.closeModal();
+		});
+		this.state = {
+			modalIsOpen: false
+		};
+	}
 
 	openModal = () => {
+		notifyResultsModalIsOpen();
+		this.props.history.push(
+			`${window.location.pathname}${window.location.search}#no-results`
+		);
 		this.setState({ ...this.state, modalIsOpen: true });
 	};
 
@@ -18,6 +39,11 @@ class NoResultsModal extends Component {
 	};
 
 	closeModal = () => {
+		notifyResultsModalIsClosed();
+		this.props.history.push(
+			`${window.location.pathname}${window.location.search}`,
+			null
+		);
 		this.setState({ ...this.state, modalIsOpen: false });
 		document.body.style.overflow = "visible";
 		// this.props.handleCloseNoParksModal();
@@ -207,7 +233,7 @@ class NoResultsModal extends Component {
 	}
 }
 
-export default NoResultsModal;
+export default withRouter(NoResultsModal);
 
 NoResultsModal.defaultProps = {
 	handleCloseNoParksModal: () => {}

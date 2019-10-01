@@ -217,7 +217,7 @@ class Register extends Component {
 
 						<div className="form__field">
 							{this.state.isRegistering ? (
-								<button>Registering...</button>
+								<div className="registerSpinner">Registering...</div>
 							) : (
 								<input type="submit" value="Register" />
 							)}
@@ -538,6 +538,10 @@ right: 4px;
 		display: flex;
 		margin: 14px;
 		margin: 0.875rem;
+		.registerSpinner{
+			color: ${props => props.theme.colorMedium};
+			margin: auto auto;
+		}
 	}
 
 	.form__input {
