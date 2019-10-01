@@ -181,7 +181,7 @@ class BaseReportPark extends Component {
 					className="close"
 					aria-label="Close"
 				>
-					<i class="fas fa-times"></i>
+					<i className="fas fa-times"></i>
 				</button>
 				<div className="form">
 					<div className="wrapper">
@@ -326,7 +326,7 @@ const LoginStyle = styled.div`
 		right: 4px;
 		float: right;
 		font-size: 2rem;
-		font-weight: 700;
+		font-weight: 600;
 		line-height: 1;
 	}
 

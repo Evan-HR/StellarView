@@ -95,6 +95,7 @@ class ParkTable extends Component {
 	renderParkCard = park => {
 		return (
 			<ParkCard
+			key={park.id}
 				park={park}
 				moon={this.props.moon}
 				handleMouseOver={this.handleCardMouseOver}

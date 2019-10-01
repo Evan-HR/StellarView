@@ -112,19 +112,19 @@ export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
 		finalScore = 0.99;
 	}
 
-	console.log({
-		moonValue: moonFraction,
-		moonScore: moonScore,
-		cloudValue: cloudCov,
-		cloudScore: cloudScore,
-		humidityValue: humidity,
-		humidityScore: humidityScore,
-		lightPolValue: lightPol,
-		lightPolScore: lightPolScore,
-		finalScore: finalScore
-	});
+	// console.log({
+	// 	moonValue: moonFraction,
+	// 	moonScore: moonScore,
+	// 	cloudValue: cloudCov,
+	// 	cloudScore: cloudScore,
+	// 	humidityValue: humidity,
+	// 	humidityScore: humidityScore,
+	// 	lightPolValue: lightPol,
+	// 	lightPolScore: lightPolScore,
+	// 	finalScore: finalScore
+	// });
 
-	console.log("final score: ", finalScore);
+	// console.log("final score: ", finalScore);
 	return {
 		finalScore: finalScore,
 		moonScore: moonScore,
@@ -207,7 +207,7 @@ class BaseMainComponent extends Component {
 		});
 		emitter.on("resultsModalIsClosed", () => {
 			// console.log("Main component heard about modal CLOSING");
-			this.setState({ resultsModalIsClosed: false });
+			this.setState({ resultsModalIsOpen: false });
 		});
 	}
 
@@ -226,7 +226,7 @@ class BaseMainComponent extends Component {
 			} else if (this.state.tutorialModalIsOpen) {
 				// console.log("Notifying modal");
 				notifyCloseTutorialModal();
-			}else if (this.state.resultsModalIsOpen) {
+			} else if (this.state.resultsModalIsOpen) {
 				// console.log("Notifying modal");
 				notifyCloseResultsModal();
 			} else {
@@ -394,7 +394,7 @@ class BaseMainComponent extends Component {
 		parksArray.sort((a, b) =>
 			a.distance > b.distance ? 1 : b.distance > a.distance ? -1 : 0
 		);
-		this.setState({ parks: parksArray, sortedBy: "dist" });
+		this.setState({ ...this.state, parks: parksArray, sortedBy: "dist" });
 	};
 
 	sortParksScore = () => {
@@ -402,7 +402,7 @@ class BaseMainComponent extends Component {
 		parksArray.sort((a, b) =>
 			a.score > b.score ? -1 : b.score > a.score ? 1 : 0
 		);
-		this.setState({ parks: parksArray, sortedBy: "score" });
+		this.setState({ ...this.state, parks: parksArray, sortedBy: "score" });
 	};
 
 	renderResults = () => {
@@ -423,6 +423,7 @@ class BaseMainComponent extends Component {
 
 						{this.state.parks.length > 0 ? (
 							<div className="sortByContainer">
+								<span className="NearestNum">{`Showing nearest ${this.state.parks.length}/${this.state.totalResults} parks.`}</span>
 								<div className="sortBy">
 									Sort parks by:{"  "}
 									<button
@@ -442,7 +443,7 @@ class BaseMainComponent extends Component {
 										Score
 									</button>
 								</div>
-								{` Showing nearest ${this.state.parks.length}/${this.state.totalResults} parks.`}
+								
 							</div>
 						) : (
 							""
@@ -622,6 +623,15 @@ const ResultsPageStyle = styled.div`
 			font-family: "Lato", sans-serif;
 			grid-area: sort;
 			margin-bottom: 0.7rem;
+
+			.NearestNum {
+				display: flex;
+				color: ${props => props.theme.white};
+				font-size: 14px;
+				margin: 5px 0px 15px 0px;
+				border-bottom: 1px solid #8c969c;
+
+			}
 
 			.sortBy {
 				color: ${props => props.theme.white};

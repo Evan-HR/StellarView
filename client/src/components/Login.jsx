@@ -136,7 +136,7 @@ class BaseLogin extends Component {
 					className="close"
 					aria-label="Close"
 				>
-					<i class="fas fa-times"></i>
+					<i className="fas fa-times"></i>
 				</button>
 				<div className="grid">
 					<form onSubmit={this.onSubmit} className="form login">
@@ -355,7 +355,7 @@ const NewLoginStyle = styled.div`
 right: 4px;
 		float: right;
 		font-size: 2rem;
-		font-weight: 700;
+		font-weight: 600;
 		line-height: 1;
 	}
 

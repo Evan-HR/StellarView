@@ -173,7 +173,7 @@ class NoResultsModal extends Component {
 							</span>
 						</div>
 						<div className="Symbol">
-							<i class="far fa-question-circle fa-2x"></i>
+							<i className="far fa-question-circle fa-2x"></i>
 						</div>
 						<div className="whyExplanation">
 							{this.renderMessage(
@@ -200,6 +200,8 @@ class NoResultsModal extends Component {
 						</span>
 					</div>
 				)}
+
+				<div className="OKClose" onClick={this.closeModal}>Got it.</div>
 			</NoResultsStyle>
 		);
 	};
@@ -293,6 +295,14 @@ const NoResultsStyle = styled.div`
 	@media screen and (min-width: 320px) {
 	}
 
+	.OKClose{
+		all:unset;
+		padding-bottom: 50px;
+		font-weight: 600;
+		cursor: pointer;
+		color: ${props => props.theme.yellow};
+	}
+
 	.Symbol {
 		padding: 15px 0px;
 		i {
@@ -367,7 +377,7 @@ const NoResultsStyle = styled.div`
 		right: 4px;
 		float: right;
 		font-size: 2rem;
-		font-weight: 700;
+		font-weight: 600;
 		line-height: 1;
 		:hover {
 			color: ${props => props.theme.colorMedium};
