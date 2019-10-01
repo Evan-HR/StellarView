@@ -917,7 +917,7 @@ display: block;
 	}
 
 	.ToggleAdvancedSearch {
-		all: unset;
+		/* all: unset; */
 		cursor: pointer;
 		color: #bdbdbd;
 		:hover,
