@@ -928,9 +928,8 @@ display: block;
 
 	.ToggleAdvancedSearch {
 		all: unset;
-		-webkit-appearance: none !important;
-			-moz-appearance: none !important;
-			appearance: none !important;
+		-webkit-text-fill-color: #bdbdbd;
+   -webkit-opacity: 1; 
 		
 		cursor: pointer;
 		color: #bdbdbd;
