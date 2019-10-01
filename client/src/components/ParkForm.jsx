@@ -791,15 +791,18 @@ const SearchFormStyle = styled.div`
 		font-size: 13px;
 
 		.nearMe {
+			all: unset;
 			-webkit-appearance: none !important;
--moz-appearance: none !important;
-appearance: none !important;
+			-moz-appearance: none !important;
+			appearance: none !important;
 			cursor: pointer;
 
 			background: ${props => props.theme.yellow};
 			border-radius: 20px;
 			height: 36px;
 			width: 100%;
+			-webkit-text-fill-color: rgba(0, 0, 0, 1); 
+   -webkit-opacity: 1; 
 			color: ${props => props.theme.prettyDark};
 			transition: color 0.1s ease;
 			font-size: 15px;
@@ -893,6 +896,9 @@ display: block;
 	}
 
 	.searchTerm {
+		-webkit-appearance: none !important;
+			-moz-appearance: none !important;
+			appearance: none !important;
 		width: calc(100% - 40px);
 		background-color: ${props => props.theme.darkAccent};
 		transition: background-color 0.1s ease;
@@ -917,7 +923,7 @@ display: block;
 	}
 
 	.ToggleAdvancedSearch {
-		/* all: unset; */
+		all: unset;
 		cursor: pointer;
 		color: #bdbdbd;
 		:hover,
