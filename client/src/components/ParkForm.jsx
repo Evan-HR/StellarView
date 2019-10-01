@@ -896,6 +896,8 @@ display: block;
 		-webkit-appearance: none !important;
 			-moz-appearance: none !important;
 			appearance: none !important;
+			border-radius:0;
+	
 		width: calc(100% - 40px);
 		background-color: ${props => props.theme.darkAccent};
 		transition: background-color 0.1s ease;
