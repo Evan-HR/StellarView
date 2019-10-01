@@ -513,9 +513,9 @@ class BaseParkForm extends Component {
 							onChange={this.handlePlaceChange}
 						/>
 
-						<button
+						<div
 							className={"searchButton"}
-							type="submit"
+							
 							disabled={
 								this.state.reqData.placeName === "" ||
 								this.state.isGeocodingLocation
@@ -539,7 +539,7 @@ class BaseParkForm extends Component {
 						>
 							{/* <SVG src={searchIcon}></SVG> */}
 							<i className="fa fa-search" />
-						</button>
+						</div>
 					</form>
 				</div>
 
