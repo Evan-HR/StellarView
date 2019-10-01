@@ -193,7 +193,7 @@ class BaseParkForm extends Component {
 	//    getCurrentPosition's callback, you either need to
 	//    bind the success callback or make use of arrow function.
 	getMyLocation = e => {
-		this.setState({ isLoadingLocation: true,isInvalidLocation:false });
+		this.setState({ isLoadingLocation: true, isInvalidLocation: false });
 		// console.log(this.props);
 		if (
 			!this.props.authState.userLocation ||
@@ -630,9 +630,7 @@ class BaseParkForm extends Component {
 					</span>
 				) : (
 					<span className="messageAboveForm">
-						<span className="generic">
-							Let's stargaze:
-						</span>
+						<span className="generic">Let's stargaze:</span>
 					</span>
 				)}
 
@@ -794,6 +792,9 @@ const SearchFormStyle = styled.div`
 
 		.nearMe {
 			all: unset;
+			-webkit-appearance: none;
+-moz-appearance: none;
+appearance: none;
 			cursor: pointer;
 
 			background: ${props => props.theme.yellow};
@@ -845,6 +846,9 @@ const SearchFormStyle = styled.div`
 	.searchButton {
 		width: 40px;
 		height: 36px;
+		-webkit-appearance: none;
+-moz-appearance: none;
+appearance: none;
 		
 		svg{
 			margin: auto auto;

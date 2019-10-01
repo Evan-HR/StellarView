@@ -467,6 +467,9 @@ const TutorialStyle = styled.div`
 
 			.nearMe {
 				all: unset;
+				-webkit-appearance: none;
+-moz-appearance: none;
+appearance: none;
 
 				background: ${props => props.theme.yellow};
 				border-radius: 20px;
