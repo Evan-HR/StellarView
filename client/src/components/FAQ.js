@@ -105,6 +105,12 @@ const FAQ = props => (
 							phase.
 						</li>
 					</ol>
+					<a href={ParkMapNA} target="_blank">
+						<img
+							src={ParkMapNA}
+							alt="Stored parks, coloured according to light pollution, lighter=more light pollution"
+						/>
+					</a>
 					Ideally, parks with a score of 75% are higher are the parks
 					suitable for naked-eye stargazing. This score means that
 					these parks have a Bortle class of 4 (Rural/suburban
@@ -201,12 +207,6 @@ const FAQ = props => (
 						but others returned names of other nearby objects, such
 						as monuments or schools.
 					</p>
-					<a href={ParkMapNA} target="_blank">
-						<img
-							src={ParkMapNA}
-							alt="Stored parks, coloured according to light pollution, lighter=more light pollution"
-						/>
-					</a>
 					<p>
 						This process was done for all parks in Canada, USA, New
 						Zealand and Australia. The generated parks dataset is

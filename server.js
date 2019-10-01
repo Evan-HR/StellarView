@@ -901,6 +901,7 @@ app.post("/api/getParkData", async (req, res) => {
 	const dist = req.body.dist;
 	const lightpol = req.body.lightpol;
 	const utime = new Date(req.body.utime);
+	const numResults = req.body.numResults ? req.body.numResults : 75;
 
 	//STEP 2: GET PARKS FROM DATABASE USING USER INPUT PARAMS
 	//6371 is km, 3959 is miles
@@ -916,7 +917,25 @@ app.post("/api/getParkData", async (req, res) => {
 				res.sendStatus(500);
 				return;
 			}
+			// console.log("Initial results:", initialResults);
+
+			let totalResults = initialResults.length;
+			console.log("numResults:", numResults)
+
+			
+			console.log("Initial results len:", initialResults.length);
+
+			if (initialResults.length > numResults) {
+				initialResults = initialResults.slice(0, numResults);
+			}
+			
+			console.log("Sliced results len:", initialResults.length);
+
+			let shownResults = initialResults.length;
+
 			var parkDataJSON = JSON.parse(JSON.stringify(initialResults));
+
+			// console.log(parkDataJSON);
 
 			//STEP 3 : GET PARKIDS FOR REVIEWS ARRAY
 			var reviewIDsOriginal = [];
@@ -1303,6 +1322,8 @@ app.post("/api/getParkData", async (req, res) => {
 
 						//STEP 9: FORMAT RESPONSE JSON
 						let reply = {
+							totalResults: totalResults,
+							shownResults: shownResults,
 							parks: parkDataJSON,
 							moonFraction: phaseInfo.fraction,
 							moonPercent: phaseInfo.phase,
