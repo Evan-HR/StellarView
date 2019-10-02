@@ -110,8 +110,7 @@ const FAQ = props => (
 						<li>
 							We then find the nearest parks relative to the user
 							with a Bortle class of <i>at most</i> 4 - the{" "}
-							<i>Rural/Suburban</i>
-							transition zone. These parks are available to us
+							<i>Rural/Suburban</i>{" "}transition zone. These parks are available to us
 							using Open Street Maps and a database. We store only
 							the parks below a certain radiance value,
 							corresponding to a Bortle class. Thus, parks located
