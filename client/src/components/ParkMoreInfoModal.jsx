@@ -302,10 +302,10 @@ class ParkMoreInfoModal extends Component {
 										<React.Fragment>
 											<span className="MoreInfoDesc">
 												{this.park.score > 0.8
-													? "We recommend stargazing at score above 80%.  Read how the score is calculated here."
+													? "We recommend stargazing at score above 80%.  Read how the score is calculated in the FAQs."
 													: this.park.score > 0.6
-													? "We do not strongly recommend stargazing at this score.  Read how the score is calculated here."
-													: "We strongly recommend to not stargaze at a score below 60%.  Read how the score is calculated here."}
+													? "We do not strongly recommend stargazing at this score.  Read how the score is calculated in the FAQs."
+													: "We strongly recommend to not stargaze at a score below 60%.  Read how the score is calculated in the FAQs."}
 											</span>
 										</React.Fragment>
 									}
