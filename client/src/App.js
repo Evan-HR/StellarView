@@ -59,9 +59,9 @@ class App extends Component {
 		return (
 			<React.Fragment>
 				<Helmet>
-					<meta property="og:image" content={SocialLogo} />
+					{/* <meta property="og:image" content={SocialLogo} />
 					<meta property="og:image:height" content="341" />
-					<meta property="og:image:width" content="650" />
+					<meta property="og:image:width" content="650" /> */}
 					<meta
 						property="og:description"
 						content="Quickly find areas to stargaze near you."
