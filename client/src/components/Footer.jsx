@@ -89,6 +89,7 @@ const FooterStyle = styled.div`
 	} */
 	.Vlad {
 		grid-area: Vlad;
+
 	}
 	.Dustin {
 		grid-area: Dustin;
@@ -96,12 +97,16 @@ const FooterStyle = styled.div`
 	}
 	.Evan {
 		grid-area: Evan;
+		color: ${props => props.theme.white};
+		font-weight: 300;
+		
 	}
 	.Names {
 		display: flex;
 		margin: 7px 0;
 		flex-direction: column;
-		color: ${props => props.theme.yellow};
+		font-weight: 600;
+		color: ${props => props.theme.colorMedium};
 		@media screen and (min-width: 455px) {
 			flex-direction: row;
 		}
@@ -111,6 +116,7 @@ const FooterStyle = styled.div`
 		grid-area: Quote;
 		a{
 			color: ${props => props.theme.pink}; 
+			font-weight: 600;
 		}
 	}
 

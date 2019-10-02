@@ -3,12 +3,16 @@ import styled from "styled-components";
 import QGISModel from "./style/Images/QGISModel.png";
 import WeatherEstimation from "./style/Images/Weather-Estimation-Test.png";
 import ParkMapNA from "./style/Images/ParkMapNA.png";
+import lightPolMapDemo from "./style/Images/lightPolMapDemo.png";
+import StarBackgroundLess from "./StarBackgroundLess";
 
 const FAQ = props => (
 	<FAQStyle>
 		<h1 className="FAQHeader">FAQ</h1>
+
 		<div className="FAQ_Sections">
-			<ul>
+			<StarBackgroundLess/>
+			<ol>
 				<li>
 					<a href="#who">Who are we?</a>
 				</li>
@@ -25,37 +29,45 @@ const FAQ = props => (
 					<a href="#secure">How secure is this?</a>
 				</li>
 				<li>
-					<a href="#dataGeneration">Link to datageneration</a>
+					<a href="#dataGeneration">Where do the data come from?</a>
 				</li>
 				<li>
-					<a href="#programming-tools">Link to programming info</a>
+					<a href="#realTime">
+						What happens in the back-end during a real-time search?
+					</a>
 				</li>
 				<li>
-					<a href="#ranking">park ranking factors</a>
+					<a href="#score">How is the score calculated?</a>
 				</li>
 				<li>
 					<a href="#future">Future</a>
 				</li>
 				<li>
-					<a href="#credits">credits</a>
+					<a href="#credits">Credits</a>
 				</li>
 				<li>
 					<a href="#contact">Contact</a>
 				</li>
-			</ul>
+			</ol>
 		</div>
 		<div className="FAQ_Sections_Content">
 			<h1 id="who">Who are we?</h1>
 			<div className="Background">
 				<span>
-					STELLARGAZE is made by 3 developers who met at McMaster
-					University's Computer Science department in Hamilton,
-					Ontario. The idea came from Evan Reaume, after realizing the
-					current applications out there are not so user-friendly. The
-					front and back-end was fully implemented by both Dustin
-					Jurkaulionis and Vlad Falach over the Summer of 2019 as
-					their first full-scale web application. It was designed by
-					all three.
+					STELLARGAZE is an idea come to life by 3 developers who met
+					at McMaster University's Computer Science department in
+					Hamilton, Ontario. Inspired by Evan Reaume, Stellargaze
+					hopes to simplify the stargazing process. The front-end and
+					back-end was fully implemented by both{" "}
+					<a href="www.dustinjurkaulionis.com" target="_blank">
+						Dustin Jurkaulionis
+					</a>{" "}
+					and{" "}
+					<a href="www.vladfalach.com" target="_blank">
+						Vlad Falach
+					</a>{" "}
+					over the Summer of 2019 as their first full-scale web
+					application. It was designed by all three.
 				</span>
 			</div>
 			<h1 id="why">Why was this made?</h1>
@@ -69,27 +81,36 @@ const FAQ = props => (
 					stargazing more enjoyable. To us, this means being able to
 					see the stars as conveniently as possible. Our scoring
 					algorithm hopes to achieve that for you, so that less time
-					is spent planning and more time can be spent stargazing.
+					is spent planning and reading complicated light pollution
+					maps.
 				</span>
 			</div>
 			<h1 id="how">How does it work?</h1>
 			<div className="Background">
 				<span className="HowWork">
-					This app works in 3 main steps: <br></br>
+					STELLARGAZE works in 3 main steps: <br></br>
 					<br></br>
 					<ol>
 						<li>
 							We analyze a satellite image provided by the Earth
 							Observations Group (EOG) at NOAA/NCEI. This
 							Day/Night Band image captures the average radiance
-							values of North America, Australia, and New Zealand. The pixel
-							values we extract correspond to a number on the
-							Bortle scale, which gives an approximate measure of
-							the night sky's brightness at a particular location.{" "}
+							values of North America, Australia, and New Zealand.
+							The pixel values we extract correspond to a number
+							on the{" "}
+							<a
+								href="https://en.wikipedia.org/wiki/Bortle_scale"
+								target="_blank"
+							>
+								Bortle scale
+							</a>
+							, which gives an approximate measure of the night
+							sky's brightness at a particular location.{" "}
 						</li>
 						<li>
-							We then find the nearest parks to the user with a
-							Bortle class of at most 4 - the Rural/Suburban
+							We then find the nearest parks relative to the user
+							with a Bortle class of <i>at most</i> 4 - the{" "}
+							<i>Rural/Suburban</i>
 							transition zone. These parks are available to us
 							using Open Street Maps and a database. We store only
 							the parks below a certain radiance value,
@@ -98,50 +119,77 @@ const FAQ = props => (
 							pollution are not stored.{" "}
 						</li>
 						<li>
-							Parks within a maximum of 200km of the user in lower
-							light-pollution zones are given a score based on not
+							Parks within 140km of the user in lower
+							light-pollution zones are then ranked based on not
 							only the light pollution, but cloud coverage (the %
 							of the sky covered by clouds), humidity %, and moon
 							phase.
 						</li>
 					</ol>
-					<a href={ParkMapNA} target="_blank">
-						<img
-							src={ParkMapNA}
-							alt="Stored parks, coloured according to light pollution, lighter=more light pollution"
-						/>
-					</a>
-					Ideally, parks with a score of 75% are higher are the parks
-					suitable for naked-eye stargazing. This score means that
-					these parks have a Bortle class of 4 (Rural/suburban
-					transition) or below, cloud coverage below 25%, humidity
-					below 70%, and a moon phase below 50% illumination (First
-					Quarter and below, for instance).
+					<figure>
+						<a href={ParkMapNA} target="_blank">
+							<img
+								src={ParkMapNA}
+								alt="Stored parks, coloured according to light pollution, lighter=more light pollution"
+							/>
+						</a>
+						<figcaption>
+							Figure 1: Stored parks coloured according to light
+							pollution - the lighter the colour, the more light
+							pollution.
+						</figcaption>
+					</figure>
+					Ideally, parks with a score of <i>75% or higher</i> are the
+					parks suitable for naked-eye stargazing. This score means
+					that these parks have a Bortle class of <i>at most</i> 4
+					(Rural/suburban transition) or below, cloud coverage below
+					25%, humidity below 70%, and a moon phase below 50%
+					illumination (First Quarter and below, for instance).
+					<figure>
+						<a href={lightPolMapDemo} target="_blank">
+							<img
+								src={lightPolMapDemo}
+								alt="Stored parks, coloured according to light pollution, lighter=more light pollution"
+							/>
+						</a>
+						<figcaption>
+							Figure 2: User searching from a high light pollution
+							zone (inner city). Stellargaze directs them to parks
+							in less polluted areas (green) such as this one.
+							Source:{" "}
+							<a
+								href="https://www.lightpollutionmap.info"
+								target="_blank"
+							>
+								https://www.lightpollutionmap.info
+							</a>
+						</figcaption>
+					</figure>
 				</span>
 			</div>
 			<h1 id="register">Why register?</h1>
 			<div className="Background">
 				<span>
 					Registering grants you the ability to review a park. In the
-					future, it will be important for e-mail alerts/newsletters.
-					These e-mail alerts will be automatically sent in the
-					morning and will suggest parks that are predicted to have
-					good naked-eye star visibility. We will ask for user
-					permission before this is fully implemented.
+					future, it will be important for e-mail alerts/push
+					notifications. These alerts will only be sent in the morning
+					when your nearby parks are predicted to have excellent
+					naked-eye star visibility. We will ask for user permission
+					before this is fully implemented.
 				</span>
 			</div>
 			<h1 id="secure">How secure is this?</h1>
 			<div className="Background">
 				<span>
 					<ul>
-						<li>
+						<p>
 							This site makes use of cookies. We only store your
 							preferred name and user id in them. The user id
 							allows us to gather your reviews and favorited
 							parks. We use cookies so that your log-in status
 							persists even if our server shuts down.
-						</li>
-						<li>
+						</p>
+						<p>
 							Your password is encrypted using{" "}
 							<a
 								target="_blank"
@@ -151,11 +199,11 @@ const FAQ = props => (
 							</a>
 							. Thus, we do not view or store any plaintext
 							passwords.
-						</li>
+						</p>
 					</ul>
 				</span>
 			</div>
-			<h1 id="dataGeneration">Data Source Details</h1>
+			<h1 id="dataGeneration">Where do the data come from?</h1>
 			<div className="Background">
 				<span className="HowWork">
 					<p>
@@ -163,20 +211,20 @@ const FAQ = props => (
 						combination of multiple data sources: real-time data
 						such as weather data and sky object data, and
 						non-real-time data, such as park location and light
-						pollution. This data is not real-time since the values,
+						pollution. This data is not real-time since the values
 						don't change significantly from day to day. As a result,
 						these values are best calculated beforehand and stored
 						in a database.
 					</p>
 					<p>
 						An invaluable tool in creating the database was the QGIS
-						process toolkit. The process begins by collecting data
-						on all objects labeled as parks on OpenStreetMaps. This
-						is done via the{" "}
+						process toolkit. The process began by collecting data on
+						all objects labeled as <i>parks</i> on OpenStreetMaps.
+						This was done via the{" "}
 						<a href="https://github.com/3liz/QuickOSM">QuickOSM</a>{" "}
-						plugin, which allows this process to be automatic. The
-						process has to be run on each state sized area in turn,
-						so it's wrapped in another python script.
+						plugin, which allowed this process to be automatic. The
+						process had to be run on each state/province sized area
+						in turn, so it's wrapped in another python script.
 					</p>
 					<figure>
 						<a href={QGISModel} target="_blank">
@@ -185,22 +233,22 @@ const FAQ = props => (
 								alt="QGIS Graphical Process Modeler"
 							/>
 						</a>
+						<figcaption>
+							Figure 3: QGIS Graphical Process Modeler
+						</figcaption>
 					</figure>
 
 					<p>
 						The average light pollution for each park is sampled,
 						and the extra information is dropped from the parks. The
-						parks are then filtered by light pollution, to drop the
-						ones that have too much light pollution to be used for
-						stargazing regardless of the conditions from the
-						database.
+						parks which have too much light pollution are dropped.
 					</p>
 					<p>
 						A number of parks listed in OSM don't have names, since
 						they represent small parkettes or rural sports fields.
-						In order to deal with having a large number of "Unnamed"
-						parks, we had to develop a script which uses a reverse
-						geocoding service,{" "}
+						In order to deal with having a large number of{" "}
+						<i>"Unnamed"</i> parks, we had to develop a script which
+						uses a reverse geocoding service,{" "}
 						<a href="https://nominatim.org/">Nominatim</a>, in order
 						to generate approximate names for these missing parks.
 						Some of these parks returned simply street addresses,
@@ -208,71 +256,74 @@ const FAQ = props => (
 						as monuments or schools.
 					</p>
 					<p>
-						This process was done for all parks in Canada, USA, New
-						Zealand and Australia. The generated parks dataset is
-						then stored in the database for later use.
+						This process was done for all parks in Canada (minue
+						some PEI), USA, New Zealand and Australia. The generated
+						parks dataset is then stored in the database for later
+						use.
 					</p>
 				</span>
 			</div>
-			<h2>Live Data Sources</h2>
+			<h1 id="realTime">
+				What happens in the back-end during a real-time search?
+			</h1>
 			<div className="Background">
 				<span className="HowWork">
 					<p>
 						When a request is executed, a number of real-time data
-						has to be collected in order to caluclate the score,
-						such as the forecasted weather, moon phase, and
-						distance, among others.
+						has to be collected in order to calculate the score,
+						such as the forecasted weather, moon phase, distance,
+						park reviews, etc.
 					</p>
 					<p>
 						Weather forecast data is obtained from{" "}
 						<a href="https://openweathermap.org/">OpenWeather</a>.
 						Due to the data limitations and the wide area required
-						for forecasting, doing forecast requests for each park
-						individually was infeasible. As a result a k-means
-						clustering algorithm was used to cluster nearby parks
-						together, since all parks in an area could share a
-						forecast. After some testing, there was not a
+						for forecasting, doing forecast requests for{" "}
+						<i>each park</i> individually was infeasible, as well as
+						not financially viable. As a result, a{" "}
+						<i>k-means clustering algorithm</i> was used to cluster
+						nearby parks together, since all parks in an area could
+						share a forecast. After some testing, there was not a
 						significant difference between using nearest neighbor
 						and the more elaborate methods, so nearest neighbor was
 						used. As a result, the centroid of each cluster of parks
 						is used as the forecast request point, and all parks in
 						a cluster share the same forecast.
 					</p>
-
-					<a href={WeatherEstimation} target="_blank">
-						<img
-							src={WeatherEstimation}
-							alt="Weather Estimation Test"
-						/>
-					</a>
+					<figure>
+						<a href={WeatherEstimation} target="_blank">
+							<img
+								src={WeatherEstimation}
+								alt="Weather Estimation Test"
+							/>
+						</a>
+						<figcaption>
+							Figure 4: Weather Estimation Test
+						</figcaption>
+					</figure>
 					<p>
 						If the user makes a search after it is already dark, a
 						future weather forecast wouldn't be as useful as the
-						current weather, in which case they are shown the
-						current conditions instead of the forecast.
+						current weather. Thus, they are shown the current
+						conditions instead of the forecast.
 					</p>
 				</span>
 			</div>
-			<h2 id="programming-tools">Mention the frameworks/tools used</h2>
-			<div className="Background">
-				<span>
-					<p></p>
-				</span>
-			</div>
-			<h2 id="ranking">Score Caluclation Details</h2>
+			<h1 id="score">How is the score calculated?</h1>
 			<div className="Background">
 				<span>
 					<p>
-						The final park score is caluclated from a combination of
-						factors, primarily the moon illumination, humidity,
-						cloud coverage and light pollution.
+						The final park score is calculated from a combination of
+						factors, primarily the moon illumination percentage,
+						humidity, cloud coverage and light pollution.
 					</p>
 					<p>
 						The significance of the moon illumination is that, just
-						like sun, the moon reflects light to earth which is
+						like sun, the moon reflects light to Earth which is
 						scattered in the atmosphere. The effect is that when the
 						moon is in the sky at full illumination it can actually
-						crowd out a lot of the smaller, dimmer, stars.
+						crowd out a lot of the smaller, dimmer stars which we
+						feel users should enjoy seeing.
 					</p>
 					<p>
 						Humidity also contributes to poor star visibility.
@@ -289,17 +340,20 @@ const FAQ = props => (
 						stars through gaps in the clouds.
 					</p>
 					<p>
-						Light pollution crowds out dimmer objects in the sky,
-						and in urban centers actually makes star gazing
-						impossible. One of the main sources of light pollution
-						is street lights, which scatter light. Humidity plays a
+						Light pollution obfuscates dimmer objects in the sky and
+						in urban centers actually makes star gazing impossible.
+						One of the main sources of light pollution is street
+						lights, which scatter light. Further, humidity plays a
 						role in light pollution, since humidity scatters light
-						from ground sources.
+						from ground sources, so our scoring algorithm takes into
+						account a humidity multiplier - the light pollution
+						score is decreased on humid days, lowering the overall
+						score.
 					</p>
 				</span>
 			</div>
-			/*all dustin */
-			<h1 id="future">Future notes</h1>
+
+			<h1 id="future">Future Notes</h1>
 			<div className="Background">
 				<span>
 					This section will be continously updated. We plan on:{" "}
@@ -400,7 +454,7 @@ const FAQ = props => (
 					</ul>
 				</span>
 			</div>
-			<h1 id="contact">How do I contact?</h1>
+			<h1 id="contact">Contact</h1>
 			<div className="Background">
 				<span>
 					Are you a sidewalk astronomer? Casual observer of the skies?
@@ -418,6 +472,27 @@ const FAQ = props => (
 export default FAQ;
 
 const FAQStyle = styled.div`
+	.FAQ_Sections {
+		font-size: 17px;
+		margin-bottom: 80px;
+		border-bottom: 2px solid ${props => props.theme.moonBackground};
+
+		ol {
+			/* list-style: none; */
+			text-align: left;
+			color: ${props => props.theme.white};
+			/* padding: 0;
+			list-style-type: none; */
+		}
+		a {
+			color: ${props => props.theme.white};
+			text-decoration: none;
+			:hover {
+				color: ${props => props.theme.colorMedium};
+			}
+		}
+	}
+
 	.FAQHeader {
 		text-align: center;
 		margin-bottom: 50px;
@@ -430,29 +505,17 @@ const FAQStyle = styled.div`
 	h1 {
 		color: ${props => props.theme.colorMedium};
 		margin: 20px 0px;
-	}
-	.FAQ_Sections {
-		font-size: 17px;
-
-		ul {
-			list-style: none;
-			text-align: left;
-			padding: 0;
-			list-style-type: none;
-		}
-		a {
-			color: ${props => props.theme.white};
-			text-decoration: none;
-			:hover {
-				color: ${props => props.theme.colorMedium};
-			}
-		}
+		font-size: 35px;
 	}
 
 	.FAQ_Sections_Content {
 		color: ${props => props.theme.white};
 		text-align: left;
 
+		figcaption {
+			font-size: 13px;
+			padding: 10px 0px;
+		}
 		ul {
 			list-style-position: inside;
 			padding-left: 0;
@@ -465,12 +528,16 @@ const FAQStyle = styled.div`
 
 		img {
 			width: 100%;
+			border: 4px solid ${props => props.theme.prettyDark};
+			border-radius: 20px;
+			margin-top: 20px;
 		}
 
 		.Background {
 			background: ${props => props.theme.moonBackground};
 			border-radius: 8px;
-			padding: 20px;
+			padding: 25px;
+			margin-bottom: 60px;
 		}
 		span {
 			a {
