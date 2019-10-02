@@ -15,6 +15,7 @@
     "react-dynamic-font": "^2.0.1",
     "react-helmet": "^5.2.1",
     "react-inlinesvg": "^1.1.6",
+    "react-meta-tags": "^0.7.4",
     "react-modal": "^3.8.1",
     "react-places-autocomplete": "^7.2.1",
     "react-ratings-declarative": "^3.4.1",
