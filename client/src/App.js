@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { AuthProvider, AuthConsumer } from "./components/AuthContext";
+import { Helmet } from "react-helmet";
 import MainComponent from "./components/MainComponent";
 import {
 	Link,
@@ -25,6 +26,7 @@ import ScrollUpButton from "react-scroll-up-button";
 import NotFoundPage from "./components/NotFoundPage";
 import StarBackgroundLess from "./components/StarBackgroundLess";
 import Notification from "./components/Notification";
+import SocialLogo from "./components/style/Media/og-image.png";
 
 class App extends Component {
 	state = {
@@ -56,6 +58,17 @@ class App extends Component {
 		// console.log("App - rendered");
 		return (
 			<React.Fragment>
+				<Helmet>
+					<meta property="og:image" content={SocialLogo} />
+					<meta property="og:image:height" content="341" />
+					<meta property="og:image:width" content="650" />
+					<meta
+						property="og:description"
+						content="Quickly find areas to stargaze near you."
+					/>
+					<meta property="og:title" content="STELLARGAZE" />
+					<meta property="og:url" content="www.stellargaze.com" />
+				</Helmet>
 				<Notification />
 				<ScrollUpButton />
 				<GlobalStyle />
