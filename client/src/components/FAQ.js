@@ -475,6 +475,7 @@ const FAQStyle = styled.div`
 		font-size: 17px;
 		margin-bottom: 80px;
 		border-bottom: 2px solid ${props => props.theme.moonBackground};
+		font-weight: 400;
 
 		ol {
 			/* list-style: none; */
