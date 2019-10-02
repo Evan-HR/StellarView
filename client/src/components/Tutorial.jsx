@@ -196,7 +196,7 @@ class Tutorial extends Component {
 					<span>
 						If successful, parks will be returned in the form of a
 						map, or in card form. The red, yellow, and green map
-						markers mean poor, mediocre, and great star visibiliy
+						markers mean poor, mediocre, and great star visibility
 						respectively.
 					</span>
 					<div className="secondary">
@@ -239,7 +239,7 @@ class Tutorial extends Component {
 					<h3>STARGAZE</h3>
 					<span>
 						A score above 70% means the conditions for stargazing
-						are adequate. Please note the forecast information on
+						are adequate. Of course, a score of 80% or greater is better!  Please note the forecast information on
 						the cards and cross-check with your local weather
 						service before deciding.
 					</span>
