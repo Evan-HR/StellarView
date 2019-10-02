@@ -511,6 +511,7 @@ const FAQStyle = styled.div`
 	.FAQ_Sections_Content {
 		color: ${props => props.theme.white};
 		text-align: left;
+		font-weight: 400;
 
 		figcaption {
 			font-size: 13px;
