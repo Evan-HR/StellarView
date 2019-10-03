@@ -11,7 +11,7 @@ const FAQ = props => (
 		<h1 className="FAQHeader">FAQ</h1>
 
 		<div className="FAQ_Sections">
-			<StarBackgroundLess/>
+			<StarBackgroundLess />
 			<ol>
 				<li>
 					<a href="#who">Who are we?</a>
@@ -110,19 +110,22 @@ const FAQ = props => (
 						<li>
 							We then find the nearest parks relative to the user
 							with a Bortle class of <i>at most</i> 4 - the{" "}
-							<i>Rural/Suburban</i>{" "}transition zone. These parks are available to us
-							using Open Street Maps and a database. We store only
-							the parks below a certain radiance value,
-							corresponding to a Bortle class. Thus, parks located
-							in a densely populated area with lots of light
-							pollution are not stored.{" "}
+							<i>Rural/Suburban</i> transition zone. These parks
+							are available to us using Open Street Maps and a
+							database. We store only the parks below a certain
+							radiance value, corresponding to a Bortle class.
+							Thus, parks located in a densely populated area with
+							lots of light pollution are not stored.{" "}
 						</li>
 						<li>
 							Parks within 140km of the user in lower
 							light-pollution zones are then ranked based on not
 							only the light pollution, but cloud coverage (the %
 							of the sky covered by clouds), humidity %, and moon
-							phase.
+							phase. Distance is calculated using an "As the crow
+							flies" methodology, not road distance. As a result,
+							some parks across bodies of water might get
+							suggested, which may not be feasible.
 						</li>
 					</ol>
 					<figure>
@@ -169,7 +172,9 @@ const FAQ = props => (
 			<h1 id="register">Why register?</h1>
 			<div className="Background">
 				<span>
-					Registering grants you the ability to review a park. In the
+					Registering grants you the ability to review a park, as well
+					as to save a park to your "Favourites". The Favourites
+					section appears upon registering and logging in. In the
 					future, it will be important for e-mail alerts/push
 					notifications. These alerts will only be sent in the morning
 					when your nearby parks are predicted to have excellent
@@ -184,7 +189,7 @@ const FAQ = props => (
 						<p>
 							This site makes use of cookies. We only store your
 							preferred name and user id in them. The user id
-							allows us to gather your reviews and favorited
+							allows us to gather your reviews and favourited
 							parks. We use cookies so that your log-in status
 							persists even if our server shuts down.
 						</p>
@@ -283,8 +288,8 @@ const FAQ = props => (
 						<i>k-means clustering algorithm</i> was used to cluster
 						nearby parks together, since all parks in an area could
 						share a forecast. After some testing, there was not a
-						significant difference between using nearest neighbor
-						and the more elaborate methods, so nearest neighbor was
+						significant difference between using nearest neighbour
+						and the more elaborate methods, so nearest neighbour was
 						used. As a result, the centroid of each cluster of parks
 						is used as the forecast request point, and all parks in
 						a cluster share the same forecast.
@@ -317,8 +322,8 @@ const FAQ = props => (
 						humidity, cloud coverage and light pollution.
 					</p>
 					<p>
-						The significance of the moon illumination is that, just
-						like sun, the moon reflects light to Earth which is
+						The significance of the moon illumination is that just
+						like the sun, the moon reflects light to Earth which is
 						scattered in the atmosphere. The effect is that when the
 						moon is in the sky at full illumination it can actually
 						crowd out a lot of the smaller, dimmer stars which we
