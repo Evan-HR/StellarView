@@ -7,7 +7,7 @@ class Footer extends Component {
 			<FooterStyle>
 				<span className="Quote">
 					"It was in <a href="https://www.stellargaze.com/search?lat=44.540&lng=-78.5464&dist=25&lightpol=1.75" target="_blank">Bobcaygeon</a>, I saw the constellations reveal
-					themselves, one star at time. -Gord Downie"
+					themselves, one star at time." -Gord Downie
 				</span>
 
 				<span className="Names">
