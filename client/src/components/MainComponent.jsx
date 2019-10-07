@@ -90,12 +90,7 @@ function linearScore(x, minX, maxX) {
 }
 
 export function parkScore(moonFraction, humidity, cloudCov, lightPol) {
-	// console.log("MOON FRACTION % IS !!!!!!!!!!!!!!", moonFraction);
-	// console.log("CLOUD COV IS !!!!!!!!!!!!!!", cloudCov);
-	// console.log("LIGHT POL IS !!!!!!!!!!!!!!", lightPol);
-	// console.log("humidity COV IS !!!!!!!!!!!!!!", humidity);
 	var moonScore = linearScore(moonFraction, 0.7, 0.2);
-	// var lightPolScore = ((-1 * 1) / 3) * (lightPol - 3);
 	var lightPolScore = linearScore(lightPol, 4.0, 0.4);
 	var humidityScore = linearScore(humidity, 0.8, 0.4);
 	var cloudScore = linearScore(cloudCov, 0.35, 0.15);
