@@ -260,7 +260,7 @@ const FAQ = props => (
 						as monuments or schools.
 					</p>
 					<p>
-						This process was done for all parks in Canada (minue
+						This process was done for all parks in Canada (minus
 						some PEI), USA, New Zealand and Australia. The generated
 						parks dataset is then stored in the database for later
 						use.
