@@ -17,6 +17,7 @@ class StarReviews extends Component {
 				rating={this.state.rating}
 				widgetRatedColors="#2F3334"
 				widgetEmptyColors="#989898"
+				widgetDimensions={this.props.starSize}
 				changeRating={this.changeRating}
 			>
 				<Ratings.Widget widgetHoverColor="#2F3334" rating={1} />

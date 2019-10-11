@@ -5,6 +5,18 @@ import { withRouter, Link } from "react-router-dom";
 import styled from "styled-components";
 import formSuccess from "./style/Media/formSuccess.svg";
 import Login from "./Login";
+import {
+	notifyRegisterModalIsOpen,
+	notifyRegisterModalIsClosed
+} from "./MainComponent";
+import ee from "eventemitter3";
+
+const emitter = new ee();
+
+export const notifyCloseRegisterModal = msg => {
+	emitter.emit("notifyCloseRegisterModal", msg);
+};
+
 class Register extends Component {
 	state = {
 		userName: "",
@@ -14,11 +26,23 @@ class Register extends Component {
 		regErrors: [],
 		errorDB: false,
 		registerSuccess: false,
-		modalIsOpen: false
+		modalIsOpen: false,
+		isRegistering: false
 	};
 
+	constructor(props) {
+		super(props);
+		emitter.on("notifyCloseRegisterModal", msg => {
+			this.closeModal();
+		});
+	}
+
 	openModal = () => {
-		this.setState({ ...this.state, modalIsOpen: true });
+		notifyRegisterModalIsOpen();
+		this.props.history.push(
+			`${window.location.pathname}${window.location.search}#register`
+		);
+		this.setState({ modalIsOpen: true });
 	};
 
 	afterOpenModal = () => {
@@ -26,7 +50,12 @@ class Register extends Component {
 	};
 
 	closeModal = () => {
-		this.setState({ ...this.state, modalIsOpen: false, errorDB: false });
+		notifyRegisterModalIsClosed();
+		this.props.history.push(
+			`${window.location.pathname}${window.location.search}`,
+			null
+		);
+		this.setState({ modalIsOpen: false, errorDB: false });
 		document.body.style.overflow = "visible";
 	};
 
@@ -61,14 +90,23 @@ class Register extends Component {
 	};
 
 	errorMsg() {
+		// console.log(this.state);
 		if (this.state.errorDB === true) {
-			return this.state.regErrors.map(errors => {
+			if (this.state.regErrors) {
+				return this.state.regErrors.map(errors => {
+					return (
+						<AlertStyle success={false}>
+							<div className="AlertText">{errors.msg}</div>
+						</AlertStyle>
+					);
+				});
+			} else {
 				return (
 					<AlertStyle success={false}>
-						<div className="AlertText">{errors.msg}</div>
+						<div className="AlertText">Unknown error.</div>
 					</AlertStyle>
 				);
-			});
+			}
 		}
 		if (this.state.registerSuccess) {
 			return (
@@ -79,6 +117,7 @@ class Register extends Component {
 			);
 		}
 	}
+
 	renderNewRegisterFormStyle = () => {
 		return (
 			<NewLoginStyle>
@@ -89,12 +128,12 @@ class Register extends Component {
 					className="close"
 					aria-label="Close"
 				>
-					<i className="fas fa-window-close" />
+					<i className="fas fa-times"></i>
 				</button>
 				<div className="grid">
 					<form onSubmit={this.onSubmit} className="form login">
 						<div className="form__field">
-							<label for="login__username">
+							<label htmlFor="login__username">
 								<svg className="icon">
 									<use
 										xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -114,7 +153,7 @@ class Register extends Component {
 							/>
 						</div>
 						<div className="form__field">
-							<label for="login__username">
+							<label htmlFor="login__username">
 								<svg className="icon">
 									<use
 										xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -135,7 +174,7 @@ class Register extends Component {
 						</div>
 
 						<div className="form__field">
-							<label for="login__password">
+							<label htmlFor="login__password">
 								<svg className="icon">
 									<use
 										xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -156,7 +195,7 @@ class Register extends Component {
 						</div>
 
 						<div className="form__field">
-							<label for="login__password">
+							<label htmlFor="login__password">
 								<svg className="icon">
 									<use
 										xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -177,12 +216,25 @@ class Register extends Component {
 						</div>
 
 						<div className="form__field">
-							<input type="submit" value="Register" />
+							{this.state.isRegistering ? (
+								<div className="registerSpinner">Registering...</div>
+							) : (
+								<input type="submit" value="Register" />
+							)}
 						</div>
 					</form>
 
 					<p className="text--center">
-						Already a member? <Login />
+						{this.props.hideLink ? (
+							""
+						) : (
+							<React.Fragment>
+								Already a member?{" "}
+								<span>
+									<Login hideLink={true} />
+								</span>
+							</React.Fragment>
+						)}
 					</p>
 				</div>
 				{this.errorMsg()}
@@ -205,17 +257,19 @@ class Register extends Component {
 	};
 
 	registerSuccess = () => {
-		console.log("get here for some reason?");
+		// console.log("get here for some reason?");
 		this.setState({
 			registerSuccess: true,
-			modalIsOpen: false
+			modalIsOpen: false,
+			isRegistering: false
 		});
-		console.log("REG SUCCESS, GOING TO LOGIN NOW");
+		// console.log("REG SUCCESS, GOING TO LOGIN NOW");
 		this.props.handleLogin();
 	};
 
 	onSubmit = e => {
-		console.log("SUBMIT BUTTON PRESSED");
+		// console.log("SUBMIT BUTTON PRESSED");
+		this.setState({ isRegistering: true });
 		e.preventDefault();
 		axios
 			.post("/api/register", {
@@ -232,7 +286,8 @@ class Register extends Component {
 				//console.error("ERROR OCCURRED!", err);
 				this.setState({
 					errorDB: true,
-					regErrors: err.response.data.errors
+					regErrors: err.response.data.errors,
+					isRegistering: false
 				});
 				//this.handleErrorAlert();
 				//.then(this.closemModal) is needed
@@ -242,12 +297,20 @@ class Register extends Component {
 	render() {
 		return (
 			<React.Fragment>
-				<a onClick={() => this.openModal()}>
-					<Link to="/">Register</Link>
+				<a
+					onClick={() => {
+						this.openModal();
+					}}
+				>
+					{this.props.children ? (
+						<React.Fragment>{this.props.children}</React.Fragment>
+					) : (
+						<React.Fragment>Register</React.Fragment>
+					)}
 				</a>
 				<Modal
 					closeTimeoutMS={800}
-					className="modal-dialog"
+					// className="modal-dialog"
 					isOpen={this.state.modalIsOpen}
 					onAfterOpen={this.afterOpenModal}
 					onRequestClose={this.closeModal}
@@ -259,14 +322,14 @@ class Register extends Component {
 						{this.renderNewRegisterFormStyle()}
 
 						{/* {this.errorMsg()} */}
-				</ModalStyle>
+					</ModalStyle>
 				</Modal>
 			</React.Fragment>
 		);
 	}
 }
 
-export default Register;
+export default withRouter(Register);
 /////////////////////////////////
 
 const customStyles = {
@@ -287,6 +350,7 @@ const customStyles = {
 		padding: "0px",
 		border: "none",
 		borderRadius: "2.5px",
+		background:"black",
 		marginRight: "-50%",
 		transform: "translate(-50%, -50%)",
 		maxWidth: "100vw",
@@ -332,39 +396,44 @@ const NewLoginStyle = styled.div`
 	-ms-flex-pack: center;
 	justify-content: center;
 	height: 80vh;
-	width: 60vw;
 	position: relative;
 	background: ${props => props.theme.prettyDark};
 	font-family: "Lato", sans-serif;
 	color: ${props => props.theme.white};
-	/* min-height: 100vh; */
+	width: 100vw;
+
+	@media screen and (min-width: 320px) {
+		width: 100vw;
+	}
+
+	@media screen and (min-width: 600px) {
+		width: 60vw;
+	}
+
+	@media screen and (min-width: 801px) {
+		width: 45vw;
+	}
 
 	.close {
-		position: absolute;
-		top: 0px;
-		right: 0px;
-		float: right;
-		font-size: 2.5rem;
-		font-weight: 700;
-		line-height: 1;
-		color: ${props => props.theme.white};
 		outline: none;
 		text-shadow: none;
-		opacity: 0.5;
+		color: ${props => props.theme.white};
+		position: absolute;
+		top: -1px;
+right: 4px;
+		float: right;
+		font-size: 2rem;
+		font-weight: 600;
+		line-height: 1;
 	}
 
 	.close:hover {
-		color: ${props => props.theme.colorBad};
+		color: ${props => props.theme.pink};
 		text-decoration: none;
 	}
 
 	.close:active {
-		color: ${props => props.theme.white};
-	}
-
-	.close:not(:disabled):not(.disabled):hover,
-	.close:not(:disabled):not(.disabled):focus {
-		opacity: 0.75;
+		color: ${props => props.theme.colorMedium};
 	}
 
 	/* helpers/grid.css */
@@ -416,7 +485,7 @@ const NewLoginStyle = styled.div`
 	a:focus,
 	a:hover {
 		text-decoration: none;
-		color: ${props => props.theme.colorBad};
+		color: ${props => props.theme.highlightPink};
 		transition: 0.25s;
 	}
 
@@ -469,6 +538,10 @@ const NewLoginStyle = styled.div`
 		display: flex;
 		margin: 14px;
 		margin: 0.875rem;
+		.registerSpinner{
+			color: ${props => props.theme.colorMedium};
+			margin: auto auto;
+		}
 	}
 
 	.form__input {
@@ -516,7 +589,7 @@ const NewLoginStyle = styled.div`
 	}
 
 	.login input[type="submit"] {
-		background-color: ${props => props.theme.colorBad};
+		background-color: ${props => props.theme.highlightPink};
 		color: ${props => props.theme.prettyDark};
 		font-weight: 600;
 		text-transform: uppercase;
@@ -538,20 +611,32 @@ const NewLoginStyle = styled.div`
 
 	.text--center {
 		text-align: center;
+		span {
+			cursor: pointer;
+			color: ${props => props.theme.yellow};
+			transition: color 0.25s;
+			:focus,
+			:hover {
+				text-decoration: none;
+				color: ${props => props.theme.highlightPink};
+				transition: color 0.25s;
+			}
+			:active {
+				color: ${props => props.theme.colorMedium};
+			}
+		}
 	}
 `;
 
 const ModalStyle = styled.div`
-
-  position: relative;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  width: 100%;
-  pointer-events: auto;
-  background-clip: padding-box;
-  border-radius: 0.3rem;
-  outline: 0;
-
+	position: relative;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	width: 100%;
+	pointer-events: auto;
+	background-clip: padding-box;
+	border-radius: 0.3rem;
+	outline: 0;
 `;

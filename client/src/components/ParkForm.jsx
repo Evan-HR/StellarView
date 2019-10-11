@@ -11,6 +11,16 @@ import styled from "styled-components";
 // import nearMeButton from "./style/Media/round-my_location-24px.svg";
 // import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 // import LocationSearchInput from "./LocationSearchInput";
+import { notify } from "./Notification";
+import searchIcon from "./style/Media/search-solid.svg";
+import SVG from "react-inlinesvg";
+import ee from "eventemitter3";
+
+const emitter = new ee();
+
+export const notifyLoadQuery = msg => {
+	emitter.emit("parkFormToLoadQuery", msg);
+};
 
 class BaseParkForm extends Component {
 	state = {
@@ -26,7 +36,8 @@ class BaseParkForm extends Component {
 		isGeocodingLocation: false,
 		isInvalidLocation: false,
 		formErrors: {},
-		advancedSearch: false
+		advancedSearch: false,
+		placesComplete: false
 	};
 
 	constructor(props) {
@@ -34,6 +45,10 @@ class BaseParkForm extends Component {
 		this.sliderLight = this.state.reqData.lightpol;
 		this.sliderDist = this.state.reqData.dist;
 		this.autoComplete = false;
+		emitter.on("parkFormToLoadQuery", () => {
+			// console.log("Park form got back button event");
+			this.loadQuery();
+		});
 	}
 
 	//There are two cases when we would want to load results form url query:
@@ -43,10 +58,10 @@ class BaseParkForm extends Component {
 	// componentDidMount runs RIGHT after post-render
 	componentDidMount() {
 		// this.getMyLocation();
-		console.log("USER LOC: ", this.props.userLocation);
+		// console.log("USER LOC: ", this.props.userLocation);
 
 		//On page load, load results from query is possible
-		console.log("Form mounted, searching...");
+		// console.log("Form mounted, searching...");
 		this.loadQuery();
 	}
 
@@ -55,10 +70,15 @@ class BaseParkForm extends Component {
 			this.loadAutoComplete();
 		}
 		//On back button load previous results
-		window.onpopstate = e => {
-			console.log("Back button pressed");
-			this.loadQuery();
-		};
+		// window.onpopstate = e => {
+		// 	console.log("Back button pressed");
+		// 	console.log(window.location.href);
+		// 	if (window.location.hash === "#modal") {
+		// 		notifyCloseModal();
+		// 	} else {
+		// 		this.loadQuery();
+		// 	}
+		// };
 	}
 
 	//Load query into state
@@ -66,7 +86,7 @@ class BaseParkForm extends Component {
 		let query = qs.parse(window.location.search, {
 			ignoreQueryPrefix: true
 		});
-		console.log(query);
+		// console.log(query);
 		// console.log("First mount? ", this.state.firstLoad)
 		if (Object.keys(query).length !== 0) {
 			if (
@@ -89,7 +109,7 @@ class BaseParkForm extends Component {
 					},
 					//SetState callback
 					() => {
-						console.log("Submitting..", this.state.reqData);
+						// console.log("Submitting..", this.state.reqData);
 						this.onSubmit();
 					}
 				);
@@ -109,11 +129,11 @@ class BaseParkForm extends Component {
 
 	handlePlaceChange = changeEvent => {
 		this.setState({
-			...this.state,
 			reqData: {
 				...this.state.reqData,
 				placeName: changeEvent.target.value
 			},
+			placesComplete: false,
 			isInvalidLocation: false
 		});
 	};
@@ -132,7 +152,7 @@ class BaseParkForm extends Component {
 				}`
 			)
 			.then(({ data }) => {
-				console.log(data);
+				// console.log(data);
 
 				if (window.google) {
 					var latLng = new window.google.maps.LatLng(
@@ -163,18 +183,24 @@ class BaseParkForm extends Component {
 			});
 	};
 
+	renderInvalidLocation = () => {
+		this.setState({
+			...this.state,
+			isInvalidLocation: true
+		});
+	};
 	//   In order to have access to  this.state inside
 	//    getCurrentPosition's callback, you either need to
 	//    bind the success callback or make use of arrow function.
 	getMyLocation = e => {
-		this.setState({ isLoadingLocation: true });
-		console.log(this.props);
+		this.setState({ isLoadingLocation: true, isInvalidLocation: false });
+		// console.log(this.props);
 		if (
 			!this.props.authState.userLocation ||
 			(this.props.authState.userLocation.lat === "" &&
 				this.props.authState.userLocation.lng === "")
 		) {
-			console.log("Getting new location");
+			// console.log("Getting new location");
 			navigator.geolocation.getCurrentPosition(
 				async position => {
 					console.log(
@@ -184,7 +210,7 @@ class BaseParkForm extends Component {
 						`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
 					);
 					address = address["data"]["address"]["city"];
-					console.log(address);
+					// console.log(address);
 					this.setState(
 						{
 							...this.state,
@@ -225,7 +251,7 @@ class BaseParkForm extends Component {
 				{ enableHighAccuracy: true }
 			);
 		} else {
-			console.log("Fetching auth location");
+			// console.log("Fetching auth location");
 			if (window.google && this.props.googleMap) {
 				this.props.googleMap.panTo(
 					new window.google.maps.LatLng(
@@ -301,20 +327,17 @@ class BaseParkForm extends Component {
 	// 	});
 	// };
 
-	//props to send one-way information to ParksData
+	//props to send one-way information to MainComponent
 	//this.state is the "X" in getParkData()
 	//fetchP(x) --> getParkData(x)
 	onSubmit = e => {
 		if (e) e.preventDefault();
-		console.log(this.state.reqData);
+		// console.log(this.state.reqData);
 		const errors = this.validate(this.state.reqData);
 		if (errors.length === 0) {
 			var d = new Date();
-
 			this.setState({
-				...this.state,
 				formErrors: [],
-
 				reqData: { ...this.state.reqData, utime: d.getTime() }
 			});
 			this.updateHistoryQuery(this.state.reqData);
@@ -325,7 +348,7 @@ class BaseParkForm extends Component {
 				})
 			);
 		} else {
-			this.setState({ ...this.state, formErrors: errors });
+			this.setState({ formErrors: errors });
 		}
 		//getParkData(reqdata) of parent
 	};
@@ -341,7 +364,7 @@ class BaseParkForm extends Component {
 	};
 
 	updateHistoryQuery = reqData => {
-		console.log("Updating history...");
+		// console.log("Updating history...");
 		//this.props.history.push({ query: "test" });
 		let query = qs.parse(window.location.search, {
 			ignoreQueryPrefix: true
@@ -360,7 +383,7 @@ class BaseParkForm extends Component {
 				}&lightpol=${parseFloat(reqData.lightpol).toFixed(2)}`
 			);
 		} else {
-			console.log("Attempting to repeat current search.");
+			// console.log("Attempting to repeat current search.");
 		}
 	};
 
@@ -409,7 +432,7 @@ class BaseParkForm extends Component {
 			return (
 				<React.Fragment>
 					<span className="spinner-border spinner-border-sm" />
-					Locating
+					{/* {"  "}Locating */}
 				</React.Fragment>
 			);
 		} else {
@@ -420,34 +443,35 @@ class BaseParkForm extends Component {
 	renderFormErrors = () => {
 		if (Object.keys(this.state.formErrors).length > 0) {
 			return (
-				<React.Fragment>
+				<ErrorStyle>
 					<b className="text-danger">
 						{this.state.formErrors.join(", ")}
 					</b>
-				</React.Fragment>
+				</ErrorStyle>
 			);
 		}
 	};
 
 	loadAutoComplete = () => {
-		this.autoComplete = new window.google.maps.places.SearchBox(
-			document.getElementById("autoComplete")
-		);
-		this.autoComplete.addListener("places_changed", this.onPlaceChanged);
+		const field = document.getElementById("address-field");
+		this.autoComplete = new window.google.maps.places.Autocomplete(field);
+		// this.enableEnterKey(field);
+		this.autoComplete.addListener("place_changed", this.onPlaceChanged);
 		// this.autoCompleteLoaded = true;
 	};
 
 	onPlaceChanged = () => {
-		let places = this.autoComplete.getPlaces();
-		if (places == 0) {
-			return;
-		}
+		// console.log("Getting location from places");
+		let place = this.autoComplete.getPlace();
+		// if (places == 0) {
+		// 	return;
+		// }
 
-		var place = places[0];
-		console.log(place);
-		if (place.geometry && place.geometry.location) {
+		// var place = places[0];
+		// console.log("Valid place:", place);
+		if (place && place.geometry && place.geometry.location) {
 			let location = place.geometry.location.toJSON();
-			console.log(location);
+			// console.log(location);
 			if (window.google) {
 				this.props.googleMap.panTo(place.geometry.location); //Make map global
 			}
@@ -458,7 +482,8 @@ class BaseParkForm extends Component {
 						placeName: place.formatted_address,
 						lat: location.lat,
 						lng: location.lng
-					}
+					},
+					placesComplete: true
 				}
 				// () => this.onSubmit()
 			);
@@ -468,7 +493,10 @@ class BaseParkForm extends Component {
 	render() {
 		//console.log("Fetching parks?", this.props.isFetchingParks);
 		return (
-			<SearchFormStyle advancedSearch={this.state.advancedSearch}>
+			<SearchFormStyle
+				advancedSearch={this.state.advancedSearch}
+				isInvalidLocation={this.state.isInvalidLocation}
+			>
 				<div className="citySearch">
 					<form
 						onSubmit={e => {
@@ -476,35 +504,42 @@ class BaseParkForm extends Component {
 						}}
 					>
 						<input
-							id="autoComplete"
+							id="address-field"
 							className="searchTerm"
 							type="text"
 							name="placeName"
-							placeholder="Enter your city e.g. London, ON"
+							placeholder="Enter your location"
 							value={this.state.reqData.placeName || ""}
 							onChange={this.handlePlaceChange}
 						/>
 
-						<button
-							className={
-								"searchButton"
-								// (this.state.isInvalidLocation
-								// 	? " btn-danger"
-								// 	: " btn-primary")
-							}
-							type="submit"
+						<div
+							className={"searchButton"}
+							
 							disabled={
 								this.state.reqData.placeName === "" ||
 								this.state.isGeocodingLocation
 							}
 							onClick={e => {
-								this.onSubmit();
+								// console.log("Enter got here first");
+								if (this.state.placesComplete) {
+									this.onSubmit();
+								} else {
+									this.renderInvalidLocation();
+									// notify("Invalid location - please try again.");
+									// console.log(
+									// 	"Didn't use autocomplete yet!",
+									// 	this.state
+									// );
+								}
+								// this.onSubmit();
 								// this.onPlaceChanged();
 								// this.getPlaceCoordinates(e);
 							}}
 						>
+							{/* <SVG src={searchIcon}></SVG> */}
 							<i className="fa fa-search" />
-						</button>
+						</div>
 					</form>
 				</div>
 
@@ -516,10 +551,7 @@ class BaseParkForm extends Component {
 						disabled={this.state.isLoadingLocation}
 						onClick={this.getMyLocation}
 					>
-						<span>NEAR ME</span>
-
-						{/* <img src={nearMeButton} /> */}
-						{/* <strong>{this.renderLocationSpinner()}</strong> */}
+						<strong>{this.renderLocationSpinner()}</strong>
 					</button>
 				</div>
 
@@ -555,10 +587,11 @@ class BaseParkForm extends Component {
 
 						<br />
 						<SliderStyle>
+							{/* old max was 250 */}
 							<MuiSlider
 								aria-labelledby="discrete-slider-custom"
 								min={5}
-								max={300}
+								max={140}
 								step={5}
 								valueLabelDisplay="auto"
 								marks={marksDist}
@@ -567,14 +600,17 @@ class BaseParkForm extends Component {
 							/>
 						</SliderStyle>
 						<br />
-						<span className="FormTitle">Light Pollution</span>
+						<span className="FormTitle">
+							Max Light Pollution Zone
+						</span>
 						<br />
 						<SliderStyle>
+							{/* old max was 4.0 */}
 							<MuiSlider
 								aria-labelledby="discrete-slider-custom"
-								min={0}
-								max={6.5}
-								step={null}
+								min={0.4}
+								max={4.0}
+								step={0.1}
 								valueLabelDisplay="auto"
 								marks={marksLight}
 								value={parseFloat(this.state.reqData.lightpol)}
@@ -585,6 +621,18 @@ class BaseParkForm extends Component {
 				</div>
 
 				{this.renderFormErrors()}
+
+				{this.state.isInvalidLocation ? (
+					<span className="messageAboveForm">
+						<span className=" invalidLocation">
+							Invalid location - please try again.
+						</span>
+					</span>
+				) : (
+					<span className="messageAboveForm">
+						<span className="generic">Let's stargaze:</span>
+					</span>
+				)}
 
 				{/* <button
 							onClick={e => this.onSubmit(e)}
@@ -603,21 +651,28 @@ const marksDist = [
 		label: "5"
 	},
 	{
-		value: 25,
-		label: "25"
+		value: 25
 	},
 	{
 		value: 50,
 		label: "50"
 	},
 	{
+		value: 75,
+		label: "75"
+	},
+	{
 		value: 100,
 		label: "100"
 	},
 	{
-		value: 200,
-		label: "200"
+		value: 140,
+		label: "140"
 	}
+	// {
+	// 	value: 250,
+	// 	label: "250"
+	// }
 ];
 
 const marksLight = [
@@ -626,21 +681,22 @@ const marksLight = [
 		label: "Dark"
 	},
 	{
-		value: 1.0,
+		value: 1.0
+	},
+	{
+		value: 1.75,
 		label: "Rural"
 	},
 	{
 		value: 3.0,
-		label: "Brighter Rural"
+		label: "Rural/Suburban"
 	},
 	{
-		value: 6.0,
-		label: "Suburban"
+		value: 3.5
+	},
+	{
+		value: 4.0
 	}
-	// {
-	// 	value: 6,
-	// 	label: "6"
-	// }
 ];
 
 const ParkForm = parkFormProps => (
@@ -653,28 +709,74 @@ const ParkForm = parkFormProps => (
 
 export default withRouter(ParkForm);
 
-////////////////////////////////////////////
-
 const SearchFormStyle = styled.div`
-background: none;
-	/* background-color: ${props => props.theme.mapBlue}; */
+	background: none;
+
 	font-family: "Lato", sans-serif;
-	padding: 13px;
+
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-template-rows: ${props =>
-		props.advancedSearch
-			? `auto auto auto`
-			: `auto auto`}; /* Three rows, two with explicit widths */
+		props.advancedSearch ? `auto auto auto` : `auto auto`};
 	grid-gap: 10px;
 	grid-template-areas:
-		"searchBar searchBar myLocation"
-		"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
+"messageAboveForm messageAboveForm messageAboveForm"
+		"searchBar searchBar searchBar"
+	
+		"advancedSearchToggle advancedSearchToggle myLocation"
 		${props =>
 			props.advancedSearch
 				? `"advancedSearch advancedSearch advancedSearch"`
 				: ``};
+
+	@media screen and (min-width: 320) {
+		grid-template-areas:
+"messageAboveForm messageAboveForm messageAboveForm"
+			"searchBar searchBar myLocation"
+			"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
+			${props =>
+				props.advancedSearch
+					? `"advancedSearch advancedSearch advancedSearch"`
+					: ``};
+	}
+
+	@media screen and (min-width: 480px) {
+		grid-template-areas:
+		"messageAboveForm messageAboveForm messageAboveForm"
+			"searchBar searchBar myLocation"
+			"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
+			${props =>
+				props.advancedSearch
+					? `"advancedSearch advancedSearch advancedSearch"`
+					: ``};
+	}
+
+	.messageAboveForm{
+		grid-area: messageAboveForm;
+		text-align: left;
+		font-weight: 600;
+		animation: fadein 3s;
+			@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+
+
+		.invalidLocation{
+			color: ${props => props.theme.colorBad};
+		}
+		.generic{
+			color: ${props => props.theme.yellow};
+
+		}
+		
+	}
+
 	.AdvancedSearch {
+
+		width: 90%;
+		margin: auto auto;
 		${props => (props.advancedSearch ? `` : `display: none`)}
 		grid-area:advancedSearch;
 
@@ -688,50 +790,50 @@ background: none;
 		color: ${props => props.theme.white};
 		font-size: 13px;
 
-
 		.nearMe {
 			all: unset;
+			-webkit-appearance: none !important;
+			-moz-appearance: none !important;
+			appearance: none !important;
 			cursor: pointer;
-			/* background-color: ${props => props.theme.prettyDark}; */
+
 			background: ${props => props.theme.yellow};
 			border-radius: 20px;
 			height: 36px;
 			width: 100%;
+			-webkit-text-fill-color: rgba(0, 0, 0, 1); 
+   -webkit-opacity: 1; 
 			color: ${props => props.theme.prettyDark};
 			transition: color 0.1s ease;
-
 			font-size: 15px;
 			font-weight: 600;
-			
 
-			/* transition: background-color 0.2s; */
-		
-		:hover {
-
-				color: ${props => props.theme.colorBad};
-		
-		}
-		:active {
-		
-    -webkit-transform: scale(1.05);
-    transform: scale(1.05);
-
-			/* background-color: #fff3e5; */
-			
-		}
+			:disabled {
+				background: gray;
+			}
+			:hover:enabled {
+				background-color: ${props => props.theme.colorMedium};
+				/* color: ${props => props.theme.highlightPink}; */
+			}
+			:active:enabled {
+				-webkit-transform: scale(1.05);
+				transform: scale(1.05);
+			}
 		}
 		grid-area: myLocation;
 	}
 
 	.advancedSearchToggle {
 		grid-area: advancedSearchToggle;
-		span{
+		margin: auto 0;
+		span {
 			font-weight: 500;
 		}
 
 		button {
 			float: left;
 			i {
+				margin-left: 5px;
 				transform: rotate(
 					${props => (props.advancedSearch ? `0deg` : `-90deg`)}
 				);
@@ -746,94 +848,98 @@ background: none;
 	.searchButton {
 		width: 40px;
 		height: 36px;
-		/* border: 1px solid #00b4cc; */
-		background: ${props => props.theme.prettyDark};
+		-webkit-appearance: none !important;
+-moz-appearance: none !important;
+appearance: none !important;
+		
+		svg{
+			margin: auto auto;
+
+display: block;
+		}
+
+		background: ${(props, isInvalidLocation) =>
+			isInvalidLocation
+				? props.theme.highlightPink
+				: props.theme.prettyDark};
 		text-align: center;
 
 		color: ${props => props.theme.white};
-		/* border-radius: 0 5px 5px 0; */
+
 		cursor: pointer;
 		font-size: 20px;
+		border: 2px solid #2a2c2d;
+		float: left;
+		background-position: center;
+		transition: background 0.2s, color 0.1s ease;
+
 		:focus {
 			outline: 0;
 		}
-		border: none;
-		float: left;
-		transition: color 0.1s ease;
-		background-position: center;
-			transition: background 0.2s;
-		
+
 		:hover {
 			background: ${props => props.theme.prettyDark}
-				radial-gradient(circle, transparent 1%, rgba(0, 0, 0, .3) 1%)
+				radial-gradient(circle, transparent 1%, rgba(0, 0, 0, 0.3) 1%)
 				center/15000%;
-				color: ${props => props.theme.colorBad};
-		
+			color: ${props => props.theme.colorMedium};
 		}
+
 		:active {
-			
-			background-color: rgba(0, 0, 0, .3);
+			background-color: rgba(0, 0, 0, 0.3);
 			background-size: 100%;
 			transition: background 0s;
 		}
 	}
 
-	.searchTerm:focus {
-		color: ${props => props.theme.white};
-	}
-	/* .search {
-		width: 100%;
-		position: relative;
-		display: flex;
-		grid-area: searchBar;
-	} */
 
 	.searchTerm {
+		-webkit-appearance: none !important;
+			-moz-appearance: none !important;
+			appearance: none !important;
+			border-radius:0;
+	
 		width: calc(100% - 40px);
 		background-color: ${props => props.theme.darkAccent};
 		transition: background-color 0.1s ease;
-		/* border: 3px solid #00b4cc; */
-		/* border-right: none; */
+
 		padding: 5px;
 		height: 36px;
-		/* border-radius: 5px 0 0 5px; */
+
 		outline: none;
 		color: ${props => props.theme.white};
 		border: none;
 		float: left;
+
+		:focus {
+		color: ${props => props.theme.white};
+	}
+
 		:hover,
 		:active {
 			background-color: ${props => props.theme.moonBackground};
 			transition: background-color 0.1s ease;
 		}
-		
-::placeholder {
 
- font-weight: 300;
- opacity: 0.3;
-}
+		::placeholder {
+			font-weight: 300;
+			opacity: 0.5;
+		}
 	}
 
 	.ToggleAdvancedSearch {
 		all: unset;
+		-webkit-text-fill-color: #bdbdbd;
+   -webkit-opacity: 1; 
+		
 		cursor: pointer;
 		color: #bdbdbd;
 		:hover,
 		:active {
-			color: ${props => props.theme.colorBad};
+			color: ${props => props.theme.colorMedium};
 			transition: color 0.2s ease;
 		}
-
-		/* margin-top: 5px; */
 	}
 `;
-
-// const muiTheme = getMuiTheme({
-// 	slider: {
-// 	  trackColor: 'yellow',
-// 	  selectionColor: 'green'
-// 	},
-//   });
 
 const SliderStyle = styled.div`
 	.MuiSlider-root {
@@ -844,6 +950,10 @@ const SliderStyle = styled.div`
 		font-family: "Lato", sans-serif;
 	}
 	.MuiSlider-markLabelActive {
-		color: ${props => props.theme.colorBad};
+		color: ${props => props.theme.colorMedium};
 	}
+`;
+
+const ErrorStyle = styled.div`
+	color: ${props => props.theme.colorMedium};
 `;

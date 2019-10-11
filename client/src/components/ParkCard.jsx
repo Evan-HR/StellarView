@@ -25,13 +25,18 @@ class ParkCard extends Component {
 			return <div>{numReviews} reviews</div>;
 		}
 	}
+	prettyDate(time) {
+		var date = new Date(time);
+		var localeSpecificTime = date.toLocaleTimeString();
+		return localeSpecificTime.replace(/:\d+ /, " ");
+	}
 
 	renderReviewScore(reviewScore) {
 		if (reviewScore) {
 			return (
 				<div>
 					<StarReviewsStatic
-						starSize={"20px"}
+						starSize={"14px"}
 						avgScore={reviewScore}
 					/>
 				</div>
@@ -39,7 +44,7 @@ class ParkCard extends Component {
 		} else {
 			return (
 				<div>
-					<StarReviewsStatic starSize={"20px"} avgScore={0} />
+					<StarReviewsStatic starSize={"14px"} avgScore={0} />
 				</div>
 			);
 		}
@@ -51,77 +56,61 @@ class ParkCard extends Component {
 
 	render() {
 		return (
-			<div className="card">
-			<CardBootstrap>
+			<ParkCardWrapper
+				onMouseEnter={() => {
+					this.props.handleMouseOver(this.props.park.id);
+				}}
+				onMouseLeave={() => {
+					this.props.handleMouseLeave(this.props.park.id);
+				}}
+				onClick={() => {
+					this.props.handleMouseClick(this.props.park.id);
+				}}
+			>
 				<CardStyle>
-					<div
-						className="ParkTitle"
-						style={{ textTransform: "capitalize" }}
-						onMouseEnter={() => {
-							this.props.handleMouseOver(this.props.park.id);
-						}}
-						onMouseLeave={() => {
-							this.props.handleMouseLeave(this.props.park.id);
-						}}
-						onClick={() => {
-							this.props.handleMouseClick(this.props.park.id);
-						}}
-					>
-						<span className="Title">
+					<div className="ParkHeader">
+						<span className="ParkTitle">
 							{this.props.park.name_alt
 								? this.props.park.name_alt
 								: this.props.park.name}
 						</span>
 
-						<div className="Dist">
-							<span className="DistCharacteristic">
+						<div className="CarIcon">
+							<i className="fas fa-car"></i>
+							<div className="CarIconDesc">
 								{this.props.park.distance < 9000 ? (
 									<React.Fragment>
 										{Math.trunc(
 											parseFloat(this.props.park.distance)
 										)}
+										{" km"}
 									</React.Fragment>
 								) : (
-									<React.Fragment>?</React.Fragment>
+									<React.Fragment>n/a</React.Fragment>
 								)}
-							</span>
-							<span className="DistMantissa">
-								{this.props.park.distance < 9000 ? (
-									<React.Fragment>
-										.
-										{Math.trunc(
-											(parseFloat(
-												this.props.park.distance
-											) *
-												100) %
-												100
-										)}
-									</React.Fragment>
-								) : (
-									<React.Fragment>??</React.Fragment>
-								)}{" "}
-								<b> km</b>
-							</span>
+							</div>
 						</div>
+
 					</div>
 
-					<div className="WeatherIcons">
-						<div className="ParkHum">
+					<div className="cardContent">
+						<div className="HumidityIcon">
 							<img
 								src={humidityIcon}
 								alt="Humidity"
 								title="Humidity Level"
 							/>
-							<br />
+						</div>
+						<span className="HumidityIconDesc">
 							{this.props.park.weather.humidity < 40
 								? "Great"
 								: this.props.park.weather.humidity < 70
 								? "Okay"
 								: "Poor"}
-						</div>
+						</span>
 
-						<div className="ParkCloud">
-							{this.props.park.weather.clouds < 40 ? (
+						<div className="CloudIcon">
+							{this.props.park.weather.clouds < 35 ? (
 								<img
 									src={cloudGoodIcon}
 									alt="Cloud Coverage"
@@ -134,119 +123,100 @@ class ParkCard extends Component {
 									title="High Cloud Coverage"
 								/>
 							)}
-							{/* <img src={cloudIcon} /> */}
-							<br />
+						</div>
+
+						<span className="CloudIconDesc">
 							{this.props.park.weather.clouds < 20
 								? "Great"
 								: this.props.park.weather.clouds < 35
 								? "Okay"
 								: "Poor"}
-						</div>
+						</span>
 
-						<div className="ParkLightPol">
+						<div className="LightPolIcon">
 							<img
 								src={lightPolIcon}
 								alt="Light Pollution"
 								title="Light Pollution"
 							/>
-							<br />
+						</div>
+						<span className="LightPolIconDesc">
 							{this.props.park.light_pol < 1
 								? "Great"
 								: this.props.park.light_pol < 3
 								? "Okay"
 								: "Poor"}
-						</div>
-						<div className="ParkTemp">
-							<span className="tempIcon">
-								<img
-									src={tempIcon}
-									alt="Temperature"
-									title="Temperature"
-								/>
-							</span>
-							<br />
-							<span className="tempNum">
-								{Math.round(this.props.park.weather.temp)} °C
-							</span>
-
-							{/* {this.props.park.weather.temp < 15
-									? "Chilly"
-									: this.props.park.weather.temp < 25
-									? "Comfortable"
-									: "Inadequate"} */}
-						</div>
-					</div>
-
-					<div className="WeatherInfo">
-						<span>
-							<b>{this.props.park.weather.city}</b> forecast for{" "}
-							{new Date(
-								this.props.park.weather.time
-							).toLocaleString()}
 						</span>
-					</div>
 
-					<div className="ScoreLabel">
-						<CountUp
-							start={0}
-							end={Math.round(this.props.park.score * 100)}
-							delay={0}
-						>
-							{({ countUpRef }) => (
-								<div className="Score">
-									{/* <span className="ScoreTitle">Score:{" "}</span> */}
-									<span ref={countUpRef} />
-									<span className="Percentage">%</span>
-								</div>
-							)}
-						</CountUp>
-					</div>
-					<div className="ParkScoreIcon">
-						{this.props.park.score > 0.8 ? (
-							<i className="far fa-eye visibleGoodIcon"></i>
-						) : this.props.park.score > 0.6 ? (
-							<i className="far fa-eye visiblePartlyIcon"></i>
-						) : (
-							<i className="fas fa-eye-slash invisibleIcon"></i>
-						)}
-						<br />
-						{this.props.park.score > 0.8
-							? "Visible"
-							: this.props.park.score > 0.6
-							? "Partly Visible"
-							: "Not Visible"}
-					</div>
+						<div className="TempIcon">
+							<img
+								src={tempIcon}
+								alt="Temperature"
+								title="Temperature"
+							/>
+						</div>
+						<span className="TempIconDesc">
+							{Math.round(this.props.park.weather.temp)}° C
+						</span>
 
-					<div
-						className="StarRev"
-						onClick={() => {
-							this.props.handleMouseClick(this.props.park.id);
-						}}
-					>
-						<div className="StarScore">
-							{this.renderReviewScore(this.props.park.avgScore)}
+						<div className="WeatherInfo">
+							<span>
+								<b>{this.props.park.weather.city}</b> forecast
+								for{" "}
+								{this.prettyDate(this.props.park.weather.time)}
+								{/* {new Date(
+								this.props.park.weather.time
+							).toLocaleString()} */}
+							</span>
 						</div>
-						<div className="StarNumRev">
-							{this.renderNumReviews(this.props.park.numReviews)}
+
+						<span className="ScoreDesc">Visibility Score</span>
+
+						<div className="Score">
+							<CountUp
+								start={0}
+								end={Math.trunc(this.props.park.score * 100)}
+								delay={0}
+							>
+								{({ countUpRef }) => (
+									<React.Fragment>
+										<div
+											className="ScoreNumber"
+											ref={countUpRef}
+										/>
+						
+										<div className="Percentage">%</div>
+									</React.Fragment>
+								)}
+							</CountUp>
 						</div>
-					</div>
-					{/* 
+
+						<div className="MoreInfoDesc">Tap for more</div>
+
 						<div
-							className="moreInfo"
+							className="StarRev"
 							onClick={() => {
 								this.props.handleMouseClick(this.props.park.id);
 							}}
 						>
-							<i className="faqIcon fas fa-question-circle moreInfoIcon" />
-						</div> */}
+							<div className="StarScore">
+								{this.renderReviewScore(
+									this.props.park.avgScore
+								)}
+							</div>
+							<div className="StarNumRev">
+								{this.renderNumReviews(
+									this.props.park.numReviews
+								)}
+							</div>
+						</div>
+					</div>
 				</CardStyle>
-			</CardBootstrap>
-			</div>
+			</ParkCardWrapper>
 		);
 	}
 }
 
-//Default no-op functions if no prop, so that it doesn't complain about them not existing
 ParkCard.defaultProps = {
 	handleMouseOver: () => {},
 	handleMouseLeave: () => {},
@@ -255,281 +225,440 @@ ParkCard.defaultProps = {
 
 export default ParkCard;
 
+const ParkCardWrapper = styled.div`
+	background: ${props => props.theme.cardDark};
+	padding-bottom: 10px;
+	margin-bottom: 1rem;
+	position: relative;
+
+	/* min-width: 320px; */
+	cursor: pointer;
+
+	:hover {
+		background: ${props => props.theme.cardLight};
+		/* background: linear-gradient(
+			0deg,
+			${props => props.theme.cardLight} 70%,
+			${props => props.theme.cardHeaderHover} 70%
+		); */
+	}
+	:active {
+		background: ${props => props.theme.cardDark};
+		/* background: linear-gradient(
+			0deg,
+			${props => props.theme.cardDark} 70%,
+			${props => props.theme.cardHeader} 70%
+		); */
+	}
+
+	@media screen and (min-width: 320px) {
+		padding-bottom: 10px;
+	}
+
+	@media screen and (min-width: 355px) {
+		border-radius: 20px;
+		margin: 0 10px 15px 10px;
+	}
+
+	@media screen and (min-width: 400px) {
+		margin: 0 10px 15px 10px;
+	}
+
+
+
+	@media screen and (min-width: 480px) {
+		padding-bottom: 0px;
+	}
+
+	@media screen and (min-width: 525px) {
+		border-radius: 20px;
+	}
+
+	
+	/* @media screen and (min-width: 685px) {
+		padding-left: 7vw;
+		padding-right: 7vw;
+	}
+	@media screen and (min-width: 830px) {
+		padding-left: 9vw;
+		padding-right: 9vw;
+	}
+
+	@media screen and (min-width: 900px) {
+		padding-left: 11vw;
+		padding-right: 11vw;
+	}
+
+	@media screen and (min-width: 989px) {
+		padding-left: 0vw;
+		padding-right: 0vw;
+	}
+
+	/* @media screen and (min-width: 1060px) {
+		padding-left: 1vw;
+		padding-right: 1vw;
+	} */
+	@media screen and (min-width: 1292px) {
+		padding-bottom: 0px;
+	}
+
+	@media screen and (min-width: 1460px) {
+		
+	}
+
+	@media screen and (min-width: 1600px) {
+		
+	} 
+`;
+
 const CardStyle = styled.div`
-
-	/* margin: 13px; */
-	/* margin-bottom: 10px;
-	margin-left: 13px;
-	margin-right: 13px; */
-	max-height: 300px;
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
-	grid-template-rows: 1fr 1fr 1fr 1fr;
-	/* grid-column-gap: 10px;
-	grid-row-gap: 10px; */
-	grid-template-areas:
-		"ParkTitle   ParkTitle   ParkTitle    ParkTitle"
-		"ScoreLabel WeatherInfo WeatherInfo WeatherInfo"
-		"ParkScoreIcon WeatherIcons WeatherIcons WeatherIcons"
-		/* "ParkHum     ParkCloud   ParkLightPol ParkScore" */
-		"ParkScoreIcon StarRev    StarRev     StarRev";
-
-		font-family: 'Lato', sans-serif;
+	font-family: "Lato", sans-serif;
 	font-style: normal;
 	font-weight: 400;
 	font-size: 18px;
 	line-height: 23px;
-	text-align: left;
-
 	color: ${props => props.theme.fontDark};
-/* 
-	.moreInfo{
-		grid-area: MoreInfo;
-		margin: auto 0px 0px auto;
-    padding: 0px 10px 10px 0;
-	cursor: pointer;
-	.moreInfoIcon{
+	min-height: 270px;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: 0.3fr auto;
+	/* grid-gap: 1em; */
 
-		font-size: 1.2em;
+	grid-template-areas:
+		"ParkHeader   ParkHeader   ParkHeader    ParkHeader 	ParkHeader 	  ParkHeader"
+		"cardContent  cardContent cardContent 	 cardContent  	cardContent   cardContent";
+
+	@media screen and (min-width: 320px) {
+		grid-template-rows: 0.4fr auto;
+	}
+	@media screen and (min-width: 480px) {
+	}
+
+	.ParkHeader {
+		display: grid;
+		grid-area: ParkHeader;
+		grid-template-columns: 1fr 0.2fr;
+		grid-template-areas: "ParkTitle CarIcon";
+		/* min-height: 13vh; */
+		background: ${props => props.theme.green};
+		border-bottom: 5px solid #111414;
+		padding: 13px 10px;
 		:hover,
-	:active {
-		color: ${props => props.theme.colorBad};
-		transition: color 0.1s ease;
-	
-
-	}
-
-	}
-
-	} */
-
-
-	.ScoreLabel{
-		grid-area: ScoreLabel;
-		text-align: center;
-        margin: 50px 0 0 0;
-	font-size: 50px;
-    font-weight: 600;
-
-	.Percentage{
-		font-size: 17px;
-    font-weight: 400;
-	}
-
-	}
-
-
-	.ParkTitle {
-		border-top-left-radius: 20px;
-		border-top-right-radius: 20px;
-		background: ${props => props.theme.cardHeader};
-		-webkit-transition: background-color 0.1s linear;
-    -ms-transition: background-color 0.1s linear;
-    transition: background-color 0.1s linear;
-	
-		grid-area: ParkTitle;
-		/* border-bottom: 1px ${props => props.theme.fontDark} solid; */
-		position: relative;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		/* padding-bottom: 8px; */
-		color: ${props => props.theme.prettyDark};
-		padding: 0 13px 0 13px;
-		height: 80px;
-		cursor: pointer;
-		
-		:hover{
-			
+		:active {
 			background: ${props => props.theme.cardHeaderHover};
-		
-    -webkit-transition: background-color 0.1s linear;
-    -ms-transition: background-color 0.1s linear;
-    transition: background-color 0.1s linear;
+		}
+		@media screen and (min-width: 320px) {
+			padding: 13px 10px;
 		}
 
-		:active{
+		@media screen and (min-width: 355px) {
+			border-top-left-radius: 20px;
+			border-top-right-radius: 20px;
 	
-			background: ${props => props.theme.cardHeaderHover};
-		
-    -webkit-transition: background-color 0.1s linear;
-    -ms-transition: background-color 0.1s linear;
-    transition: background-color 0.1s linear;
-		
+	}
+		@media screen and (min-width: 430px) {
+			padding: 13px 30px;
 		}
-
-		.Title {
+		@media screen and (min-width: 480px) {
+			padding: 10px 30px;
+		}
+		@media screen and (min-width: 525px) {
 			
-
-			font-size: 25px;
-			 
-			line-height: 34px;
-	
+			padding: 10px 30px;
 		}
-		
-		.Dist {
-/* cursor: crosshair; */
-			padding-left: 10px;
-    display: inline-block;
-    min-width: 73px;
+		@media screen and (min-width: 685px) {
+			/* padding-left: 7vw;
+			padding-right: 7vw; */
+		}
+		@media screen and (min-width: 830px) {
+			/* padding-left: 9vw;
+			padding-right: 9vw; */
+		}
 
-			span {
-				left: 0;
-				position: relative;
+		@media screen and (min-width: 900px) {
+			/* padding-left: 11vw;
+			padding-right: 11vw; */
+		}
+
+		@media screen and (min-width: 989px) {
+			/* padding-left: 0vw;
+			padding-right: 0vw; */
+		}
+
+		@media screen and (min-width: 1060px) {
+			/* padding-left: 3vw;
+			padding-right: 3vw; */
+		}
+		/* @media screen and (min-width: 1292px) {
+			padding-left: 2.5vw;
+			padding-right: 2.5vw;
+		}
+
+		@media screen and (min-width: 1460px) {
+			padding-left: 5vw;
+			padding-right: 5vw;
+		} */
+
+		@media screen and (min-width: 1600px) {
+			/* padding-left: 6vw;
+			padding-right: 6vw; */
+		}
+
+		.ParkTitle {
+			display: flex;
+			grid-area: ParkTitle;
+
+			color: ${props => props.theme.prettyDark};
+			font-weight: 500;
+			font-size: 22px;
+			text-align: left;
+			margin: auto auto auto 0px;
+			line-height: 30px;
+			/* padding-left: 1rem; */
+
+			@media screen and (min-width: 320px) {
+				margin: auto auto auto 0px;
+				/* padding-left: 1rem; */
 			}
+			@media screen and (min-width: 480px) {
+				margin: auto auto auto 0px;
+				font-size: 25px;
+			}
+		}
 
-			.DistMantissa {
+		.CarIcon {
+			grid-area: CarIcon;
+			margin: auto 0 auto auto;
+			font-size: 22px;
+			i{
+				color: ${props => props.theme.prettyDark}
+			}
+			/* padding-right: 1rem; */
+			.CarIconDesc {
+				margin: auto auto;
+				font-size: 14px;
+			}
+		}
+
+	}
+
+	.cardContent {
+		display: grid;
+		grid-area: cardContent;
+		grid-template-columns: repeat(6, 1fr);
+		grid-template-rows: 1fr 1fr 0.5fr 1fr;
+		/* grid-gap: 1em; */
+
+		grid-template-areas:
+			"ScoreDesc   ScoreDesc    WeatherInfo  	  WeatherInfo 	WeatherInfo 	  WeatherInfo"
+			"Score 		 Score 		 HumidityIcon 	  CloudIcon 	LightPolIcon 	  TempIcon "
+			"Score 		 Score 		 HumidityIconDesc CloudIconDesc LightPolIconDesc  TempIconDesc "
+			"StarRev 	 StarRev 	 StarRev 	  	  StarRev  		MoreInfoDesc 	  MoreInfoDesc";
+
+		@media screen and (min-width: 320px) {
+			padding: 0px 10px;
+			grid-template-rows: 1fr 1fr 0.5fr 1fr;
+		}
+
+		@media screen and (min-width: 430px) {
+			padding: 0px 30px;
+	
+		}
+
+		@media screen and (min-width: 480px) {
+			padding: 0px 30px;
+			.WeatherInfo {
+				padding-bottom: 10px;
+			}
+		}
+
+		@media screen and (min-width: 685px) {
+			/* padding-left: 7vw;
+			padding-right: 7vw; */
+		}
+		@media screen and (min-width: 830px) {
+			/* padding-left: 9vw;
+			padding-right: 9vw; */
+		}
+
+		@media screen and (min-width: 900px) {
+			/* padding-left: 11vw;
+			padding-right: 11vw; */
+		}
+
+		@media screen and (min-width: 989px) {
+			/* padding-left: 0vw;
+			padding-right: 0vw; */
+		}
+
+		@media screen and (min-width: 1060px) {
+			/* padding-left: 3vw;
+			padding-right: 3vw; */
+		}
+		@media screen and (min-width: 1292px) {
+			/* padding-left: 2.5vw;
+			padding-right: 2.5vw; */
+		}
+
+		@media screen and (min-width: 1460px) {
+			/* padding-left: 5vw;
+			padding-right: 5vw; */
+		}
+
+		@media screen and (min-width: 1600px) {
+			/* padding-left: 6vw;
+			padding-right: 6vw; */
+		}
+
+		.WeatherInfo {
+			display: flex;
+
+			grid-area: WeatherInfo;
+			font-weight: 400;
+			font-size: 13px;
+			margin: auto auto 0 auto;
+		}
+		.HumidityIcon {
+			display: flex;
+
+			grid-area: HumidityIcon;
+			margin: auto auto 0 auto;
+		}
+		.HumidityIconDesc {
+			display: flex;
+
+			grid-area: HumidityIconDesc;
+			font-size: 14px;
+			margin: 0 auto;
+		}
+		.CloudIcon {
+			display: flex;
+
+			grid-area: CloudIcon;
+			margin: auto auto 0 auto;
+		}
+		.CloudIconDesc {
+			display: flex;
+
+			grid-area: CloudIconDesc;
+			font-size: 14px;
+			margin: 0 auto;
+		}
+		.LightPolIcon {
+			display: flex;
+
+			grid-area: LightPolIcon;
+			margin: auto auto 0 auto;
+		}
+		.LightPolIconDesc {
+			display: flex;
+
+			grid-area: LightPolIconDesc;
+			font-size: 14px;
+			margin: 0 auto;
+		}
+
+		.TempIcon {
+			display: flex;
+			grid-area: TempIcon;
+
+			margin: auto auto 0 auto;
+		}
+		.TempIconDesc {
+			display: flex;
+			grid-area: TempIconDesc;
+			font-size: 14px;
+
+			/* margin: auto auto; */
+			margin: 0 auto;
+		}
+
+		.StarRev {
+			grid-area: StarRev;
+			cursor: pointer;
+			display: flex;
+			/* float: left; */
+			margin: 10px auto auto 0px;
+
+			.StarScore {
+				display: flex;
+				.widget-svg {
+					height: 11px;
+					width: 11px;
+				}
+			}
+			.StarNumRev {
+				display: flex;
+				font-size: 12px;
+				padding-top: 5px;
+				margin: 0px 0px 0px 14px;
+				:hover,
+				:active {
+					color: ${props => props.theme.highlightPink};
+					transition: color 0.2s ease;
+				}
+
+				@media screen and (min-width: 480px) {
+					font-size: 13px;
+				}
+			}
+		}
+
+		.MoreInfoDesc {
+			display: flex;
+			grid-area: MoreInfoDesc;
+			font-size: 12px;
+			padding-top: 0px;
+			margin: 14px 0px auto auto;
+
+			@media screen and (min-width: 480px) {
 				font-size: 13px;
 			}
 		}
-	}
 
+		.ScoreDesc {
+			display: flex;
+			grid-area: ScoreDesc;
+			font-size: 13px;
 
-	.WeatherInfo {
-		grid-area: WeatherInfo;
-    font-weight: 400;
-    font-size: 16px;
-	line-height: 18px;
-	font-family: monospace;
-    align-content: center;
-	/* padding-left: 15px; */
-    text-align: center;
-   
-	margin: auto 20px auto 20px;
-	}
-
-	.WeatherIcons {
-		grid-area: WeatherIcons;
-		display: flex;
-		justify-content: space-between;
-		.ParkHum {
-
-			text-align: center;
-			margin: auto auto;
-
-		}
-		.ParkCloud {
-		
-			text-align: center;
-			margin: auto auto;
-		}
-		.ParkLightPol {
-	
-			text-align: center;
-			margin: auto auto;
-		}
-
-		.ParkTemp {
-		text-align: center;
-		margin: auto auto;
-
-
-
-		span {
-			display: inline-block;
-		}
-	}
-	}
-	
-	.ParkScore {
-		grid-area: ParkScore;
-		
-		font-style: normal;
-		font-weight: 600;
-		display: block;
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-
-
-  
-
-.ScoreWrapper{
-	position: absolute;
-
-		.ScoreNumerator {
-			display:inline;
-			font-size: 54px;
-		
-		}
-		.Percentage {
-			display:inline;
-				font-size: 20px;
+			margin: auto auto 0 0px;
+			font-weight: 400;
+			/* padding-bottom: 2px; */
+			@media screen and (min-width: 320px) {
+				padding-bottom: 0px;
 			}
-		
-		
-	}
-	}
 
-	
-	.ParkScoreIcon {
-		grid-area: ParkScoreIcon;
-		display: block;
-		align-content: center;
-    text-align: center;
-    margin: auto 10px auto 10px;
-		/* margin: 0px auto auto auto; */
-  /* width: 50px; */
-  .visibleGoodIcon{
-	  font-size:32px;
-	  color: ${props => props.theme.parkMapGreen};
-  }
-
-  .visiblePartlyIcon{
-	font-size:32px;
-	  color: #92704f;
-  }
-  .invisibleIcon{
-	font-size:32px;
-	  /* color: ${props => props.theme.colorBad}; */
-  }
-  
-
-			
+			@media screen and (min-width: 480px) {
+				font-size: 14px;
+				padding-bottom: 10px;
+			}
 		}
 
-	.StarRev {
-		grid-area: StarRev;
-	cursor: pointer;
-		
-		display: flex;
-    float: left;
+		.Score {
+			display: flex;
+			grid-area: Score;
+			font-size: 60px;
+			font-weight: 600;
+			padding-top: 25px;
+			align-items: baseline;
+			margin: auto 0;
+			.Percentage {
+				display: inline-block;
+				font-size: 25px;
+			}
 
-	margin: auto auto;
-		.StarScore{
-display: inline-block;
+			@media screen and (min-width: 320px) {
+				font-size: 60px;
+				padding-top: 25px;
+			}
+
+			@media screen and (min-width: 480px) {
+				font-size: 80px;
+				padding-top: 15px;
+				.Percentage {
+					font-size: 30px;
+				}
+			}
 		}
-		.StarNumRev{
-			display: inline-block;
-		
-			font-size: 14px;
-			margin: 4px 0 0 14px;
-			:hover,
-	:active {
-		color: ${props => props.theme.colorBad};
-		transition: color 0.2s ease;
-
-	}
-		}
-	}
-
-`;
-
-const CardBootstrap = styled.div`
-	position: relative;
-	display: -ms-flexbox;
-	display: flex;
-	-ms-flex-direction: column;
-	flex-direction: column;
-	min-width: 0;
-	word-wrap: break-word;
-	/* background-color: ${props => props.theme.white}; */
-	background-clip: border-box;
-	border: none !important;
-	border-radius: 20px;
-
-	hr {
-		margin-right: 0;
-		margin-left: 0;
 	}
 `;

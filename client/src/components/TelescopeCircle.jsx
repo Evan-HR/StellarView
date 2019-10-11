@@ -3,32 +3,30 @@ import styled from "styled-components";
 
 const TelescopeCircle = props => (
 	<TeleStyle>
-		<div className="circle">
-			<div className="stars">
-				<div className="star-six"></div>
-				<div className="starround2"></div>
-				<div className="starround6"></div>
-			</div>
+		<div className="stars">
+			<div className="star-six"></div>
+			<div className="starround2"></div>
+			<div className="starround6"></div>
+		</div>
 
-			<div className="stars2">
-				<div className="starround2"></div>
-				<div className="moon"></div>
-			</div>
+		<div className="stars2">
+			<div className="starround2"></div>
+			<div className="moon"></div>
+		</div>
 
-			<div className="stars3">
-				<div className="starround4"></div>
-				<div className="starround2"></div>
-			</div>
+		<div className="stars3">
+			<div className="starround4"></div>
+			<div className="starround2"></div>
+		</div>
 
-			<div className="stars4">
-				<div className="starround2"></div>
-				<div className="star-six"></div>
-			</div>
+		<div className="stars4">
+			<div className="starround2"></div>
+			<div className="star-six"></div>
+		</div>
 
-			<div className="stars5">
-				<div className="starround4"></div>
-				<div className="starround2"></div>
-			</div>
+		<div className="stars5">
+			<div className="starround4"></div>
+			<div className="starround2"></div>
 		</div>
 	</TeleStyle>
 );
@@ -36,15 +34,38 @@ const TelescopeCircle = props => (
 export default TelescopeCircle;
 
 const TeleStyle = styled.div`
-	.circle {
+	/* width: 320px;
+	height: 320px; */
+
+	/* margin: auto auto; */
+	clip-path: circle(50% at 50% 50%);
+	background: ${props => props.theme.darkAccent};
+
+	transition: all 500ms ease-in;
+	width: 300px;
+	height: 300px;
+	margin: 40px auto 20px auto;
+	overflow: hidden;
+	transition: all 500ms ease-in;
+
+	:hover {
+		transform: scale(1.06);
+		transition: all 1000ms ease-in;
+	}
+
+	@media screen and (min-width: 320px) {
+	}
+	@media screen and (min-width: 420px) {
+	}
+
+	@media screen and (min-width: 320px) {
+		width: 250px;
+		height: 250px;
+	}
+
+	@media screen and (min-width: 420px) {
 		width: 300px;
 		height: 300px;
-		margin: 15px auto 0;
-		background: ${props => props.theme.darkAccent};
-		border-radius: 50%;
-		/* moz-border-radius: 50%; */
-		overflow: hidden;
-		transition: all 500ms ease-in;
 	}
 
 	.stars {
@@ -63,21 +84,21 @@ const TeleStyle = styled.div`
 
 	.stars3 {
 		position: relative;
-		top: 180px;
+		top: 110px;
 		left: -50px;
 		animation: orbit 15s linear infinite;
 	}
 
 	.stars4 {
 		position: relative;
-		top: 150px;
+		top: 120px;
 		left: 300px;
 		animation: orbitrev 22s linear infinite;
 	}
 
 	.stars5 {
 		position: relative;
-		top: -50px;
+		top: 31px;
 		left: 300px;
 		animation: orbitrev 12s linear infinite;
 	}
@@ -119,6 +140,7 @@ const TeleStyle = styled.div`
 		border-radius: 5px;
 		position: relative;
 		top: 20px;
+
 		left: 35px;
 	}
 
@@ -131,6 +153,7 @@ const TeleStyle = styled.div`
 		border-radius: 5px;
 		position: relative;
 		top: 50px;
+
 		left: 105px;
 	}
 
@@ -144,11 +167,6 @@ const TeleStyle = styled.div`
 		position: relative;
 		top: 50px;
 		right: 85px;
-	}
-
-	.circle:hover {
-		transform: scale(1.2);
-		transition: all 1000ms ease-in;
 	}
 
 	@keyframes orbit {

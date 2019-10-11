@@ -7,6 +7,17 @@ import styled from "styled-components";
 import Register from "./Register";
 import formError from "./style/Media/formError.svg";
 import formSuccess from "./style/Media/formSuccess.svg";
+import {
+	notifyLoginModalIsOpen,
+	notifyLoginModalIsClosed
+} from "./MainComponent";
+import ee from "eventemitter3";
+
+const emitter = new ee();
+
+export const notifyCloseLoginModal = msg => {
+	emitter.emit("notifyCloseLoginModal", msg);
+};
 
 Modal.setAppElement("#root");
 class BaseLogin extends Component {
@@ -18,8 +29,19 @@ class BaseLogin extends Component {
 		loginSuccess: false
 	};
 
+	constructor(props) {
+		super(props);
+		emitter.on("notifyCloseLoginModal", msg => {
+			this.closeModal();
+		});
+	}
+
 	openModal = () => {
-		this.setState({ ...this.state, modalIsOpen: true });
+		notifyLoginModalIsOpen();
+		this.props.history.push(
+			`${window.location.pathname}${window.location.search}#login`
+		);
+		this.setState({ modalIsOpen: true });
 	};
 
 	afterOpenModal = () => {
@@ -27,9 +49,14 @@ class BaseLogin extends Component {
 	};
 
 	closeModal = () => {
-		console.log("Closing login modal");
+		// console.log("Closing login modal");
+		notifyLoginModalIsClosed();
+		this.props.history.push(
+			`${window.location.pathname}${window.location.search}`,
+			null
+		);
 		this.props.refreshInfoModal();
-		this.setState({ ...this.state, modalIsOpen: false, errorDB: false });
+		this.setState({ modalIsOpen: false, errorDB: false });
 		document.body.style.overflow = "visible";
 	};
 
@@ -73,7 +100,7 @@ class BaseLogin extends Component {
 	}
 
 	loginSuccess = () => {
-		console.log("get here for some reason?");
+		// console.log("get here for some reason?");
 		this.setState({ loginSuccess: true, errorDB: false });
 		setTimeout(() => {
 			this.closeModal();
@@ -109,7 +136,7 @@ class BaseLogin extends Component {
 					className="close"
 					aria-label="Close"
 				>
-					<i className="fas fa-window-close" />
+					<i className="fas fa-times"></i>
 				</button>
 				<div className="grid">
 					<form onSubmit={this.onSubmit} className="form login">
@@ -161,7 +188,16 @@ class BaseLogin extends Component {
 					</form>
 
 					<p className="text--center">
-						Not a member? <Register />
+						{this.props.hideLink ? (
+							""
+						) : (
+							<React.Fragment>
+								Not a member?{" "}
+								<span>
+									<Register hideLink={true} />
+								</span>
+							</React.Fragment>
+						)}
 					</p>
 				</div>
 				{this.errorMsg()}
@@ -194,9 +230,8 @@ class BaseLogin extends Component {
 					{this.props.children ? (
 						<React.Fragment>{this.props.children}</React.Fragment>
 					) : (
-						<Link to="/">Login</Link>
+						"Login"
 					)}
-					{/* <Link>login</Link> */}
 				</a>
 
 				<Modal
@@ -205,7 +240,7 @@ class BaseLogin extends Component {
 					onAfterOpen={this.afterOpenModal}
 					onRequestClose={this.closeModal}
 					contentLabel="Login Modal"
-					className="modal-dialog"
+					// className="modal-dialog"
 					style={customStyles}
 				>
 					<ModalStyle>
@@ -225,11 +260,11 @@ const Login = props => (
 
 BaseLogin.defaultProps = {
 	refreshInfoModal: () => {
-		console.log("Default prop!");
+		// console.log("Default prop!");
 	}
 };
 
-export default Login;
+export default withRouter(Login);
 
 /////////////////////////////////
 
@@ -250,6 +285,7 @@ const customStyles = {
 		bottom: "auto",
 		padding: "0px",
 		border: "none",
+		background:"black",
 		borderRadius: "2.5px",
 		marginRight: "-50%",
 		transform: "translate(-50%, -50%)",
@@ -292,39 +328,44 @@ const NewLoginStyle = styled.div`
 	-ms-flex-pack: center;
 	justify-content: center;
 	height: 80vh;
-	width: 60vw;
 	position: relative;
 	background: ${props => props.theme.prettyDark};
 	font-family: "Lato", sans-serif;
 	color: ${props => props.theme.white};
-	/* min-height: 100vh; */
+	width: 100vw;
+
+	@media screen and (min-width: 320px) {
+		width: 100vw;
+	}
+
+	@media screen and (min-width: 600px) {
+		width: 60vw;
+	}
+
+	@media screen and (min-width: 801px) {
+		width: 45vw;
+	}
 
 	.close {
-		position: absolute;
-		top: 0px;
-		right: 0px;
-		float: right;
-		font-size: 2.5rem;
-		font-weight: 700;
-		line-height: 1;
-		color: ${props => props.theme.white};
 		outline: none;
 		text-shadow: none;
-		opacity: 0.5;
+		color: ${props => props.theme.white};
+		position: absolute;
+		top: -1px;
+right: 4px;
+		float: right;
+		font-size: 2rem;
+		font-weight: 600;
+		line-height: 1;
 	}
 
 	.close:hover {
-		color: ${props => props.theme.colorBad};
+		color: ${props => props.theme.pink};
 		text-decoration: none;
 	}
 
 	.close:active {
-		color: ${props => props.theme.white};
-	}
-
-	.close:not(:disabled):not(.disabled):hover,
-	.close:not(:disabled):not(.disabled):focus {
-		opacity: 0.75;
+		color: ${props => props.theme.colorMedium};
 	}
 
 	/* helpers/grid.css */
@@ -376,7 +417,7 @@ const NewLoginStyle = styled.div`
 	a:focus,
 	a:hover {
 		text-decoration: none;
-		color: ${props => props.theme.colorBad};
+		color: ${props => props.theme.highlightPink};
 		transition: 0.25s;
 	}
 
@@ -476,7 +517,7 @@ const NewLoginStyle = styled.div`
 	}
 
 	.login input[type="submit"] {
-		background-color: ${props => props.theme.colorBad};
+		background-color: ${props => props.theme.highlightPink};
 		color: ${props => props.theme.prettyDark};
 		font-weight: 600;
 		text-transform: uppercase;
@@ -498,6 +539,20 @@ const NewLoginStyle = styled.div`
 
 	.text--center {
 		text-align: center;
+		span {
+			cursor: pointer;
+			color: ${props => props.theme.yellow};
+			transition: color 0.25s;
+			:focus,
+			:hover {
+				text-decoration: none;
+				color: ${props => props.theme.highlightPink};
+				transition: color 0.25s;
+			}
+			:active {
+				color: ${props => props.theme.colorMedium};
+			}
+		}
 	}
 `;
 

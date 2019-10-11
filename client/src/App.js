@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { AuthProvider, AuthConsumer } from "./components/AuthContext";
-import ParksData from "./components/ParksData";
+import MainComponent from "./components/MainComponent";
 import {
 	Link,
 	NavLink,
@@ -24,6 +24,8 @@ import Footer from "./components/Footer";
 import ScrollUpButton from "react-scroll-up-button";
 import NotFoundPage from "./components/NotFoundPage";
 import StarBackgroundLess from "./components/StarBackgroundLess";
+import Notification from "./components/Notification";
+import SocialLogo from "./components/style/Media/og-image.png";
 
 class App extends Component {
 	state = {
@@ -52,9 +54,10 @@ class App extends Component {
 			backdrop = <Backdrop click={this.backdropClickHandler} />;
 		}
 		//console.log("parks ", parks);
-		console.log("App - rendered");
+		// console.log("App - rendered");
 		return (
 			<React.Fragment>
+				<Notification />
 				<ScrollUpButton />
 				<GlobalStyle />
 				{/* <StarBackgroundLess/> */}
@@ -75,14 +78,13 @@ class App extends Component {
 								handleLogin={this.props.handleLogin}
 							/>
 							{backdrop}
-							<AuthConsumer>
-								{authState => {
-									console.log(authState);
-									return (
-										<Route
-											path="/profile"
-											render={() => {
-												console.log(authState);
+							<Switch>
+								<Route
+									path="/profile"
+									render={() => (
+										<AuthConsumer>
+											{authState => {
+												// console.log(authState);
 												if (authState.isAuth !== null) {
 													if (
 														authState.isAuth ===
@@ -95,11 +97,9 @@ class App extends Component {
 														);
 												}
 											}}
-										/>
-									);
-								}}
-							</AuthConsumer>
-							<Switch>
+										</AuthConsumer>
+									)}
+								/>
 								<Route
 									exact
 									path="/"
@@ -110,11 +110,16 @@ class App extends Component {
 
 								<Route
 									path={["/home", "/search"]}
-									component={ParksData}
+									component={MainComponent}
 								/>
-								<Route path="/faq" component={FAQ} />
+								<Route path="/FAQ" component={FAQ} />
 
-								<Route path="*" component={NotFoundPage} />
+								<Route
+									//Since /profile is outside the switch,
+									//make sure it's not getting picked up by *
+									path="*"
+									component={NotFoundPage}
+								/>
 							</Switch>
 						</Router>
 					</div>

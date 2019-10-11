@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import { AuthConsumer } from "./AuthContext";
 import ParkTableProfile from "./ParkTableProfile";
-import { parkScore } from "./ParksData";
+import { parkScore } from "./MainComponent";
+import styled from "styled-components";
 
 class BaseProfile extends Component {
 	constructor(props) {
@@ -46,13 +47,13 @@ class BaseProfile extends Component {
 	// }
 
 	getParkData = () => {
-		console.log("-------------------got to getParkData!");
-		console.log("userFavs is: ", this.props.context.userFavorites);
-		console.log("lat is: ", this.props.context.userLocation.lat);
-		console.log("hasFavSpots : ", this.props.context.hasFavSpots);
+		// console.log("-------------------got to getParkData!");
+		// console.log("userFavs is: ", this.props.context.userFavorites);
+		// console.log("lat is: ", this.props.context.userLocation.lat);
+		// console.log("hasFavSpots : ", this.props.context.hasFavSpots);
 
 		if (this.props.context.hasFavSpots == true) {
-			console.log("hasFavSpots got here");
+			// console.log("hasFavSpots got here");
 			var now = new Date();
 			var isoDate = now.toISOString();
 			isoDate = new Date(isoDate);
@@ -69,15 +70,15 @@ class BaseProfile extends Component {
 
 			//var parkProfileDataJSON = JSON.parse(parkProfileData)
 
-			console.log(
-				"console log before getProfileParks -- should crash after this: ",
-				parkProfileData
-			);
+			// console.log(
+			// 	"console log before getProfileParks -- should crash after this: ",
+			// 	parkProfileData
+			// );
 
 			axios
 				.post("/api/getProfileParks", parkProfileData)
 				.then(response => {
-					console.log("response from first call: ", response);
+					// console.log("response from first call: ", response);
 					var d = new Date();
 					var userTime = d.getTime();
 					return axios.post("/api/getProfileParksWeather", {
@@ -86,15 +87,17 @@ class BaseProfile extends Component {
 					}); // using response.data
 				})
 				.then(response => {
-					console.log("Response from second call", response);
+					// console.log("Response from second call", response);
 
 					for (var i = 0; i < response.data.parks.length; i++) {
-						response.data.parks[i].score = parkScore(
+						let tempScore = parkScore(
 							response.data.moonFraction,
 							response.data.parks[i].weather.humidity / 100,
 							response.data.parks[i].weather.clouds / 100,
 							response.data.parks[i].light_pol / 100
 						);
+						response.data.parks[i].score = tempScore.finalScore;
+						response.data.parks[i].scoreBreakdown = tempScore;
 					}
 
 					this.setState({
@@ -107,12 +110,12 @@ class BaseProfile extends Component {
 					});
 				});
 		} else {
-			console.log("NAAAAATHING!");
+			// console.log("NAAAAATHING!");
 		}
 	};
 
 	sendToParkTable = () => {
-		console.log("sendtoParkTable hath entered");
+		// console.log("sendtoParkTable hath entered");
 		//console.log("testboolInfoLoad is : " + this.state.testBoolInfoLoaded);
 
 		if (
@@ -146,18 +149,20 @@ class BaseProfile extends Component {
 	};
 
 	render() {
-		console.log("RENDER!!!! STATE IS BELOW:");
-		console.log("USER ID IS : ", this.props.context.userID);
-		console.log("USER LAT IS : ", this.props.context.userLocation.lat);
-		console.log("USER FAV PARKS", this.props.context.userFavorites);
-		console.log("HAS FAV SPOTS", this.props.context.hasFavSpots);
-		console.log(this.state);
+		// console.log("RENDER!!!! STATE IS BELOW:");
+		// console.log("USER ID IS : ", this.props.context.userID);
+		// console.log("USER LAT IS : ", this.props.context.userLocation.lat);
+		// console.log("USER FAV PARKS", this.props.context.userFavorites);
+		// console.log("HAS FAV SPOTS", this.props.context.hasFavSpots);
+		// console.log(this.state);
 		return (
-			<div>
-				Hello, {this.props.context.firstName}!<br />
-				{this.renderNoSpotsMsg()}
-				{this.sendToParkTable()}
-			</div>
+			<ProfileStyle>
+				<div>
+					<span className="firstName">Hello, {this.props.context.firstName}!</span>
+					{this.renderNoSpotsMsg()}
+					{this.sendToParkTable()}
+				</div>
+			</ProfileStyle>
 		);
 	}
 }
@@ -167,3 +172,12 @@ const Profile = props => (
 );
 
 export default Profile;
+
+const ProfileStyle = styled.div`
+	.firstName {
+		font-size: 20px;
+		margin: 20px auto;
+		display: block;
+		color: ${props => props.theme.white};
+	}
+`;

@@ -27,7 +27,7 @@ class BaseReportPark extends Component {
 	};
 
 	closeModal = () => {
-		console.log("Closing login modal");
+		// console.log("Closing login modal");
 		this.props.refreshInfoModal();
 		this.setState({ ...this.state, modalIsOpen: false, errorDB: false });
 		document.body.style.overflow = "visible";
@@ -73,7 +73,7 @@ class BaseReportPark extends Component {
 	}
 
 	reportSuccess = () => {
-		console.log("get here for some reason?");
+		// console.log("get here for some reason?");
 		this.setState({ reportSuccess: true, errorDB: false });
 		setTimeout(() => {
 			this.closeModal();
@@ -114,7 +114,7 @@ class BaseReportPark extends Component {
 			<ReportFormStyle>
 				<h1>What's the reason?</h1>
 				<label className="container">
-					Park does not exist
+					<span>Park does not exist</span>
 					<input
 						type="radio"
 						name="report"
@@ -125,7 +125,18 @@ class BaseReportPark extends Component {
 					<span className="checkmark"></span>
 				</label>
 				<label className="container">
-					By-laws enforced
+					<span>Too many lights</span>
+					<input
+						type="radio"
+						name="report"
+						id="inaccessible"
+						value="inaccessible"
+						onChange={this.handleFormChange}
+					/>
+					<span className="checkmark"></span>
+				</label>
+				<label className="container">
+					<span>By-laws enforced</span>
 					<input
 						type="radio"
 						name="report"
@@ -136,7 +147,7 @@ class BaseReportPark extends Component {
 					<span className="checkmark"></span>
 				</label>
 				<label className="container">
-					No parking
+					<span>No parking</span>
 					<input
 						type="radio"
 						name="report"
@@ -147,7 +158,7 @@ class BaseReportPark extends Component {
 					<span className="checkmark"></span>
 				</label>
 				<label className="container">
-					Inaccessible
+					<span>Inaccessible</span>
 					<input
 						type="radio"
 						name="report"
@@ -170,7 +181,7 @@ class BaseReportPark extends Component {
 					className="close"
 					aria-label="Close"
 				>
-					<i className="fas fa-window-close" />
+					<i className="fas fa-times"></i>
 				</button>
 				<div className="form">
 					<div className="wrapper">
@@ -215,14 +226,14 @@ class BaseReportPark extends Component {
 					onAfterOpen={this.afterOpenModal}
 					onRequestClose={this.closeModal}
 					contentLabel="Login Modal"
-					className="modal-dialog"
+					// className="modal-dialog"
 					style={customStyles}
 				>
 					<ModalStyle>
-					<div className="modal-content">
+						{/* <div className="modal-content"> */}
 						{this.renderReportModal()}
 						{/* {this.renderModalContent()} */}
-					</div>
+						{/* </div> */}
 					</ModalStyle>
 				</Modal>
 			</React.Fragment>
@@ -238,7 +249,7 @@ const ReportPark = props => (
 
 BaseReportPark.defaultProps = {
 	refreshInfoModal: () => {
-		console.log("Default prop!");
+		// console.log("Default prop!");
 	}
 };
 
@@ -264,6 +275,7 @@ const customStyles = {
 		padding: "0px",
 		border: "none",
 		borderRadius: "2.5px",
+		backgroundColor: "rgba(0,0,0,0.9)",
 		marginRight: "-50%",
 		transform: "translate(-50%, -50%)",
 		maxWidth: "100vw",
@@ -287,39 +299,44 @@ const LoginStyle = styled.div`
 	-ms-flex-pack: center;
 	justify-content: center;
 	height: 80vh;
-	width: 60vw;
 	position: relative;
-	background: ${props => props.theme.mapBlue};
+	background: ${props => props.theme.prettyDark};
 	font-family: "Lato", sans-serif;
 	color: ${props => props.theme.white};
-	/* min-height: 100vh; */
+	width: 100vw;
+
+	@media screen and (min-width: 320px) {
+		width: 100vw;
+	}
+
+	@media screen and (min-width: 600px) {
+		width: 60vw;
+	}
+
+	@media screen and (min-width: 801px) {
+		width: 45vw;
+	}
 
 	.close {
-		position: absolute;
-		top: 0px;
-		right: 0px;
-		float: right;
-		font-size: 2.5rem;
-		font-weight: 700;
-		line-height: 1;
-		color: ${props => props.theme.white};
 		outline: none;
 		text-shadow: none;
-		opacity: 0.5;
+		color: ${props => props.theme.white};
+		position: absolute;
+		top: -1px;
+		right: 4px;
+		float: right;
+		font-size: 2rem;
+		font-weight: 600;
+		line-height: 1;
 	}
 
 	.close:hover {
-		color: ${props => props.theme.colorBad};
+		color: ${props => props.theme.pink};
 		text-decoration: none;
 	}
 
 	.close:active {
-		color: ${props => props.theme.white};
-	}
-
-	.close:not(:disabled):not(.disabled):hover,
-	.close:not(:disabled):not(.disabled):focus {
-		opacity: 0.75;
+		color: ${props => props.theme.colorMedium};
 	}
 
 	.myLocation {
@@ -328,26 +345,32 @@ const LoginStyle = styled.div`
 
 		.nearMe {
 			all: unset;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
 			cursor: pointer;
 			background-color: ${props => props.theme.cardLight};
 			height: 36px;
 			width: 100%;
 			color: ${props => props.theme.prettyDark};
 			transition: color 0.1s ease;
+			border-radius: 3px;
 
 			font-size: 15px;
 			font-weight: 600;
 
 			transition: background 0.4s;
 			:hover {
-				background-color: ${props => props.theme.cardLightHover};
+				background-color: ${props => props.theme.yellow};
 
 				transition: background 0s;
 			}
 			:active {
-				background-color: ${props => props.theme.cardLightHover};
+				background-color: ${props => props.theme.colorMedium};
 				background-size: 100%;
 				transition: background 0s;
+				-webkit-transform: scale(1.05);
+				transform: scale(1.05);
 			}
 		}
 	}
@@ -417,6 +440,12 @@ const ReportFormStyle = styled.div`
 		-ms-user-select: none;
 		user-select: none;
 		font-size: 20px;
+		span {
+			:hover,
+			:focus {
+				color: ${props => props.theme.yellow};
+			}
+		}
 	}
 
 	/* Hide the browser's default radio button */
@@ -439,7 +468,7 @@ const ReportFormStyle = styled.div`
 
 	/* On mouse-over, add a grey background color */
 	.container:hover input ~ .checkmark {
-		background-color: #ccc;
+		background-color: ${props => props.theme.yellow};
 	}
 
 	/* When the radio button is checked, add a blue background */
@@ -471,16 +500,14 @@ const ReportFormStyle = styled.div`
 `;
 
 const ModalStyle = styled.div`
-
-  position: relative;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  width: 100%;
-  pointer-events: auto;
-  background-clip: padding-box;
-  border-radius: 0.3rem;
-  outline: 0;
-
+	position: relative;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	width: 100%;
+	pointer-events: auto;
+	background-clip: padding-box;
+	border-radius: 0.3rem;
+	outline: 0;
 `;

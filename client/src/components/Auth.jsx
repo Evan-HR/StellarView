@@ -25,12 +25,12 @@ export class Auth extends React.Component {
 			setUserLocation: this.setUserLocation,
 			handleLogin: this.handleLogin
 		};
-		console.log("AFTER REG, PRE-GETUSERAUTH, should be SECOND");
+		// console.log("AFTER REG, PRE-GETUSERAUTH, should be SECOND");
 		//this.getWeatherInfo();
 		this.getUserAuth();
-		console.log(
-			"AFTER REG and getUserAuth() in constructor, should be THIRD"
-		);
+		// console.log(
+		// 	"AFTER REG and getUserAuth() in constructor, should be THIRD"
+		// );
 		// this.getUserInfo();
 		// this.getUserReviews();
 		this.handleLogoutState = this.handleLogoutState.bind(this);
@@ -74,21 +74,21 @@ export class Auth extends React.Component {
 
 	//for register function
 	handleLogin = () => {
-		console.log("GOT HERE, should be FIRST");
+		// console.log("GOT HERE, should be FIRST");
 
 		this.getUserInfo();
 		//this.getUserFavSpots();
 	};
 
 	getUserAuth() {
-		console.log("FIRST: GETUSERAUTH()");
+		// console.log("FIRST: GETUSERAUTH()");
 		var self = this;
 		axios
 			.get("/api/getUserAuth")
 			.then(function(response) {
-				console.log("response is: ", response.data);
+				// console.log("response is: ", response.data);
 				if (response.data === true) {
-					console.log("get here ya?");
+					// console.log("get here ya?");
 					self.getUserInfo();
 					// self.getUserReviews();
 					// self.getUserFavSpots();
@@ -111,12 +111,12 @@ export class Auth extends React.Component {
 
 	getUserInfo() {
 		var self = this;
-		console.log("SECOND: getUserInfo()");
+		// console.log("SECOND: getUserInfo()");
 		axios
 			.get("/api/getUserInfo")
 
 			.then(({ data }) => {
-				console.log("Got user info, setting state")
+				// console.log("Got user info, setting state")
 				this.setState({
 					...this.state,
 					firstName: data.firstName,
@@ -133,16 +133,16 @@ export class Auth extends React.Component {
 	}
 
 	getUserFavSpots() {
-		console.log("FOURTH: getUserFavSpots()");
+		// console.log("FOURTH: getUserFavSpots()");
 		axios
 			.get("/api/getUserFavSpots")
 
 			.then(favSpots => {
 				if (favSpots.status === 204) {
-					console.log("204!!!!!!! NO FAV SPOTS!!");
+					// console.log("204!!!!!!! NO FAV SPOTS!!");
 					this.setState({ ...this.state, hasNoSpots: true });
 				} else {
-					console.log("fav spots: ", favSpots);
+					// console.log("fav spots: ", favSpots);
 					this.setState({
 						...this.state,
 						userFavorites: favSpots.data,
@@ -157,18 +157,18 @@ export class Auth extends React.Component {
 	}
 
 	getUserReviews() {
-		console.log(
-			"GETUSERREVIEWS GOT HERE  -  SHOULD BE ONLY ONCE!!!!!!!!!!!"
-		);
-		console.log("THIRD: getUserReviews()");
+		// console.log(
+		// 	"GETUSERREVIEWS GOT HERE  -  SHOULD BE ONLY ONCE!!!!!!!!!!!"
+		// );
+		// console.log("THIRD: getUserReviews()");
 		axios
 			.get("/api/getUserReviews")
 
 			.then(reviews => {
-				console.log("REVIEWS CONSOLE LOG: ", reviews.data);
-				console.log("REVIEWS STATUS CONSOLE LOG: ", reviews.status);
+				// console.log("REVIEWS CONSOLE LOG: ", reviews.data);
+				// console.log("REVIEWS STATUS CONSOLE LOG: ", reviews.status);
 				if (!(reviews.status === 204)) {
-					console.log("REVIEWS STATE UPDATE GOT HERE?");
+					// console.log("REVIEWS STATE UPDATE GOT HERE?");
 					this.setState({
 						...this.state,
 						userReviews: reviews.data

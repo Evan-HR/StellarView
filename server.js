@@ -15,9 +15,6 @@ const geolib = require("geolib");
 //authentication variables
 var session = require("express-session");
 var passport = require("passport");
-
-var PassportHerokuAddon = require("passport-heroku-addon");
-
 var LocalStrategy = require("passport-local").Strategy;
 var MySQLStore = require("express-mysql-session")(session);
 var bcrypt = require("bcrypt");
@@ -111,8 +108,8 @@ app.use(
 		store: sessionStore,
 		//only logged/registered users have cookies
 		saveUninitialized: false,
-		//cookie: { secure: true }
-		cookie: { httpOnly: false, secure: true }
+		// secure: true,
+		cookie: { httpOnly: false }
 	})
 );
 
@@ -131,7 +128,6 @@ app.use(function(req, res, next) {
 //using passport to authenticate login
 //adjust usernameField to email because this middleware
 //mandates key word "username"
-/*
 passport.use(
 	new LocalStrategy(
 		{
@@ -166,12 +162,6 @@ passport.use(
 		}
 	)
 );
-*/
-passport.use(
-	new PassportHerokuAddon({
-		sso_salt: process.env.SSO_SALT
-	})
-);
 
 // app.get("/home", function(req, res) {
 // 	res.redirect("/");
@@ -182,7 +172,7 @@ passport.use(
 // 	res.redirect("/");
 // });
 
-app.get("/logout", function(req, res) {
+app.get("/api/logout", function(req, res) {
 	console.log("LOG OUT GOT HERE!???!?");
 	req.logout();
 	//destroys session from database
@@ -194,22 +184,12 @@ app.get("/logout", function(req, res) {
 
 //local strategy cuz database is localhost
 //----------------------BEGIN LOGIN--------------------------------------//
-/*
 app.post(
 	"/api/login",
 	passport.authenticate("local", {
 		successRedirect: "/",
 		failureRedirect: "/api/login"
 	})
-);
-*/
-
-app.get(
-	"/heroku/resources/:id",
-	passport.authenticate("heroku-addon"),
-	function(request, response) {
-		response.redirect("/");
-	}
 );
 //----------------------END LOGIN--------------------------------------//
 app.get("/api/getUserFavSpots", function(req, res) {
@@ -343,7 +323,7 @@ app.post("/api/register", function(req, res) {
 		//check if same
 		var password = req.body.password1;
 
-		console.log("name email and password: " + name, email, password);
+		console.log("name email and password: " + name, email, "password");
 
 		const emailQuery = "SELECT * from users WHERE email=?";
 		connection.query(emailQuery, [email], (err, results, fields) => {
@@ -365,7 +345,8 @@ app.post("/api/register", function(req, res) {
 					//proceed with INSERT query, no duplicate emails
 
 					const insertQuery =
-						"INSERT into users (name, email, password) VALUES (?,?,?); SELECT LAST_INSERT_ID() as user_id;";
+						"INSERT into users (name, email, password) VALUES (?,?,?);";
+					const getIDQuery = "SELECT LAST_INSERT_ID() as user_id;";
 
 					//wrap insert query with bcrypt
 					bcrypt.hash(password, saltRounds, function(err, hash) {
@@ -374,15 +355,32 @@ app.post("/api/register", function(req, res) {
 							[name, email, hash],
 							(err, results, fields) => {
 								if (err) {
-									console.log("failed " + err);
+									console.log("failed to insert", err);
 									res.sendStatus(500);
 									return;
 								} else {
-									const user_id = results[1][0].user_id;
-									req.login(user_id, function(err) {
-										//will return successfully registered user to homepage
-										res.redirect("/");
-									});
+									connection.query(
+										getIDQuery,
+										(err, results) => {
+											if (err) {
+												console.log(
+													"failed to getID",
+													err
+												);
+												res.sendStatus(500);
+												return;
+											} else {
+												const user_id =
+													results[0].user_id;
+												req.login(user_id, function(
+													err
+												) {
+													//will return successfully registered user to homepage
+													res.redirect("/");
+												});
+											}
+										}
+									);
 								}
 							}
 						);
@@ -399,7 +397,11 @@ passport.serializeUser(function(user_id, done) {
 });
 //use this any time you want to GET info to a session
 passport.deserializeUser(function(user_id, done) {
-	//User.findById(id, function (err, user) {
+	// console.log("Desrializing user...");
+	// User.findById(user_id, function(err, user_id) {
+	// 	console.log("Done!");
+	// 	done(null, user_id);
+	// });
 	//^ this line automatic in mongo, hopefully no issues with mySQL
 	done(null, user_id);
 });
@@ -431,13 +433,15 @@ app.get("/api/getUserAuth", (req, res) => {
 //post register user name: req.session.passport.user  (will give 81)
 //post login user name: req.session.passport.user  (will give 81)
 app.get("/api/getUserInfo", (req, res) => {
-	console.log("SECOND: getuserinfO");
+	console.log("SECOND: getuserinfO, req session is:", req.session);
 	const nameQuery = "SELECT name from users WHERE id=?";
 	if (req.session.passport) {
+		console.log("Sending query");
 		connection.query(
 			nameQuery,
 			[req.session.passport.user],
 			(err, profileInfo) => {
+				console.log("Got query response");
 				if (err) {
 					console.log("failed" + err);
 					res.sendStatus(500);
@@ -458,6 +462,9 @@ app.get("/api/getUserInfo", (req, res) => {
 				}
 			}
 		);
+	} else {
+		console.log("No req.session.passport detected");
+		res.sendStatus(500);
 	}
 });
 
@@ -758,7 +765,7 @@ app.post("/api/getProfileParksWeather", async (req, res) => {
 		moonType: moonType,
 		stellarData: {}
 	};
-
+	console.log("Sending weather reply: ", reply);
 	res.send(reply);
 });
 
@@ -768,7 +775,7 @@ async function getParkWeatherAxios(park, userTime) {
 
 	var times = suncalc.getTimes(utime, park.lat, park.lng);
 
-	console.log("Sun data:", times);
+	// console.log("Sun data:", times);
 
 	var nightTime = new Date(times.night);
 	var dawnTime = new Date(times.dawn);
@@ -852,7 +859,6 @@ async function getParkWeatherAxios(park, userTime) {
 					response.list[succInst]
 				);
 				weatherInstance = response.list[succInst];
-				break;
 			}
 
 			park.weather = {
@@ -878,8 +884,12 @@ async function getParkWeatherAxios(park, userTime) {
 						}
 					) / 1000
 			};
+
+			break;
 		}
 	}
+
+	console.log("Got weather for park: ", park);
 
 	return park;
 }
@@ -891,6 +901,7 @@ app.post("/api/getParkData", async (req, res) => {
 	const dist = req.body.dist;
 	const lightpol = req.body.lightpol;
 	const utime = new Date(req.body.utime);
+	const numResults = req.body.numResults ? req.body.numResults : 100; //Fallback number of results to return
 
 	//STEP 2: GET PARKS FROM DATABASE USING USER INPUT PARAMS
 	//6371 is km, 3959 is miles
@@ -906,7 +917,19 @@ app.post("/api/getParkData", async (req, res) => {
 				res.sendStatus(500);
 				return;
 			}
+			// console.log("Initial results:", initialResults);
+
+			let totalResults = initialResults.length;
+
+			if (initialResults.length > numResults) {
+				initialResults = initialResults.slice(0, numResults);
+			}
+
+			let shownResults = initialResults.length;
+
 			var parkDataJSON = JSON.parse(JSON.stringify(initialResults));
+
+			// console.log(parkDataJSON);
 
 			//STEP 3 : GET PARKIDS FOR REVIEWS ARRAY
 			var reviewIDsOriginal = [];
@@ -1293,6 +1316,8 @@ app.post("/api/getParkData", async (req, res) => {
 
 						//STEP 9: FORMAT RESPONSE JSON
 						let reply = {
+							totalResults: totalResults,
+							shownResults: shownResults,
 							parks: parkDataJSON,
 							moonFraction: phaseInfo.fraction,
 							moonPercent: phaseInfo.phase,
@@ -1306,7 +1331,7 @@ app.post("/api/getParkData", async (req, res) => {
 								moonset: moonTimeData.set
 							}
 						};
-						//console.log("Response ", reply);
+						console.log("Response ", reply);
 
 						//STEP 10: SEND DATA TO FRONT-END
 						res.send(reply);
