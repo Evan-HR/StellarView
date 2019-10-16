@@ -59,11 +59,11 @@ const FAQ = props => (
 					Hamilton, Ontario. Inspired by Evan Reaume, Stellargaze
 					hopes to simplify the stargazing process. The front-end and
 					back-end was fully implemented by both{" "}
-					<a href="www.dustinjurkaulionis.com" target="_blank">
+					<a href="http://www.dustinjurkaulionis.com" target="_blank">
 						Dustin Jurkaulionis
 					</a>{" "}
 					and{" "}
-					<a href="www.vladfalach.com" target="_blank">
+					<a href="http://www.vladfalach.com" target="_blank">
 						Vlad Falach
 					</a>{" "}
 					over the Summer of 2019 as their first full-scale web
@@ -466,7 +466,14 @@ const FAQ = props => (
 					algorithm is continuously being improved so any advice
 					and/or feedback would be greatly appreciated. Please email
 					us at{" "}
-					<a href="mailto:dev@stellargaze.com">dev@stellargaze.com</a>
+					<a href="mailto:dev@stellargaze.com">dev@stellargaze.com</a>{" "}
+					and visit the repo at{" "}
+					<a
+						target="_blank"
+						href="https://github.com/CyberTropic/StellarGaze"
+					>
+						code
+					</a>
 				</span>
 			</div>
 		</div>
