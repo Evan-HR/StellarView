@@ -467,7 +467,7 @@ const FAQ = props => (
 					and/or feedback would be greatly appreciated. Please email
 					us at{" "}
 					<a href="mailto:dev@stellargaze.com">dev@stellargaze.com</a>{" "}
-					and
+					and{" "}
 					<a
 						target="_blank"
 						href="https://github.com/CyberTropic/StellarGaze"
