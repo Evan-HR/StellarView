@@ -467,12 +467,12 @@ const FAQ = props => (
 					and/or feedback would be greatly appreciated. Please email
 					us at{" "}
 					<a href="mailto:dev@stellargaze.com">dev@stellargaze.com</a>{" "}
-					and visit the repo at{" "}
+					and
 					<a
 						target="_blank"
 						href="https://github.com/CyberTropic/StellarGaze"
 					>
-						code
+						visit the repo
 					</a>
 				</span>
 			</div>
