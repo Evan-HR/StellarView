@@ -77,7 +77,7 @@ var options = {
 	host: process.env.JAWSDB_MARIA_HOST,
 	user: process.env.JAWSDB_MARIA_USER,
 	password: process.env.JAWSDB_MARIA_PASSWORD,
-	database: process.env.JAWSDB_MARIA_DATABASE
+	database: process.env.JAWSDB_MARIA_DATABASE,
 };
 
 var sessionStore = new MySQLStore(options);
@@ -109,7 +109,7 @@ app.use(
 		//only logged/registered users have cookies
 		saveUninitialized: false,
 		// secure: true,
-		cookie: { httpOnly: false }
+		cookie: { httpOnly: false },
 	})
 );
 
@@ -120,7 +120,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
 	res.locals.isAuthenticated = req.isAuthenticated();
 	next();
 });
@@ -131,9 +131,9 @@ app.use(function(req, res, next) {
 passport.use(
 	new LocalStrategy(
 		{
-			usernameField: "email"
+			usernameField: "email",
 		},
-		function(username, password, done) {
+		function (username, password, done) {
 			const passQuery = "SELECT id,password from users WHERE email=?";
 			connection.query(passQuery, [username], (err, results, fields) => {
 				//passport handles this error
@@ -150,7 +150,7 @@ passport.use(
 					const hash = results[0].password.toString();
 
 					//used to be user.results[0].id
-					bcrypt.compare(password, hash, function(err, response) {
+					bcrypt.compare(password, hash, function (err, response) {
 						if (response === true) {
 							return done(null, results[0].id);
 						} else {
@@ -172,7 +172,7 @@ passport.use(
 // 	res.redirect("/");
 // });
 
-app.get("/api/logout", function(req, res) {
+app.get("/api/logout", function (req, res) {
 	console.log("LOG OUT GOT HERE!???!?");
 	req.logout();
 	//destroys session from database
@@ -188,11 +188,11 @@ app.post(
 	"/api/login",
 	passport.authenticate("local", {
 		successRedirect: "/",
-		failureRedirect: "/api/login"
+		failureRedirect: "/api/login",
 	})
 );
 //----------------------END LOGIN--------------------------------------//
-app.get("/api/getUserFavSpots", function(req, res) {
+app.get("/api/getUserFavSpots", function (req, res) {
 	const getFavSpotsQuery =
 		"SELECT park_id from favorite_parks where user_id = ?";
 	connection.query(
@@ -222,7 +222,7 @@ app.get("/api/getUserFavSpots", function(req, res) {
 });
 
 //get reviews from db
-app.get("/api/getReviews", function(req, res) {
+app.get("/api/getReviews", function (req, res) {
 	const getReviewQuery =
 		"SELECT id, name, score, review, date from reviews where p_id = ?";
 
@@ -251,7 +251,7 @@ app.get("/api/getReviews", function(req, res) {
 				let reply = {
 					reviews: reviews,
 					averageScore: averageScore,
-					numReviews: reviewsLength
+					numReviews: reviewsLength,
 				};
 
 				res.send(reply);
@@ -263,7 +263,7 @@ app.get("/api/getReviews", function(req, res) {
 });
 
 //put review to database
-app.post("/api/storeReview", function(req, res) {
+app.post("/api/storeReview", function (req, res) {
 	console.log("review on submission from client: ", req.body);
 	console.log(req.body.name);
 	console.log(req.body.user_id);
@@ -281,7 +281,7 @@ app.post("/api/storeReview", function(req, res) {
 			req.body.score,
 			req.body.name,
 			req.body.user_id,
-			req.body.review
+			req.body.review,
 		],
 		(err, profileInfo) => {
 			if (err) {
@@ -294,7 +294,7 @@ app.post("/api/storeReview", function(req, res) {
 	);
 });
 
-app.post("/api/register", function(req, res) {
+app.post("/api/register", function (req, res) {
 	//client-side validation
 	req.checkBody("name", "Preferred name cannot be empty.").notEmpty();
 	req.checkBody(
@@ -349,7 +349,7 @@ app.post("/api/register", function(req, res) {
 					const getIDQuery = "SELECT LAST_INSERT_ID() as user_id;";
 
 					//wrap insert query with bcrypt
-					bcrypt.hash(password, saltRounds, function(err, hash) {
+					bcrypt.hash(password, saltRounds, function (err, hash) {
 						connection.query(
 							insertQuery,
 							[name, email, hash],
@@ -372,7 +372,7 @@ app.post("/api/register", function(req, res) {
 											} else {
 												const user_id =
 													results[0].user_id;
-												req.login(user_id, function(
+												req.login(user_id, function (
 													err
 												) {
 													//will return successfully registered user to homepage
@@ -392,11 +392,11 @@ app.post("/api/register", function(req, res) {
 });
 
 //----------------------BEGIN AUTHENTICATION-----------------
-passport.serializeUser(function(user_id, done) {
+passport.serializeUser(function (user_id, done) {
 	done(null, user_id);
 });
 //use this any time you want to GET info to a session
-passport.deserializeUser(function(user_id, done) {
+passport.deserializeUser(function (user_id, done) {
 	// console.log("Desrializing user...");
 	// User.findById(user_id, function(err, user_id) {
 	// 	console.log("Done!");
@@ -501,7 +501,7 @@ app.get("/api/getUserReviews", (req, res) => {
 });
 
 //full park info link pages
-app.get("/park/:id", function(req, res) {
+app.get("/park/:id", function (req, res) {
 	var id = req.params.id;
 	const lat = req.body.lat;
 	const lng = req.body.lng;
@@ -521,7 +521,7 @@ app.get("/park/:id", function(req, res) {
 			parklightpol: parkInfo[0].light_pol,
 			parklocation: [parkInfo[0].lat, parkInfo[0].lng],
 			userlocation: [lat, lng],
-			mapAPIKey: mapsKey1
+			mapAPIKey: mapsKey1,
 		});
 		res.end();
 	});
@@ -618,7 +618,7 @@ app.post("/results.html", (req, res) => {
 			res.render("results.ejs", {
 				location: [lat, lng],
 				parks: results,
-				mapAPIKey: mapsKey1
+				mapAPIKey: mapsKey1,
 			});
 			res.end();
 		}
@@ -723,7 +723,9 @@ app.post("/api/getProfileParksWeather", async (req, res) => {
 
 	parkDataLength = Object.keys(parkData).length;
 
-	let weatherData = parkData.map(park => getParkWeatherAxios(park, userTime));
+	let weatherData = parkData.map((park) =>
+		getParkWeatherAxios(park, userTime)
+	);
 	await Promise.all(weatherData);
 	console.log("Weather results:", weatherData);
 
@@ -763,7 +765,7 @@ app.post("/api/getProfileParksWeather", async (req, res) => {
 		moonFraction: phaseInfo.fraction,
 		moonPhase: phaseInfo.phase,
 		moonType: moonType,
-		stellarData: {}
+		stellarData: {},
 	};
 	console.log("Sending weather reply: ", reply);
 	res.send(reply);
@@ -794,7 +796,7 @@ async function getParkWeatherAxios(park, userTime) {
 	}
 	response = await axios
 		.get(weatherURL)
-		.then(response => response.data)
+		.then((response) => response.data)
 		.catch(false);
 
 	if (!forecast) {
@@ -810,19 +812,19 @@ async function getParkWeatherAxios(park, userTime) {
 			temp: weatherInstance.main.temp,
 			stationCoord: {
 				lat: response.coord.lat,
-				lng: response.coord.lon
+				lng: response.coord.lon,
 			},
 			stationDist:
 				geolib.getDistance(
 					{
 						lat: park.lat,
-						lng: park.lng
+						lng: park.lng,
 					},
 					{
 						lat: response.coord.lat,
-						lng: response.coord.lon
+						lng: response.coord.lon,
 					}
-				) / 1000
+				) / 1000,
 		};
 	} else {
 		//Get forecast weather
@@ -870,19 +872,19 @@ async function getParkWeatherAxios(park, userTime) {
 				temp: weatherInstance.main.temp,
 				stationCoord: {
 					lat: response.city.coord.lat,
-					lng: response.city.coord.lon
+					lng: response.city.coord.lon,
 				},
 				stationDist:
 					geolib.getDistance(
 						{
 							lat: park.lat,
-							lng: park.lng
+							lng: park.lng,
 						},
 						{
 							lat: response.city.coord.lat,
-							lng: response.city.coord.lon
+							lng: response.city.coord.lon,
 						}
-					) / 1000
+					) / 1000,
 			};
 
 			break;
@@ -999,7 +1001,7 @@ app.post("/api/getParkData", async (req, res) => {
 						for (var i = 0; i < parkDataJSON.length; i++) {
 							parkCoordinates[i] = [
 								parkDataJSON[i].lat,
-								parkDataJSON[i].lng
+								parkDataJSON[i].lng,
 							];
 						}
 
@@ -1043,7 +1045,7 @@ app.post("/api/getParkData", async (req, res) => {
 											.lat,
 									lng:
 										parkDataJSON[clusters[clusterNum][i]]
-											.lng
+											.lng,
 								});
 							}
 							//console.log(clusterCoordinates);
@@ -1072,7 +1074,7 @@ app.post("/api/getParkData", async (req, res) => {
 											lng:
 												parkDataJSON[
 													clusters[clusterNum][i]
-												].lng
+												].lng,
 										},
 										clusterCentroid
 									)
@@ -1116,7 +1118,7 @@ app.post("/api/getParkData", async (req, res) => {
 
 								response = await axios
 									.get(weatherURL)
-									.then(response => response.data)
+									.then((response) => response.data)
 									.catch(false);
 
 								weatherInstance = response;
@@ -1139,7 +1141,7 @@ app.post("/api/getParkData", async (req, res) => {
 										temp: weatherInstance.main.temp,
 										stationCoord: {
 											lat: response.coord.lat,
-											lng: response.coord.lon
+											lng: response.coord.lon,
 										},
 										stationDist:
 											geolib.getDistance(
@@ -1155,13 +1157,13 @@ app.post("/api/getParkData", async (req, res) => {
 															clusters[
 																clusterNum
 															][i]
-														].lng
+														].lng,
 												},
 												{
 													lat: response.coord.lat,
-													lng: response.coord.lon
+													lng: response.coord.lon,
 												}
-											) / 1000
+											) / 1000,
 									};
 								}
 
@@ -1173,7 +1175,7 @@ app.post("/api/getParkData", async (req, res) => {
 
 								response = await axios
 									.get(weatherURL)
-									.then(response => response.data)
+									.then((response) => response.data)
 									.catch(false);
 
 								//Go through the forecasts and find the closest one to nightfall
@@ -1243,7 +1245,7 @@ app.post("/api/getParkData", async (req, res) => {
 										temp: weatherInstance.main.temp,
 										stationCoord: {
 											lat: response.city.coord.lat,
-											lng: response.city.coord.lon
+											lng: response.city.coord.lon,
 										},
 										stationDist:
 											geolib.getDistance(
@@ -1259,14 +1261,15 @@ app.post("/api/getParkData", async (req, res) => {
 															clusters[
 																clusterNum
 															][i]
-														].lng
+														].lng,
 												},
 												{
 													lat:
 														response.city.coord.lat,
-													lng: response.city.coord.lon
+													lng:
+														response.city.coord.lon,
 												}
-											) / 1000
+											) / 1000,
 									};
 								}
 							}
@@ -1328,8 +1331,8 @@ app.post("/api/getParkData", async (req, res) => {
 								night: sunTimeData.night,
 								nightEnd: sunTimeData.nightEnd,
 								moonrise: moonTimeData.rise,
-								moonset: moonTimeData.set
-							}
+								moonset: moonTimeData.set,
+							},
 						};
 						console.log("Response ", reply);
 
