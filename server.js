@@ -1,3 +1,15 @@
+const {
+	getIndividualParkWeatherAxios,
+} = require("./serverSrc/getIndividualParkWeatherAxios");
+
+//Custom imports
+const {
+	getMoon,
+	toRadians,
+	inRange,
+	getMoonPhaseString,
+} = require("./serverSrc/helperFunctions");
+
 //bring in both express and mysql TEST FOR VLAD
 const express = require("express");
 const mysql = require("mysql");
@@ -27,6 +39,7 @@ var sslRedirect = require("heroku-ssl-redirect");
 require("dotenv").config();
 const mapsKey1 = process.env.REACT_APP_DUSTINMAPKEY;
 const weatherKey1 = process.env.REACT_APP_EVANWEATHERKEY;
+exports.weatherKey1 = weatherKey1;
 const cookieKey = process.env.SECRET;
 // const sqlUsername = process.env.SQLUSERNAME;
 // const sqlPassword = process.env.SQLPASSWORD;
@@ -294,7 +307,7 @@ app.post("/api/storeReview", function (req, res) {
 	);
 });
 
-app.post("/api/register", function (req, res) {
+app.post("/api/register", async function (req, res) {
 	//client-side validation
 	req.checkBody("name", "Preferred name cannot be empty.").notEmpty();
 	req.checkBody(
@@ -317,81 +330,82 @@ app.post("/api/register", function (req, res) {
 
 	if (errors) {
 		res.status(422).json({ errors: errors });
-	} else {
-		var name = req.body.name;
-		var email = req.body.email;
-		//check if same
-		var password = req.body.password1;
+		return;
+	}
+	var name = req.body.name;
+	var email = req.body.email;
+	//check if same
+	var password = req.body.password1;
 
-		console.log("name email and password: " + name, email, "password");
+	console.log("name email and password: " + name, email, "password");
 
-		const emailQuery = "SELECT * from users WHERE email=?";
-		connection.query(emailQuery, [email], (err, results, fields) => {
-			if (err) {
-				console.log("failed" + err);
-				res.sendStatus(500);
-				return;
-			} else {
-				if (results.length > 0) {
-					//display error message
-					console.log("GOT HERE???");
-					var jsonString =
-						'[{"msg" : "Email already registered.  Please try again."}]';
-					var emailErrorJSON = JSON.parse(jsonString);
-					console.log("errors is: ");
-					console.log(emailErrorJSON.msg);
-					res.status(422).json({ errors: emailErrorJSON });
+	const emailQuery = "SELECT * from users WHERE email=?";
+
+	try {
+		var results = await new Promise((resolve, reject) => {
+			connection.query(emailQuery, [email], (err, results, fields) => {
+				if (err) {
+					reject(err);
 				} else {
-					//proceed with INSERT query, no duplicate emails
+					resolve(results);
+				}
+			});
+		});
+	} catch (err) {
+		console.log("failed" + err);
+		res.sendStatus(500);
+		return;
+	}
 
-					const insertQuery =
-						"INSERT into users (name, email, password) VALUES (?,?,?);";
-					const getIDQuery = "SELECT LAST_INSERT_ID() as user_id;";
+	if (results.length > 0) {
+		//display error message
+		console.log("GOT HERE???");
+		var jsonString =
+			'[{"msg" : "Email already registered.  Please try again."}]';
+		var emailErrorJSON = JSON.parse(jsonString);
+		console.log("errors is: ");
+		console.log(emailErrorJSON.msg);
+		res.status(422).json({ errors: emailErrorJSON });
+		return;
+	}
+	//proceed with INSERT query, no duplicate emails
 
-					//wrap insert query with bcrypt
-					bcrypt.hash(password, saltRounds, function (err, hash) {
-						connection.query(
-							insertQuery,
-							[name, email, hash],
-							(err, results, fields) => {
-								if (err) {
-									console.log("failed to insert", err);
-									res.sendStatus(500);
-									return;
-								} else {
-									connection.query(
-										getIDQuery,
-										(err, results) => {
-											if (err) {
-												console.log(
-													"failed to getID",
-													err
-												);
-												res.sendStatus(500);
-												return;
-											} else {
-												const user_id =
-													results[0].user_id;
-												req.login(user_id, function (
-													err
-												) {
-													//will return successfully registered user to homepage
-													res.redirect("/");
-												});
-											}
-										}
-									);
-								}
-							}
-						);
+	const insertQuery =
+		"INSERT into users (name, email, password) VALUES (?,?,?);";
+	const getIDQuery = "SELECT LAST_INSERT_ID() as user_id;";
+
+	//wrap insert query with bcrypt
+	bcrypt.hash(password, saltRounds, function (err, hash) {
+		connection.query(
+			insertQuery,
+			[name, email, hash],
+			(err, results, fields) => {
+				if (err) {
+					console.log("failed to insert", err);
+					res.sendStatus(500);
+					return;
+				} else {
+					connection.query(getIDQuery, (err, results) => {
+						if (err) {
+							console.log("failed to getID", err);
+							res.sendStatus(500);
+							return;
+						} else {
+							const user_id = results[0].user_id;
+							req.login(user_id, function (err) {
+								//will return successfully registered user to homepage
+								res.redirect("/");
+							});
+						}
 					});
 				}
 			}
-		});
-	}
+		);
+	});
 });
 
 //----------------------BEGIN AUTHENTICATION-----------------
+//How come this just happens in the middle of the file, rather than a function that gets called?
 passport.serializeUser(function (user_id, done) {
 	done(null, user_id);
 });
@@ -625,22 +639,6 @@ app.post("/results.html", (req, res) => {
 	);
 });
 
-function getMoon(userTime) {
-	var time = new Date(userTime);
-
-	var phaseInfo = suncalc.getMoonIllumination(time);
-	return phaseInfo;
-}
-
-function toRadians(angle) {
-	console.log("RADIANS FUNC RAN!!?!?!?!?");
-	return angle * (Math.PI / 180);
-}
-
-function inRange(x, min, max) {
-	return (x - min) * (x - max) <= 0;
-}
-
 app.post("/api/getProfileParks", async (req, res) => {
 	console.log("body is: ", req.body);
 	var tempString = JSON.stringify(req.body.userFavs);
@@ -682,27 +680,6 @@ app.post("/api/getProfileParks", async (req, res) => {
 						Math.cos(toRadians(park.lng) - toRadians(lng)) +
 						Math.sin(toRadians(lat)) * Math.sin(toRadians(park.lat))
 				);
-
-			//moon stuff
-			// var phaseInfo = getMoon(req.body.userTime);
-			// var moonType = "";
-
-			// if (
-			// 	inRange(percentMoon, 0, 0.125) ||
-			// 	inRange(percentMoon, 0.875, 1)
-			// ) {
-			// 	moonType = "New Moon";
-			// } else if (inRange(percentMoon, 0.125, 0.375)) {
-			// 	moonType = "First Quarter";
-			// } else if (inRange(percentMoon, 0.375, 0.625)) {
-			// 	moonType = "Full Moon";
-			// } else if (inRange(percentMoon, 0.625, 0.875)) {
-			// 	moonType = "Last Quarter";
-			// }
-
-			// park.moon = phaseInfo.fraction;
-			// park.moonType = phaseInfo.phase;
-
 			//axios goes here normally
 		}
 
@@ -724,7 +701,7 @@ app.post("/api/getProfileParksWeather", async (req, res) => {
 	parkDataLength = Object.keys(parkData).length;
 
 	let weatherData = parkData.map((park) =>
-		getParkWeatherAxios(park, userTime)
+		getIndividualParkWeatherAxios(park, userTime, weatherKey1)
 	);
 	await Promise.all(weatherData);
 	console.log("Weather results:", weatherData);
@@ -736,29 +713,7 @@ app.post("/api/getProfileParksWeather", async (req, res) => {
 
 	var phaseInfo = getMoon(userTime);
 
-	var moonType;
-	if (
-		inRange(phaseInfo.phase, 0.9375, 1) ||
-		inRange(phaseInfo.phase, 0, 0.0625)
-	) {
-		moonType = "New Moon";
-	} else if (inRange(phaseInfo.phase, 0.0625, 0.1875)) {
-		moonType = "Waxing Crescent";
-	} else if (inRange(phaseInfo.phase, 0.1875, 0.3125)) {
-		moonType = "First Quarter";
-	} else if (inRange(phaseInfo.phase, 0.3125, 0.4375)) {
-		moonType = "Waxing Gibbous";
-	} else if (inRange(phaseInfo.phase, 0.4375, 0.5625)) {
-		moonType = "Full Moon";
-	} else if (inRange(phaseInfo.phase, 0.5625, 0.6875)) {
-		moonType = "Waning Gibbous";
-	} else if (inRange(phaseInfo.phase, 0.6875, 0.8125)) {
-		moonType = "Last Quarter";
-	} else if (inRange(phaseInfo.phase, 0.8125, 0.9375)) {
-		moonType = "Waning Crescent";
-	} else {
-		moonType = "New Moon";
-	}
+	var moonType = getMoonPhaseString(phaseInfo.phase);
 
 	let reply = {
 		parks: parkData,
@@ -770,131 +725,6 @@ app.post("/api/getProfileParksWeather", async (req, res) => {
 	console.log("Sending weather reply: ", reply);
 	res.send(reply);
 });
-
-async function getParkWeatherAxios(park, userTime) {
-	// console.log(weatherURL);
-	var utime = new Date(userTime);
-
-	var times = suncalc.getTimes(utime, park.lat, park.lng);
-
-	// console.log("Sun data:", times);
-
-	var nightTime = new Date(times.night);
-	var dawnTime = new Date(times.dawn);
-	// console.log(nightTime);
-
-	let weatherInstance = null;
-	let response = null;
-	let forecast = false;
-
-	//If ucurrent time is past night-time or dawn use current weather
-	if (utime > nightTime || utime < dawnTime) {
-		weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${park.lat}&lon=${park.lng}&appid=${weatherKey1}&units=metric`;
-	} else {
-		forecast = true;
-		weatherURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${park.lat}&lon=${park.lng}&appid=${weatherKey1}&units=metric`;
-	}
-	response = await axios
-		.get(weatherURL)
-		.then((response) => response.data)
-		.catch(false);
-
-	if (!forecast) {
-		//Get current weather
-		weatherInstance = response;
-
-		park.weather = {
-			time: utime.getTime(),
-			city: response.name,
-			clouds: weatherInstance.clouds.all,
-			cloudDesc: weatherInstance.weather[0].description,
-			humidity: weatherInstance.main.humidity,
-			temp: weatherInstance.main.temp,
-			stationCoord: {
-				lat: response.coord.lat,
-				lng: response.coord.lon,
-			},
-			stationDist:
-				geolib.getDistance(
-					{
-						lat: park.lat,
-						lng: park.lng,
-					},
-					{
-						lat: response.coord.lat,
-						lng: response.coord.lon,
-					}
-				) / 1000,
-		};
-	} else {
-		//Get forecast weather
-		for (var i = 0; i < response.cnt; i++) {
-			console.log(
-				new Date(response.list[i].dt_txt).getTime(),
-				nightTime.getTime(),
-				new Date(response.list[i].dt_txt).getTime() >
-					nightTime.getTime()
-			);
-			if (
-				new Date(response.list[i].dt_txt).getTime() >
-				nightTime.getTime()
-			) {
-				//If the date before nightfall is closer to nightfall than the one after, pick the closer one
-				let succInst = i;
-				if (
-					i > 0 &&
-					Math.abs(
-						new Date(response.list[i - 1].dt_txt) -
-							nightTime.getTime()
-					) <
-						Math.abs(
-							new Date(response.list[i].dt_txt).getTime() -
-								nightTime.getTime()
-						)
-				) {
-					succInst = i - 1;
-				}
-				console.log(
-					"Success! Looking at ",
-					succInst,
-					":",
-					response.list[succInst]
-				);
-				weatherInstance = response.list[succInst];
-			}
-
-			park.weather = {
-				time: new Date(weatherInstance.dt_txt).getTime(),
-				city: response.city.name,
-				clouds: weatherInstance.clouds.all,
-				cloudDesc: weatherInstance.weather[0].description,
-				humidity: weatherInstance.main.humidity,
-				temp: weatherInstance.main.temp,
-				stationCoord: {
-					lat: response.city.coord.lat,
-					lng: response.city.coord.lon,
-				},
-				stationDist:
-					geolib.getDistance(
-						{
-							lat: park.lat,
-							lng: park.lng,
-						},
-						{
-							lat: response.city.coord.lat,
-							lng: response.city.coord.lon,
-						}
-					) / 1000,
-			};
-
-			break;
-		}
-	}
-
-	console.log("Got weather for park: ", park);
-
-	return park;
-}
 
 app.post("/api/getParkData", async (req, res) => {
 	//STEP 1: PARSE USER FORM DATA
@@ -918,11 +748,8 @@ app.post("/api/getParkData", async (req, res) => {
 				queryFromUserForm,
 				[lat, lng, lat, dist, lightpol],
 				(err, result) => {
-					if (err) {
-						reject(err);
-					} else {
-						resolve(result);
-					}
+					if (err) reject(err);
+					resolve(result);
 				}
 			);
 		});
@@ -932,7 +759,7 @@ app.post("/api/getParkData", async (req, res) => {
 		return;
 	}
 
-	console.log("Grabbed database!", initialResults);
+	console.log("Database query success");
 
 	// console.log("Initial results:", initialResults);
 
@@ -977,19 +804,15 @@ app.post("/api/getParkData", async (req, res) => {
 
 	const allReviewsQuery = `select AVG(score)as avgScore,count(*) as numReviews,p_id from reviews where p_id in ${inParkIDSet} group by p_id`;
 	if (!(reviewIDsOriginal && reviewIDsOriginal.length)) {
-		res.sendStatus(204); //Why does not having review IDs cause a 204 error?
+		res.sendStatus(204); //Why does not having review IDs cause a 204 error? :/
 		return;
 	}
 
-	console.log("NEW ERROR GOT HERE?, ", reviewIDs.length);
 	try {
 		var reviewsResults = await new Promise((resolve, reject) => {
 			connection.query(allReviewsQuery, [inParkIDSet], (err, result) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(result);
-				}
+				if (err) reject(err);
+				resolve(result);
 			});
 		});
 	} catch (err) {
@@ -1215,29 +1038,7 @@ app.post("/api/getParkData", async (req, res) => {
 	var phaseInfo = getMoon(utime);
 
 	let moonPercent = phaseInfo.fraction;
-	var moonType;
-	if (
-		inRange(phaseInfo.phase, 0.9375, 1) ||
-		inRange(phaseInfo.phase, 0, 0.0625)
-	) {
-		moonType = "New Moon";
-	} else if (inRange(phaseInfo.phase, 0.0625, 0.1875)) {
-		moonType = "Waxing Crescent";
-	} else if (inRange(phaseInfo.phase, 0.1875, 0.3125)) {
-		moonType = "First Quarter";
-	} else if (inRange(phaseInfo.phase, 0.3125, 0.4375)) {
-		moonType = "Waxing Gibbous";
-	} else if (inRange(phaseInfo.phase, 0.4375, 0.5625)) {
-		moonType = "Full Moon";
-	} else if (inRange(phaseInfo.phase, 0.5625, 0.6875)) {
-		moonType = "Waning Gibbous";
-	} else if (inRange(phaseInfo.phase, 0.6875, 0.8125)) {
-		moonType = "Last Quarter";
-	} else if (inRange(phaseInfo.phase, 0.8125, 0.9375)) {
-		moonType = "Waning Crescent";
-	} else {
-		moonType = "New Moon";
-	}
+	var moonType = getMoonPhaseString(phaseInfo.phase);
 
 	let sunTimeData = suncalc.getTimes(utime, parseFloat(lat), parseFloat(lng));
 	let moonTimeData = suncalc.getMoonTimes(
