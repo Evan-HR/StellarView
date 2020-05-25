@@ -178,15 +178,6 @@ passport.use(
 	)
 );
 
-// app.get("/home", function(req, res) {
-// 	res.redirect("/");
-
-// });
-
-// app.get("/search", function(req, res) {
-// 	res.redirect("/");
-// });
-
 app.get("/api/logout", function (req, res) {
 	console.log("LOG OUT GOT HERE!???!?");
 	req.logout();
@@ -237,44 +228,53 @@ app.get("/api/getUserFavSpots", function (req, res) {
 });
 
 //get reviews from db
-app.get("/api/getReviews", function (req, res) {
+app.get("/api/getReviews", async function (req, res) {
 	const getReviewQuery =
 		"SELECT id, name, score, review, date from reviews where p_id = ?";
 
-	connection.query(getReviewQuery, [req.query.parkID], (err, reviews) => {
-		if (reviews.length > 0) {
-			if (err) {
-				console.log("failed" + err);
-				res.sendStatus(500);
-				return;
-			} else {
-				console.log("REVIEWS about to be sent: ", reviews);
-				var reviewsJSON = JSON.parse(JSON.stringify(reviews));
-				var score = 0;
-				var reviewsLength = Object.keys(reviewsJSON).length;
-				console.log("num reviews: " + reviewsLength);
-				for (let review in reviewsJSON) {
-					review = reviewsJSON[review];
-					console.log("score is : ", review.score);
-					score = score + review.score;
+	try {
+		var reviews = await new Promise((resolve, reject) => {
+			connection.query(
+				getReviewQuery,
+				[req.query.parkID],
+				(err, reviews) => {
+					if (err) reject(err);
+					resolve(reviews);
 				}
+			);
+		});
+	} catch (err) {
+		console.log("failed" + err);
+		res.sendStatus(500);
+		return;
+	}
+	if ((reviews.length = 0)) {
+		console.log("No reviews", reviews);
+		res.sendStatus(204);
+		return;
+	}
 
-				var averageScore =
-					Math.round((score / reviewsLength) * 10) / 10;
-				console.log("average score truncated is: " + averageScore);
+	console.log("REVIEWS about to be sent: ", reviews);
+	var reviewsJSON = JSON.parse(JSON.stringify(reviews));
+	var score = 0;
+	var reviewsLength = Object.keys(reviewsJSON).length;
+	console.log("num reviews: " + reviewsLength);
+	for (let review in reviewsJSON) {
+		review = reviewsJSON[review];
+		console.log("score is : ", review.score);
+		score = score + review.score;
+	}
 
-				let reply = {
-					reviews: reviews,
-					averageScore: averageScore,
-					numReviews: reviewsLength,
-				};
+	var averageScore = Math.round((score / reviewsLength) * 10) / 10;
+	console.log("average score truncated is: " + averageScore);
 
-				res.send(reply);
-			}
-		} else {
-			res.sendStatus(204);
-		}
-	});
+	let reply = {
+		reviews: reviews,
+		averageScore: averageScore,
+		numReviews: reviewsLength,
+	};
+
+	res.send(reply);
 });
 
 //put review to database
@@ -446,8 +446,6 @@ app.get("/api/getUserAuth", (req, res) => {
 	}
 });
 
-//post register user name: req.session.passport.user  (will give 81)
-//post login user name: req.session.passport.user  (will give 81)
 app.get("/api/getUserInfo", (req, res) => {
 	console.log("SECOND: getuserinfO, req session is:", req.session);
 	const nameQuery = "SELECT name from users WHERE id=?";
@@ -463,8 +461,6 @@ app.get("/api/getUserInfo", (req, res) => {
 					res.sendStatus(500);
 					return;
 				} else {
-					console.log("GET HERE?????????????");
-
 					console.log("profile info: ", profileInfo);
 
 					tempName = profileInfo[0].name;
@@ -514,33 +510,6 @@ app.get("/api/getUserReviews", (req, res) => {
 			}
 		);
 	}
-});
-
-//full park info link pages
-app.get("/park/:id", function (req, res) {
-	var id = req.params.id;
-	const lat = req.body.lat;
-	const lng = req.body.lng;
-	//get info for id
-	const queryString =
-		"SELECT name, light_pol, lat, lng from ontario_parks WHERE id=?";
-	connection.query(queryString, id, (err, parkInfo) => {
-		if (err) {
-			console.log("failed" + err);
-			res.sendStatus(500);
-			return;
-		}
-		res.render("park.ejs", {
-			//parkInfo: parkInfo
-			parkname: parkInfo[0].name,
-			parkid: parkInfo[0].id,
-			parklightpol: parkInfo[0].light_pol,
-			parklocation: [parkInfo[0].lat, parkInfo[0].lng],
-			userlocation: [lat, lng],
-			mapAPIKey: mapsKey1,
-		});
-		res.end();
-	});
 });
 
 app.post("/api/postFavSpot", (req, res) => {
@@ -600,42 +569,6 @@ app.post("/api/reportPark", (req, res) => {
 				res.sendStatus(500);
 				return;
 			}
-			res.end();
-		}
-	);
-});
-
-//note, res.send sends the HTTP response, res.end ends the response process
-app.post("/results.html", (req, res) => {
-	console.log("Latitude entered: " + req.body.lat);
-	console.log("Longitude entered: " + req.body.lng);
-	console.log("Maximum Distance: " + req.body.dist);
-	//console.log(mapsKey1);
-	//get fields from forms
-	const lat = req.body.lat;
-	const lng = req.body.lng;
-	const dist = req.body.dist;
-	const lightpol = req.body.lightpol;
-
-	//6371 is km, 3959 is miles
-	const queryString =
-		"SELECT *, ( 6371 * acos( cos( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin( radians( ? ) ) * sin( radians( lat ) ) ) ) AS distance FROM ontario_parks HAVING distance <= ? AND light_pol <= ? ORDER BY distance ASC";
-	connection.query(
-		queryString,
-		[lat, lng, lat, dist, lightpol],
-		(err, results) => {
-			if (err) {
-				console.log("failed" + err);
-				res.sendStatus(500);
-				return;
-			}
-
-			//res.send(results)
-			res.render("results.ejs", {
-				location: [lat, lng],
-				parks: results,
-				mapAPIKey: mapsKey1,
-			});
 			res.end();
 		}
 	);
@@ -883,4 +816,67 @@ app.post("/api/getParkData", async (req, res) => {
 
 	//STEP 10: SEND DATA TO FRONT-END
 	res.send(reply);
+});
+
+//note, res.send sends the HTTP response, res.end ends the response process
+app.post("/results.html", (req, res) => {
+	console.log("Latitude entered: " + req.body.lat);
+	console.log("Longitude entered: " + req.body.lng);
+	console.log("Maximum Distance: " + req.body.dist);
+	//console.log(mapsKey1);
+	//get fields from forms
+	const lat = req.body.lat;
+	const lng = req.body.lng;
+	const dist = req.body.dist;
+	const lightpol = req.body.lightpol;
+
+	//6371 is km, 3959 is miles
+	const queryString =
+		"SELECT *, ( 6371 * acos( cos( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin( radians( ? ) ) * sin( radians( lat ) ) ) ) AS distance FROM ontario_parks HAVING distance <= ? AND light_pol <= ? ORDER BY distance ASC";
+	connection.query(
+		queryString,
+		[lat, lng, lat, dist, lightpol],
+		(err, results) => {
+			if (err) {
+				console.log("failed" + err);
+				res.sendStatus(500);
+				return;
+			}
+
+			//res.send(results)
+			res.render("results.ejs", {
+				location: [lat, lng],
+				parks: results,
+				mapAPIKey: mapsKey1,
+			});
+			res.end();
+		}
+	);
+});
+
+//full park info link pages
+app.get("/park/:id", function (req, res) {
+	var id = req.params.id;
+	const lat = req.body.lat;
+	const lng = req.body.lng;
+	//get info for id
+	const queryString =
+		"SELECT name, light_pol, lat, lng from ontario_parks WHERE id=?";
+	connection.query(queryString, id, (err, parkInfo) => {
+		if (err) {
+			console.log("failed" + err);
+			res.sendStatus(500);
+			return;
+		}
+		res.render("park.ejs", {
+			//parkInfo: parkInfo
+			parkname: parkInfo[0].name,
+			parkid: parkInfo[0].id,
+			parklightpol: parkInfo[0].light_pol,
+			parklocation: [parkInfo[0].lat, parkInfo[0].lng],
+			userlocation: [lat, lng],
+			mapAPIKey: mapsKey1,
+		});
+		res.end();
+	});
 });
