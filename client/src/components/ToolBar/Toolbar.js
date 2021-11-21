@@ -36,7 +36,7 @@ class Toolbar extends Component {
             <div className="spacer" />
             <div className="toolbar_navigation-items">
               <ul>
-                <AuthConsumer>
+                {/* <AuthConsumer>
                   {(x) => {
                     if (x.isAuth === true) {
                       return (
@@ -49,8 +49,8 @@ class Toolbar extends Component {
                     }
                   }}
                 </AuthConsumer>
-                <AuthConsumer>
-                  {(x) => {
+                <AuthConsumer> */}
+                {/* {(x) => {
                     if (x.isAuth === true) {
                       return (
                         <li>
@@ -78,11 +78,10 @@ class Toolbar extends Component {
                     <div className="toolbarLink">REGISTER</div>
                   </Register>
                 </li>
-                <li>
-                  <Link to="/FAQ">
-                    <div className="toolbarLink">FAQ</div>
-                  </Link>
-                </li>
+                <li> */}
+                <Link to="/FAQ">
+                  <div className="toolbarLink">FAQ</div>
+                </Link>
               </ul>
             </div>
           </nav>
