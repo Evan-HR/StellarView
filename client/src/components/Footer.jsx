@@ -3,14 +3,41 @@ import styled from 'styled-components';
 
 class Footer extends Component {
   render() {
-    return (
-      <FooterStyle>
-        <span className="Contact">
-          <a href="mailto:dev@stellargaze.com">dev@stellargaze.com</a>
-        </span>
-      </FooterStyle>
-    );
-  }
+		return (
+			<FooterStyle>
+				<span className="Quote">
+					"It was in <a href="https://www.stellargaze.com/search?lat=44.540&lng=-78.5464&dist=25&lightpol=1.75" target="_blank">Bobcaygeon</a>, I saw the constellations reveal
+					themselves, one star at time." -Gord Downie
+				</span>
+
+				<span className="Names">
+					<span className="Vlad">
+						<a
+							target="_blank"
+							rel="noopener noreferrer"
+							href="http://vladfalach.com"
+						>
+							Vlad Falach
+						</a>
+					</span>
+					<span className="Dustin">
+						<a
+							target="_blank"
+							rel="noopener noreferrer"
+							href="http://dustinjurkaulionis.com"
+						>
+							Dustin Jurkaulionis
+						</a>
+					</span>
+
+					<span className="Evan">Evan Reaume</span>
+				</span>
+				<span className="Contact">
+					<a href="mailto:dev@stellargaze.com">dev@stellargaze.com</a>
+				</span>
+			</FooterStyle>
+		);
+	}
 }
 
 export default Footer;
