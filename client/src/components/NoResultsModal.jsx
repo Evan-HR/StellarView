@@ -1,24 +1,24 @@
-import React, { Component } from 'react';
-import Modal from 'react-modal';
-import { withRouter } from 'react-router-dom';
-import styled from 'styled-components';
-import ee from 'eventemitter3';
+import React, { Component } from "react";
+import Modal from "react-modal";
+import { withRouter } from "react-router-dom";
+import styled from "styled-components";
+import ee from "eventemitter3";
 import {
   notifyResultsModalIsOpen,
   notifyResultsModalIsClosed,
-} from './MainComponent';
+} from "./MainComponent";
 
 const emitter = new ee();
 
 export const notifyCloseResultsModal = (msg) => {
-  emitter.emit('notifyCloseResultsModal', msg);
+  emitter.emit("notifyCloseResultsModal", msg);
 };
 
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 class NoResultsModal extends Component {
   constructor(props) {
     super(props);
-    emitter.on('notifyCloseResultsModal', (msg) => {
+    emitter.on("notifyCloseResultsModal", (msg) => {
       this.closeModal();
     });
     this.state = {
@@ -35,7 +35,7 @@ class NoResultsModal extends Component {
   };
 
   afterOpenModal = () => {
-    document.body.style.overflow = 'hidden'; //Prevents background scrolling
+    document.body.style.overflow = "hidden"; //Prevents background scrolling
   };
 
   closeModal = () => {
@@ -45,7 +45,7 @@ class NoResultsModal extends Component {
       null
     );
     this.setState({ ...this.state, modalIsOpen: false });
-    document.body.style.overflow = 'visible';
+    document.body.style.overflow = "visible";
   };
 
   renderMessage = (moonPhaseNum, scoreBreakdown) => {
@@ -56,7 +56,7 @@ class NoResultsModal extends Component {
     //moon
     var daysUntilGoodMoon;
     var goodMoonCondition = false;
-    var nextGoodMoonType = '';
+    var nextGoodMoonType = "";
     if (inRange(moonPhaseNum, 0.9375, 1) || inRange(moonPhaseNum, 0, 0.0625)) {
       //new moon
       goodMoonCondition = true;
@@ -68,15 +68,15 @@ class NoResultsModal extends Component {
     } else if (inRange(moonPhaseNum, 0.3125, 0.4375)) {
       //"Waxing Gibbous";
       daysUntilGoodMoon = 11;
-      nextGoodMoonType += 'Last Quarter';
+      nextGoodMoonType += "Last Quarter";
     } else if (inRange(moonPhaseNum, 0.4375, 0.5625)) {
       //"full moon";
       daysUntilGoodMoon = 7;
-      nextGoodMoonType += 'Last Quarter';
+      nextGoodMoonType += "Last Quarter";
     } else if (inRange(moonPhaseNum, 0.5625, 0.6875)) {
       //Waning Gibbous
       daysUntilGoodMoon = 4;
-      nextGoodMoonType += 'Last Quarter';
+      nextGoodMoonType += "Last Quarter";
     } else if (inRange(moonPhaseNum, 0.6875, 0.8125)) {
       //Last Quarter
 
@@ -103,45 +103,19 @@ class NoResultsModal extends Component {
           The moon is shining too bright right now, hiding the stars. <br></br>
           Try again in <span className="daysUntil">
             {daysUntilGoodMoon}
-          </span>{' '}
+          </span>{" "}
           days, when the moon is a <br></br>
           <span className="nextMoon">{nextGoodMoonType}</span>
         </span>
       );
     }
-
-    // if (badHumidity){
-    // 	humidityPhrase+="Humidity levels seem alright...";
-    // }else{
-    // 	humidityPhrase+="Humidity levels are poor...";
-    // }
-
-    // if (badClouds){
-    // 	cloudPhrase+="It's too cloudy!";
-    // }else{
-    // 	cloudPhrase+="It's not very cloudy, that's good!";
-    // }
-
-    //returns moon icon + moonPhrase, humidity icon + phrase, etc.
   };
 
   renderNoParks = () => {
     return (
       <NoResultsStyle noVis={this.props.noVis}>
-        <button
-          type="button"
-          onClick={this.closeModal}
-          className="close"
-          aria-label="Close"
-        >
-          <i className="fas fa-times" />
-        </button>
         {this.props.noVis ? (
           <div className="messageBox">
-            {/* <div className="Symbol">
-							<i className="reportIcon fas fa-exclamation-triangle fa-2x"></i>
-						</div> */}
-
             <div className="openingMsg">
               <h1>We're sorry.</h1>
               <span>
@@ -158,9 +132,6 @@ class NoResultsModal extends Component {
                 JSON.parse(JSON.stringify(this.props.scoreBreakdown))
               )}
             </div>
-            {/* <div>
-							{JSON.stringify(this.props.scoreBreakdown)}
-							</div> */}
           </div>
         ) : (
           <div className="messageBox">
@@ -170,14 +141,14 @@ class NoResultsModal extends Component {
 
             <span>
               Sorry, we couldn't find any suitable parks in this area! Try
-              increasing your max distance and/or light pollution value using{' '}
+              increasing your max distance and/or light pollution value using{" "}
               <i>Advanced Search</i>.
             </span>
           </div>
         )}
 
         <div className="OKClose" onClick={this.closeModal}>
-          Got it.
+          Close
         </div>
       </NoResultsStyle>
     );
@@ -187,9 +158,7 @@ class NoResultsModal extends Component {
     this.openModal();
   }
 
-  //classNameName changes model content, style gives you anything you specify to override defaults
   render() {
-    // console.log("moon phase is: ",this.props.moonPhase);
     return (
       <React.Fragment>
         <Modal
@@ -198,14 +167,9 @@ class NoResultsModal extends Component {
           onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
           contentLabel="Login Modal"
-          // className="modal-dialog"
           style={customStyles}
         >
-          <ModalStyle>
-            {/* {this.renderLoginModal()} */}
-            {/* {this.renderModalContent()} */}
-            {this.renderNoParks()}
-          </ModalStyle>
+          <ModalStyle>{this.renderNoParks()}</ModalStyle>
         </Modal>
       </React.Fragment>
     );
@@ -218,32 +182,30 @@ NoResultsModal.defaultProps = {
   handleCloseNoParksModal: () => {},
 };
 
-/////////////////////////////////
-
 const customStyles = {
   overlay: {
-    position: 'fixed',
+    position: "fixed",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.9)',
-    transition: 'opacity 400ms ease-in-out',
+    backgroundColor: "rgba(0,0,0,0.9)",
+    transition: "opacity 400ms ease-in-out",
   },
   content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    padding: '0px',
-    border: 'none',
-    borderRadius: '2.5px',
-    backgroundColor: 'rgba(0,0,0,0.9)',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    maxWidth: '100vw',
-    maxHeight: '100vh',
-    overflow: 'hidden',
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    padding: "0px",
+    border: "none",
+    borderRadius: "2.5px",
+    backgroundColor: "rgba(0,0,0,0.9)",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    maxWidth: "100vw",
+    maxHeight: "100vh",
+    overflow: "hidden",
   },
 };
 
@@ -266,7 +228,7 @@ const NoResultsStyle = styled.div`
   max-width: 530px;
   position: relative;
   background: ${(props) => props.theme.prettyDark};
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   color: ${(props) => props.theme.white};
 
   @media screen and (min-width: 320px) {
@@ -318,7 +280,7 @@ const NoResultsStyle = styled.div`
 
   @media screen and (min-width: 320px) {
     width: 100vw;
-    width: ${(props) => (props.noVis ? '100vw' : 'block')};
+    width: ${(props) => (props.noVis ? "100vw" : "block")};
   }
 
   @media screen and (min-width: 600px) {
@@ -326,8 +288,8 @@ const NoResultsStyle = styled.div`
   }
 
   @media screen and (min-width: 801px) {
-    width: ${(props) => (props.noVis ? '70vw' : '45vw')};
-    height: ${(props) => (props.noVis ? '70vh' : '30vh')};
+    width: ${(props) => (props.noVis ? "70vw" : "45vw")};
+    height: ${(props) => (props.noVis ? "70vh" : "30vh")};
   }
 
   .messageBox {

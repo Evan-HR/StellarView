@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import { AuthConsumer } from './AuthContext';
-import Login from './Login';
-import styled from 'styled-components';
+import React, { Component } from "react";
+import axios from "axios";
+import { AuthConsumer } from "./AuthContext";
+import Login from "./Login";
+import styled from "styled-components";
 
 class BaseFavPark extends Component {
   state = {
@@ -39,7 +39,7 @@ class BaseFavPark extends Component {
 
   handleUnfavSpot() {
     axios
-      .post('/api/postUnfavSpot', {
+      .post("/api/postUnfavSpot", {
         params: {
           park_id: this.props.parkID,
           user_id: this.props.context.userID,
@@ -52,15 +52,12 @@ class BaseFavPark extends Component {
           hasFaved: false,
         });
         this.props.context.userFavorites.pop(this.props.parkID);
-      })
-      .catch((error) => {
-        console.log(error);
       });
   }
 
   handleFavSpot() {
     axios
-      .post('/api/postFavSpot', {
+      .post("/api/postFavSpot", {
         params: {
           park_id: this.props.parkID,
           user_id: this.props.context.userID,

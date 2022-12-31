@@ -1,21 +1,16 @@
-import React, { Component } from 'react';
-import DrawerToggleButton from './DrawerToggleButton';
-import styled from 'styled-components';
-import { AuthProvider, AuthConsumer } from '../AuthContext';
-import { withRouter, Link } from 'react-router-dom';
-import Login from '../Login';
-import axios from 'axios';
-import Register from '../Register';
-import FAQ from '../FAQ';
-import logo from '../style/Media/StellarStarLogo.svg';
-import SVG from 'react-inlinesvg';
+import React, { Component } from "react";
+import styled from "styled-components";
+import { withRouter, Link } from "react-router-dom";
+import axios from "axios";
+import logo from "../style/Media/StellarStarLogo.svg";
+import SVG from "react-inlinesvg";
 
 class Toolbar extends Component {
   state = {};
 
   handleLogout(e) {
     e.preventDefault();
-    axios.get('/api/logout');
+    axios.get("/api/logout");
     this.props.handleLogoutState();
   }
 
@@ -24,10 +19,6 @@ class Toolbar extends Component {
       <ToolbarStyle>
         <div className="toolbar__center">
           <nav className="toolbar__navigation">
-            <div>
-              <DrawerToggleButton click={this.props.drawerClickHandler} />
-            </div>
-
             <div className="toolbarLogo">
               <Link to="/home">
                 <SVG src={logo}></SVG>
@@ -36,49 +27,6 @@ class Toolbar extends Component {
             <div className="spacer" />
             <div className="toolbar_navigation-items">
               <ul>
-                {/* <AuthConsumer>
-                  {(x) => {
-                    if (x.isAuth === true) {
-                      return (
-                        <li>
-                          <Link to="/profile">
-                            <div className="toolbarLink">FAVORITES</div>
-                          </Link>
-                        </li>
-                      );
-                    }
-                  }}
-                </AuthConsumer>
-                <AuthConsumer> */}
-                {/* {(x) => {
-                    if (x.isAuth === true) {
-                      return (
-                        <li>
-                          <div
-                            className="toolbarLink"
-                            onClick={(e) => this.handleLogout(e)}
-                          >
-                            LOGOUT
-                          </div>
-                        </li>
-                      );
-                    } else {
-                      return (
-                        <li>
-                          <Login handleLogin={this.props.handleLogin}>
-                            <div className="toolbarLink">LOGIN</div>
-                          </Login>
-                        </li>
-                      );
-                    }
-                  }}
-                </AuthConsumer>
-                <li>
-                  <Register handleLogin={this.props.handleLogin}>
-                    <div className="toolbarLink">REGISTER</div>
-                  </Register>
-                </li>
-                <li> */}
                 <Link to="/FAQ">
                   <div className="toolbarLink">FAQ</div>
                 </Link>
@@ -92,8 +40,6 @@ class Toolbar extends Component {
 }
 
 export default withRouter(Toolbar);
-
-////////////////////////////////////////////////
 
 const ToolbarStyle = styled.header`
   width: 100%;
@@ -170,7 +116,7 @@ const ToolbarStyle = styled.header`
     margin-top: 1%;
 
     a {
-      font-family: 'Lato', sans-serif;
+      font-family: "Lato", sans-serif;
       font-weight: 600;
       text-decoration: none;
       letter-spacing: 0.08em;
@@ -200,7 +146,7 @@ const ToolbarStyle = styled.header`
 
   .toolbarLink {
     cursor: pointer;
-    font-family: 'Lato', sans-serif;
+    font-family: "Lato", sans-serif;
     font-weight: 600;
     text-decoration: none;
     letter-spacing: 0.08em;

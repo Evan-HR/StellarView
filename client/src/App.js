@@ -1,51 +1,23 @@
-import React, { Component } from 'react';
-import { AuthConsumer } from './components/AuthContext';
-import MainComponent from './components/MainComponent';
+import React, { Component } from "react";
+import MainComponent from "./components/MainComponent";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Redirect,
-} from 'react-router-dom';
-import Profile from './components/Profile';
-import ToolBar from './components/ToolBar/Toolbar';
-import SideDrawer from './components/ToolBar/SideDrawer';
-import Backdrop from './components/Backdrop/Backdrop';
-import styled from 'styled-components';
-import { createGlobalStyle } from 'styled-components';
+} from "react-router-dom";
+import ToolBar from "./components/ToolBar/Toolbar";
+import styled from "styled-components";
+import { createGlobalStyle } from "styled-components";
 
-import FAQ from './components/FAQ';
-import Footer from './components/Footer';
-import ScrollUpButton from 'react-scroll-up-button';
-import NotFoundPage from './components/NotFoundPage';
-import Notification from './components/Notification';
+import FAQ from "./components/FAQ";
+import Footer from "./components/Footer";
+import ScrollUpButton from "react-scroll-up-button";
+import NotFoundPage from "./components/NotFoundPage";
+import Notification from "./components/Notification";
 
 class App extends Component {
-  state = {
-    sideDrawerOpen: false,
-  };
-
-  //if sidedraweropen, save as false
-  drawerToggleClickHandler = () => {
-    this.setState((prevState) => {
-      return { sideDrawerOpen: !prevState.sideDrawerOpen };
-    });
-  };
-
-  sideDrawerLinkClickHandler = () => {
-    this.setState({ sideDrawerOpen: false });
-  };
-
-  backdropClickHandler = () => {
-    this.setState({ sideDrawerOpen: false });
-  };
-
   render() {
-    let backdrop;
-    if (this.state.sideDrawerOpen) {
-      backdrop = <Backdrop click={this.backdropClickHandler} />;
-    }
-    //co
     return (
       <React.Fragment>
         <Notification />
@@ -59,27 +31,8 @@ class App extends Component {
                 handleLogoutState={this.props.handleLogoutState}
                 handleLogin={this.props.handleLogin}
               />
-              <SideDrawer
-                show={this.state.sideDrawerOpen}
-                close={this.sideDrawerLinkClickHandler}
-                handleLogoutState={this.props.handleLogoutState}
-                handleLogin={this.props.handleLogin}
-              />
-              {backdrop}
+
               <Switch>
-                <Route
-                  path="/profile"
-                  render={() => (
-                    <AuthConsumer>
-                      {(authState) => {
-                        if (authState.isAuth !== null) {
-                          if (authState.isAuth === true) return <Profile />;
-                          else return <Redirect to="/" />;
-                        }
-                      }}
-                    </AuthConsumer>
-                  )}
-                />
                 <Route
                   exact
                   path="/"
@@ -88,7 +41,7 @@ class App extends Component {
                   }}
                 />
 
-                <Route path={['/home', '/search']} component={MainComponent} />
+                <Route path={["/home", "/search"]} component={MainComponent} />
                 <Route path="/FAQ" component={FAQ} />
 
                 <Route path="*" component={NotFoundPage} />
@@ -102,17 +55,7 @@ class App extends Component {
   }
 }
 
-//IMPORTANT TO EXPORT!
 export default App;
-
-////////////////////////////////////////////////////////////////
-
-// font-family: 'Open Sans', sans-serif;
-// font-family: 'Merriweather Sans', sans-serif;
-// font-family: 'IBM Plex Mono', monospace;
-// font-family: 'IBM Plex Sans', sans-serif;
-//'Yeseva One', cursive;
-//font-family: 'Barlow', sans-serif;
 
 const SiteStyle = styled.div`
   display: flex;

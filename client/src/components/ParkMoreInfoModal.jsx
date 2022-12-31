@@ -1,53 +1,52 @@
-import React, { Component, useState } from 'react';
-import Modal from 'react-modal';
-import Reviews from './Reviews';
-import FavPark from './FavPark';
-import styled from 'styled-components';
-import './modal.css';
-import MoonDisplay from './MoonDisplay';
-import { useSpring, animated as a } from 'react-spring';
-import humidityIcon from './style/Media/cardIcons/humidity.svg';
-import cloudBadIcon from './style/Media/cardIcons/cloudBad.svg';
-import cloudGoodIcon from './style/Media/cardIcons/cloudGood.svg';
-import lightPolIcon from './style/Media/cardIcons/lightPol.svg';
-import ReportPark from './ReportPark';
-import CountUp from 'react-countup';
-import { withRouter } from 'react-router-dom';
+import React, { Component, useState } from "react";
+import Modal from "react-modal";
+import Reviews from "./Reviews";
+import FavPark from "./FavPark";
+import styled from "styled-components";
+import "./modal.css";
+import MoonDisplay from "./MoonDisplay";
+import { useSpring, animated as a } from "react-spring";
+import humidityIcon from "./style/Media/cardIcons/humidity.svg";
+import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
+import cloudGoodIcon from "./style/Media/cardIcons/cloudGood.svg";
+import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
+import ReportPark from "./ReportPark";
+import { withRouter } from "react-router-dom";
 import {
   notifyInfoModalIsOpen,
   notifyInfoModalIsClosed,
-} from './MainComponent';
-import ee from 'eventemitter3';
+} from "./MainComponent";
+import ee from "eventemitter3";
 
 const emitter = new ee();
 
 export const notifyCloseModal = (msg) => {
-  emitter.emit('notifyCloseModal', msg);
+  emitter.emit("notifyCloseModal", msg);
 };
 
 const modalStyle = {
   overlay: {
-    position: 'fixed',
+    position: "fixed",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.9)',
-    transition: 'opacity 400ms ease-in-out',
+    backgroundColor: "rgba(0,0,0,0.9)",
+    transition: "opacity 400ms ease-in-out",
   },
   content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    padding: '0px',
-    border: 'none',
-    borderRadius: '4px',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    maxWidth: '100vw',
-    maxHeight: '100vh',
-    overflow: 'hidden',
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    padding: "0px",
+    border: "none",
+    borderRadius: "4px",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    maxWidth: "100vw",
+    maxHeight: "100vh",
+    overflow: "hidden",
   },
 };
 
@@ -61,7 +60,7 @@ class ParkMoreInfoModal extends Component {
     this.park = { weather: {} };
     this.userLocation = {};
     this.toRemountReviews = false;
-    emitter.on('notifyCloseModal', (msg) => {
+    emitter.on("notifyCloseModal", (msg) => {
       this.closeModal();
     });
   }
@@ -69,35 +68,35 @@ class ParkMoreInfoModal extends Component {
   //means..
   renderLightMsg(lightPol) {
     if (lightPol < 0.25) {
-      return 'many constellations are barely noticed among the large number of stars';
+      return "many constellations are barely noticed among the large number of stars";
     } else if (lightPol < 0.4) {
-      return 'the M33 is visible to the naked-eye';
+      return "the M33 is visible to the naked-eye";
     } else if (lightPol < 1) {
-      return 'the M15, M4, M5, and M22 are naked-eye objects';
+      return "the M15, M4, M5, and M22 are naked-eye objects";
     } else if (lightPol < 3) {
-      return 'the Milky Way lacks detail, and the M33 is only visible when high in sky.';
+      return "the Milky Way lacks detail, and the M33 is only visible when high in sky.";
     } else if (lightPol < 6) {
-      return 'the Milky Way is very weak and looks washed out.';
+      return "the Milky Way is very weak and looks washed out.";
     }
   }
 
   getLightPolSky(lightPol) {
     if (lightPol < 0.25) {
-      return 'Pure Dark Sky';
+      return "Pure Dark Sky";
     } else if (lightPol < 0.4) {
-      return 'Dark Sky';
+      return "Dark Sky";
     } else if (lightPol < 1) {
-      return 'Rural';
+      return "Rural";
     } else if (lightPol < 3) {
-      return 'Rural/Suburban';
+      return "Rural/Suburban";
     } else if (lightPol < 6) {
-      return 'Suburban';
+      return "Suburban";
     }
   }
 
   openModal = (content) => {
-    if (content === '') {
-      content = 'No content.';
+    if (content === "") {
+      content = "No content.";
     }
     this.modalContent = content;
     this.userLocation = content.userLocation;
@@ -112,11 +111,11 @@ class ParkMoreInfoModal extends Component {
   };
 
   afterOpenModal = () => {
-    document.body.style.overflow = 'hidden'; //Prevents background scrolling
+    document.body.style.overflow = "hidden"; //Prevents background scrolling
   };
 
   closeModal = () => {
-    document.body.style.overflow = 'visible';
+    document.body.style.overflow = "visible";
     notifyInfoModalIsClosed();
     this.props.history.push(
       `${window.location.pathname}${window.location.search}`,
@@ -137,7 +136,7 @@ class ParkMoreInfoModal extends Component {
     navigator.geolocation.getCurrentPosition((position) => {
       window.open(
         `https://www.google.com/maps?saddr=${position.coords.latitude},${position.coords.longitude}&daddr=${this.park.lat},${this.park.lng}`,
-        '_blank'
+        "_blank"
       );
     });
   };
@@ -155,7 +154,7 @@ class ParkMoreInfoModal extends Component {
         <ModalStyle>
           <div className="modal-header">
             <span className="ParkTitle">
-              {this.park.name === 'Unknown' && this.park.name_alt
+              {this.park.name === "Unknown" && this.park.name_alt
                 ? this.park.name_alt
                 : this.park.name}
             </span>
@@ -223,10 +222,10 @@ class ParkMoreInfoModal extends Component {
                         </div>
                         <div className="Value">
                           {this.park.score > 0.8
-                            ? 'Visible'
+                            ? "Visible"
                             : this.park.score > 0.6
-                            ? 'Partly Visible'
-                            : 'Not Visible'}
+                            ? "Partly Visible"
+                            : "Not Visible"}
                         </div>
                       </WeatherWrapper>
                     </React.Fragment>
@@ -235,10 +234,10 @@ class ParkMoreInfoModal extends Component {
                     <React.Fragment>
                       <span className="MoreInfoDesc">
                         {this.park.score > 0.8
-                          ? 'Good naked-eye star visibilty at this score.'
+                          ? "Good naked-eye star visibilty at this score."
                           : this.park.score > 0.6
-                          ? 'Naked-eye stargazing may not be adequate at this time right now.'
-                          : 'Naked-eye stargazing not possible at this time right now.'}
+                          ? "Naked-eye stargazing may not be adequate at this time right now."
+                          : "Naked-eye stargazing not possible at this time right now."}
                       </span>
                     </React.Fragment>
                   }
@@ -255,25 +254,17 @@ class ParkMoreInfoModal extends Component {
                           <span>Visibility Score</span>
                         </div>
                         <div className="Score">
-                          <CountUp
-                            start={0}
-                            end={Math.trunc(this.park.score * 100)}
-                            delay={0}
-                          >
-                            {({ countUpRef }) => (
-                              <React.Fragment>
-                                <div className="ScoreNumber" ref={countUpRef} />
-                                <div className="Percentage">%</div>
-                              </React.Fragment>
-                            )}
-                          </CountUp>
+                          <React.Fragment>
+                            <div className="ScoreNumber" />
+                            <div className="Percentage">%</div>
+                          </React.Fragment>
                         </div>
                         <div className="Value">
                           {this.park.score > 0.8
-                            ? 'Great'
+                            ? "Great"
                             : this.park.score > 0.6
-                            ? 'Poor'
-                            : 'Very poor'}
+                            ? "Poor"
+                            : "Very poor"}
                         </div>
                       </WeatherWrapper>
                     </React.Fragment>
@@ -282,10 +273,10 @@ class ParkMoreInfoModal extends Component {
                     <React.Fragment>
                       <span className="MoreInfoDesc">
                         {this.park.score > 0.8
-                          ? 'We recommend stargazing at score above 80%.  Read how the score is calculated in the FAQs.'
+                          ? "We recommend stargazing at score above 80%.  Read how the score is calculated in the FAQs."
                           : this.park.score > 0.6
-                          ? 'We do not strongly recommend stargazing at this score.  Read how the score is calculated in the FAQs.'
-                          : 'We strongly recommend to not stargaze at a score below 60%.  Read how the score is calculated in the FAQs.'}
+                          ? "We do not strongly recommend stargazing at this score.  Read how the score is calculated in the FAQs."
+                          : "We strongly recommend to not stargaze at a score below 60%.  Read how the score is calculated in the FAQs."}
                       </span>
                     </React.Fragment>
                   }
@@ -344,8 +335,8 @@ class ParkMoreInfoModal extends Component {
                   back={
                     <React.Fragment>
                       <span className="MoreInfoDesc">
-                        The Bortle class of{' '}
-                        {this.getLightPolSky(this.park.light_pol)} means{' '}
+                        The Bortle class of{" "}
+                        {this.getLightPolSky(this.park.light_pol)} means{" "}
                         {this.renderLightMsg(this.park.light_pol)}
                       </span>
                     </React.Fragment>
@@ -411,7 +402,7 @@ class ParkMoreInfoModal extends Component {
                 this.remountReviews()
               ) : (
                 <Reviews
-                  starSize={'14px'}
+                  starSize={"14px"}
                   refreshInfoModal={this.refreshModal}
                   parkID={this.park.id}
                 />
@@ -479,7 +470,7 @@ const ModalStyle = styled.div`
   flex-direction: column;
   /* width: 452px; */
   height: 95vh;
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   border: none;
   color: ${(props) => props.theme.fontDark};
   background: black;
@@ -499,7 +490,7 @@ const ModalStyle = styled.div`
     padding: 0rem 1rem;
 
     .ParkTitle {
-      font-family: 'Lato', sans-serif;
+      font-family: "Lato", sans-serif;
       font-style: normal;
       font-weight: 500;
       color: ${(props) => props.theme.prettyDark};
@@ -549,10 +540,10 @@ const ModalStyle = styled.div`
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto auto auto;
     grid-template-areas:
-      'HeaderGrid    			   HeaderGrid'
-      'infoText 				   infoText'
-      'weatherContainer    	   weatherContainer'
-      'reviewsContainer          reviewsContainer';
+      "HeaderGrid    			   HeaderGrid"
+      "infoText 				   infoText"
+      "weatherContainer    	   weatherContainer"
+      "reviewsContainer          reviewsContainer";
     grid-row-gap: 20px;
     grid-column-gap: 20px;
     padding: 20px 20px 0 20px;
@@ -573,8 +564,8 @@ const ModalStyle = styled.div`
       grid-template-rows: 1fr 0.2fr;
 
       grid-template-areas:
-        'directions  				favPark			 		 reportPark	'
-        'directionsText				favParkText	 	 	 reportParkText ';
+        "directions  				favPark			 		 reportPark	"
+        "directionsText				favParkText	 	 	 reportParkText ";
 
       .ParkScoreHeading {
         grid-area: ParkScoreHeading;
@@ -692,9 +683,9 @@ const ModalStyle = styled.div`
       grid-row-gap: 20px;
       grid-column-gap: 20px;
       grid-template-areas:
-        'scoreContainer    visibilityContainer'
-        'cloudContainer    lightPolContainer'
-        'moonContainer     humidityContainer';
+        "scoreContainer    visibilityContainer"
+        "cloudContainer    lightPolContainer"
+        "moonContainer     humidityContainer";
 
       .scoreContainer {
         height: 157px;

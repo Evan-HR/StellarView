@@ -1,15 +1,13 @@
-import React, { Component } from 'react';
-import StarReviewsStatic from './StarReviewsStatic';
+import React, { Component } from "react";
+import StarReviewsStatic from "./StarReviewsStatic";
 
-import styled from 'styled-components';
-import humidityIcon from './style/Media/cardIcons/humidity.svg';
+import styled from "styled-components";
+import humidityIcon from "./style/Media/cardIcons/humidity.svg";
 
-import cloudBadIcon from './style/Media/cardIcons/cloudBad.svg';
-import cloudGoodIcon from './style/Media/cardIcons/cloudGood.svg';
-import lightPolIcon from './style/Media/cardIcons/lightPol.svg';
-import tempIcon from './style/Media/cardIcons/temperature.svg';
-
-import CountUp from 'react-countup';
+import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
+import cloudGoodIcon from "./style/Media/cardIcons/cloudGood.svg";
+import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
+import tempIcon from "./style/Media/cardIcons/temperature.svg";
 
 class ParkCard extends Component {
   state = {};
@@ -26,20 +24,20 @@ class ParkCard extends Component {
   prettyDate(time) {
     var date = new Date(time);
     var localeSpecificTime = date.toLocaleTimeString();
-    return localeSpecificTime.replace(/:\d+ /, ' ');
+    return localeSpecificTime.replace(/:\d+ /, " ");
   }
 
   renderReviewScore(reviewScore) {
     if (reviewScore) {
       return (
         <div>
-          <StarReviewsStatic starSize={'14px'} avgScore={reviewScore} />
+          <StarReviewsStatic starSize={"14px"} avgScore={reviewScore} />
         </div>
       );
     } else {
       return (
         <div>
-          <StarReviewsStatic starSize={'14px'} avgScore={0} />
+          <StarReviewsStatic starSize={"14px"} avgScore={0} />
         </div>
       );
     }
@@ -76,7 +74,7 @@ class ParkCard extends Component {
                 {this.props.park.distance < 9000 ? (
                   <React.Fragment>
                     {Math.trunc(parseFloat(this.props.park.distance))}
-                    {' km'}
+                    {" km"}
                   </React.Fragment>
                 ) : (
                   <React.Fragment>n/a</React.Fragment>
@@ -91,10 +89,10 @@ class ParkCard extends Component {
             </div>
             <span className="HumidityIconDesc">
               {this.props.park.weather.humidity < 40
-                ? 'Great'
+                ? "Great"
                 : this.props.park.weather.humidity < 70
-                ? 'Okay'
-                : 'Poor'}
+                ? "Okay"
+                : "Poor"}
             </span>
 
             <div className="CloudIcon">
@@ -115,10 +113,10 @@ class ParkCard extends Component {
 
             <span className="CloudIconDesc">
               {this.props.park.weather.clouds < 20
-                ? 'Great'
+                ? "Great"
                 : this.props.park.weather.clouds < 35
-                ? 'Okay'
-                : 'Poor'}
+                ? "Okay"
+                : "Poor"}
             </span>
 
             <div className="LightPolIcon">
@@ -130,10 +128,10 @@ class ParkCard extends Component {
             </div>
             <span className="LightPolIconDesc">
               {this.props.park.light_pol < 1
-                ? 'Great'
+                ? "Great"
                 : this.props.park.light_pol < 3
-                ? 'Okay'
-                : 'Poor'}
+                ? "Okay"
+                : "Poor"}
             </span>
 
             <div className="TempIcon">
@@ -145,7 +143,7 @@ class ParkCard extends Component {
 
             <div className="WeatherInfo">
               <span>
-                <b>{this.props.park.weather.city}</b> forecast for{' '}
+                <b>{this.props.park.weather.city}</b> forecast for{" "}
                 {this.prettyDate(this.props.park.weather.time)}
                 {/* {new Date(
 								this.props.park.weather.time
@@ -156,19 +154,11 @@ class ParkCard extends Component {
             <span className="ScoreDesc">Visibility Score</span>
 
             <div className="Score">
-              <CountUp
-                start={0}
-                end={Math.trunc(this.props.park.score * 100)}
-                delay={0}
-              >
-                {({ countUpRef }) => (
-                  <React.Fragment>
-                    <div className="ScoreNumber" ref={countUpRef} />
+              <React.Fragment>
+                <div className="ScoreNumber" />
 
-                    <div className="Percentage">%</div>
-                  </React.Fragment>
-                )}
-              </CountUp>
+                <div className="Percentage">%</div>
+              </React.Fragment>
             </div>
 
             <div className="MoreInfoDesc">Tap for more</div>
@@ -202,56 +192,53 @@ ParkCard.defaultProps = {
 export default ParkCard;
 
 const ParkCardWrapper = styled.div`
-	background: ${(props) => props.theme.cardDark};
-	padding-bottom: 10px;
-	margin-bottom: 1rem;
-	position: relative;
+  background: ${(props) => props.theme.cardDark};
+  padding-bottom: 10px;
+  margin-bottom: 1rem;
+  position: relative;
 
-	/* min-width: 320px; */
-	cursor: pointer;
+  /* min-width: 320px; */
+  cursor: pointer;
 
-	:hover {
-		background: ${(props) => props.theme.cardLight};
-		/* background: linear-gradient(
+  :hover {
+    background: ${(props) => props.theme.cardLight};
+    /* background: linear-gradient(
 			0deg,
 			${(props) => props.theme.cardLight} 70%,
 			${(props) => props.theme.cardHeaderHover} 70%
 		); */
-	}
-	:active {
-		background: ${(props) => props.theme.cardDark};
-		/* background: linear-gradient(
+  }
+  :active {
+    background: ${(props) => props.theme.cardDark};
+    /* background: linear-gradient(
 			0deg,
 			${(props) => props.theme.cardDark} 70%,
 			${(props) => props.theme.cardHeader} 70%
 		); */
-	}
+  }
 
-	@media screen and (min-width: 320px) {
-		padding-bottom: 10px;
-	}
+  @media screen and (min-width: 320px) {
+    padding-bottom: 10px;
+  }
 
-	@media screen and (min-width: 355px) {
-		border-radius: 20px;
-		margin: 0 10px 15px 10px;
-	}
+  @media screen and (min-width: 355px) {
+    border-radius: 20px;
+    margin: 0 10px 15px 10px;
+  }
 
-	@media screen and (min-width: 400px) {
-		margin: 0 10px 15px 10px;
-	}
+  @media screen and (min-width: 400px) {
+    margin: 0 10px 15px 10px;
+  }
 
+  @media screen and (min-width: 480px) {
+    padding-bottom: 0px;
+  }
 
+  @media screen and (min-width: 525px) {
+    border-radius: 20px;
+  }
 
-	@media screen and (min-width: 480px) {
-		padding-bottom: 0px;
-	}
-
-	@media screen and (min-width: 525px) {
-		border-radius: 20px;
-	}
-
-	
-	/* @media screen and (min-width: 685px) {
+  /* @media screen and (min-width: 685px) {
 		padding-left: 7vw;
 		padding-right: 7vw;
 	}
@@ -274,21 +261,19 @@ const ParkCardWrapper = styled.div`
 		padding-left: 1vw;
 		padding-right: 1vw;
 	} */
-	@media screen and (min-width: 1292px) {
-		padding-bottom: 0px;
-	}
+  @media screen and (min-width: 1292px) {
+    padding-bottom: 0px;
+  }
 
-	@media screen and (min-width: 1460px) {
-		
-	}
+  @media screen and (min-width: 1460px) {
+  }
 
-	@media screen and (min-width: 1600px) {
-		
-	} 
+  @media screen and (min-width: 1600px) {
+  }
 `;
 
 const CardStyle = styled.div`
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -301,8 +286,8 @@ const CardStyle = styled.div`
   /* grid-gap: 1em; */
 
   grid-template-areas:
-    'ParkHeader   ParkHeader   ParkHeader    ParkHeader 	ParkHeader 	  ParkHeader'
-    'cardContent  cardContent cardContent 	 cardContent  	cardContent   cardContent';
+    "ParkHeader   ParkHeader   ParkHeader    ParkHeader 	ParkHeader 	  ParkHeader"
+    "cardContent  cardContent cardContent 	 cardContent  	cardContent   cardContent";
 
   @media screen and (min-width: 320px) {
     grid-template-rows: 0.4fr auto;
@@ -314,7 +299,7 @@ const CardStyle = styled.div`
     display: grid;
     grid-area: ParkHeader;
     grid-template-columns: 1fr 0.2fr;
-    grid-template-areas: 'ParkTitle CarIcon';
+    grid-template-areas: "ParkTitle CarIcon";
     /* min-height: 13vh; */
     background: ${(props) => props.theme.green};
     border-bottom: 5px solid #111414;
@@ -423,10 +408,10 @@ const CardStyle = styled.div`
     /* grid-gap: 1em; */
 
     grid-template-areas:
-      'ScoreDesc   ScoreDesc    WeatherInfo  	  WeatherInfo 	WeatherInfo 	  WeatherInfo'
-      'Score 		 Score 		 HumidityIcon 	  CloudIcon 	LightPolIcon 	  TempIcon '
-      'Score 		 Score 		 HumidityIconDesc CloudIconDesc LightPolIconDesc  TempIconDesc '
-      'StarRev 	 StarRev 	 StarRev 	  	  StarRev  		MoreInfoDesc 	  MoreInfoDesc';
+      "ScoreDesc   ScoreDesc    WeatherInfo  	  WeatherInfo 	WeatherInfo 	  WeatherInfo"
+      "Score 		 Score 		 HumidityIcon 	  CloudIcon 	LightPolIcon 	  TempIcon "
+      "Score 		 Score 		 HumidityIconDesc CloudIconDesc LightPolIconDesc  TempIconDesc "
+      "StarRev 	 StarRev 	 StarRev 	  	  StarRev  		MoreInfoDesc 	  MoreInfoDesc";
 
     @media screen and (min-width: 320px) {
       padding: 0px 10px;
