@@ -166,8 +166,6 @@ class ParkMoreInfoModal extends Component {
             </button>
           </div>
           <div className="ContentGrid">
-            <span className="textContainer">Tap a square for more info</span>
-
             <div className="weatherContainer">
               <div className="visibilityContainer">
                 <Card
@@ -492,17 +490,10 @@ const ModalStyle = styled.div`
   }
 
   .ContentGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto auto auto;
-    grid-template-areas:
-      "HeaderGrid    			   HeaderGrid"
-      "infoText 				   infoText"
-      "weatherContainer    	   weatherContainer"
-      "reviewsContainer          reviewsContainer";
-    grid-row-gap: 20px;
-    grid-column-gap: 20px;
     padding: 0px 20px 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     height: 100%;
     overflow-y: auto;
     background: ${(props) => props.theme.white};
@@ -511,29 +502,7 @@ const ModalStyle = styled.div`
       grid-area: infoText;
       font-weight: 500;
       font-size: 15px;
-    }
-
-    .Heading,
-    .Value {
-      font-style: normal;
-      font-weight: 600;
-      font-size: 14px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      @media screen and (min-width: 320px) {
-        font-size: 14px;
-      }
-      @media screen and (min-width: 600px) {
-        font-size: 18px;
-      }
-
-      span {
-        display: inline-block;
-        vertical-align: middle;
-        line-height: normal;
-      }
+      padding: 0.5rem 0rem;
     }
 
     .MoreInfoDesc {
@@ -560,8 +529,8 @@ const ModalStyle = styled.div`
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr 1fr 1fr;
-      grid-row-gap: 20px;
-      grid-column-gap: 20px;
+      grid-row-gap: 10px;
+      grid-column-gap: 10px;
       grid-template-areas:
         "scoreContainer    visibilityContainer"
         "cloudContainer    lightPolContainer"

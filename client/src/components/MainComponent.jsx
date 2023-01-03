@@ -189,9 +189,9 @@ class BaseMainComponent extends Component {
         isFetchingParks: false,
       });
     } else {
-      // If working locally, http://localhost:PORTNUM/api/getParkData
+      // If running locally, http://localhost:PORTNUM/api/getParkData
       axios
-        .post("http://localhost:6060/api/getParkData", reqData)
+        .post("/api/getParkData", reqData)
         .then((response) => {
           if (!(response.status === 204)) {
             for (var i = 0; i < response.data.parks.length; i++) {
