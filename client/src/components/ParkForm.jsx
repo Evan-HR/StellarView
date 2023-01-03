@@ -1,27 +1,26 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import { withRouter } from 'react-router-dom';
-import qs from 'qs';
-import MuiSlider from '@material-ui/core/Slider';
-import { AuthConsumer } from './AuthContext';
-import styled from 'styled-components';
-import ee from 'eventemitter3';
+import React, { Component } from "react";
+import axios from "axios";
+import { withRouter } from "react-router-dom";
+import qs from "qs";
+import MuiSlider from "@material-ui/core/Slider";
+import styled from "styled-components";
+import ee from "eventemitter3";
 
 const emitter = new ee();
 
 export const notifyLoadQuery = (msg) => {
-  emitter.emit('parkFormToLoadQuery', msg);
+  emitter.emit("parkFormToLoadQuery", msg);
 };
 
 class BaseParkForm extends Component {
   state = {
     reqData: {
-      lat: '',
-      lng: '',
+      lat: "",
+      lng: "",
       dist: 25,
       lightpol: 1.75,
-      error: '',
-      placeName: '',
+      error: "",
+      placeName: "",
     },
     isLoadingLocation: false,
     isGeocodingLocation: false,
@@ -36,7 +35,7 @@ class BaseParkForm extends Component {
     this.sliderLight = this.state.reqData.lightpol;
     this.sliderDist = this.state.reqData.dist;
     this.autoComplete = false;
-    emitter.on('parkFormToLoadQuery', () => {
+    emitter.on("parkFormToLoadQuery", () => {
       this.loadQuery();
     });
   }
@@ -72,10 +71,9 @@ class BaseParkForm extends Component {
               lng: query.lng,
               dist: query.dist,
               lightpol: parseFloat(query.lightpol),
-              error: '',
+              error: "",
             },
           },
-          //SetState callback
           () => {
             this.onSubmit();
           }
@@ -95,16 +93,11 @@ class BaseParkForm extends Component {
     });
   };
 
-  /**
-   * For more info visit https://nominatim.org/release-docs/develop/api/Search/
-   */
   getPlaceCoordinates = () => {
     this.setState({ isGeocodingLocation: true });
     axios
       .get(
-        //Internet Explorer didn't want to connect to OSM server, so the request has to be proxied through heroku
-        //This can be avoided by redirecting the call through NODE
-        `${'https://cors-anywhere.herokuapp.com/'}http://nominatim.openstreetmap.org/search?format=json&q=${
+        `${"https://cors-anywhere.herokuapp.com/"}http://nominatim.openstreetmap.org/search?format=json&q=${
           this.state.reqData.placeName
         }`
       )
@@ -144,89 +137,52 @@ class BaseParkForm extends Component {
       isInvalidLocation: true,
     });
   };
-  //   In order to have access to  this.state inside
-  //    getCurrentPosition's callback, you either need to
-  //    bind the success callback or make use of arrow function.
+
   getMyLocation = (e) => {
     this.setState({ isLoadingLocation: true, isInvalidLocation: false });
-    if (
-      !this.props.authState.userLocation ||
-      (this.props.authState.userLocation.lat === '' &&
-        this.props.authState.userLocation.lng === '')
-    ) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          console.log(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
-          );
-          let address = await axios.get(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
-          );
-          address = address['data']['address']['city'];
-          // console.log(address);
-          this.setState(
-            {
-              ...this.state,
-              reqData: {
-                ...this.state.reqData,
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-                placeName: address,
-                error: null,
-              },
-              isLoadingLocation: false,
-            },
-            () => this.onSubmit()
-          );
-          if (window.google) {
-            this.props.googleMap.panTo(
-              new window.google.maps.LatLng(
-                position.coords.latitude,
-                position.coords.longitude
-              )
-            );
-          }
-          this.props.authState.setUserLocation(
-            position.coords.latitude,
-            position.coords.longitude
-          );
-        },
-        (error) => {
-          this.setState({
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        let address = await axios.get(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
+        );
+        address = address["data"]["address"]["city"];
+
+        this.setState(
+          {
             ...this.state,
             reqData: {
               ...this.state.reqData,
-              error: error.message,
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+              placeName: address,
+              error: null,
             },
             isLoadingLocation: false,
-          });
-        },
-        { enableHighAccuracy: true }
-      );
-    } else {
-      if (window.google && this.props.googleMap) {
-        this.props.googleMap.panTo(
-          new window.google.maps.LatLng(
-            this.props.authState.userLocation.lat,
-            this.props.authState.userLocation.lng
-          )
+          },
+          () => this.onSubmit()
         );
-      }
-      let address = null;
-
-      this.setState(
-        {
+        if (window.google) {
+          this.props.googleMap.panTo(
+            new window.google.maps.LatLng(
+              position.coords.latitude,
+              position.coords.longitude
+            )
+          );
+        }
+      },
+      (error) => {
+        this.setState({
+          ...this.state,
           reqData: {
             ...this.state.reqData,
-            lat: this.props.authState.userLocation.lat,
-            lng: this.props.authState.userLocation.lng,
-            placeName: address,
+            error: error.message,
           },
           isLoadingLocation: false,
-        },
-        () => this.onSubmit()
-      );
-    }
+        });
+      },
+      { enableHighAccuracy: true }
+    );
   };
 
   handleDistanceChange = (changeEvent, value) => {
@@ -312,29 +268,29 @@ class BaseParkForm extends Component {
     const errors = [];
     if (
       !reqData.lat ||
-      reqData.lat === '' ||
+      reqData.lat === "" ||
       reqData.lat < -90 ||
       reqData.lat > 90 ||
       !reqData.lng ||
-      reqData.lng === '' ||
+      reqData.lng === "" ||
       reqData.lng < -180 ||
       reqData.lng > 180
     )
-      errors.push('Invalid location');
+      errors.push("Invalid location");
     if (
       !reqData.dist ||
-      reqData.dist === '' ||
+      reqData.dist === "" ||
       reqData.dist < 0 ||
       reqData.dist > 300
     )
-      errors.push('Invalid distance');
+      errors.push("Invalid distance");
     if (
       !reqData.lightpol ||
-      reqData.lightpol === '' ||
+      reqData.lightpol === "" ||
       reqData.lightpol < 0 ||
       reqData.lightpol > 40
     )
-      errors.push('Invalid light pollution');
+      errors.push("Invalid light pollution");
     return errors;
   };
 
@@ -346,7 +302,7 @@ class BaseParkForm extends Component {
         </React.Fragment>
       );
     } else {
-      return 'Near Me';
+      return "Near Me";
     }
   };
 
@@ -354,16 +310,16 @@ class BaseParkForm extends Component {
     if (Object.keys(this.state.formErrors).length > 0) {
       return (
         <ErrorStyle>
-          <b className="text-danger">{this.state.formErrors.join(', ')}</b>
+          <b className="text-danger">{this.state.formErrors.join(", ")}</b>
         </ErrorStyle>
       );
     }
   };
 
   loadAutoComplete = () => {
-    const field = document.getElementById('address-field');
+    const field = document.getElementById("address-field");
     this.autoComplete = new window.google.maps.places.Autocomplete(field);
-    this.autoComplete.addListener('place_changed', this.onPlaceChanged);
+    this.autoComplete.addListener("place_changed", this.onPlaceChanged);
   };
 
   onPlaceChanged = () => {
@@ -404,14 +360,14 @@ class BaseParkForm extends Component {
               type="text"
               name="placeName"
               placeholder="Enter your location"
-              value={this.state.reqData.placeName || ''}
+              value={this.state.reqData.placeName || ""}
               onChange={this.handlePlaceChange}
             />
 
             <div
-              className={'searchButton'}
+              className={"searchButton"}
               disabled={
-                this.state.reqData.placeName === '' ||
+                this.state.reqData.placeName === "" ||
                 this.state.isGeocodingLocation
               }
               onClick={(e) => {
@@ -438,17 +394,6 @@ class BaseParkForm extends Component {
           </button>
         </div>
 
-        {/* CLEAR BUTTON!!!! */}
-
-        {/* <button
-						className="btn btn-danger m-2"
-						onClick={this.props.clearParks}
-						// className={this.clearButtonClass()}
-						type="button"
-					>
-						<strong>Clear</strong>
-					</button> */}
-
         <div className="advancedSearchToggle">
           <button
             className="ToggleAdvancedSearch"
@@ -464,13 +409,11 @@ class BaseParkForm extends Component {
         </div>
 
         <div className="AdvancedSearch">
-          {/* <LocationSearchInput /> */}
           <form>
             <span className="FormTitle">Max Distance (km)</span>
 
             <br />
             <SliderStyle>
-              {/* old max was 250 */}
               <MuiSlider
                 aria-labelledby="discrete-slider-custom"
                 min={5}
@@ -486,7 +429,6 @@ class BaseParkForm extends Component {
             <span className="FormTitle">Max Light Pollution Zone</span>
             <br />
             <SliderStyle>
-              {/* old max was 4.0 */}
               <MuiSlider
                 aria-labelledby="discrete-slider-custom"
                 min={0.4}
@@ -514,13 +456,6 @@ class BaseParkForm extends Component {
             <span className="generic">Let's stargaze:</span>
           </span>
         )}
-
-        {/* <button
-							onClick={e => this.onSubmit(e)}
-							disabled={this.props.isFetchingParks}
-						>
-							Stargaze
-						</button> */}
       </SearchFormStyle>
     );
   }
@@ -529,48 +464,44 @@ class BaseParkForm extends Component {
 const marksDist = [
   {
     value: 5,
-    label: '5',
+    label: "5",
   },
   {
     value: 25,
   },
   {
     value: 50,
-    label: '50',
+    label: "50",
   },
   {
     value: 75,
-    label: '75',
+    label: "75",
   },
   {
     value: 100,
-    label: '100',
+    label: "100",
   },
   {
     value: 140,
-    label: '140',
+    label: "140",
   },
-  // {
-  // 	value: 250,
-  // 	label: "250"
-  // }
 ];
 
 const marksLight = [
   {
     value: 0.4,
-    label: 'Dark',
+    label: "Dark",
   },
   {
     value: 1.0,
   },
   {
     value: 1.75,
-    label: 'Rural',
+    label: "Rural",
   },
   {
     value: 3.0,
-    label: 'Rural/Suburban',
+    label: "Rural/Suburban",
   },
   {
     value: 3.5,
@@ -580,244 +511,233 @@ const marksLight = [
   },
 ];
 
-const ParkForm = (parkFormProps) => (
-  <AuthConsumer>
-    {(authState) => (
-      <BaseParkForm {...{ ...parkFormProps, authState: authState }} />
-    )}
-  </AuthConsumer>
-);
-
-export default withRouter(ParkForm);
+export default withRouter(BaseParkForm);
 
 const SearchFormStyle = styled.div`
-	background: none;
+  background: none;
 
-	font-family: "Lato", sans-serif;
+  font-family: "Lato", sans-serif;
 
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	grid-template-rows: ${(props) =>
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: ${(props) =>
     props.advancedSearch ? `auto auto auto` : `auto auto`};
-	grid-gap: 10px;
-	grid-template-areas:
-"messageAboveForm messageAboveForm messageAboveForm"
-		"searchBar searchBar searchBar"
-	
-		"advancedSearchToggle advancedSearchToggle myLocation"
-		${(props) =>
+  grid-gap: 10px;
+  grid-template-areas:
+    "messageAboveForm messageAboveForm messageAboveForm"
+    "searchBar searchBar searchBar"
+    "advancedSearchToggle advancedSearchToggle myLocation"
+    ${(props) =>
       props.advancedSearch
         ? `"advancedSearch advancedSearch advancedSearch"`
         : ``};
 
-	@media screen and (min-width: 320) {
-		grid-template-areas:
-"messageAboveForm messageAboveForm messageAboveForm"
-			"searchBar searchBar myLocation"
-			"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
-			${(props) =>
+  @media screen and (min-width: 320) {
+    grid-template-areas:
+      "messageAboveForm messageAboveForm messageAboveForm"
+      "searchBar searchBar myLocation"
+      "advancedSearchToggle advancedSearchToggle advancedSearchToggle"
+      ${(props) =>
         props.advancedSearch
           ? `"advancedSearch advancedSearch advancedSearch"`
           : ``};
-	}
+  }
 
-	@media screen and (min-width: 480px) {
-		grid-template-areas:
-		"messageAboveForm messageAboveForm messageAboveForm"
-			"searchBar searchBar myLocation"
-			"advancedSearchToggle advancedSearchToggle advancedSearchToggle"
-			${(props) =>
+  @media screen and (min-width: 480px) {
+    grid-template-areas:
+      "messageAboveForm messageAboveForm messageAboveForm"
+      "searchBar searchBar myLocation"
+      "advancedSearchToggle advancedSearchToggle advancedSearchToggle"
+      ${(props) =>
         props.advancedSearch
           ? `"advancedSearch advancedSearch advancedSearch"`
           : ``};
-	}
+  }
 
-	.messageAboveForm{
-		grid-area: messageAboveForm;
-		text-align: left;
-		font-weight: 600;
-		animation: fadein 3s;
-			@keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
+  .messageAboveForm {
+    grid-area: messageAboveForm;
+    text-align: left;
+    font-weight: 600;
+    animation: fadein 3s;
+    @keyframes fadein {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
 
+    .invalidLocation {
+      color: ${(props) => props.theme.colorBad};
+    }
+    .generic {
+      color: ${(props) => props.theme.yellow};
+    }
+  }
 
+  .AdvancedSearch {
+    width: 90%;
+    margin: auto auto;
+    ${(props) => (props.advancedSearch ? `` : `display: none`)}
+    grid-area:advancedSearch;
 
-		.invalidLocation{
-			color: ${(props) => props.theme.colorBad};
-		}
-		.generic{
-			color: ${(props) => props.theme.yellow};
+    .FormTitle {
+      color: ${(props) => props.theme.white};
+      font-weight: 600;
+    }
+  }
 
-		}
-		
-	}
+  .myLocation {
+    color: ${(props) => props.theme.white};
+    font-size: 13px;
 
-	.AdvancedSearch {
+    .nearMe {
+      all: unset;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
+      cursor: pointer;
 
-		width: 90%;
-		margin: auto auto;
-		${(props) => (props.advancedSearch ? `` : `display: none`)}
-		grid-area:advancedSearch;
+      background: ${(props) => props.theme.yellow};
+      border-radius: 20px;
+      height: 36px;
+      width: 100%;
+      -webkit-text-fill-color: rgba(0, 0, 0, 1);
+      opacity: 1;
+      color: ${(props) => props.theme.prettyDark};
+      transition: color 0.1s ease;
+      font-size: 15px;
+      font-weight: 600;
 
-		.FormTitle {
-			color: ${(props) => props.theme.white};
-			font-weight: 600;
-		}
-	}
+      :disabled {
+        background: gray;
+      }
+      :hover:enabled {
+        background-color: ${(props) => props.theme.colorMedium};
+        /* color: ${(props) => props.theme.highlightPink}; */
+      }
+      :active:enabled {
+        -webkit-transform: scale(1.05);
+        transform: scale(1.05);
+      }
+    }
+    grid-area: myLocation;
+  }
 
-	.myLocation {
-		color: ${(props) => props.theme.white};
-		font-size: 13px;
+  .advancedSearchToggle {
+    grid-area: advancedSearchToggle;
+    margin: auto 0;
+    span {
+      font-weight: 500;
+    }
 
-		.nearMe {
-			all: unset;
-			-webkit-appearance: none !important;
-			-moz-appearance: none !important;
-			appearance: none !important;
-			cursor: pointer;
+    button {
+      float: left;
+      i {
+        margin-left: 5px;
+        transform: rotate(
+          ${(props) => (props.advancedSearch ? `0deg` : `-90deg`)}
+        );
+      }
+    }
+  }
 
-			background: ${(props) => props.theme.yellow};
-			border-radius: 20px;
-			height: 36px;
-			width: 100%;
-			-webkit-text-fill-color: rgba(0, 0, 0, 1); 
-   -webkit-opacity: 1; 
-			color: ${(props) => props.theme.prettyDark};
-			transition: color 0.1s ease;
-			font-size: 15px;
-			font-weight: 600;
+  .citySearch {
+    grid-area: searchBar;
+  }
 
-			:disabled {
-				background: gray;
-			}
-			:hover:enabled {
-				background-color: ${(props) => props.theme.colorMedium};
-				/* color: ${(props) => props.theme.highlightPink}; */
-			}
-			:active:enabled {
-				-webkit-transform: scale(1.05);
-				transform: scale(1.05);
-			}
-		}
-		grid-area: myLocation;
-	}
+  .searchButton {
+    width: 40px;
+    height: 36px;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
 
-	.advancedSearchToggle {
-		grid-area: advancedSearchToggle;
-		margin: auto 0;
-		span {
-			font-weight: 500;
-		}
+    svg {
+      margin: auto auto;
 
-		button {
-			float: left;
-			i {
-				margin-left: 5px;
-				transform: rotate(
-					${(props) => (props.advancedSearch ? `0deg` : `-90deg`)}
-				);
-			}
-		}
-	}
+      display: block;
+    }
 
-	.citySearch {
-		grid-area: searchBar;
-	}
-
-	.searchButton {
-		width: 40px;
-		height: 36px;
-		-webkit-appearance: none !important;
--moz-appearance: none !important;
-appearance: none !important;
-		
-		svg{
-			margin: auto auto;
-
-display: block;
-		}
-
-		background: ${(props, isInvalidLocation) =>
+    background: ${(props, isInvalidLocation) =>
       isInvalidLocation ? props.theme.highlightPink : props.theme.prettyDark};
-		text-align: center;
+    text-align: center;
 
-		color: ${(props) => props.theme.white};
+    color: ${(props) => props.theme.white};
 
-		cursor: pointer;
-		font-size: 20px;
-		border: 2px solid #2a2c2d;
-		float: left;
-		background-position: center;
-		transition: background 0.2s, color 0.1s ease;
+    cursor: pointer;
+    font-size: 20px;
+    border: 2px solid #2a2c2d;
+    float: left;
+    background-position: center;
+    transition: background 0.2s, color 0.1s ease;
 
-		:focus {
-			outline: 0;
-		}
+    :focus {
+      outline: 0;
+    }
 
-		:hover {
-			background: ${(props) => props.theme.prettyDark}
-				radial-gradient(circle, transparent 1%, rgba(0, 0, 0, 0.3) 1%)
-				center/15000%;
-			color: ${(props) => props.theme.colorMedium};
-		}
+    :hover {
+      background: ${(props) => props.theme.prettyDark}
+        radial-gradient(circle, transparent 1%, rgba(0, 0, 0, 0.3) 1%)
+        center/15000%;
+      color: ${(props) => props.theme.colorMedium};
+    }
 
-		:active {
-			background-color: rgba(0, 0, 0, 0.3);
-			background-size: 100%;
-			transition: background 0s;
-		}
-	}
+    :active {
+      background-color: rgba(0, 0, 0, 0.3);
+      background-size: 100%;
+      transition: background 0s;
+    }
+  }
 
+  .searchTerm {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    border-radius: 0;
 
-	.searchTerm {
-		-webkit-appearance: none !important;
-			-moz-appearance: none !important;
-			appearance: none !important;
-			border-radius:0;
-	
-		width: calc(100% - 40px);
-		background-color: ${(props) => props.theme.darkAccent};
-		transition: background-color 0.1s ease;
+    width: calc(100% - 40px);
+    background-color: ${(props) => props.theme.darkAccent};
+    transition: background-color 0.1s ease;
 
-		padding: 5px;
-		height: 36px;
+    padding: 5px;
+    height: 36px;
 
-		outline: none;
-		color: ${(props) => props.theme.white};
-		border: none;
-		float: left;
+    outline: none;
+    color: ${(props) => props.theme.white};
+    border: none;
+    float: left;
 
-		:focus {
-		color: ${(props) => props.theme.white};
-	}
+    :focus {
+      color: ${(props) => props.theme.white};
+    }
 
-		:hover,
-		:active {
-			background-color: ${(props) => props.theme.moonBackground};
-			transition: background-color 0.1s ease;
-		}
+    :hover,
+    :active {
+      background-color: ${(props) => props.theme.moonBackground};
+      transition: background-color 0.1s ease;
+    }
 
-		::placeholder {
-			font-weight: 300;
-			opacity: 0.5;
-		}
-	}
+    ::placeholder {
+      font-weight: 300;
+      opacity: 0.5;
+    }
+  }
 
-	.ToggleAdvancedSearch {
-		all: unset;
-		-webkit-text-fill-color: #bdbdbd;
-   -webkit-opacity: 1; 
-		
-		cursor: pointer;
-		color: #bdbdbd;
-		:hover,
-		:active {
-			color: ${(props) => props.theme.colorMedium};
-			transition: color 0.2s ease;
-		}
-	}
+  .ToggleAdvancedSearch {
+    all: unset;
+    -webkit-text-fill-color: #bdbdbd;
+    opacity: 1;
+
+    cursor: pointer;
+    color: #bdbdbd;
+    :hover,
+    :active {
+      color: ${(props) => props.theme.colorMedium};
+      transition: color 0.2s ease;
+    }
+  }
 `;
 
 const SliderStyle = styled.div`
@@ -826,7 +746,7 @@ const SliderStyle = styled.div`
   }
   .MuiSlider-markLabel {
     color: #bdbdbd;
-    font-family: 'Lato', sans-serif;
+    font-family: "Lato", sans-serif;
   }
   .MuiSlider-markLabelActive {
     color: ${(props) => props.theme.colorMedium};

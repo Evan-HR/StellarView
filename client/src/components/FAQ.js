@@ -1,10 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
-import QGISModel from './style/Images/QGISModel.png';
-import WeatherEstimation from './style/Images/Weather-Estimation-Test.png';
-import ParkMapNA from './style/Images/ParkMapNA.png';
-import lightPolMapDemo from './style/Images/lightPolMapDemo.png';
-import StarBackgroundLess from './StarBackgroundLess';
+import React from "react";
+import styled from "styled-components";
+import QGISModel from "./style/Images/QGISModel.png";
+import WeatherEstimation from "./style/Images/Weather-Estimation-Test.png";
+import ParkMapNA from "./style/Images/ParkMapNA.png";
+import lightPolMapDemo from "./style/Images/lightPolMapDemo.png";
+import StarBackgroundLess from "./StarBackgroundLess";
 
 const FAQ = (props) => (
   <FAQStyle>
@@ -53,14 +53,14 @@ const FAQ = (props) => (
           McMaster University's Computer Science department in Hamilton,
           Ontario. Inspired by Evan Reaume, Stellargaze hopes to simplify the
           stargazing process. The front-end and back-end was fully implemented
-          by both{' '}
+          by both{" "}
           <a href="http://www.dustinjurkaulionis.com" target="_blank">
             Dustin Jurkaulionis
-          </a>{' '}
-          and{' '}
+          </a>{" "}
+          and{" "}
           <a href="http://www.vladfalach.com" target="_blank">
             Vlad Falach
-          </a>{' '}
+          </a>{" "}
           over the Summer of 2019 as their first full-scale web application. It
           was designed by all three.
         </span>
@@ -68,7 +68,7 @@ const FAQ = (props) => (
       <h1 id="why">Why was this made?</h1>
       <div className="Background">
         <span>
-          {' '}
+          {" "}
           Humans have a special connection to the sky. There are roughly 5000
           stars visible at night, and such stars are not so easy to spot due to
           light pollution and our migration into cities. This project was made
@@ -88,7 +88,7 @@ const FAQ = (props) => (
               We analyze a satellite image provided by the Earth Observations
               Group (EOG) at NOAA/NCEI. This Day/Night Band image captures the
               average radiance values of North America, Australia, and New
-              Zealand. The pixel values we extract correspond to a number on the{' '}
+              Zealand. The pixel values we extract correspond to a number on the{" "}
               <a
                 href="https://en.wikipedia.org/wiki/Bortle_scale"
                 target="_blank"
@@ -96,7 +96,7 @@ const FAQ = (props) => (
                 Bortle scale
               </a>
               , which gives an approximate measure of the night sky's brightness
-              at a particular location.{' '}
+              at a particular location.{" "}
             </li>
             <li>
               We then find the nearest parks relative to the user with a Bortle
@@ -104,7 +104,7 @@ const FAQ = (props) => (
               zone. These parks are available to us using Open Street Maps and a
               database. We store only the parks below a certain radiance value,
               corresponding to a Bortle class. Thus, parks located in a densely
-              populated area with lots of light pollution are not stored.{' '}
+              populated area with lots of light pollution are not stored.{" "}
             </li>
             <li>
               Parks within 140km of the user in lower light-pollution zones are
@@ -142,7 +142,7 @@ const FAQ = (props) => (
             <figcaption>
               Figure 2: User searching from a high light pollution zone (inner
               city). Stellargaze directs them to parks in less polluted areas
-              (green) such as this one. Source:{' '}
+              (green) such as this one. Source:{" "}
               <a href="https://www.lightpollutionmap.info" target="_blank">
                 https://www.lightpollutionmap.info
               </a>
@@ -197,7 +197,7 @@ const FAQ = (props) => (
           <p>
             An invaluable tool in creating the database was the QGIS process
             toolkit. The process began by collecting data on all objects labeled
-            as <i>parks</i> on OpenStreetMaps. This was done via the{' '}
+            as <i>parks</i> on OpenStreetMaps. This was done via the{" "}
             <a href="https://github.com/3liz/QuickOSM">QuickOSM</a> plugin,
             which allowed this process to be automatic. The process had to be
             run on each state/province sized area in turn, so it's wrapped in
@@ -219,7 +219,7 @@ const FAQ = (props) => (
             A number of parks listed in OSM don't have names, since they
             represent small parkettes or rural sports fields. In order to deal
             with having a large number of <i>"Unnamed"</i> parks, we had to
-            develop a script which uses a reverse geocoding service,{' '}
+            develop a script which uses a reverse geocoding service,{" "}
             <a href="https://nominatim.org/">Nominatim</a>, in order to generate
             approximate names for these missing parks. Some of these parks
             returned simply street addresses, but others returned names of other
@@ -243,11 +243,11 @@ const FAQ = (props) => (
             weather, moon phase, distance, park reviews, etc.
           </p>
           <p>
-            Weather forecast data is obtained from{' '}
+            Weather forecast data is obtained from{" "}
             <a href="https://openweathermap.org/">OpenWeather</a>. Due to the
             data limitations and the wide area required for forecasting, doing
             forecast requests for <i>each park</i> individually was infeasible,
-            as well as not financially viable. As a result, a{' '}
+            as well as not financially viable. As a result, a{" "}
             <i>k-means clustering algorithm</i> was used to cluster nearby parks
             together, since all parks in an area could share a forecast. After
             some testing, there was not a significant difference between using
@@ -330,7 +330,7 @@ const FAQ = (props) => (
           <ul>
             <li>
               Light pollution data provided by the VIIRS Day/Night Band
-              Nighttime Lights images via the{' '}
+              Nighttime Lights images via the{" "}
               <a
                 target="_blank"
                 href="https://eogdata.mines.edu/download_dnb_composites.html"
@@ -341,32 +341,32 @@ const FAQ = (props) => (
             VIIRS Day/Night Band Nighttime Lights
             <li>
               Band value numbers for the radiance corresponding to a Bortle
-              number provided by Jurij Stare of{' '}
+              number provided by Jurij Stare of{" "}
               <a target="_blank" href="https://www.lightpollutionmap.info/">
                 lightpollutionmap.info
               </a>
             </li>
             <li>
-              Moonrise/moonset and sunrise/sunset data provided by{' '}
+              Moonrise/moonset and sunrise/sunset data provided by{" "}
               <a target="_blank" href="http://suncalc.net">
                 Suncalc
               </a>
             </li>
             <li>
-              OpenStreetMap data gathered via{' '}
+              OpenStreetMap data gathered via{" "}
               <a target="_blank" href="https://github.com/3liz/QuickOSM">
                 QuickOSM
-              </a>{' '}
+              </a>{" "}
               plugin.
             </li>
             <li>
-              Telescope animation in homepage adapted based on a Codepen by{' '}
+              Telescope animation in homepage adapted based on a Codepen by{" "}
               <a target="_blank" href="https://codepen.io/littleginger">
                 @littleginger
               </a>
             </li>
             <li>
-              404 page astronaut animation adapted based on a Codepen by{' '}
+              404 page astronaut animation adapted based on a Codepen by{" "}
               <a target="_blank" href="https://codepen.io/hellochad">
                 @hellochad
               </a>
@@ -380,12 +380,12 @@ const FAQ = (props) => (
           Are you a sidewalk astronomer? Casual observer of the skies?
           Professional? A human? We'd love to hear your feedback! Our algorithm
           is continuously being improved so any advice and/or feedback would be
-          greatly appreciated. Please email us at{' '}
-          <a href="mailto:dev@stellargaze.com">dev@stellargaze.com</a> and{' '}
+          greatly appreciated. Please email us at{" "}
+          <a href="mailto:dev@stellargaze.com">dev@stellargaze.com</a> and{" "}
           <a target="_blank" href="https://github.com/CyberTropic/StellarGaze">
             visit the repo.
           </a>
-          {'   '}Please note the code is old as it was our first experience with
+          {"   "}Please note the code is old as it was our first experience with
           React / web apps, and is not indicative of our current web development
           skills :)
         </span>
@@ -420,14 +420,14 @@ const FAQStyle = styled.div`
   }
 
   .FAQHeader {
-    text-align: center;
     margin-bottom: 50px;
+    text-align: left;
   }
   width: 85%;
   margin: auto auto;
   max-width: 900px;
 
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   h1 {
     color: ${(props) => props.theme.colorMedium};
     margin: 20px 0px;

@@ -1,74 +1,30 @@
-import React, { Component } from 'react';
-import Modal from 'react-modal';
-import { withRouter } from 'react-router-dom';
-import styled from 'styled-components';
+import React, { Component } from "react";
+import Modal from "react-modal";
+import { withRouter } from "react-router-dom";
+import styled from "styled-components";
 
 import {
   notifyTutorialModalIsOpen,
   notifyTutorialModalIsClosed,
-} from './MainComponent';
-import ee from 'eventemitter3';
-import searchIcon from './style/Media/search-solid.svg';
-import SVG from 'react-inlinesvg';
-import markerGood from './style/MapMarkers/resultsGood.svg';
-import markerAverage from './style/MapMarkers/resultsMedium.svg';
-import markerBad from './style/MapMarkers/resultsBad.svg';
+} from "./MainComponent";
+import ee from "eventemitter3";
+import searchIcon from "./style/Media/search-solid.svg";
+import SVG from "react-inlinesvg";
+import markerGood from "./style/MapMarkers/resultsGood.svg";
+import markerAverage from "./style/MapMarkers/resultsMedium.svg";
+import markerBad from "./style/MapMarkers/resultsBad.svg";
 
 const emitter = new ee();
 
-const marksDist = [
-  {
-    value: 5,
-    label: '5',
-  },
-  {
-    value: 25,
-  },
-  {
-    value: 50,
-    label: '50',
-  },
-  {
-    value: 100,
-    label: '100',
-  },
-  {
-    value: 150,
-    label: '150',
-  },
-  {
-    value: 250,
-    label: '250',
-  },
-];
-
-const marksLight = [
-  {
-    value: 0.4,
-    label: 'Dark',
-  },
-  {
-    value: 1.0,
-  },
-  {
-    value: 1.75,
-    label: 'Rural',
-  },
-  {
-    value: 3.0,
-    label: 'Rural/Suburban',
-  },
-];
-
 export const notifyCloseTutorialModal = (msg) => {
-  emitter.emit('notifyCloseTutorialModal', msg);
+  emitter.emit("notifyCloseTutorialModal", msg);
 };
 
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 class Tutorial extends Component {
   constructor(props) {
     super(props);
-    emitter.on('notifyCloseTutorialModal', (msg) => {
+    emitter.on("notifyCloseTutorialModal", (msg) => {
       this.closeModal();
     });
     this.state = {
@@ -87,7 +43,7 @@ class Tutorial extends Component {
   };
 
   afterOpenModal = () => {
-    document.body.style.overflow = 'hidden'; //Prevents background scrolling
+    document.body.style.overflow = "hidden"; //Prevents background scrolling
   };
 
   closeModal = () => {
@@ -98,7 +54,7 @@ class Tutorial extends Component {
       null
     );
     this.setState({ modalIsOpen: false, errorDB: false });
-    document.body.style.overflow = 'visible';
+    document.body.style.overflow = "visible";
   };
 
   renderStepOneSearch = () => {
@@ -119,7 +75,7 @@ class Tutorial extends Component {
             </div>
           </div>
         ) : (
-          ''
+          ""
         )}
       </React.Fragment>
     );
@@ -153,7 +109,7 @@ class Tutorial extends Component {
         <React.Fragment>
           <h3>SEARCH</h3>
           <span>
-            By default, we search up to 25km away from your location. Tap{' '}
+            By default, we search up to 25km away from your location. Tap{" "}
             <i>Advanced Search</i> if you wish to customize your search.
           </span>
         </React.Fragment>
@@ -191,10 +147,7 @@ class Tutorial extends Component {
         <React.Fragment>
           <h3>RESULTS</h3>
           <span>
-            You can click a map marker or a card to bring up more information,
-            which includes the reviews, the score breakdown, and the ability to{' '}
-            <i>favorite</i>, <i>report</i>, or get <i>directions</i> to the
-            park.
+            You can click a map marker or a card to bring up more information
           </span>
         </React.Fragment>
       );
@@ -242,8 +195,7 @@ class Tutorial extends Component {
           <h3>STARGAZE</h3>
           <span>
             Go to the park and enjoy your evening! If the park has heavy
-            streetlights, find a darker area nearby to settle down and report
-            the park for us in the More Information page.
+            streetlights, find a darker area nearby
           </span>
           <div className="secondary">
             <i className="far fa-laugh-wink fa-3x"></i>
@@ -268,14 +220,6 @@ class Tutorial extends Component {
   renderStepOne = () => {
     return (
       <TutorialStyle>
-        <button
-          type="button"
-          onClick={this.closeModal}
-          className="close"
-          aria-label="Close"
-        >
-          <i className="fas fa-times" />
-        </button>
         <div className="containerTutorial">{this.renderMessage()}</div>
         <div className="Icon">
           <i
@@ -298,7 +242,7 @@ class Tutorial extends Component {
           {this.props.children ? (
             <React.Fragment>{this.props.children}</React.Fragment>
           ) : (
-            'Tutorial'
+            "Tutorial"
           )}
         </a>
 
@@ -308,14 +252,9 @@ class Tutorial extends Component {
           onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
           contentLabel="Tutorial Modal"
-          // className="modal-dialog"
           style={customStyles}
         >
-          <ModalStyle>
-            {/* {this.renderLoginModal()} */}
-            {/* {this.renderModalContent()} */}
-            {this.renderStepOne()}
-          </ModalStyle>
+          <ModalStyle>{this.renderStepOne()}</ModalStyle>
         </Modal>
       </React.Fragment>
     );
@@ -324,45 +263,40 @@ class Tutorial extends Component {
 
 export default withRouter(Tutorial);
 
-/////////////////////////////////
-
 const customStyles = {
   overlay: {
-    position: 'fixed',
+    position: "fixed",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.9)',
-    transition: 'opacity 400ms ease-in-out',
+    backgroundColor: "rgba(0,0,0,0.9)",
+    transition: "opacity 400ms ease-in-out",
   },
   content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    padding: '0px',
-    border: 'none',
-    background: 'black',
-    borderRadius: '2.5px',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    maxWidth: '100vw',
-    maxHeight: '100vh',
-    overflow: 'hidden',
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    padding: "0px",
+    border: "none",
+    background: "black",
+    borderRadius: "2.5px",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    maxWidth: "100vw",
+    maxHeight: "100vh",
+    overflow: "hidden",
   },
 };
 
-//style the "modal" here - don't worry about the ccontent shit
 const TutorialStyle = styled.div`
   max-width: 600px;
   background: ${(props) => props.theme.moonBackground};
   border-radius: 8px;
-  /* padding: 20px; */
   text-align: left;
   font-size: 15px;
-  /* padding: 20px; */
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   color: ${(props) => props.theme.white};
   font-weight: 400;
 

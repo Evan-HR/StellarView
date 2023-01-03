@@ -1,63 +1,44 @@
-//Store parks state and handle display
-import React, { Component } from 'react';
-import ParkForm, { notifyLoadQuery } from './ParkForm';
-import ParkTable from './ParkTable';
-import ParkMap from './ParkMap';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import axios from 'axios';
-import styled from 'styled-components';
-import MoonComponent from './Moon';
-import { Spring, animated } from 'react-spring/renderprops';
-import { withRouter } from 'react-router-dom';
-import TelescopeCircle from './TelescopeCircle';
-import { notifyCloseModal } from './ParkMoreInfoModal';
-import { notifyCloseLoginModal } from './Login';
-import { notifyCloseRegisterModal } from './Register';
-import { notifyCloseTutorialModal } from './Tutorial';
-import { notifyCloseResultsModal } from './NoResultsModal';
-import Tutorial from './Tutorial';
-import ee from 'eventemitter3';
+import React, { Component } from "react";
+import ParkForm, { notifyLoadQuery } from "./ParkForm";
+import ParkTable from "./ParkTable";
+import ParkMap from "./ParkMap";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import axios from "axios";
+import styled from "styled-components";
+import MoonComponent from "./Moon";
+import { Spring, animated } from "react-spring/renderprops";
+import { withRouter } from "react-router-dom";
+import TelescopeCircle from "./TelescopeCircle";
+import { notifyCloseModal } from "./ParkMoreInfoModal";
+import { notifyCloseTutorialModal } from "./Tutorial";
+import { notifyCloseResultsModal } from "./NoResultsModal";
+import Tutorial from "./Tutorial";
+import ee from "eventemitter3";
 
 const emitter = new ee();
 
 export const notifyInfoModalIsOpen = (msg) => {
-  emitter.emit('infoModalIsOpen', msg);
+  emitter.emit("infoModalIsOpen", msg);
 };
 
 export const notifyInfoModalIsClosed = (msg) => {
-  emitter.emit('infoModalIsClosed', msg);
-};
-
-export const notifyLoginModalIsOpen = (msg) => {
-  emitter.emit('loginModalIsOpen', msg);
-};
-
-export const notifyLoginModalIsClosed = (msg) => {
-  emitter.emit('loginModalIsClosed', msg);
-};
-
-export const notifyRegisterModalIsOpen = (msg) => {
-  emitter.emit('registerModalIsOpen', msg);
-};
-
-export const notifyRegisterModalIsClosed = (msg) => {
-  emitter.emit('registerModalIsClosed', msg);
+  emitter.emit("infoModalIsClosed", msg);
 };
 
 export const notifyTutorialModalIsOpen = (msg) => {
-  emitter.emit('tutorialModalIsOpen', msg);
+  emitter.emit("tutorialModalIsOpen", msg);
 };
 
 export const notifyTutorialModalIsClosed = (msg) => {
-  emitter.emit('tutorialModalIsClosed', msg);
+  emitter.emit("tutorialModalIsClosed", msg);
 };
 
 export const notifyResultsModalIsOpen = (msg) => {
-  emitter.emit('resultsModalIsOpen', msg);
+  emitter.emit("resultsModalIsOpen", msg);
 };
 
 export const notifyResultsModalIsClosed = (msg) => {
-  emitter.emit('resultsModalIsClosed', msg);
+  emitter.emit("resultsModalIsClosed", msg);
 };
 
 function linearScore(x, minX, maxX) {
@@ -102,15 +83,15 @@ class BaseMainComponent extends Component {
   state = {
     parks: [],
     fetchReq: [],
-    moonPhase: '',
-    moonFraction: '',
-    moonType: '',
+    moonPhase: "",
+    moonFraction: "",
+    moonType: "",
     stellarData: {},
     isMapLoaded: false,
     isFetchingParks: false,
     hideForm: false,
     hideMap: true,
-    sortedBy: 'dist',
+    sortedBy: "dist",
     infoModalIsOpen: false,
     loginModalIsOpen: false,
     registerModalIsOpen: false,
@@ -123,34 +104,34 @@ class BaseMainComponent extends Component {
     this.googleMap = false;
     this.markers = {};
     this.noParksModalOpen = false;
-    emitter.on('infoModalIsOpen', (msg) => {
+    emitter.on("infoModalIsOpen", (msg) => {
       this.setState({ infoModalIsOpen: true });
     });
-    emitter.on('infoModalIsClosed', () => {
+    emitter.on("infoModalIsClosed", () => {
       this.setState({ infoModalIsOpen: false });
     });
-    emitter.on('loginModalIsOpen', (msg) => {
+    emitter.on("loginModalIsOpen", (msg) => {
       this.setState({ loginModalIsOpen: true });
     });
-    emitter.on('loginModalIsClosed', () => {
+    emitter.on("loginModalIsClosed", () => {
       this.setState({ loginModalIsOpen: false });
     });
-    emitter.on('registerModalIsOpen', (msg) => {
+    emitter.on("registerModalIsOpen", (msg) => {
       this.setState({ registerModalIsOpen: true });
     });
-    emitter.on('registerModalIsClosed', () => {
+    emitter.on("registerModalIsClosed", () => {
       this.setState({ registerModalIsOpen: false });
     });
-    emitter.on('tutorialModalIsOpen', () => {
+    emitter.on("tutorialModalIsOpen", () => {
       this.setState({ tutorialModalIsOpen: true });
     });
-    emitter.on('tutorialModalIsClosed', () => {
+    emitter.on("tutorialModalIsClosed", () => {
       this.setState({ tutorialModalIsOpen: false });
     });
-    emitter.on('resultsModalIsOpen', () => {
+    emitter.on("resultsModalIsOpen", () => {
       this.setState({ resultsModalIsOpen: true });
     });
-    emitter.on('resultsModalIsClosed', () => {
+    emitter.on("resultsModalIsClosed", () => {
       this.setState({ resultsModalIsOpen: false });
     });
   }
@@ -159,10 +140,6 @@ class BaseMainComponent extends Component {
     window.onpopstate = (e) => {
       if (this.state.infoModalIsOpen) {
         notifyCloseModal();
-      } else if (this.state.loginModalIsOpen) {
-        notifyCloseLoginModal();
-      } else if (this.state.registerModalIsOpen) {
-        notifyCloseRegisterModal();
       } else if (this.state.tutorialModalIsOpen) {
         notifyCloseTutorialModal();
       } else if (this.state.resultsModalIsOpen) {
@@ -187,9 +164,9 @@ class BaseMainComponent extends Component {
     let storageKey = JSON.stringify(reqData);
     let localData = sessionStorage.getItem(storageKey);
 
-    //Pull from local storage if possible
+    // Pull from local storage if possible
     if (localData) {
-      //Check if it's expired
+      // Check if it's expired
       let data = JSON.parse(localData);
       let now = new Date();
       let expiration = new Date(data.timestamp);
@@ -212,11 +189,11 @@ class BaseMainComponent extends Component {
         isFetchingParks: false,
       });
     } else {
+      // If running locally, http://localhost:PORTNUM/api/getParkData
       axios
-        .post('/api/getParkData', reqData)
+        .post("/api/getParkData", reqData)
         .then((response) => {
           if (!(response.status === 204)) {
-            let maxScore = 0;
             for (var i = 0; i < response.data.parks.length; i++) {
               let tempScore = parkScore(
                 response.data.moonFraction,
@@ -266,14 +243,14 @@ class BaseMainComponent extends Component {
         config={{ tension: 2000, friction: 100, precision: 1 }}
         from={{
           transform: this.state.hideMap
-            ? 'translate3d(0,30px,0)'
-            : 'translate3d(0,0,0)',
+            ? "translate3d(0,30px,0)"
+            : "translate3d(0,0,0)",
           opacity: this.state.hideMap ? 0 : 1,
         }}
         to={{
           transform: this.state.hideMap
-            ? 'translate3d(0,0,0)'
-            : 'translate3d(0,30px,0)',
+            ? "translate3d(0,0,0)"
+            : "translate3d(0,30px,0)",
           opacity: this.state.hideMap ? 1 : 0,
         }}
       >
@@ -312,7 +289,7 @@ class BaseMainComponent extends Component {
     parksArray.sort((a, b) =>
       a.distance > b.distance ? 1 : b.distance > a.distance ? -1 : 0
     );
-    this.setState({ ...this.state, parks: parksArray, sortedBy: 'dist' });
+    this.setState({ ...this.state, parks: parksArray, sortedBy: "dist" });
   };
 
   sortParksScore = () => {
@@ -320,7 +297,7 @@ class BaseMainComponent extends Component {
     parksArray.sort((a, b) =>
       a.score > b.score ? -1 : b.score > a.score ? 1 : 0
     );
-    this.setState({ ...this.state, parks: parksArray, sortedBy: 'score' });
+    this.setState({ ...this.state, parks: parksArray, sortedBy: "score" });
   };
 
   renderResults = () => {
@@ -341,23 +318,23 @@ class BaseMainComponent extends Component {
               <div className="sortByContainer">
                 <span className="NearestNum">{`Showing nearest ${this.state.parks.length}/${this.state.totalResults} parks.`}</span>
                 <div className="sortBy">
-                  Sort parks by:{'  '}
+                  Sort parks by:{"  "}
                   <button
                     onClick={this.sortParksDist}
-                    disabled={this.state.sortedBy === 'dist'}
+                    disabled={this.state.sortedBy === "dist"}
                   >
                     Distance
                   </button>
                   <button
                     onClick={this.sortParksScore}
-                    disabled={this.state.sortedBy === 'score'}
+                    disabled={this.state.sortedBy === "score"}
                   >
                     Score
                   </button>
                 </div>
               </div>
             ) : (
-              ''
+              ""
             )}
           </div>
 
@@ -398,7 +375,7 @@ class BaseMainComponent extends Component {
         {this.renderParkMap()}
         <div className="formMoonCards">
           {this.renderParkForm()}
-          {window.location.pathname === '/home'
+          {window.location.pathname === "/home"
             ? this.renderLanding()
             : this.renderResults()}
         </div>
@@ -410,7 +387,7 @@ class BaseMainComponent extends Component {
 const MainComponent = (parkProps) => (
   <Router>
     <Route
-      path={['/home', '/search']}
+      path={["/home", "/search"]}
       render={(routerProps) => (
         //Combine props passed to parkForm with router props
         <BaseMainComponent {...{ ...parkProps, ...routerProps }} />
@@ -480,8 +457,8 @@ const ResultsPageStyle = styled.div`
     display: grid;
     grid-template-columns: 1fr;
     grid-template-areas:
-      'formMoonSort'
-      'cards';
+      "formMoonSort"
+      "cards";
   }
 
   .parkTableStyle {
@@ -495,9 +472,9 @@ const ResultsPageStyle = styled.div`
     grid-area: formMoonSort;
 
     grid-template-areas:
-      'form'
-      'moonContainer'
-      'sort';
+      "form"
+      "moonContainer"
+      "sort";
 
     @media screen and (min-width: 350px) {
       padding: 0 5px;
@@ -525,7 +502,7 @@ const ResultsPageStyle = styled.div`
     }
 
     .sortByContainer {
-      font-family: 'Lato', sans-serif;
+      font-family: "Lato", sans-serif;
       grid-area: sort;
       margin-bottom: 0.7rem;
 
@@ -567,15 +544,15 @@ const ResultsPageStyle = styled.div`
     margin-top: 2vh;
     width: 100%;
     grid-template-columns: 1fr;
-    grid-template-rows: ${(props) => (props.hideMap ? '0px auto' : '50% auto')};
-    grid-template-areas: 'formMoonCards';
+    grid-template-rows: ${(props) => (props.hideMap ? "0px auto" : "50% auto")};
+    grid-template-areas: "formMoonCards";
 
     .formMoonCards {
       overflow: none;
     }
 
     .parkMapStyle {
-      display: ${(props) => (props.hideMap ? 'none' : 'fixed')};
+      display: ${(props) => (props.hideMap ? "none" : "fixed")};
     }
   }
 
@@ -583,14 +560,14 @@ const ResultsPageStyle = styled.div`
     margin-top: 2vh;
     width: 100%;
     grid-template-columns: 1fr;
-    grid-template-rows: ${(props) => (props.hideMap ? '0px auto' : '50% auto')};
-    grid-template-areas: 'formMoonCards';
+    grid-template-rows: ${(props) => (props.hideMap ? "0px auto" : "50% auto")};
+    grid-template-areas: "formMoonCards";
     .formMoonCards {
       overflow: none;
     }
 
     .parkMapStyle {
-      display: ${(props) => (props.hideMap ? 'none' : 'fixed')};
+      display: ${(props) => (props.hideMap ? "none" : "fixed")};
     }
   }
 
@@ -598,14 +575,14 @@ const ResultsPageStyle = styled.div`
     margin-top: 2vh;
     width: 95%;
     grid-template-columns: 1fr;
-    grid-template-areas: 'formMoonCards';
+    grid-template-areas: "formMoonCards";
 
     .formMoonCards {
       overflow: none;
     }
 
     .parkMapStyle {
-      display: ${(props) => (props.hideMap ? 'none' : 'fixed')};
+      display: ${(props) => (props.hideMap ? "none" : "fixed")};
     }
   }
 
@@ -644,22 +621,22 @@ const MainContentWrapper = styled.div`
     height: 45vh;
     top: 10%;
     background-color: gray;
-    display: ${(props) => (props.pathname === '/home' ? 'none' : 'block')};
+    display: ${(props) => (props.pathname === "/home" ? "none" : "block")};
     margin: 40px auto 40px auto;
   }
 
   @media screen and (min-width: 1025px) {
     margin: 0 5%;
-    display: ${(props) => (props.pathname === '/home' ? 'block' : 'grid')};
+    display: ${(props) => (props.pathname === "/home" ? "block" : "grid")};
     /* display: grid; */
     grid-template-columns: minmax(470px, 0.5fr) 1fr;
-    grid-template-areas: 'formMoonCards map';
+    grid-template-areas: "formMoonCards map";
 
     .formMoonCards {
       grid-area: formMoonCards;
     }
     .parkMapStyle {
-      display: ${(props) => (props.pathname === '/home' ? 'none' : 'fixed')};
+      display: ${(props) => (props.pathname === "/home" ? "none" : "fixed")};
       grid-area: map;
       width: 95%;
       height: 80vh;
@@ -671,7 +648,7 @@ const MainContentWrapper = styled.div`
   }
 
   ${(props) =>
-    props.pathname === '/home'
+    props.pathname === "/home"
       ? `.parkFormStyle {
 		width: 90%;
 		margin: auto auto;
