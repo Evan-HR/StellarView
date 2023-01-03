@@ -12,7 +12,6 @@ import { createGlobalStyle } from "styled-components";
 
 import FAQ from "./components/FAQ";
 import Footer from "./components/Footer";
-import ScrollUpButton from "react-scroll-up-button";
 import NotFoundPage from "./components/NotFoundPage";
 import Notification from "./components/Notification";
 
@@ -21,7 +20,6 @@ class App extends Component {
     return (
       <React.Fragment>
         <Notification />
-        <ScrollUpButton />
         <GlobalStyle />
         <SiteStyle>
           <div className="SiteContent">
@@ -47,8 +45,8 @@ class App extends Component {
                 <Route path="*" component={NotFoundPage} />
               </Switch>
             </Router>
+            <Footer />
           </div>
-          <Footer />
         </SiteStyle>
       </React.Fragment>
     );

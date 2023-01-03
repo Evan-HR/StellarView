@@ -446,22 +446,17 @@ const ModalStyle = styled.div`
       font-family: "Lato", sans-serif;
       font-style: normal;
       font-weight: 500;
-      color: ${(props) => props.theme.prettyDark};
-
+      color: ${(props) => props.theme.white};
       text-align: left;
       padding: 1.5rem 1rem;
       display: flex;
       grid-area: ParkTitle;
-
-      color: ${(props) => props.theme.prettyDark};
-
       font-size: 22px;
-      text-align: left;
       margin: auto auto;
       line-height: 30px;
     }
 
-    background: ${(props) => props.theme.green};
+    background: #2d333c;
     border-bottom: 6px solid ${(props) => props.theme.prettyDark};
     border-radius: 0rem;
     .close {
@@ -469,9 +464,9 @@ const ModalStyle = styled.div`
       border: none;
       background: none;
       text-shadow: none;
-      color: ${(props) => props.theme.prettyDark};
+      color: ${(props) => props.theme.white};
       position: absolute;
-      top: -1px;
+      top: 4px;
       right: 4px;
       float: right;
       font-size: 2rem;
@@ -496,7 +491,7 @@ const ModalStyle = styled.div`
     justify-content: center;
     height: 100%;
     overflow-y: auto;
-    background: ${(props) => props.theme.white};
+    background: #2d333c;
 
     .textContainer {
       grid-area: infoText;

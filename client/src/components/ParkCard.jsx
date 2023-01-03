@@ -159,7 +159,7 @@ const ParkCardWrapper = styled.div`
   }
 
   @media screen and (min-width: 355px) {
-    margin: 0 10px 15px 10px;
+    margin: 0 10px 25px 10px;
   }
 
   @media screen and (min-width: 480px) {
@@ -194,7 +194,7 @@ const CardStyle = styled.div`
     grid-area: ParkHeader;
     grid-template-columns: 1fr 0.2fr;
     grid-template-areas: "ParkTitle CarIcon";
-    background: ${(props) => props.theme.mapBlue};
+    background: #1f2125;
 
     border-bottom: 5px solid #111414;
     padding: 13px 10px;
@@ -257,6 +257,7 @@ const CardStyle = styled.div`
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: 1fr 1fr 1fr;
     background: #0d0e0f;
+    border: 1px solid #363636;
 
     color: ${(props) => props.theme.white};
     img {
