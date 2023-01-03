@@ -1,8 +1,8 @@
 //Displays park table
-import React, { Component } from 'react';
-import ParkCard from './ParkCard';
-import { useSpring, animated as a } from 'react-spring';
-import NoResultsModal from './NoResultsModal';
+import React, { Component } from "react";
+import ParkCard from "./ParkCard";
+import { useSpring, animated as a } from "react-spring";
+import NoResultsModal from "./NoResultsModal";
 
 class ParkTable extends Component {
   state = {};
@@ -49,7 +49,7 @@ class ParkTable extends Component {
         <React.Fragment>
           {Math.max(...this.props.parkList.map((park) => park.score)) < 0.7
             ? this.renderBadParks()
-            : ''}
+            : ""}
 
           <a.div style={this.springStyle}>
             {this.props.parkList.map((park) => this.renderParkCard(park))}
@@ -117,7 +117,7 @@ class ParkTable extends Component {
   handleCardMouseClick = (parkID) => {
     this.props.googleMap.panTo(this.props.markers[parkID].position);
     this.props.googleMap.setZoom(10);
-    window.google.maps.event.trigger(this.props.markers[parkID], 'click');
+    window.google.maps.event.trigger(this.props.markers[parkID], "click");
   };
 
   renderParkTable = () => {
@@ -132,7 +132,11 @@ class ParkTable extends Component {
     return (
       <div
         className="spinner-grow text-secondary"
-        style={{ marginTop: '20px', width: '3rem', height: '3rem' }}
+        style={{
+          marginBottom: "20px",
+          width: "3rem",
+          height: "3rem",
+        }}
       />
     );
   };

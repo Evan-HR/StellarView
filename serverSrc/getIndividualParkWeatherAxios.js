@@ -1,6 +1,6 @@
-const axios = require('axios');
-const suncalc = require('suncalc');
-const geolib = require('geolib');
+const axios = require("axios");
+const suncalc = require("suncalc");
+const geolib = require("geolib");
 
 async function getIndividualParkWeatherAxios(park, userTime, weatherKey1) {
   var utime = new Date(userTime);
@@ -98,7 +98,6 @@ async function getIndividualParkWeatherAxios(park, userTime, weatherKey1) {
       break;
     }
   }
-  console.log('Got weather for park: ', park);
   return park;
 }
 exports.getIndividualParkWeatherAxios = getIndividualParkWeatherAxios;

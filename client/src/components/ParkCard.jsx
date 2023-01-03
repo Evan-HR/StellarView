@@ -148,22 +148,13 @@ export default ParkCard;
 
 const ParkCardWrapper = styled.div`
   background: #0d0e0f;
-  padding-bottom: 10px;
   margin-bottom: 1rem;
   position: relative;
 
   cursor: pointer;
 
-  @media screen and (min-width: 320px) {
-    padding-bottom: 10px;
-  }
-
   @media screen and (min-width: 355px) {
     margin: 0 10px 25px 10px;
-  }
-
-  @media screen and (min-width: 480px) {
-    padding-bottom: 0px;
   }
 `;
 

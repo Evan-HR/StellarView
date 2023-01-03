@@ -191,7 +191,7 @@ class BaseMainComponent extends Component {
     } else {
       // If running locally, http://localhost:PORTNUM/api/getParkData
       axios
-        .post("/api/getParkData", reqData)
+        .post("api/getParkData", reqData)
         .then((response) => {
           if (!(response.status === 204)) {
             for (var i = 0; i < response.data.parks.length; i++) {
@@ -304,39 +304,41 @@ class BaseMainComponent extends Component {
     return (
       <ResultsPageStyle>
         <div className="formMoonCards">
-          <div className="formMoonSort">
-            <div className="moonStyle">
-              <MoonComponent
-                moonPhase={this.state.moonPhase}
-                parkList={this.state.parks}
-                moonType={this.state.moonType}
-                stellarData={this.state.stellarData}
-              />
-            </div>
-
-            {this.state.parks.length > 0 ? (
-              <div className="sortByContainer">
-                <span className="NearestNum">{`Showing nearest ${this.state.parks.length}/${this.state.totalResults} parks.`}</span>
-                <div className="sortBy">
-                  Sort parks by:{"  "}
-                  <button
-                    onClick={this.sortParksDist}
-                    disabled={this.state.sortedBy === "dist"}
-                  >
-                    Distance
-                  </button>
-                  <button
-                    onClick={this.sortParksScore}
-                    disabled={this.state.sortedBy === "score"}
-                  >
-                    Score
-                  </button>
-                </div>
+          {!this.state.isFetchingParks && (
+            <div className="formMoonSort">
+              <div className="moonStyle">
+                <MoonComponent
+                  moonPhase={this.state.moonPhase}
+                  parkList={this.state.parks}
+                  moonType={this.state.moonType}
+                  stellarData={this.state.stellarData}
+                />
               </div>
-            ) : (
-              ""
-            )}
-          </div>
+
+              {this.state.parks.length > 0 ? (
+                <div className="sortByContainer">
+                  <span className="NearestNum">{`Showing nearest ${this.state.parks.length}/${this.state.totalResults} parks.`}</span>
+                  <div className="sortBy">
+                    Sort parks by:{"  "}
+                    <button
+                      onClick={this.sortParksDist}
+                      disabled={this.state.sortedBy === "dist"}
+                    >
+                      Distance
+                    </button>
+                    <button
+                      onClick={this.sortParksScore}
+                      disabled={this.state.sortedBy === "score"}
+                    >
+                      Score
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          )}
 
           <div className="parkTableStyle">
             <ParkTable

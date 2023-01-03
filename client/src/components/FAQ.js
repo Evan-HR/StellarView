@@ -150,39 +150,7 @@ const FAQ = (props) => (
           </figure>
         </span>
       </div>
-      {/* <h1 id="register">Why register?</h1>
-			<div className="Background">
-				<span>
-					Registering grants you the ability to review a park, as well
-					as to save a park to your "Favourites". The Favourites
-					section appears upon registering and logging in. In the
-					future, it will be important for e-mail alerts/push
-					notifications. These alerts will only be sent in the morning
-					when your nearby parks are predicted to have excellent
-					naked-eye star visibility. We will ask for user permission
-					before this is fully implemented.
-				</span>
-			</div> */}
-      {/* <h1 id="secure">How secure is this?</h1>
-      <div className="Background">
-        <span>
-          <ul>
-            <p>
-              This site makes use of cookies. We only store your preferred name
-              and user id in them. The user id allows us to gather your reviews
-              and favourited parks. We use cookies so that your log-in status
-              persists even if our server shuts down.
-            </p>
-            <p>
-              Your password is encrypted using{' '}
-              <a target="_blank" href="https://en.wikipedia.org/wiki/Bcrypt">
-                Bcrypt
-              </a>
-              . Thus, we do not view or store any plaintext passwords.
-            </p>
-          </ul>
-        </span>
-      </div> */}
+
       <h1 id="dataGeneration">Where do the data come from?</h1>
       <div className="Background">
         <span className="HowWork">

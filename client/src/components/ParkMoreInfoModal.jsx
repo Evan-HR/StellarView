@@ -456,7 +456,7 @@ const ModalStyle = styled.div`
       line-height: 30px;
     }
 
-    background: #2d333c;
+    background: ${(props) => props.theme.prettyDark};
     border-bottom: 6px solid ${(props) => props.theme.prettyDark};
     border-radius: 0rem;
     .close {
@@ -491,7 +491,7 @@ const ModalStyle = styled.div`
     justify-content: center;
     height: 100%;
     overflow-y: auto;
-    background: #2d333c;
+    background: ${(props) => props.theme.prettyDark};
 
     .textContainer {
       grid-area: infoText;

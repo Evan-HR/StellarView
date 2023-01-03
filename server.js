@@ -13,7 +13,6 @@ const {
 const suncalc = require("suncalc");
 
 var session = require("express-session");
-var passport = require("passport");
 
 var MySQLStore = require("express-mysql-session")(session);
 
@@ -77,13 +76,6 @@ app.use(
   })
 );
 
-passport.serializeUser(function (user_id, done) {
-  done(null, user_id);
-});
-passport.deserializeUser(function (user_id, done) {
-  done(null, user_id);
-});
-
 app.get("/park/:id", function (req, res) {
   var id = req.params.id;
   const lat = req.body.lat;
@@ -109,7 +101,6 @@ app.get("/park/:id", function (req, res) {
 });
 
 app.post("/api/getParkData", async (req, res) => {
-  console.log("GET HERE? ");
   const lat = req.body.lat;
   const lng = req.body.lng;
   const dist = req.body.dist;
@@ -137,8 +128,6 @@ app.post("/api/getParkData", async (req, res) => {
     res.sendStatus(500);
     return;
   }
-
-  console.log("Database query success");
 
   let totalResults = initialResults.length;
   if (initialResults.length > numResults) {
