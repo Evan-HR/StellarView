@@ -4,27 +4,26 @@
   "private": true,
   "proxy": "http://localhost:5000/",
   "dependencies": {
-    "@material-ui/core": "^4.3.3",
-    "bootstrap": "^4.3.1",
-    "eventemitter3": "^4.0.0",
+    "@material-ui/core": "^4.9.14",
+    "bootstrap": "^5.2.3",
+    "eventemitter3": "^4.0.4",
+    "fix": "^0.0.3",
     "letter-grade": "^1.0.0",
-    "qs": "^6.7.0",
-    "react": "^16.8.6",
-    "react-countup": "^4.2.2",
-    "react-dom": "^16.8.6",
+    "qs": "^6.9.4",
+    "react": "^16.14.0",
+    "react-dom": "^16.13.1",
     "react-dynamic-font": "^2.0.1",
     "react-helmet": "^5.2.1",
-    "react-inlinesvg": "^1.1.6",
+    "react-inlinesvg": "^3.0.1",
     "react-meta-tags": "^0.7.4",
-    "react-modal": "^3.8.1",
+    "react-modal": "^3.11.2",
     "react-places-autocomplete": "^7.2.1",
     "react-ratings-declarative": "^3.4.1",
-    "react-router": "^5.0.1",
-    "react-router-dom": "^5.0.1",
-    "react-scripts": "3.0.1",
-    "react-scroll-up-button": "^1.6.4",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "^5.0.1",
     "react-spring": "^8.0.27",
-    "styled-components": "^4.3.2",
+    "styled-components": "^4.4.1",
     "suncalc": "^1.8.0"
   },
   "scripts": {
@@ -47,5 +46,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "fibers": "^5.0.0",
+    "jquery": "^3.5.1",
+    "typescript": "^3.9.2",
+    "yargs-parser": "^18.1.3"
   }
 }

@@ -1,8 +1,0 @@
-{
-    "prettier.tabWidth": 4,
-    "prettier.useTabs": true,
-    "python.formatting.provider": "black", 
-    "vscode_custom_css.imports": [
-        "file:///C:/Users/Vlad/.vscode/extensions/robbowen.synthwave-vscode-0.0.7/synthwave84.css"
-        ]
-}
