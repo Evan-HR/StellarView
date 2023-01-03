@@ -1,4 +1,3 @@
-//Store parks state and handle display
 import React, { Component } from "react";
 import ParkForm, { notifyLoadQuery } from "./ParkForm";
 import ParkTable from "./ParkTable";
@@ -11,8 +10,6 @@ import { Spring, animated } from "react-spring/renderprops";
 import { withRouter } from "react-router-dom";
 import TelescopeCircle from "./TelescopeCircle";
 import { notifyCloseModal } from "./ParkMoreInfoModal";
-import { notifyCloseLoginModal } from "./Login";
-import { notifyCloseRegisterModal } from "./Register";
 import { notifyCloseTutorialModal } from "./Tutorial";
 import { notifyCloseResultsModal } from "./NoResultsModal";
 import Tutorial from "./Tutorial";
@@ -26,22 +23,6 @@ export const notifyInfoModalIsOpen = (msg) => {
 
 export const notifyInfoModalIsClosed = (msg) => {
   emitter.emit("infoModalIsClosed", msg);
-};
-
-export const notifyLoginModalIsOpen = (msg) => {
-  emitter.emit("loginModalIsOpen", msg);
-};
-
-export const notifyLoginModalIsClosed = (msg) => {
-  emitter.emit("loginModalIsClosed", msg);
-};
-
-export const notifyRegisterModalIsOpen = (msg) => {
-  emitter.emit("registerModalIsOpen", msg);
-};
-
-export const notifyRegisterModalIsClosed = (msg) => {
-  emitter.emit("registerModalIsClosed", msg);
 };
 
 export const notifyTutorialModalIsOpen = (msg) => {
@@ -159,10 +140,6 @@ class BaseMainComponent extends Component {
     window.onpopstate = (e) => {
       if (this.state.infoModalIsOpen) {
         notifyCloseModal();
-      } else if (this.state.loginModalIsOpen) {
-        notifyCloseLoginModal();
-      } else if (this.state.registerModalIsOpen) {
-        notifyCloseRegisterModal();
       } else if (this.state.tutorialModalIsOpen) {
         notifyCloseTutorialModal();
       } else if (this.state.resultsModalIsOpen) {
@@ -183,14 +160,13 @@ class BaseMainComponent extends Component {
   };
 
   getParkData = (reqData) => {
-    console.log("client got here");
     this.setState({ isFetchingParks: true });
     let storageKey = JSON.stringify(reqData);
     let localData = sessionStorage.getItem(storageKey);
 
-    //Pull from local storage if possible
+    // Pull from local storage if possible
     if (localData) {
-      //Check if it's expired
+      // Check if it's expired
       let data = JSON.parse(localData);
       let now = new Date();
       let expiration = new Date(data.timestamp);
@@ -213,10 +189,10 @@ class BaseMainComponent extends Component {
         isFetchingParks: false,
       });
     } else {
+      // If working locally, http://localhost:PORTNUM/api/getParkData
       axios
-        .post("/api/getParkData", reqData)
+        .post("http://localhost:6060/api/getParkData", reqData)
         .then((response) => {
-          console.log("req data: ", reqData);
           if (!(response.status === 204)) {
             for (var i = 0; i < response.data.parks.length; i++) {
               let tempScore = parkScore(
@@ -249,7 +225,6 @@ class BaseMainComponent extends Component {
           }
         })
         .catch((err) => {
-          console.log("CATCH!!!");
           console.error(err);
           this.setState({ parks: [], isFetchingParks: false });
         });

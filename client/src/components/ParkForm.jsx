@@ -3,7 +3,6 @@ import axios from "axios";
 import { withRouter } from "react-router-dom";
 import qs from "qs";
 import MuiSlider from "@material-ui/core/Slider";
-import { AuthConsumer } from "./AuthContext";
 import styled from "styled-components";
 import ee from "eventemitter3";
 
@@ -94,15 +93,10 @@ class BaseParkForm extends Component {
     });
   };
 
-  /**
-   * For more info visit https://nominatim.org/release-docs/develop/api/Search/
-   */
   getPlaceCoordinates = () => {
     this.setState({ isGeocodingLocation: true });
     axios
       .get(
-        //Internet Explorer didn't want to connect to OSM server, so the request has to be proxied through heroku
-        //This can be avoided by redirecting the call through NODE
         `${"https://cors-anywhere.herokuapp.com/"}http://nominatim.openstreetmap.org/search?format=json&q=${
           this.state.reqData.placeName
         }`
@@ -143,86 +137,52 @@ class BaseParkForm extends Component {
       isInvalidLocation: true,
     });
   };
-  //   In order to have access to  this.state inside
-  //    getCurrentPosition's callback, you either need to
-  //    bind the success callback or make use of arrow function.
+
   getMyLocation = (e) => {
     this.setState({ isLoadingLocation: true, isInvalidLocation: false });
-    if (
-      !this.props.authState.userLocation ||
-      (this.props.authState.userLocation.lat === "" &&
-        this.props.authState.userLocation.lng === "")
-    ) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          let address = await axios.get(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
-          );
-          address = address["data"]["address"]["city"];
 
-          this.setState(
-            {
-              ...this.state,
-              reqData: {
-                ...this.state.reqData,
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-                placeName: address,
-                error: null,
-              },
-              isLoadingLocation: false,
-            },
-            () => this.onSubmit()
-          );
-          if (window.google) {
-            this.props.googleMap.panTo(
-              new window.google.maps.LatLng(
-                position.coords.latitude,
-                position.coords.longitude
-              )
-            );
-          }
-          this.props.authState.setUserLocation(
-            position.coords.latitude,
-            position.coords.longitude
-          );
-        },
-        (error) => {
-          this.setState({
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        let address = await axios.get(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
+        );
+        address = address["data"]["address"]["city"];
+
+        this.setState(
+          {
             ...this.state,
             reqData: {
               ...this.state.reqData,
-              error: error.message,
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+              placeName: address,
+              error: null,
             },
             isLoadingLocation: false,
-          });
-        },
-        { enableHighAccuracy: true }
-      );
-    } else {
-      if (window.google && this.props.googleMap) {
-        this.props.googleMap.panTo(
-          new window.google.maps.LatLng(
-            this.props.authState.userLocation.lat,
-            this.props.authState.userLocation.lng
-          )
+          },
+          () => this.onSubmit()
         );
-      }
-      let address = null;
-
-      this.setState(
-        {
+        if (window.google) {
+          this.props.googleMap.panTo(
+            new window.google.maps.LatLng(
+              position.coords.latitude,
+              position.coords.longitude
+            )
+          );
+        }
+      },
+      (error) => {
+        this.setState({
+          ...this.state,
           reqData: {
             ...this.state.reqData,
-            lat: this.props.authState.userLocation.lat,
-            lng: this.props.authState.userLocation.lng,
-            placeName: address,
+            error: error.message,
           },
           isLoadingLocation: false,
-        },
-        () => this.onSubmit()
-      );
-    }
+        });
+      },
+      { enableHighAccuracy: true }
+    );
   };
 
   handleDistanceChange = (changeEvent, value) => {
@@ -551,15 +511,7 @@ const marksLight = [
   },
 ];
 
-const ParkForm = (parkFormProps) => (
-  <AuthConsumer>
-    {(authState) => (
-      <BaseParkForm {...{ ...parkFormProps, authState: authState }} />
-    )}
-  </AuthConsumer>
-);
-
-export default withRouter(ParkForm);
+export default withRouter(BaseParkForm);
 
 const SearchFormStyle = styled.div`
   background: none;

@@ -5,28 +5,9 @@ class Footer extends Component {
   render() {
     return (
       <FooterStyle>
-        <span className="Names">
-          <span className="Vlad">
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="http://vladfalach.com"
-            >
-              Vlad Falach
-            </a>
-          </span>
-          <span className="Dustin">
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="http://dustinjurkaulionis.com"
-            >
-              Dustin Jurkaulionis
-            </a>
-          </span>
-
-          <span className="Evan">Evan Reaume</span>
-        </span>
+        <a href="/FAQ" className="FAQ_footer">
+          FAQ
+        </a>
       </FooterStyle>
     );
   }
@@ -41,7 +22,6 @@ const FooterStyle = styled.div`
   justify-content: space-around;
   font-family: Lato;
   align-items: center;
-  height: 110px;
   font-weight: 500;
   letter-spacing: 0.2em;
   background-color: ${(props) => props.theme.prettyDark};
@@ -49,12 +29,9 @@ const FooterStyle = styled.div`
   margin: 30px auto 15px auto;
   font-weight: 400;
   font-size: 11px;
-  padding: 10px 13px;
-  /* max-width: 600px; */
 
   @media screen and (min-width: 320px) {
     font-size: 11px;
-    height: 150px;
   }
 
   @media screen and (min-width: 400px) {
@@ -62,52 +39,8 @@ const FooterStyle = styled.div`
     width: 90%;
   }
 
-  @media screen and (min-width: 450px) {
-    height: 110px;
-  }
-
   @media screen and (min-width: 600px) {
     font-size: 12px;
-  }
-
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-template-areas:
-    "Quote Quote Quote"
-    "Vlad Dustin Evan"
-    "Contact Contact Contact";
-  /* .Copyright{
-		grid-area: Copyright;
-	} */
-  .Vlad {
-    grid-area: Vlad;
-  }
-  .Dustin {
-    grid-area: Dustin;
-    padding: 0 10px;
-  }
-  .Evan {
-    grid-area: Evan;
-    color: ${(props) => props.theme.white};
-    font-weight: 300;
-  }
-  .Names {
-    display: flex;
-    margin: 7px 0;
-    flex-direction: column;
-    font-weight: 600;
-    color: ${(props) => props.theme.colorMedium};
-    @media screen and (min-width: 455px) {
-      flex-direction: row;
-    }
-  }
-
-  .Quote {
-    grid-area: Quote;
-    a {
-      color: ${(props) => props.theme.pink};
-      font-weight: 600;
-    }
   }
 
   .Contact {
@@ -122,6 +55,28 @@ const FooterStyle = styled.div`
       color: ${(props) => props.theme.highlightPink};
       transition: color 0.2s ease;
       cursor: pointer;
+    }
+  }
+
+  @media screen and (max-width: 320px) {
+    .FAQ_footer {
+      display: flex;
+    }
+    .Names {
+      display: none;
+    }
+  }
+  @media screen and (min-width: 320px) {
+    .FAQ_footer {
+      display: flex;
+    }
+    .Names {
+      display: none;
+    }
+  }
+  @media screen and (min-width: 600px) {
+    .FAQ_footer {
+      display: none;
     }
   }
 `;

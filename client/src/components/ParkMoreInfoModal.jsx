@@ -1,7 +1,5 @@
 import React, { Component, useState } from "react";
 import Modal from "react-modal";
-import Reviews from "./Reviews";
-import FavPark from "./FavPark";
 import styled from "styled-components";
 import "./modal.css";
 import MoonDisplay from "./MoonDisplay";
@@ -10,7 +8,6 @@ import humidityIcon from "./style/Media/cardIcons/humidity.svg";
 import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
 import cloudGoodIcon from "./style/Media/cardIcons/cloudGood.svg";
 import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
-import ReportPark from "./ReportPark";
 import { withRouter } from "react-router-dom";
 import {
   notifyInfoModalIsOpen,
@@ -169,36 +166,6 @@ class ParkMoreInfoModal extends Component {
             </button>
           </div>
           <div className="ContentGrid">
-            <div className="HeaderGrid">
-              <div className="favPark">
-                <FavPark parkID={this.park.id} />
-
-                <div className="favParkText">Save</div>
-              </div>
-
-              <div className="reportPark">
-                <ReportPark parkID={this.park.id} />
-
-                <div className="reportParkText">Report</div>
-              </div>
-
-              <div className="directions">
-                {this.userLocation ? (
-                  <a
-                    href={`https://www.google.com/maps?saddr=${this.userLocation.lat},${this.userLocation.lng}&daddr=${this.park.lat},${this.park.lng}`}
-                    target="_blank"
-                  >
-                    <i className="fas fa-car"></i>
-                  </a>
-                ) : (
-                  <a onClick={this.getLocation}>
-                    <i className="fas fa-car"></i>
-                  </a>
-                )}
-                <div className="directionsText">Directions</div>
-              </div>
-            </div>
-
             <span className="textContainer">Tap a square for more info</span>
 
             <div className="weatherContainer">
@@ -255,7 +222,9 @@ class ParkMoreInfoModal extends Component {
                         </div>
                         <div className="Score">
                           <React.Fragment>
-                            <div className="ScoreNumber" />
+                            <div className="ScoreNumber">
+                              {Math.trunc(this.park.score * 100)}
+                            </div>
                             <div className="Percentage">%</div>
                           </React.Fragment>
                         </div>
@@ -396,22 +365,8 @@ class ParkMoreInfoModal extends Component {
                 />
               </div>
             </div>
-
-            <div className="reviewsContainer">
-              {this.toRemountReviews ? (
-                this.remountReviews()
-              ) : (
-                <Reviews
-                  starSize={"14px"}
-                  refreshInfoModal={this.refreshModal}
-                  parkID={this.park.id}
-                />
-              )}
-            </div>
           </div>
         </ModalStyle>
-
-        {/* </div> */}
       </Modal>
     );
   }
@@ -508,12 +463,13 @@ const ModalStyle = styled.div`
       line-height: 30px;
     }
 
-    /* padding: 1rem 2.5rem 2rem 1rem; */
     background: ${(props) => props.theme.green};
     border-bottom: 6px solid ${(props) => props.theme.prettyDark};
     border-radius: 0rem;
     .close {
       outline: none;
+      border: none;
+      background: none;
       text-shadow: none;
       color: ${(props) => props.theme.prettyDark};
       position: absolute;
@@ -546,7 +502,7 @@ const ModalStyle = styled.div`
       "reviewsContainer          reviewsContainer";
     grid-row-gap: 20px;
     grid-column-gap: 20px;
-    padding: 20px 20px 0 20px;
+    padding: 0px 20px 0 20px;
     height: 100%;
     overflow-y: auto;
     background: ${(props) => props.theme.white};
@@ -555,82 +511,6 @@ const ModalStyle = styled.div`
       grid-area: infoText;
       font-weight: 500;
       font-size: 15px;
-    }
-
-    .HeaderGrid {
-      display: grid;
-      grid-area: HeaderGrid;
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-template-rows: 1fr 0.2fr;
-
-      grid-template-areas:
-        "directions  				favPark			 		 reportPark	"
-        "directionsText				favParkText	 	 	 reportParkText ";
-
-      .ParkScoreHeading {
-        grid-area: ParkScoreHeading;
-        font-size: 18px;
-        margin-bottom: 20px;
-      }
-
-      .directions {
-        margin: auto 0;
-        grid-area: directions;
-        font-size: 20px;
-
-        font-weight: 400;
-        a {
-          outline: none;
-          text-decoration: none;
-        }
-        i {
-          color: ${(props) => props.theme.franNavy};
-          transition: color 0.3s;
-          :hover,
-          :active {
-            color: ${(props) => props.theme.directionsHover};
-            transition: color 0.3s;
-          }
-        }
-
-        .directionsText {
-          grid-area: directionsText;
-          font-size: 16px;
-          font-weight: 400;
-          font-family: Lato;
-        }
-      }
-
-      i {
-        font-size: 40px;
-      }
-
-      .favPark {
-        margin: auto 0;
-        grid-area: favPark;
-        button:focus {
-          outline: 0;
-        }
-
-        .favParkText {
-          grid-area: favParkText;
-          font-size: 16px;
-          font-weight: 400;
-        }
-      }
-      .reportPark {
-        margin: auto 0;
-        grid-area: reportPark;
-        button {
-          outline: none;
-        }
-
-        .reportParkText {
-          grid-area: reportParkText;
-          font-size: 16px;
-          font-weight: 400;
-        }
-      }
     }
 
     .Heading,

@@ -56,11 +56,9 @@ const ToolbarStyle = styled.header`
 
   .toolbar__center {
     display: block;
-    /* width: 85%; */
     height: 100%;
     margin: 0.5rem auto 0 auto;
     width: 90%;
-    /* max-width: 1467px; */
 
     @media screen and (min-width: 320px) {
       width: 90%;

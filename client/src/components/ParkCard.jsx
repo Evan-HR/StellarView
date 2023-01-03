@@ -1,9 +1,6 @@
 import React, { Component } from "react";
-import StarReviewsStatic from "./StarReviewsStatic";
-
 import styled from "styled-components";
 import humidityIcon from "./style/Media/cardIcons/humidity.svg";
-
 import cloudBadIcon from "./style/Media/cardIcons/cloudBad.svg";
 import cloudGoodIcon from "./style/Media/cardIcons/cloudGood.svg";
 import lightPolIcon from "./style/Media/cardIcons/lightPol.svg";
@@ -12,35 +9,10 @@ import tempIcon from "./style/Media/cardIcons/temperature.svg";
 class ParkCard extends Component {
   state = {};
 
-  renderNumReviews(numReviews) {
-    if (numReviews === 1) {
-      return <div>{numReviews} review</div>;
-    } else if (!numReviews) {
-      return <div>No reviews</div>;
-    } else {
-      return <div>{numReviews} reviews</div>;
-    }
-  }
   prettyDate(time) {
     var date = new Date(time);
     var localeSpecificTime = date.toLocaleTimeString();
     return localeSpecificTime.replace(/:\d+ /, " ");
-  }
-
-  renderReviewScore(reviewScore) {
-    if (reviewScore) {
-      return (
-        <div>
-          <StarReviewsStatic starSize={"14px"} avgScore={reviewScore} />
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <StarReviewsStatic starSize={"14px"} avgScore={0} />
-        </div>
-      );
-    }
   }
 
   inRange(x, min, max) {
@@ -145,9 +117,6 @@ class ParkCard extends Component {
               <span>
                 <b>{this.props.park.weather.city}</b> forecast for{" "}
                 {this.prettyDate(this.props.park.weather.time)}
-                {/* {new Date(
-								this.props.park.weather.time
-							).toLocaleString()} */}
               </span>
             </div>
 
@@ -155,26 +124,12 @@ class ParkCard extends Component {
 
             <div className="Score">
               <React.Fragment>
-                <div className="ScoreNumber" />
+                <div className="ScoreNumber">
+                  {Math.trunc(this.props.park.score * 100)}
+                </div>
 
                 <div className="Percentage">%</div>
               </React.Fragment>
-            </div>
-
-            <div className="MoreInfoDesc">Tap for more</div>
-
-            <div
-              className="StarRev"
-              onClick={() => {
-                this.props.handleMouseClick(this.props.park.id);
-              }}
-            >
-              <div className="StarScore">
-                {this.renderReviewScore(this.props.park.avgScore)}
-              </div>
-              <div className="StarNumRev">
-                {this.renderNumReviews(this.props.park.numReviews)}
-              </div>
             </div>
           </div>
         </CardStyle>
@@ -197,24 +152,13 @@ const ParkCardWrapper = styled.div`
   margin-bottom: 1rem;
   position: relative;
 
-  /* min-width: 320px; */
   cursor: pointer;
 
   :hover {
     background: ${(props) => props.theme.cardLight};
-    /* background: linear-gradient(
-			0deg,
-			${(props) => props.theme.cardLight} 70%,
-			${(props) => props.theme.cardHeaderHover} 70%
-		); */
   }
   :active {
     background: ${(props) => props.theme.cardDark};
-    /* background: linear-gradient(
-			0deg,
-			${(props) => props.theme.cardDark} 70%,
-			${(props) => props.theme.cardHeader} 70%
-		); */
   }
 
   @media screen and (min-width: 320px) {
@@ -238,29 +182,6 @@ const ParkCardWrapper = styled.div`
     border-radius: 20px;
   }
 
-  /* @media screen and (min-width: 685px) {
-		padding-left: 7vw;
-		padding-right: 7vw;
-	}
-	@media screen and (min-width: 830px) {
-		padding-left: 9vw;
-		padding-right: 9vw;
-	}
-
-	@media screen and (min-width: 900px) {
-		padding-left: 11vw;
-		padding-right: 11vw;
-	}
-
-	@media screen and (min-width: 989px) {
-		padding-left: 0vw;
-		padding-right: 0vw;
-	}
-
-	/* @media screen and (min-width: 1060px) {
-		padding-left: 1vw;
-		padding-right: 1vw;
-	} */
   @media screen and (min-width: 1292px) {
     padding-bottom: 0px;
   }
@@ -279,11 +200,10 @@ const CardStyle = styled.div`
   font-size: 18px;
   line-height: 23px;
   color: ${(props) => props.theme.fontDark};
-  min-height: 270px;
+  min-height: 220px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: 0.3fr auto;
-  /* grid-gap: 1em; */
 
   grid-template-areas:
     "ParkHeader   ParkHeader   ParkHeader    ParkHeader 	ParkHeader 	  ParkHeader"
@@ -300,7 +220,6 @@ const CardStyle = styled.div`
     grid-area: ParkHeader;
     grid-template-columns: 1fr 0.2fr;
     grid-template-areas: "ParkTitle CarIcon";
-    /* min-height: 13vh; */
     background: ${(props) => props.theme.green};
     border-bottom: 5px solid #111414;
     padding: 13px 10px;
@@ -325,43 +244,6 @@ const CardStyle = styled.div`
     @media screen and (min-width: 525px) {
       padding: 10px 30px;
     }
-    @media screen and (min-width: 685px) {
-      /* padding-left: 7vw;
-			padding-right: 7vw; */
-    }
-    @media screen and (min-width: 830px) {
-      /* padding-left: 9vw;
-			padding-right: 9vw; */
-    }
-
-    @media screen and (min-width: 900px) {
-      /* padding-left: 11vw;
-			padding-right: 11vw; */
-    }
-
-    @media screen and (min-width: 989px) {
-      /* padding-left: 0vw;
-			padding-right: 0vw; */
-    }
-
-    @media screen and (min-width: 1060px) {
-      /* padding-left: 3vw;
-			padding-right: 3vw; */
-    }
-    /* @media screen and (min-width: 1292px) {
-			padding-left: 2.5vw;
-			padding-right: 2.5vw;
-		}
-
-		@media screen and (min-width: 1460px) {
-			padding-left: 5vw;
-			padding-right: 5vw;
-		} */
-
-    @media screen and (min-width: 1600px) {
-      /* padding-left: 6vw;
-			padding-right: 6vw; */
-    }
 
     .ParkTitle {
       display: flex;
@@ -373,11 +255,9 @@ const CardStyle = styled.div`
       text-align: left;
       margin: auto auto auto 0px;
       line-height: 30px;
-      /* padding-left: 1rem; */
 
       @media screen and (min-width: 320px) {
         margin: auto auto auto 0px;
-        /* padding-left: 1rem; */
       }
       @media screen and (min-width: 480px) {
         margin: auto auto auto 0px;
@@ -392,7 +272,6 @@ const CardStyle = styled.div`
       i {
         color: ${(props) => props.theme.prettyDark};
       }
-      /* padding-right: 1rem; */
       .CarIconDesc {
         margin: auto auto;
         font-size: 14px;
@@ -404,67 +283,27 @@ const CardStyle = styled.div`
     display: grid;
     grid-area: cardContent;
     grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: 1fr 1fr 0.5fr 1fr;
-    /* grid-gap: 1em; */
+    grid-template-rows: 1fr 1fr 1fr;
 
     grid-template-areas:
       "ScoreDesc   ScoreDesc    WeatherInfo  	  WeatherInfo 	WeatherInfo 	  WeatherInfo"
       "Score 		 Score 		 HumidityIcon 	  CloudIcon 	LightPolIcon 	  TempIcon "
-      "Score 		 Score 		 HumidityIconDesc CloudIconDesc LightPolIconDesc  TempIconDesc "
-      "StarRev 	 StarRev 	 StarRev 	  	  StarRev  		MoreInfoDesc 	  MoreInfoDesc";
+      "Score 		 Score 		 HumidityIconDesc CloudIconDesc LightPolIconDesc  TempIconDesc ";
 
     @media screen and (min-width: 320px) {
-      padding: 0px 10px;
-      grid-template-rows: 1fr 1fr 0.5fr 1fr;
+      padding: 10px 10px;
+      grid-template-rows: 1fr 1fr 1fr;
     }
 
     @media screen and (min-width: 430px) {
-      padding: 0px 30px;
+      padding: 10px 30px;
     }
 
     @media screen and (min-width: 480px) {
-      padding: 0px 30px;
+      padding: 10px 30px;
       .WeatherInfo {
         padding-bottom: 10px;
       }
-    }
-
-    @media screen and (min-width: 685px) {
-      /* padding-left: 7vw;
-			padding-right: 7vw; */
-    }
-    @media screen and (min-width: 830px) {
-      /* padding-left: 9vw;
-			padding-right: 9vw; */
-    }
-
-    @media screen and (min-width: 900px) {
-      /* padding-left: 11vw;
-			padding-right: 11vw; */
-    }
-
-    @media screen and (min-width: 989px) {
-      /* padding-left: 0vw;
-			padding-right: 0vw; */
-    }
-
-    @media screen and (min-width: 1060px) {
-      /* padding-left: 3vw;
-			padding-right: 3vw; */
-    }
-    @media screen and (min-width: 1292px) {
-      /* padding-left: 2.5vw;
-			padding-right: 2.5vw; */
-    }
-
-    @media screen and (min-width: 1460px) {
-      /* padding-left: 5vw;
-			padding-right: 5vw; */
-    }
-
-    @media screen and (min-width: 1600px) {
-      /* padding-left: 6vw;
-			padding-right: 6vw; */
     }
 
     .WeatherInfo {
@@ -525,40 +364,7 @@ const CardStyle = styled.div`
       display: flex;
       grid-area: TempIconDesc;
       font-size: 14px;
-
-      /* margin: auto auto; */
       margin: 0 auto;
-    }
-
-    .StarRev {
-      grid-area: StarRev;
-      cursor: pointer;
-      display: flex;
-      /* float: left; */
-      margin: 10px auto auto 0px;
-
-      .StarScore {
-        display: flex;
-        .widget-svg {
-          height: 11px;
-          width: 11px;
-        }
-      }
-      .StarNumRev {
-        display: flex;
-        font-size: 12px;
-        padding-top: 5px;
-        margin: 0px 0px 0px 14px;
-        :hover,
-        :active {
-          color: ${(props) => props.theme.highlightPink};
-          transition: color 0.2s ease;
-        }
-
-        @media screen and (min-width: 480px) {
-          font-size: 13px;
-        }
-      }
     }
 
     .MoreInfoDesc {
@@ -580,7 +386,6 @@ const CardStyle = styled.div`
 
       margin: auto auto 0 0px;
       font-weight: 400;
-      /* padding-bottom: 2px; */
       @media screen and (min-width: 320px) {
         padding-bottom: 0px;
       }
@@ -596,7 +401,6 @@ const CardStyle = styled.div`
       grid-area: Score;
       font-size: 60px;
       font-weight: 600;
-      padding-top: 25px;
       align-items: baseline;
       margin: auto 0;
       .Percentage {
@@ -606,15 +410,6 @@ const CardStyle = styled.div`
 
       @media screen and (min-width: 320px) {
         font-size: 60px;
-        padding-top: 25px;
-      }
-
-      @media screen and (min-width: 480px) {
-        font-size: 80px;
-        padding-top: 15px;
-        .Percentage {
-          font-size: 30px;
-        }
       }
     }
   }
